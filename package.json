@@ -1,0 +1,112 @@
+{
+  "name": "vscode-hp42s-free42",
+  "displayName": "HP42S-free42",
+  "description": "HP42S/free42 RPN programming language support",
+  "version": "0.0.1",
+  "publisher": "J.Heilingbrunner",
+  "engines": {
+    "vscode": "^1.27.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "activationEvents": [
+    "onLanguage:hp42s",
+    "onLanguage:free42",
+    "onCommand:extension.Encode"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "hp42s",
+        "aliases": [
+          "hp42s"
+        ],
+        "extensions": [
+          "hp42s"
+        ],
+        "configuration": "./hp42s.language-configuration.json"
+      },
+      {
+        "id": "free42",
+        "aliases": [
+          "free42"
+        ],
+        "extensions": [
+          "free42"
+        ],
+        "configuration": "./free42.language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "hp42s",
+        "scopeName": "source.hp42s",
+        "path": "./syntaxes/hp42s.tmLanguage.json"
+      },
+      {
+        "language": "free42",
+        "scopeName": "source.free42",
+        "path": "./syntaxes/free42.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "hp42s",
+        "path": "./snippets/hp42s.snippets.json"
+      },
+      {
+        "language": "free42",
+        "path": "./snippets/free42.snippets.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "extension.Encode",
+        "title": "hp42s/free42: Encode Code"
+      }
+      
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "HP42S/free42 Configuration",
+      "properties": {
+        "HP42S/free42.formatterRemoveLineNumbers": {
+          "type": "boolean",
+          "default": true,
+          "description": "Formatter removes leading line numbers."
+        },
+        "HP42S/free42.formatterReplaceAbbreviations": {
+          "type": "boolean",
+          "default": true,
+          "description": "Formatter replaces abbreviations."
+        },
+        "HP42S/free42.formatterRemoveTooLongSpaces": {
+          "type": "boolean",
+          "default": true,
+          "description": "Formatter removes too long spaces."
+        },
+        "HP42S/free42.formatterTrimLine": {
+          "type": "boolean",
+          "default": true,
+          "description": "Formatter trims start and end of line."
+        }
+      }
+    }
+  },
+  "main": "./out/extension",
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "npm run compile && node ./node_modules/vscode/bin/test"
+  },
+  "devDependencies": {
+    "typescript": "^2.6.1",
+    "vscode": "^1.1.21",
+    "tslint": "^5.8.0",
+    "@types/node": "^8.10.25",
+    "@types/mocha": "^2.2.42"
+  }
+}

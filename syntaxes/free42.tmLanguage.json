@@ -1,0 +1,355 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "free42",
+	"fileTypes": ["free42"],
+	"patterns": [{
+			"include": "#keywords"
+		},
+		{
+			"include": "#constants"
+		},
+		{
+			"include": "#parameters"
+		},
+		{
+			"include": "#entities"
+		},
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#invalid"
+		}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [{
+          "include": "#keyword-opcode-constants"
+        },
+        {
+					"include": "#keyword-opcode-single-parameter"
+				},
+				{
+					"include": "#keyword-opcode-no-parameter-1-free42"
+				},
+				{
+					"include": "#keyword-opcode-no-parameter-1"
+				},
+				{
+					"include": "#keyword-opcode-no-parameter-2"
+				},
+				{
+					"include": "#keyword-opcode-no-parameter-3"
+				},
+				{
+					"include": "#keyword-opcode-no-parameter-4-free42"
+				},
+				{
+					"include": "#keyword-opcode-no-parameter-4"
+				},
+				{
+					"include": "#keyword-opcode-operator"
+				},
+				{
+					"include": "#keyword-opcode-multi-start"
+				},
+				{
+					"include": "#keyword-opcode-multi-middle"
+				},
+				{
+					"include": "#keyword-opcode-address-indirect-stack-label"
+				},
+				{
+					"include": "#keyword-opcode-address-indirect-label"
+				},
+				{
+					"include": "#keyword-opcode-address-stack-label"
+				},
+				{
+					"include": "#keyword-opcode-address-label"
+				}
+			]
+		},
+		"entities": {
+			"patterns": [{
+					"include": "#entity-stack-name"
+				},
+				{
+					"include": "#entity-name-local-label-name"
+				},
+				{
+					"include": "#entity-name-local-label-number"
+				}
+			]
+		},
+		"parameters": {
+			"patterns": [{
+					"include": "#parameter-string"
+				},
+				{
+					"include": "#parameter-number-4-digit"
+				},
+				{
+					"include": "#parameter-number-2-digit"
+				},
+				{
+					"include": "#parameter-number-1-digit"
+				},
+				{
+					"include": "#parameter-register-number"
+				}
+			]
+		},
+		"constants": {
+			"patterns": [{
+					"include": "#constant-string-prefix"
+				},
+				{
+					"include": "#constant-string-concat"
+				},
+				{
+					"include": "#constant-string"
+				},
+				{
+					"include": "#constant-number-exponential"
+				},
+				{
+					"include": "#constant-number-float"
+				},
+				{
+					"include": "#constant-number-linenumber"
+				},
+				{
+					"include": "#constant-number-integer"
+				}
+			]
+		},
+		"comments": {
+			"patterns": [{
+				"include": "#comment-program-size"
+			}]
+    },
+    "keyword-opcode-constants": {
+			"patterns": [{
+				"comment": "constants",
+				"match": "\\b(π)\\b",
+				"name": "keyword.other.control.sp.hp42s"
+			}]
+		},
+		"keyword-opcode-single-parameter": {
+			"patterns": [{
+				"comment": "starts with normal char, ends with normal char",
+				"match": "\\b(LBL|CLP|MVAR|SIZE)\\b",
+				"name": "keyword.other.control.sp.hp42s"
+			}]
+		},
+		"keyword-opcode-no-parameter-1-free42": {
+			"patterns": [{
+				"comment": "free42: starts with normal char, ends with special",
+				"match": "\\b(DATE\\+)",
+				"name": "keyword.other.control.np.hp42s"
+			}]
+		},
+		"keyword-opcode-no-parameter-1": {
+			"patterns": [{
+				"comment": "starts with normal char, ends with special",
+				"match": "\\b(BASE±|BASE\\+/-|BASE\\+|BASE-|BASE×|BASE÷|BIT\\?|CPX\\?|DIM\\?|FC\\?(?!C)|FS\\?(?!C)|HMS\\+|HMS-|I\\+|I-|J\\+|J-|MAT\\?|N!|RCL\\+|RCL-|RCL×|RCL÷|RDX,|RDX.|REAL\\?|R↑|R↓|STO\\+|STO-|STO×|STO÷|STR\\?|X<>(?!Y)|X<0\\?|X<Y\\?|X≤0\\?|X≤Y\\?|X=0\\?|X=Y\\?|X≠0\\?|X≠Y\\?|X>0\\?|X>Y\\?|X≥0\\?|X≥Y\\?|Σ\\+|Σ-|ΣREG\\?)",
+				"name": "keyword.other.control.np.hp42s"
+			}]
+		},
+		"keyword-opcode-no-parameter-2": {
+			"patterns": [{
+				"comment": "starts with special, ends with normal char",
+				"match": "(→DEC|→DEG|→HMS|→HR|→OCT|→POL|→RAD|→REC|%CH)\\b",
+				"name": "keyword.other.control.np.hp42s"
+			}]
+		},
+		"keyword-opcode-no-parameter-3": {
+			"patterns": [{
+				"comment": "starts with bracket, ends with bracket",
+				"match": "(\\[FIND\\]|\\[MAX\\]|\\[MIN\\])",
+				"name": "keyword.other.control.np.hp42s"
+			}]
+		},
+		"keyword-opcode-no-parameter-4-free42": {
+			"patterns": [{
+				"comment": "free42: starts with normal char, ends with normal char",
+				"match": "\\b(ACCEL|ADATE|ATIME24|ATIME|CLK12|CLK24|DATE|DDAYS|DMY|DOW|HEADING|MDY|LOCAT|TIME)\\b",
+				"name": "keyword.other.control.np.hp42s"
+			}]
+		},
+		"keyword-opcode-no-parameter-4": {
+			"patterns": [{
+				"comment": "starts with normal char, ends with normal char",
+				"match": "\\b(ABS|ACOSH|ACOS|ADV|AGRAPH|AIP|ALENG|ALLΣ|ALL|AND|AOFF|AON|AROT|ASHF|ASINH|ASIN|ATANH|ATAN|ATOX|AVIEW|BEEP|BEST|BINM|CLA|CLD|CLKEYS|CLLCD|CLMENU|CLRG|CLST|CLX|CLΣ|COMB|COMPLEX|CORR|COSH|COS|CPXRES|CROSS|CUSTOM|DECM|DEG|DELAY|DELR|DET|DOT|EDIT(?!N)|ENTER|EXITALL|EXPF|E↑X-1|E↑X|FC\\?C|FCSTX|FCSTY|FNRM|FP|FS\\?C|GAMMA|GETKEY|GETM|GRAD|GROW|HEXM|INSR|INVRT|IP|KEYASN|LASTX|LCLBL|LINF|LINΣ|LN1\\+X|LN|LOGF|LOG|MAN|MEAN|MENU|MOD|NEWMAT|NORM|NOT|OCTM|OFF|OLD|ON|OR|PERM|PIXEL|PI|POLAR|POSA|PRA|PRLCD|PROFF|PROMPT|PRON|PRSTK|PRUSR|PRX|PRΣ|PSE|PUTM|PWRF|RAD|RAN|RCLEL|RCLIJ|REALRES|RECT|RND|RNRM|ROTXY|RSUM|RTN|R<>R|SDEV|SEED|SIGN|SINH|SIN|SLOPE|SQRT|STOEL|STOIJ|STOP|SUM|TANH|TAN|TRACE|TRANS|UVEC|WMEAN|WRAP|X<>Y|XOR|XTOA|X↑2|YINT|Y↑X|1/X|10↑X|END)\\b",
+				"name": "keyword.other.control.np.hp42s"
+			}]
+		},
+		"keyword-opcode-operator": {
+			"patterns": [{
+				"match": "(\\+/-|\\+|-|×|÷|%|←|↑|↓|→)",
+				"name": "keyword.other.control.np.hp42s"
+			}]
+		},
+		"keyword-opcode-multi-start": {
+			"patterns": [{
+				"match": "\\b(ASSIGN)\\b",
+				"name": "keyword.other.control.np.hp42s"
+			}]
+		},
+		"keyword-opcode-multi-middle": {
+			"patterns": [{
+				"begin": "(?<=\\s)(TO)",
+				"beginCaptures": {
+					"1": {
+						"name": "keyword.other.control.np.hp42s"
+					}
+				},
+				"end": "(?=\\s)"
+			}]
+		},
+		"keyword-opcode-address-indirect-stack-label": {
+			"patterns": [{
+				"comment": "... IND ST",
+				"match": "\\bIND\\s+ST\\b",
+				"name": "keyword.other.control.isl.hp42s"
+			}]
+		},
+		"keyword-opcode-address-indirect-label": {
+			"patterns": [{
+				"comment": "... IND 99|... IND \"A\"",
+				"match": "\\bIND\\b",
+				"name": "keyword.other.control.il.hp42s"
+			}]
+		},
+		"keyword-opcode-address-stack-label": {
+			"patterns": [{
+				"comment": "... ST",
+				"match": "\\bST\\b",
+				"name": "keyword.other.control.sl.hp42s"
+			}]
+		},
+		"keyword-opcode-address-label": {
+			"patterns": [{
+				"comment": "... 99|... \"A\"",
+				"match": "\\b(ARCL|ASTO|CF|CLV|DIM|DSE|EDITN|ENG|FC\\?C|FC\\?|FIX|FS\\?C|FS\\?|GTO|INDEX|INPUT|INTEG|ISG|KEY|PGMINT|PGMSLV|PRV|RCL\\+|RCL-|RCL×|RCL÷|RCL|SCI|SF|SOLVE|STO\\+|STO-|STO×|STO÷|STO|TO|TONE|VARMENU|VIEW|X<>|XEQ|ΣREG)\\b",
+				"name": "keyword.other.control.al.hp42s"
+			}]
+		},
+		"entity-name-local-label-name": {
+			"patterns": [{
+				"match": "\\b(a|b|c|d|e|A|B|C|D|E|F|G|H|I|J|L)\\b",
+				"name": "constant.numeric.hp42s"
+			}]
+		},
+		"entity-stack-name": {
+			"patterns": [{
+				"begin": "(?<=ST)\\s+\\b([LTXYZ])",
+				"beginCaptures": {
+					"0": {
+						"name": "constant.numeric.hp42s"
+					}
+				},
+				"end": "\\b"
+			}]
+		},
+		"parameter-string": {
+			"name": "string.quoted.double.string.hp42s",
+			"begin": "(?<=\\s)\"",
+			"end": "\"",
+			"patterns": [{
+				"name": "constant.character.escape.hp42s",
+				"match": "\\\\."
+			}]
+		},
+		"parameter-number-4-digit": {
+			"patterns": [{
+				"match": "\\b[0-9]{1,4}\\b",
+				"name": "constant.numeric.hp42s"
+			}]
+		},
+		"parameter-number-2-digit": {
+			"patterns": [{
+				"match": "\\b[0-9]{2}\\b",
+				"name": "constant.numeric.hp42s"
+			}]
+		},
+		"parameter-number-1-digit": {
+			"patterns": [{
+				"match": "\\b[0-9]{1}\\b",
+				"name": "constant.numeric.hp42s"
+			}]
+		},
+		"parameter-register-number": {
+			"patterns": [{
+				"match": "\\b[0-9]{2}\\b",
+				"name": "constant.numeric.hp42s"
+			}]
+		},
+		"constant-string-prefix": {
+			"comment": "The concat character",
+			"patterns": [{
+				"begin": "(⊢)",
+				"beginCaptures": {
+					"1": {
+						"name": "keyword.other.control.np.hp42s"
+					}
+				},
+				"end": "(?=\")"
+			}]
+		},
+		"constant-string-concat": {
+			"comment": "The concat string",
+			"name": "string.quoted.double.string.hp42s",
+			"begin": "(⊢|)\"",
+			"end": "\"",
+			"patterns": [{
+				"name": "constant.character.escape.hp42s",
+				"match": "\\\\."
+			}]
+		},
+		"constant-string": {
+			"name": "string.quoted.double.string.hp42s",
+			"begin": "\\b\"",
+			"end": "\"",
+			"patterns": [{
+				"name": "constant.character.escape.hp42s",
+				"match": "\\\\."
+			}]
+		},
+		"constant-number-exponential": {
+			"patterns": [{
+				"match": "\\b(-|)(([0-9]([0-9']*[0-9])?(\\.)?[0-9]*([0-9']*[0-9])?))?ᴇ(-|)[0-9]+\\b",
+				"name": "constant.numeric.exponential.hp42s"
+			}]
+		},
+		"constant-number-float": {
+			"patterns": [{
+				"match": "\\b(-|)(([0-9]([0-9']*[0-9])?\\.[0-9]*([0-9']*[0-9])?))+\\b",
+				"name": "constant.numeric.float.hp42s"
+			}]
+		},
+		"constant-number-linenumber": {
+			"patterns": [{
+				"match": "\\b\\d+\\b",
+				"name": "constant.numeric.integer.hp42s"
+			}]
+		},
+		"constant-number-integer": {
+			"patterns": [{
+				"match": "\\b\\d+\\b",
+				"name": "constant.numeric.integer.hp42s"
+			}]
+		},
+		"comment-program-size": {
+			"patterns": [{
+				"match": "\\{ \\d+\\-Byte Prgm \\}",
+				"name": "string.quoted.double.string.hp42s"
+			}]
+		},
+		"invalid": {
+			"patterns": []
+		}
+	},
+	"scopeName": "source.free42"
+}

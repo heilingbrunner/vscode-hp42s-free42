@@ -1,0 +1,4370 @@
+{
+  "ABS": {
+    "prefix": "ABS",
+    "scope": "hp42s",
+    "body": [
+      "ABS$0"
+    ],
+    "description": "ABS: Absolute value. Returns |x|."
+  },
+  "ACOS": {
+    "prefix": "ACOS",
+    "scope": "hp42s",
+    "body": [
+      "ACOS$0"
+    ],
+    "description": "ACOS: Arc cosine. Returns cos–1 x."
+  },
+  "ACOSH": {
+    "prefix": "ACOSH",
+    "scope": "hp42s",
+    "body": [
+      "ACOSH$0"
+    ],
+    "description": "ACOSH: Arc hyperbolic cosine. Returns cosh–1 x."
+  },
+  "ADV": {
+    "prefix": "ADV",
+    "scope": "hp42s",
+    "body": [
+      "ADV$0"
+    ],
+    "description": "ADV: Advance paper one line."
+  },
+  "AGRAPH": {
+    "prefix": "AGRAPH",
+    "scope": "hp42s",
+    "body": [
+      "AGRAPH$0"
+    ],
+    "description": "AGRAPH: Alpha graphics. Display a graphics image. Each character in the alpha register specifies an 8-dot column pattern. The x- and y-registers specify the pixel location of the image."
+  },
+  "AIP": {
+    "prefix": "AIP",
+    "scope": "hp42s",
+    "body": [
+      "AIP$0"
+    ],
+    "description": "AIP: Append Integer part of x to the alpha register."
+  },
+  "ALENG": {
+    "prefix": "ALENG",
+    "scope": "hp42s",
+    "body": [
+      "ALENG$0"
+    ],
+    "description": "ALENG: Alpha length. Returns the number of characters in the alpha register."
+  },
+  "ALL": {
+    "prefix": "ALL",
+    "scope": "hp42s",
+    "body": [
+      "ALL$0"
+    ],
+    "description": "ALL: Select ALLΣ (All-statistics) mode, which uses 13 summation coefficients."
+  },
+  "ALLΣ": {
+    "prefix": "ALL",
+    "scope": "hp42s",
+    "body": [
+      "ALLΣ$0"
+    ],
+    "description": "ALLΣ: Select ALLΣ (All-statistics) mode, which uses 13 summation coefficients."
+  },
+  "AND": {
+    "prefix": "AND",
+    "scope": "hp42s",
+    "body": [
+      "AND$0"
+    ],
+    "description": "AND: Logical AND. Returns x AND y."
+  },
+  "AOFF": {
+    "prefix": "AOFF",
+    "scope": "hp42s",
+    "body": [
+      "AOFF$0"
+    ],
+    "description": "AOFF: Alpha off. Exit from the ALPHA menu."
+  },
+  "AON": {
+    "prefix": "AON",
+    "scope": "hp42s",
+    "body": [
+      "AON$0"
+    ],
+    "description": "AON: Alpha on. Select the ALPHA menu."
+  },
+  "ARCL <number>": {
+    "prefix": "ARCL",
+    "scope": "hp42s",
+    "body": [
+      "ARCL ${1:number}$0"
+    ],
+    "description": "ARCL <number>: Alpha recall. Copy data into the alpha register, appending it to the current contents. Numbers are formatted using the current display format. Parameter: register or variable (indirect allowed)."
+  },
+  "ARCL IND <number>": {
+    "prefix": "ARCL",
+    "scope": "hp42s",
+    "body": [
+      "ARCL IND ${1:number}$0"
+    ],
+    "description": "ARCL IND <number>: Alpha recall. Copy data into the alpha register, appending it to the current contents. Numbers are formatted using the current display format. Parameter: register or variable (indirect allowed)."
+  },
+  "ARCL ST <stack>": {
+    "prefix": "ARCL",
+    "scope": "hp42s",
+    "body": [
+      "ARCL ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "ARCL ST <stack>: Alpha recall. Copy data into the alpha register, appending it to the current contents. Numbers are formatted using the current display format. Parameter: register or variable (indirect allowed)."
+  },
+  "ARCL IND ST <stack>": {
+    "prefix": "ARCL",
+    "scope": "hp42s",
+    "body": [
+      "ARCL IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "ARCL IND ST <stack>: Alpha recall. Copy data into the alpha register, appending it to the current contents. Numbers are formatted using the current display format. Parameter: register or variable (indirect allowed)."
+  },
+  "ARCL \"<name>\"": {
+    "prefix": "ARCL",
+    "scope": "hp42s",
+    "body": [
+      "ARCL \"${1:name}\"$0"
+    ],
+    "description": "ARCL \"<name>\": Alpha recall. Copy data into the alpha register, appending it to the current contents. Numbers are formatted using the current display format. Parameter: register or variable (indirect allowed)."
+  },
+  "ARCL IND \"<name>\"": {
+    "prefix": "ARCL",
+    "scope": "hp42s",
+    "body": [
+      "ARCL IND \"${1:name}\"$0"
+    ],
+    "description": "ARCL IND \"<name>\": Alpha recall. Copy data into the alpha register, appending it to the current contents. Numbers are formatted using the current display format. Parameter: register or variable (indirect allowed)."
+  },
+  "AROT": {
+    "prefix": "AROT",
+    "scope": "hp42s",
+    "body": [
+      "AROT$0"
+    ],
+    "description": "AROT: Alpha rotate. Rotate the alpha register by the number of characters specified in the x-register."
+  },
+  "ASHF": {
+    "prefix": "ASHF",
+    "scope": "hp42s",
+    "body": [
+      "ASHF$0"
+    ],
+    "description": "ASHF: Alpha shift. Shifts the six left-most characters out of the alpha register."
+  },
+  "ASIN": {
+    "prefix": "ASIN",
+    "scope": "hp42s",
+    "body": [
+      "ASIN$0"
+    ],
+    "description": "ASIN: Arc sine. Returns sin–1 x."
+  },
+  "ASINH": {
+    "prefix": "ASINH",
+    "scope": "hp42s",
+    "body": [
+      "ASINH$0"
+    ],
+    "description": "ASINH: Arc hyperbolic sine. Returns sinh–1 x."
+  },
+  "ASSIGN \"<name>\" TO <number>": {
+    "prefix": "ASSIGN",
+    "scope": "hp42s",
+    "body": [
+      "ASSIGN \"${1:name}\" TO ${2:number}$0"
+    ],
+    "description": "ASSIGN \"<name>\" TO <number>: Assign a function, program, or variable to a menu key in the custom menu. Parameter 1: function name, alpha program label, or variable name. Parameter 2: key number (01–18)."
+  },
+  "ASTO <number>": {
+    "prefix": "ASTO",
+    "scope": "hp42s",
+    "body": [
+      "ASTO ${1:number}$0"
+    ],
+    "description": "ASTO <number>: Alpha store. Copy the first six characters in the alpha register into a register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "ASTO IND <number>": {
+    "prefix": "ASTO",
+    "scope": "hp42s",
+    "body": [
+      "ASTO IND ${1:number}$0"
+    ],
+    "description": "ASTO IND <number>: Alpha store. Copy the first six characters in the alpha register into a register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "ASTO ST <stack>": {
+    "prefix": "ASTO",
+    "scope": "hp42s",
+    "body": [
+      "ASTO ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "ASTO ST <stack>: Alpha store. Copy the first six characters in the alpha register into a register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "ASTO IND ST <stack>": {
+    "prefix": "ASTO",
+    "scope": "hp42s",
+    "body": [
+      "ASTO IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "ASTO IND ST <stack>: Alpha store. Copy the first six characters in the alpha register into a register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "ASTO \"<name>\"": {
+    "prefix": "ASTO",
+    "scope": "hp42s",
+    "body": [
+      "ASTO \"${1:name}\"$0"
+    ],
+    "description": "ASTO \"<name>\": Alpha store. Copy the first six characters in the alpha register into a register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "ASTO IND \"<name>\"": {
+    "prefix": "ASTO",
+    "scope": "hp42s",
+    "body": [
+      "ASTO IND \"${1:name}\"$0"
+    ],
+    "description": "ASTO IND \"<name>\": Alpha store. Copy the first six characters in the alpha register into a register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "ATAN": {
+    "prefix": "ATAN",
+    "scope": "hp42s",
+    "body": [
+      "ATAN$0"
+    ],
+    "description": "ATAN: Arc tangent. Returns tan–1 x."
+  },
+  "ATANH": {
+    "prefix": "ATANH",
+    "scope": "hp42s",
+    "body": [
+      "ATANH$0"
+    ],
+    "description": "ATANH: Arc hyperbolic tangent. Returns tanh–1 x."
+  },
+  "ATOX": {
+    "prefix": "ATOX",
+    "scope": "hp42s",
+    "body": [
+      "ATOX$0"
+    ],
+    "description": "ATOX: Alpha to X. Convert the left-most character in the alpha register to its character code (returned to the x-register) and delete the character."
+  },
+  "AVIEW": {
+    "prefix": "AVIEW",
+    "scope": "hp42s",
+    "body": [
+      "AVIEW$0"
+    ],
+    "description": "AVIEW: Alpha view. Display the alpha register."
+  },
+  "BASE+": {
+    "prefix": "BASE",
+    "scope": "hp42s",
+    "body": [
+      "BASE+$0"
+    ],
+    "description": "BASE+: Base addition. Returns the 36-bit sum of y + x."
+  },
+  "BASE-": {
+    "prefix": "BASE",
+    "scope": "hp42s",
+    "body": [
+      "BASE-$0"
+    ],
+    "description": "BASE-: Base subtraction. Returns the 36-bit difference of y – x."
+  },
+  "BASE×": {
+    "prefix": "BASE",
+    "scope": "hp42s",
+    "body": [
+      "BASE×$0"
+    ],
+    "description": "BASE×: Base multiplication. Returns the 36-bit product of y x x."
+  },
+  "BASE÷": {
+    "prefix": "BASE",
+    "scope": "hp42s",
+    "body": [
+      "BASE÷$0"
+    ],
+    "description": "BASE÷: Base division. Returns the 36-bit quotient of y ÷ x."
+  },
+  "BASE±": {
+    "prefix": "BASE",
+    "scope": "hp42s",
+    "body": [
+      "BASE±$0"
+    ],
+    "description": "BASE±: Base change sign. Returns the 36-bit 2's complement of x."
+  },
+  "BEEP": {
+    "prefix": "BEEP",
+    "scope": "hp42s",
+    "body": [
+      "BEEP$0"
+    ],
+    "description": "BEEP: Sound a sequence of four tones."
+  },
+  "BEST": {
+    "prefix": "BEST",
+    "scope": "hp42s",
+    "body": [
+      "BEST$0"
+    ],
+    "description": "BEST: Select the best curve-fitting model for the current statistical data."
+  },
+  "BINM": {
+    "prefix": "BINM",
+    "scope": "hp42s",
+    "body": [
+      "BINM$0"
+    ],
+    "description": "BINM: Select binary mode (base 2)."
+  },
+  "BIT?": {
+    "prefix": "BIT",
+    "scope": "hp42s",
+    "body": [
+      "BIT?$0"
+    ],
+    "description": "BIT?: Test the xth bit of y. If the bit is set (1), execute the next program line; if the bit is clear (0), skip the next program line."
+  },
+  "CF <number>": {
+    "prefix": "CF",
+    "scope": "hp42s",
+    "body": [
+      "CF {1:number}$0"
+    ],
+    "description": "CF <number>: Clear flag nn (00 ≤  nn ≤ 35 or 81 ≤  nn ≤ 99). Parameter: flag number (indirect allowed)."
+  },
+  "CF IND <number>": {
+    "prefix": "CF",
+    "scope": "hp42s",
+    "body": [
+      "CF IND {1:number}$0"
+    ],
+    "description": "CF IND <number>: Clear flag nn (00 ≤  nn ≤ 35 or 81 ≤  nn ≤ 99). Parameter: flag number (indirect allowed)."
+  },
+  "CF IND ST <stack>": {
+    "prefix": "CF",
+    "scope": "hp42s",
+    "body": [
+      "CF IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "CF IND ST <stack>: Clear flag nn (00 ≤  nn ≤ 35 or 81 ≤  nn ≤ 99). Parameter: flag number (indirect allowed)."
+  },
+  "CF IND \"<name>\"": {
+    "prefix": "CF",
+    "scope": "hp42s",
+    "body": [
+      "CF IND \"${1:name}\"$0"
+    ],
+    "description": "CF IND \"<name>\": Clear flag nn (00 ≤  nn ≤ 35 or 81 ≤  nn ≤ 99). Parameter: flag number (indirect allowed)."
+  },
+  "CLA": {
+    "prefix": "CL",
+    "scope": "hp42s",
+    "body": [
+      "CLA$0"
+    ],
+    "description": "CLA: Clear alpha register. If alpha mode is on and character entry is terminated (no cursor displayed), then  ◄  also executes the CLA function."
+  },
+  "CLD": {
+    "prefix": "CL",
+    "scope": "hp42s",
+    "body": [
+      "CLD$0"
+    ],
+    "description": "CLD: Clear display. Clear a message from the display."
+  },
+  "CLKEYS": {
+    "prefix": "CL",
+    "scope": "hp42s",
+    "body": [
+      "CLKEYS$0"
+    ],
+    "description": "CLKEYS: Clear all custom menu key assignments."
+  },
+  "CLLCD": {
+    "prefix": "CL",
+    "scope": "hp42s",
+    "body": [
+      "CLLCD$0"
+    ],
+    "description": "CLLCD: Clear LCD (liquid crystal display). Blanks the entire display."
+  },
+  "CLMENU": {
+    "prefix": "CL",
+    "scope": "hp42s",
+    "body": [
+      "CLMENU$0"
+    ],
+    "description": "CLMENU: Clear MENU. Deletes all menu key definitions for the programmable menu."
+  },
+  "CLP \"<name>\"": {
+    "prefix": "CL",
+    "scope": "hp42s",
+    "body": [
+      "CLP \"${1:name}\"$0"
+    ],
+    "description": "CLP \"<name>\": Clear a program from memory. Parameter: global label."
+  },
+  "CLRG": {
+    "prefix": "CL",
+    "scope": "hp42s",
+    "body": [
+      "CLRG$0"
+    ],
+    "description": "CLRG: Clear Registers. Clear all of the numbered storage registers to zero."
+  },
+  "CLST": {
+    "prefix": "CL",
+    "scope": "hp42s",
+    "body": [
+      "CLST$0"
+    ],
+    "description": "CLST: Clear Stack. Clear the stack registers to zero."
+  },
+  "CLV IND <number>": {
+    "prefix": "CL",
+    "scope": "hp42s",
+    "body": [
+      "CLV IND ${1:number}$0"
+    ],
+    "description": "CLV IND <number>: Clear a variable from memory. Parameter: variable name (indirect allowed)."
+  },
+  "CLV IND ST <stack>": {
+    "prefix": "CL",
+    "scope": "hp42s",
+    "body": [
+      "CLV IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "CLV IND ST <stack>: Clear a variable from memory. Parameter: variable name (indirect allowed)."
+  },
+  "CLV \"<name>\"": {
+    "prefix": "CL",
+    "scope": "hp42s",
+    "body": [
+      "CLV \"${1:name}\"$0"
+    ],
+    "description": "CLV \"<name>\": Clear a variable from memory. Parameter: variable name (indirect allowed)."
+  },
+  "CLV IND \"<name>\"": {
+    "prefix": "CL",
+    "scope": "hp42s",
+    "body": [
+      "CLV IND \"${1:name}\"$0"
+    ],
+    "description": "CLV IND \"<name>\": Clear a variable from memory. Parameter: variable name (indirect allowed)."
+  },
+  "CLX": {
+    "prefix": "CL",
+    "scope": "hp42s",
+    "body": [
+      "CLX$0"
+    ],
+    "description": "CLX: Clear x-register to zero. If digit entry is terminated (no cursor in the display), then  ◄  also executes CLX."
+  },
+  "CLΣ": {
+    "prefix": "CL",
+    "scope": "hp42s",
+    "body": [
+      "CLΣ$0"
+    ],
+    "description": "CLΣ: Clear statistics. Clear the accumulated statistical data in the summation registers."
+  },
+  "COMB": {
+    "prefix": "COMB",
+    "scope": "hp42s",
+    "body": [
+      "COMB$0"
+    ],
+    "description": "COMB: Combinations of y items taken x at a time = y! / [x!(y-x)!]."
+  },
+  "COMPLEX": {
+    "prefix": "COMPLEX",
+    "scope": "hp42s",
+    "body": [
+      "COMPLEX$0"
+    ],
+    "description": "COMPLEX: Convert two real numbers (or matrices) into a complex number (or matrix). Converts a complex number (or matrix) into two real numbers (or matrices)."
+  },
+  "CORR": {
+    "prefix": "CORR",
+    "scope": "hp42s",
+    "body": [
+      "CORR$0"
+    ],
+    "description": "CORR: Returns a correlation coefficient using the current statistical data and curve-fitting model."
+  },
+  "COS": {
+    "prefix": "COS",
+    "scope": "hp42s",
+    "body": [
+      "COS$0"
+    ],
+    "description": "COS: Cosine. Returns cos(x)."
+  },
+  "COSH": {
+    "prefix": "COS",
+    "scope": "hp42s",
+    "body": [
+      "COSH$0"
+    ],
+    "description": "COSH: Hyperbolic cosine. Returns cosh(x)."
+  },
+  "CPXRES": {
+    "prefix": "CPX",
+    "scope": "hp42s",
+    "body": [
+      "CPXRES$0"
+    ],
+    "description": "CPXRES: Complex-results. Enable the calculator to return a complex result, even if the inputs are real numbers."
+  },
+  "CPX?": {
+    "prefix": "CPX",
+    "scope": "hp42s",
+    "body": [
+      "CPX?$0"
+    ],
+    "description": "CPX?: If the x-register contains a complex number, execute the next program line; if the x-register does not contain a complex number, skip the next program line."
+  },
+  "CROSS": {
+    "prefix": "CROSS",
+    "scope": "hp42s",
+    "body": [
+      "CROSS$0"
+    ],
+    "description": "CROSS: Returns the cross product of two vectors (matrices or complex numbers)."
+  },
+  "CUSTOM": {
+    "prefix": "CUSTOM",
+    "scope": "hp42s",
+    "body": [
+      "CUSTOM$0"
+    ],
+    "description": "CUSTOM: Custom menu."
+  },
+  "DECM": {
+    "prefix": "DECM",
+    "scope": "hp42s",
+    "body": [
+      "DECM$0"
+    ],
+    "description": "DECM: Selects decimal mode (base 10)."
+  },
+  "DEG": {
+    "prefix": "DEG",
+    "scope": "hp42s",
+    "body": [
+      "DEG$0"
+    ],
+    "description": "DEG: Select the Degrees angular mode."
+  },
+  "DELAY": {
+    "prefix": "DELAY",
+    "scope": "hp42s",
+    "body": [
+      "DELAY$0"
+    ],
+    "description": "DELAY: Set the print delay time to x seconds."
+  },
+  "DELR": {
+    "prefix": "DELR",
+    "scope": "hp42s",
+    "body": [
+      "DELR$0"
+    ],
+    "description": "DELR: Delete row. Delete the current row from the indexed matrix."
+  },
+  "DET": {
+    "prefix": "DET",
+    "scope": "hp42s",
+    "body": [
+      "DET$0"
+    ],
+    "description": "DET: Determinant. Returns the determinant of the matrix in the x-register."
+  },
+  "DIM IND <number>": {
+    "prefix": "DIM",
+    "scope": "hp42s",
+    "body": [
+      "DIM IND ${1:number}$0"
+    ],
+    "description": "DIM IND <number>: Dimension a matrix to x columns and y rows. If the matrix does not exist, DIM creates it. Parameter: variable name (indirect allowed)."
+  },
+  "DIM IND ST <stack>": {
+    "prefix": "DIM",
+    "scope": "hp42s",
+    "body": [
+      "DIM IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "DIM IND ST <stack>: Dimension a matrix to x columns and y rows. If the matrix does not exist, DIM creates it. Parameter: variable name (indirect allowed)."
+  },
+  "DIM \"<name>\"": {
+    "prefix": "DIM",
+    "scope": "hp42s",
+    "body": [
+      "DIM \"${1:name}\"$0"
+    ],
+    "description": "DIM \"<name>\": Dimension a matrix to x columns and y rows. If the matrix does not exist, DIM creates it. Parameter: variable name (indirect allowed)."
+  },
+  "DIM IND \"<name>\"": {
+    "prefix": "DIM",
+    "scope": "hp42s",
+    "body": [
+      "DIM IND \"${1:name}\"$0"
+    ],
+    "description": "DIM IND \"<name>\": Dimension a matrix to x columns and y rows. If the matrix does not exist, DIM creates it. Parameter: variable name (indirect allowed)."
+  },
+  "DIM?": {
+    "prefix": "DIM?",
+    "scope": "hp42s",
+    "body": [
+      "DIM?$0"
+    ],
+    "description": "DIM?: Returns the dimensions of the matrix in the x-register (rows to the y-register and columns to the x-register)."
+  },
+  "DOT": {
+    "prefix": "DOT",
+    "scope": "hp42s",
+    "body": [
+      "DOT$0"
+    ],
+    "description": "DOT: Dot Product.  Returns the dot product of two vectors (matrices or complex numbers)."
+  },
+  "DSE <number>": {
+    "prefix": "DSE",
+    "scope": "hp42s",
+    "body": [
+      "DSE ${1:number}$0"
+    ],
+    "description": "DSE <number>: Decrement, skip if (less than or) equal. Given ccccccc.fffii in a variable or register, decrements ccccccc by ii and skips the next program line if ccccccc is now ≤  fff. Parameter: register or variable (indirect allowed)."
+  },
+  "DSE IND <number>": {
+    "prefix": "DSE",
+    "scope": "hp42s",
+    "body": [
+      "DSE IND ${1:number}$0"
+    ],
+    "description": "DSE IND <number>: Decrement, skip if (less than or) equal. Given ccccccc.fffii in a variable or register, decrements ccccccc by ii and skips the next program line if ccccccc is now ≤  fff. Parameter: register or variable (indirect allowed)."
+  },
+  "DSE ST <stack>": {
+    "prefix": "DSE",
+    "scope": "hp42s",
+    "body": [
+      "DSE ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "DSE ST <stack>: Decrement, skip if (less than or) equal. Given ccccccc.fffii in a variable or register, decrements ccccccc by ii and skips the next program line if ccccccc is now ≤  fff. Parameter: register or variable (indirect allowed)."
+  },
+  "DSE IND ST <stack>": {
+    "prefix": "DSE",
+    "scope": "hp42s",
+    "body": [
+      "DSE IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "DSE IND ST <stack>: Decrement, skip if (less than or) equal. Given ccccccc.fffii in a variable or register, decrements ccccccc by ii and skips the next program line if ccccccc is now ≤  fff. Parameter: register or variable (indirect allowed)."
+  },
+  "DSE \"<name>\"": {
+    "prefix": "DSE",
+    "scope": "hp42s",
+    "body": [
+      "DSE \"${1:name}\"$0"
+    ],
+    "description": "DSE \"<name>\": Decrement, skip if (less than or) equal. Given ccccccc.fffii in a variable or register, decrements ccccccc by ii and skips the next program line if ccccccc is now ≤  fff. Parameter: register or variable (indirect allowed)."
+  },
+  "DSE IND \"<name>\"": {
+    "prefix": "DSE",
+    "scope": "hp42s",
+    "body": [
+      "DSE IND \"${1:name}\"$0"
+    ],
+    "description": "DSE IND \"<name>\": Decrement, skip if (less than or) equal. Given ccccccc.fffii in a variable or register, decrements ccccccc by ii and skips the next program line if ccccccc is now ≤  fff. Parameter: register or variable (indirect allowed)."
+  },
+  "E": {
+    "prefix": "E",
+    "scope": "hp42s",
+    "body": [
+      "ᴇ$0"
+    ],
+    "description": "ᴇ: Exponent."
+  },
+  "EDIT": {
+    "prefix": "EDIT",
+    "scope": "hp42s",
+    "body": [
+      "EDIT$0"
+    ],
+    "description": "EDIT: Edit a matrix in the x-register."
+  },
+  "EDITN IND <number>": {
+    "prefix": "EDITN",
+    "scope": "hp42s",
+    "body": [
+      "EDITN IND ${1:number}$0"
+    ],
+    "description": "EDITN IND <number>: Edit a named matrix. Parameter: variable name (indirect allowed)."
+  },
+  "EDITN IND ST <stack>": {
+    "prefix": "EDITN",
+    "scope": "hp42s",
+    "body": [
+      "EDITN IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "EDITN IND ST <stack>: Edit a named matrix. Parameter: variable name (indirect allowed)."
+  },
+  "EDITN \"<name>\"": {
+    "prefix": "EDITN",
+    "scope": "hp42s",
+    "body": [
+      "EDITN \"${1:name}\"$0"
+    ],
+    "description": "EDITN \"<name>\": Edit a named matrix. Parameter: variable name (indirect allowed)."
+  },
+  "EDITN IND \"<name>\"": {
+    "prefix": "EDITN",
+    "scope": "hp42s",
+    "body": [
+      "EDITN IND \"${1:name}\"$0"
+    ],
+    "description": "EDITN IND \"<name>\": Edit a named matrix. Parameter: variable name (indirect allowed)."
+  },
+  "END": {
+    "prefix": "END",
+    "scope": "hp42s",
+    "body": [
+      "END$0"
+    ],
+    "description": "END: End of a program."
+  },
+  "ENG <number>": {
+    "prefix": "ENG",
+    "scope": "hp42s",
+    "body": [
+      "ENG ${1:number}$0"
+    ],
+    "description": "ENG <number>: Select engineering display format. Parameter: number of digits (indirect allowed)."
+  },
+  "ENG IND <number>": {
+    "prefix": "ENG",
+    "scope": "hp42s",
+    "body": [
+      "ENG IND ${1:number}$0"
+    ],
+    "description": "ENG IND <number>: Select engineering display format. Parameter: number of digits (indirect allowed)."
+  },
+  "ENG IND ST <stack>": {
+    "prefix": "ENG",
+    "scope": "hp42s",
+    "body": [
+      "ENG IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "ENG IND ST <stack>: Select engineering display format. Parameter: number of digits (indirect allowed)."
+  },
+  "ENG IND \"<name>\"": {
+    "prefix": "ENG",
+    "scope": "hp42s",
+    "body": [
+      "ENG IND \"${1:name}\"$0"
+    ],
+    "description": "ENG IND \"<name>\": Select engineering display format. Parameter: number of digits (indirect allowed)."
+  },
+  "ENTER": {
+    "prefix": "ENTER",
+    "scope": "hp42s",
+    "body": [
+      "ENTER$0"
+    ],
+    "description": "ENTER: Separate two numbers keyed in sequentially; copies x into the y-register, y into the z-register, and z into the t-register, and loses t."
+  },
+  "EXITALL": {
+    "prefix": "EXITALL",
+    "scope": "hp42s",
+    "body": [
+      "EXITALL$0"
+    ],
+    "description": "EXITALL: Exit all menus."
+  },
+  "EXPF": {
+    "prefix": "EXPF",
+    "scope": "hp42s",
+    "body": [
+      "EXPF$0"
+    ],
+    "description": "EXPF: Select the exponential curve-fitting model."
+  },
+  "E↑X": {
+    "prefix": "EX",
+    "scope": "hp42s",
+    "body": [
+      "E↑X$0"
+    ],
+    "description": "E↑X: Natural exponential. Returns ex."
+  },
+  "E↑X-1": {
+    "prefix": "EX",
+    "scope": "hp42s",
+    "body": [
+      "E↑X-1$0"
+    ],
+    "description": "E↑X-1: Natural exponential for values of x which are close to zero. Returns ex–1, which provides a much higher accuracy in the fractional part of the result."
+  },
+  "FC? <number>": {
+    "prefix": "FC?",
+    "scope": "hp42s",
+    "body": [
+      "FC? ${1:number}$0"
+    ],
+    "description": "FC? <number>: Flag clear test. If the specified flag is clear, executes the next program line; if the flag is set, skips the next program line. Parameter: flag number (indirect allowed)."
+  },
+  "FC? IND <number>": {
+    "prefix": "FC?",
+    "scope": "hp42s",
+    "body": [
+      "FC? IND ${1:number}$0"
+    ],
+    "description": "FC? IND <number>: Flag clear test. If the specified flag is clear, executes the next program line; if the flag is set, skips the next program line. Parameter: flag number (indirect allowed)."
+  },
+  "FC? IND ST <stack>": {
+    "prefix": "FC?",
+    "scope": "hp42s",
+    "body": [
+      "FC? IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "FC? IND ST <stack>: Flag clear test. If the specified flag is clear, executes the next program line; if the flag is set, skips the next program line. Parameter: flag number (indirect allowed)."
+  },
+  "FC? IND \"<name>\"": {
+    "prefix": "FC?",
+    "scope": "hp42s",
+    "body": [
+      "FC? IND \"${1:name}\"$0"
+    ],
+    "description": "FC? IND \"<name>\": Flag clear test. If the specified flag is clear, executes the next program line; if the flag is set, skips the next program line. Parameter: flag number (indirect allowed)."
+  },
+  "FC?C <number>": {
+    "prefix": "FC?C",
+    "scope": "hp42s",
+    "body": [
+      "FC?C ${1:number}$0"
+    ],
+    "description": "FC?C <number>: Flag clear test and clear. If the specified flag is clear, execute the next program line; if the flag is set, skip the next program line. Cleared after the test is complete. (This function can be used only with flags 00 through 35 and 81 through 99.) Parameter: flag number (indirect allowed)."
+  },
+  "FC?C IND <number>": {
+    "prefix": "FC?C",
+    "scope": "hp42s",
+    "body": [
+      "FC?C IND ${1:number}$0"
+    ],
+    "description": "FC?C IND <number>: Flag clear test and clear. If the specified flag is clear, execute the next program line; if the flag is set, skip the next program line. Cleared after the test is complete. (This function can be used only with flags 00 through 35 and 81 through 99.) Parameter: flag number (indirect allowed)."
+  },
+  "FC?C IND ST <stack>": {
+    "prefix": "FC?C",
+    "scope": "hp42s",
+    "body": [
+      "FC?C IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "FC?C IND ST <stack>: Flag clear test and clear. If the specified flag is clear, execute the next program line; if the flag is set, skip the next program line. Cleared after the test is complete. (This function can be used only with flags 00 through 35 and 81 through 99.) Parameter: flag number (indirect allowed)."
+  },
+  "FC?C IND \"<name>\"": {
+    "prefix": "FC?C",
+    "scope": "hp42s",
+    "body": [
+      "FC?C IND \"${1:name}\"$0"
+    ],
+    "description": "FC?C IND \"<name>\": Flag clear test and clear. If the specified flag is clear, execute the next program line; if the flag is set, skip the next program line. Cleared after the test is complete. (This function can be used only with flags 00 through 35 and 81 through 99.) Parameter: flag number (indirect allowed)."
+  },
+  "FCSTX": {
+    "prefix": "FCSTX",
+    "scope": "hp42s",
+    "body": [
+      "FCSTX$0"
+    ],
+    "description": "FCSTX: Forecasts an x-value given a y-value."
+  },
+  "FCSTY": {
+    "prefix": "FCSTY",
+    "scope": "hp42s",
+    "body": [
+      "FCSTY$0"
+    ],
+    "description": "FCSTY: Forecasts a y-value given an x-value."
+  },
+  "FIX <number>": {
+    "prefix": "FIX 11",
+    "scope": "hp42s",
+    "body": [
+      "FIX ${1:number}$0"
+    ],
+    "description": "FIX <number>: Select fixed-decimal display format. Parameter: number of digits (indirect allowed)."
+  },
+  "FIX IND <number>": {
+    "prefix": "FIX",
+    "scope": "hp42s",
+    "body": [
+      "FIX IND ${1:number}$0"
+    ],
+    "description": "FIX IND <number>: Select fixed-decimal display format. Parameter: number of digits (indirect allowed)."
+  },
+  "FIX IND ST <stack>": {
+    "prefix": "FIX",
+    "scope": "hp42s",
+    "body": [
+      "FIX IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "FIX IND ST <stack>: Select fixed-decimal display format. Parameter: number of digits (indirect allowed)."
+  },
+  "FIX IND \"<name>\"": {
+    "prefix": "FIX",
+    "scope": "hp42s",
+    "body": [
+      "FIX IND \"${1:name}\"$0"
+    ],
+    "description": "FIX IND \"<name>\": Select fixed-decimal display format. Parameter: number of digits (indirect allowed)."
+  },
+  "FLAG 00": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "00$0"
+    ],
+    "description": "FLAG 00: User flag."
+  },
+  "FLAG 01": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "01$0"
+    ],
+    "description": "FLAG 01: User flag."
+  },
+  "FLAG 02": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "02$0"
+    ],
+    "description": "FLAG 02: User flag."
+  },
+  "FLAG 03": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "03$0"
+    ],
+    "description": "FLAG 03: User flag."
+  },
+  "FLAG 04": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "04$0"
+    ],
+    "description": "FLAG 04: User flag."
+  },
+  "FLAG 05": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "05$0"
+    ],
+    "description": "FLAG 05: User flag."
+  },
+  "FLAG 06": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "06$0"
+    ],
+    "description": "FLAG 06: User flag."
+  },
+  "FLAG 07": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "07$0"
+    ],
+    "description": "FLAG 07: User flag."
+  },
+  "FLAG 08": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "08$0"
+    ],
+    "description": "FLAG 08: User flag."
+  },
+  "FLAG 09": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "09$0"
+    ],
+    "description": "FLAG 09: User flag."
+  },
+  "FLAG 10": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "10$0"
+    ],
+    "description": "FLAG 10: User flag."
+  },
+  "FLAG 11": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "11$0"
+    ],
+    "description": "FLAG 11: Automatic Execution."
+  },
+  "FLAG 12": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "12$0"
+    ],
+    "description": "FLAG 12: Print Double-wide."
+  },
+  "FLAG 13": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "13$0"
+    ],
+    "description": "FLAG 13: Print Lowercase."
+  },
+  "FLAG 14": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "14$0"
+    ],
+    "description": "FLAG 14: Flag."
+  },
+  "FLAG 15": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "15$0"
+    ],
+    "description": "FLAG 15: Print Mode."
+  },
+  "FLAG 16": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "16$0"
+    ],
+    "description": "FLAG 16: Print Mode."
+  },
+  "FLAG 17": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "17$0"
+    ],
+    "description": "FLAG 17: Reserved."
+  },
+  "FLAG 18": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "18$0"
+    ],
+    "description": "FLAG 18: Reserved."
+  },
+  "FLAG 19": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "19$0"
+    ],
+    "description": "FLAG 19: General Use"
+  },
+  "FLAG 20": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "20$0"
+    ],
+    "description": "FLAG 20: General Use."
+  },
+  "FLAG 21": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "21$0"
+    ],
+    "description": "FLAG 21: Printer Enable."
+  },
+  "FLAG 22": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "22$0"
+    ],
+    "description": "FLAG 22: Numeric Data Input."
+  },
+  "FLAG 23": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "23$0"
+    ],
+    "description": "FLAG 23: Alpha Data Input."
+  },
+  "FLAG 24": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "24$0"
+    ],
+    "description": "FLAG 24: Range Error Ignore."
+  },
+  "FLAG 25": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "25$0"
+    ],
+    "description": "FLAG 25: Error Ignore."
+  },
+  "FLAG 26": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "26$0"
+    ],
+    "description": "FLAG 26: Audio Enable."
+  },
+  "FLAG 27": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "27$0"
+    ],
+    "description": "FLAG 27: CUSTOM Menu."
+  },
+  "FLAG 28": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "28$0"
+    ],
+    "description": "FLAG 28: Radix mark (. or ,)."
+  },
+  "FLAG 29": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "29$0"
+    ],
+    "description": "FLAG 29: Digit Separators."
+  },
+  "FLAG 30": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "30$0"
+    ],
+    "description": "FLAG 30: Stack Lift Disable."
+  },
+  "FLAG 31": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "31$0"
+    ],
+    "description": "FLAG 31: Reserved."
+  },
+  "FLAG 32": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "32$0"
+    ],
+    "description": "FLAG 32: Reserved."
+  },
+  "FLAG 33": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "33$0"
+    ],
+    "description": "FLAG 33: Reserved."
+  },
+  "FLAG 34": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "34$0"
+    ],
+    "description": "FLAG 34: AGRAPH Control."
+  },
+  "FLAG 35": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "35$0"
+    ],
+    "description": "FLAG 35: AGRAPH Control."
+  },
+  "FLAG 36": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "36$0"
+    ],
+    "description": "FLAG 36: Number of Digits."
+  },
+  "FLAG 37": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "37$0"
+    ],
+    "description": "FLAG 37: Number of Digits."
+  },
+  "FLAG 38": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "38$0"
+    ],
+    "description": "FLAG 38: Number of Digits."
+  },
+  "FLAG 39": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "39$0"
+    ],
+    "description": "FLAG 39: Number of Digits."
+  },
+  "FLAG 40": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "40$0"
+    ],
+    "description": "FLAG 40: Display Format."
+  },
+  "FLAG 41": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "41$0"
+    ],
+    "description": "FLAG 41: Display Format."
+  },
+  "FLAG 42": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "42$0"
+    ],
+    "description": "FLAG 42: Grads Mode."
+  },
+  "FLAG 43": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "43$0"
+    ],
+    "description": "FLAG 43: Radians Mode."
+  },
+  "FLAG 44": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "44$0"
+    ],
+    "description": "FLAG 44: Continuous On."
+  },
+  "FLAG 45": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "45$0"
+    ],
+    "description": "FLAG 45: Solving."
+  },
+  "FLAG 46": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "46$0"
+    ],
+    "description": "FLAG 46: Integrating."
+  },
+  "FLAG 47": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "47$0"
+    ],
+    "description": "FLAG 47: Variable menu."
+  },
+  "FLAG 48": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "48$0"
+    ],
+    "description": "FLAG 48: Alpha Mode."
+  },
+  "FLAG 49": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "49$0"
+    ],
+    "description": "FLAG 49: Low Battery."
+  },
+  "FLAG 50": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "50$0"
+    ],
+    "description": "FLAG 50: Message."
+  },
+  "FLAG 51": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "51$0"
+    ],
+    "description": "FLAG 51: Two-Line Message."
+  },
+  "FLAG 52": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "52$0"
+    ],
+    "description": "FLAG 52: Program-Entry."
+  },
+  "FLAG 53": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "53$0"
+    ],
+    "description": "FLAG 53: INPUT."
+  },
+  "FLAG 54": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "54$0"
+    ],
+    "description": "FLAG 54: Reserved."
+  },
+  "FLAG 55": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "55$0"
+    ],
+    "description": "FLAG 55: Printer Existence."
+  },
+  "FLAG 56": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "56$0"
+    ],
+    "description": "FLAG 56: Linear Curve-Fitting Model."
+  },
+  "FLAG 57": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "57$0"
+    ],
+    "description": "FLAG 57: Logarithmic Curve-Fitting Model."
+  },
+  "FLAG 58": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "58$0"
+    ],
+    "description": "FLAG 58: Exponential Curve-Fitting Model."
+  },
+  "FLAG 59": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "59$0"
+    ],
+    "description": "FLAG 59: Power Curve-Fitting Model."
+  },
+  "FLAG 60": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "60$0"
+    ],
+    "description": "FLAG 60: AllΣ Mode (statistics)."
+  },
+  "FLAG 61": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "61$0"
+    ],
+    "description": "FLAG 61: Logarithmic Model Invalid."
+  },
+  "FLAG 62": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "62$0"
+    ],
+    "description": "FLAG 62: Exponential Model Invalid."
+  },
+  "FLAG 63": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "63$0"
+    ],
+    "description": "FLAG 63: Power Model Invalid."
+  },
+  "FLAG 64": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "64$0"
+    ],
+    "description": "FLAG 64: Reserved."
+  },
+  "FLAG 65": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "65$0"
+    ],
+    "description": "FLAG 65: Matrix Editor."
+  },
+  "FLAG 66": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "66$0"
+    ],
+    "description": "FLAG 66: Grow Mode."
+  },
+  "FLAG 67": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "67$0"
+    ],
+    "description": "FLAG 67: Reserved."
+  },
+  "FLAG 68": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "68$0"
+    ],
+    "description": "FLAG 68: Base Mode."
+  },
+  "FLAG 69": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "69$0"
+    ],
+    "description": "FLAG 69: Base Mode."
+  },
+  "FLAG 70": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "70$0"
+    ],
+    "description": "FLAG 70: Base Mode."
+  },
+  "FLAG 71": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "71$0"
+    ],
+    "description": "FLAG 71: Base Mode."
+  },
+  "FLAG 72": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "72$0"
+    ],
+    "description": "FLAG 72: Local-Label Mode (CUSTOM)."
+  },
+  "FLAG 73": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "73$0"
+    ],
+    "description": "FLAG 73: Polar Mode."
+  },
+  "FLAG 74": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "74$0"
+    ],
+    "description": "FLAG 74: Real-Result Only."
+  },
+  "FLAG 75": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "75$0"
+    ],
+    "description": "FLAG 75: Programmable Menu Active."
+  },
+  "FLAG 76": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "76$0"
+    ],
+    "description": "FLAG 76: Edge Wrap."
+  },
+  "FLAG 77": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "77$0"
+    ],
+    "description": "FLAG 77: End Wrap."
+  },
+  "FLAG 78": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "78$0"
+    ],
+    "description": "FLAG 78: Reserved."
+  },
+  "FLAG 79": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "79$0"
+    ],
+    "description": "FLAG 79: Reserved."
+  },
+  "FLAG 80": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "80$0"
+    ],
+    "description": "FLAG 80: Reserved."
+  },
+  "FLAG 81": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "81$0"
+    ],
+    "description": "FLAG 81: User Flag."
+  },
+  "FLAG 82": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "82$0"
+    ],
+    "description": "FLAG 82: User Flag."
+  },
+  "FLAG 83": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "83$0"
+    ],
+    "description": "FLAG 83: User Flag."
+  },
+  "FLAG 84": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "84$0"
+    ],
+    "description": "FLAG 84: User Flag."
+  },
+  "FLAG 85": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "85$0"
+    ],
+    "description": "FLAG 85: User Flag."
+  },
+  "FLAG 86": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "86$0"
+    ],
+    "description": "FLAG 86: User Flag."
+  },
+  "FLAG 87": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "87$0"
+    ],
+    "description": "FLAG 87: User Flag."
+  },
+  "FLAG 88": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "88$0"
+    ],
+    "description": "FLAG 88: User Flag."
+  },
+  "FLAG 89": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "89$0"
+    ],
+    "description": "FLAG 89: User Flag."
+  },
+  "FLAG 90": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "90$0"
+    ],
+    "description": "FLAG 90: User Flag."
+  },
+  "FLAG 91": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "91$0"
+    ],
+    "description": "FLAG 91: User Flag."
+  },
+  "FLAG 92": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "92$0"
+    ],
+    "description": "FLAG 92: User Flag."
+  },
+  "FLAG 93": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "93$0"
+    ],
+    "description": "FLAG 93: User Flag."
+  },
+  "FLAG 94": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "94$0"
+    ],
+    "description": "FLAG 94: User Flag."
+  },
+  "FLAG 95": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "95$0"
+    ],
+    "description": "FLAG 95: User Flag."
+  },
+  "FLAG 96": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "96$0"
+    ],
+    "description": "FLAG 96: User Flag."
+  },
+  "FLAG 97": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "97$0"
+    ],
+    "description": "FLAG 97: User Flag."
+  },
+  "FLAG 98": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "98$0"
+    ],
+    "description": "FLAG 98: User Flag."
+  },
+  "FLAG 99": {
+    "prefix": "FLAG",
+    "scope": "hp42s",
+    "body": [
+      "99$0"
+    ],
+    "description": "FLAG 99: User Flag."
+  },
+  "FNRM": {
+    "prefix": "FNRM",
+    "scope": "hp42s",
+    "body": [
+      "FNRM$0"
+    ],
+    "description": "FNRM: Returns the Frobenius norm of the matrix in the x-register."
+  },
+  "FP": {
+    "prefix": "FP",
+    "scope": "hp42s",
+    "body": [
+      "FP$0"
+    ],
+    "description": "FP: Returns the fractional part of x."
+  },
+  "FS? <number>": {
+    "prefix": "FS?",
+    "scope": "hp42s",
+    "body": [
+      "FS? ${1:number}$0"
+    ],
+    "description": "FS? <number>: Flag set test. If the specified flag is set, execute the next program line; if the flag is clear, skip the next program line. Parameter: flag number (indirect allowed)."
+  },
+  "FS? IND <number>": {
+    "prefix": "FS?",
+    "scope": "hp42s",
+    "body": [
+      "FS? IND ${1:number}$0"
+    ],
+    "description": "FS? IND <number>: Flag set test. If the specified flag is set, execute the next program line; if the flag is clear, skip the next program line. Parameter: flag number (indirect allowed)."
+  },
+  "FS? IND ST <stack>": {
+    "prefix": "FS?",
+    "scope": "hp42s",
+    "body": [
+      "FS? IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "FS? IND ST <stack>: Flag set test. If the specified flag is set, execute the next program line; if the flag is clear, skip the next program line. Parameter: flag number (indirect allowed)."
+  },
+  "FS? IND \"<name>\"": {
+    "prefix": "FS?",
+    "scope": "hp42s",
+    "body": [
+      "FS? IND \"${1:name}\"$0"
+    ],
+    "description": "FS? IND \"<name>\": Flag set test. If the specified flag is set, execute the next program line; if the flag is clear, skip the next program line. Parameter: flag number (indirect allowed)."
+  },
+  "FS?C <number>": {
+    "prefix": "FS?C",
+    "scope": "hp42s",
+    "body": [
+      "FS?C ${1:number}$0"
+    ],
+    "description": "FS?C <number>: Flag set test and clear. If the specified flag is set, execute the next program line; if the flag is clear, skip the next program line. Clear the flag after the test is complete. (This function can be used only with flags 00 through 35 and 81 through 99.) Parameter: flag number (indirect allowed)."
+  },
+  "FS?C IND <number>": {
+    "prefix": "FS?C",
+    "scope": "hp42s",
+    "body": [
+      "FS?C IND ${1:number}$0"
+    ],
+    "description": "FS?C IND <number>: Flag set test and clear. If the specified flag is set, execute the next program line; if the flag is clear, skip the next program line. Clear the flag after the test is complete. (This function can be used only with flags 00 through 35 and 81 through 99.) Parameter: flag number (indirect allowed)."
+  },
+  "FS?C IND ST <stack>": {
+    "prefix": "FS?C",
+    "scope": "hp42s",
+    "body": [
+      "FS?C IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "FS?C IND ST <stack>: Flag set test and clear. If the specified flag is set, execute the next program line; if the flag is clear, skip the next program line. Clear the flag after the test is complete. (This function can be used only with flags 00 through 35 and 81 through 99.) Parameter: flag number (indirect allowed)."
+  },
+  "FS?C IND \"<name>\"": {
+    "prefix": "FS?C",
+    "scope": "hp42s",
+    "body": [
+      "FS?C IND \"${1:name}\"$0"
+    ],
+    "description": "FS?C IND \"<name>\": Flag set test and clear. If the specified flag is set, execute the next program line; if the flag is clear, skip the next program line. Clear the flag after the test is complete. (This function can be used only with flags 00 through 35 and 81 through 99.) Parameter: flag number (indirect allowed)."
+  },
+  "GAMMA": {
+    "prefix": "GAMMA",
+    "scope": "hp42s",
+    "body": [
+      "GAMMA$0"
+    ],
+    "description": "GAMMA: Gamma function. Returns Γ(x)."
+  },
+  "GETKEY": {
+    "prefix": "GETKEY",
+    "scope": "hp42s",
+    "body": [
+      "GETKEY$0"
+    ],
+    "description": "GETKEY: Get key. The calculator waits for you to press a key. When you do, the key number is returned to the x-register. Keys are numbered from 1 through 37 ( Σ+  through  ÷ )for normal keys and 38 through 74 (■ Σ–   through ■CATALOG) for shifted keys."
+  },
+  "GETM": {
+    "prefix": "GETM",
+    "scope": "hp42s",
+    "body": [
+      "GETM$0"
+    ],
+    "description": "GETM: Get matrix. Copy a submatrix into the x-register from the indexed matrix."
+  },
+  "GRAD": {
+    "prefix": "GRAD",
+    "scope": "hp42s",
+    "body": [
+      "GRAD$0"
+    ],
+    "description": "GRAD: Select grads angular mode."
+  },
+  "GROW": {
+    "prefix": "GROW",
+    "scope": "hp42s",
+    "body": [
+      "GROW$0"
+    ],
+    "description": "GROW: Select grow mode. Executing → or J+ causes the matrix to grow by one new row if the index pointers are at the last (lower-right) element in the matrix."
+  },
+  "GTO <number>": {
+    "prefix": "GTO",
+    "scope": "hp42s",
+    "body": [
+      "GTO ${1:number}$0"
+    ],
+    "description": "GTO <number>: Go to label. From the keyboard, move the program pointer to the specified label. In a running program, cause the program to branch to the specified label. Parameter: local or global label (indirect allowed)."
+  },
+  "GTO IND <number>": {
+    "prefix": "GTO",
+    "scope": "hp42s",
+    "body": [
+      "GTO IND ${1:number}$0"
+    ],
+    "description": "GTO IND <number>: Go to label. From the keyboard, move the program pointer to the specified label. In a running program, cause the program to branch to the specified label. Parameter: local or global label (indirect allowed)."
+  },
+  "GTO IND ST <stack>": {
+    "prefix": "GTO",
+    "scope": "hp42s",
+    "body": [
+      "GTO IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "GTO IND ST <stack>: Go to label. From the keyboard, move the program pointer to the specified label. In a running program, cause the program to branch to the specified label. Parameter: local or global label (indirect allowed)."
+  },
+  "GTO <alpha_local_label>": {
+    "prefix": "GTO",
+    "scope": "hp42s",
+    "body": [
+      "GTO ${1:A|B|C|D|E|F|G|H|I|J|a|b|c|d|e}$0"
+    ],
+    "description": "GTO <alpha_local_label>: Go to label. From the keyboard, move the program pointer to the specified label. In a running program, cause the program to branch to the specified label. Parameter: local or global label (indirect allowed)."
+  },
+  "GTO \"<name>\"": {
+    "prefix": "GTO",
+    "scope": "hp42s",
+    "body": [
+      "GTO \"${1:name}\"$0"
+    ],
+    "description": "GTO \"<name>\": Go to label. From the keyboard, move the program pointer to the specified label. In a running program, cause the program to branch to the specified label. Parameter: local or global label (indirect allowed)."
+  },
+  "GTO IND \"<name>\"": {
+    "prefix": "GTO",
+    "scope": "hp42s",
+    "body": [
+      "GTO IND \"${1:name}\"$0"
+    ],
+    "description": "GTO IND \"<name>\": Go to label. From the keyboard, move the program pointer to the specified label. In a running program, cause the program to branch to the specified label. Parameter: local or global label (indirect allowed)."
+  },
+  "HEXM": {
+    "prefix": "HEXM",
+    "scope": "hp42s",
+    "body": [
+      "HEXM$0"
+    ],
+    "description": "HEXM: Select hexadecimal mode (base 16)."
+  },
+  "HMS+": {
+    "prefix": "HMS",
+    "scope": "hp42s",
+    "body": [
+      "HMS+$0"
+    ],
+    "description": "HMS+: Add x and y using H.MMSSss (hours-minutes-seconds) format."
+  },
+  "HMS-": {
+    "prefix": "HMS",
+    "scope": "hp42s",
+    "body": [
+      "HMS-$0"
+    ],
+    "description": "HMS-: Subtract x from y using H.MMSSss (hours-minutes-seconds) format."
+  },
+  "I+": {
+    "prefix": "I",
+    "scope": "hp42s",
+    "body": [
+      "I+$0"
+    ],
+    "description": "I+: Increment the row pointer in the indexed matrix."
+  },
+  "I-": {
+    "prefix": "I",
+    "scope": "hp42s",
+    "body": [
+      "I-$0"
+    ],
+    "description": "I-: Decrement the row pointer in the indexed matrix."
+  },
+  "INDEX IND <number>": {
+    "prefix": "INDEX",
+    "scope": "hp42s",
+    "body": [
+      "INDEX IND ${1:number}$0"
+    ],
+    "description": "INDEX IND <number>: Index a named matrix. Parameter: variable name (indirect allowed)."
+  },
+  "INDEX IND ST <stack>": {
+    "prefix": "INDEX",
+    "scope": "hp42s",
+    "body": [
+      "INDEX IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "INDEX IND ST <stack>: Index a named matrix. Parameter: variable name (indirect allowed)."
+  },
+  "INDEX \"<name>\"": {
+    "prefix": "INDEX",
+    "scope": "hp42s",
+    "body": [
+      "INDEX \"${1:name}\"$0"
+    ],
+    "description": "INDEX \"<name>\": Index a named matrix. Parameter: variable name (indirect allowed)."
+  },
+  "INDEX IND \"<name>\"": {
+    "prefix": "INDEX",
+    "scope": "hp42s",
+    "body": [
+      "INDEX IND \"${1:name}\"$0"
+    ],
+    "description": "INDEX IND \"<name>\": Index a named matrix. Parameter: variable name (indirect allowed)."
+  },
+  "INPUT <number>": {
+    "prefix": "INPUT",
+    "scope": "hp42s",
+    "body": [
+      "INPUT ${1:number}$0"
+    ],
+    "description": "INPUT <number>: Recall a register or variable to the x-register, display the name of the register or variable along with the contents of the x-register, and halt program execution. Pressing R/S (or ■SST) stores x into the register or variable; pressing EXIT cancels. (Used only in programs.) Parameter: register or variable (indirect allowed)."
+  },
+  "INPUT IND <number>": {
+    "prefix": "INPUT",
+    "scope": "hp42s",
+    "body": [
+      "INPUT IND ${1:number}$0"
+    ],
+    "description": "INPUT IND <number>: Recall a register or variable to the x-register, display the name of the register or variable along with the contents of the x-register, and halt program execution. Pressing R/S (or ■SST) stores x into the register or variable; pressing EXIT cancels. (Used only in programs.) Parameter: register or variable (indirect allowed)."
+  },
+  "INPUT ST <stack>": {
+    "prefix": "INPUT",
+    "scope": "hp42s",
+    "body": [
+      "INPUT ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "INPUT ST <stack>: Recall a register or variable to the x-register, display the name of the register or variable along with the contents of the x-register, and halt program execution. Pressing R/S (or ■SST) stores x into the register or variable; pressing EXIT cancels. (Used only in programs.) Parameter: register or variable (indirect allowed)."
+  },
+  "INPUT IND ST <stack>": {
+    "prefix": "INPUT",
+    "scope": "hp42s",
+    "body": [
+      "INPUT IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "INPUT IND ST <stack>: Recall a register or variable to the x-register, display the name of the register or variable along with the contents of the x-register, and halt program execution. Pressing R/S (or ■SST) stores x into the register or variable; pressing EXIT cancels. (Used only in programs.) Parameter: register or variable (indirect allowed)."
+  },
+  "INPUT \"<name>\"": {
+    "prefix": "INPUT",
+    "scope": "hp42s",
+    "body": [
+      "INPUT \"${1:name}\"$0"
+    ],
+    "description": "INPUT \"<name>\": Recall a register or variable to the x-register, display the name of the register or variable along with the contents of the x-register, and halt program execution. Pressing R/S (or ■SST) stores x into the register or variable; pressing EXIT cancels. (Used only in programs.) Parameter: register or variable (indirect allowed)."
+  },
+  "INPUT IND \"<name>\"": {
+    "prefix": "INPUT",
+    "scope": "hp42s",
+    "body": [
+      "INPUT IND \"${1:name}\"$0"
+    ],
+    "description": "INPUT IND \"<name>\": Recall a register or variable to the x-register, display the name of the register or variable along with the contents of the x-register, and halt program execution. Pressing R/S (or ■SST) stores x into the register or variable; pressing EXIT cancels. (Used only in programs.) Parameter: register or variable (indirect allowed)."
+  },
+  "INSR": {
+    "prefix": "INSR",
+    "scope": "hp42s",
+    "body": [
+      "INSR$0"
+    ],
+    "description": "INSR: Insert a row in the indexed matrix."
+  },
+  "INTEG IND <number>": {
+    "prefix": "INTEG",
+    "scope": "hp42s",
+    "body": [
+      "INTEG IND ${1:number}$0"
+    ],
+    "description": "INTEG IND <number>: Integrate the selected integration program with respect to the specified variable. Parameter: variable name (indirect allowed)."
+  },
+  "INTEG IND ST <stack>": {
+    "prefix": "INTEG",
+    "scope": "hp42s",
+    "body": [
+      "INTEG IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "INTEG IND ST <stack>: Integrate the selected integration program with respect to the specified variable. Parameter: variable name (indirect allowed)."
+  },
+  "INTEG \"<name>\"": {
+    "prefix": "INTEG",
+    "scope": "hp42s",
+    "body": [
+      "INTEG \"${1:name}\"$0"
+    ],
+    "description": "INTEG \"<name>\": Integrate the selected integration program with respect to the specified variable. Parameter: variable name (indirect allowed)."
+  },
+  "INTEG IND \"<name>\"": {
+    "prefix": "INTEG",
+    "scope": "hp42s",
+    "body": [
+      "INTEG IND \"${1:name}\"$0"
+    ],
+    "description": "INTEG IND \"<name>\": Integrate the selected integration program with respect to the specified variable. Parameter: variable name (indirect allowed)."
+  },
+  "INVRT": {
+    "prefix": "INVRT",
+    "scope": "hp42s",
+    "body": [
+      "INVRT$0"
+    ],
+    "description": "INVRT: Returns the inverse of the matrix in the x-register."
+  },
+  "IP": {
+    "prefix": "IP",
+    "scope": "hp42s",
+    "body": [
+      "IP$0"
+    ],
+    "description": "IP: Returns the integer part of x."
+  },
+  "ISG <number>": {
+    "prefix": "ISG",
+    "scope": "hp42s",
+    "body": [
+      "ISG ${1:number}$0"
+    ],
+    "description": "ISG <number>: Increment, skip if greater. Given ccccccc.fffii in a variable or register, increments ccccccc by ii and skips the next program line if ccccccc is now > fff. Parameter: register or variable (indirect allowed)."
+  },
+  "ISG IND <number>": {
+    "prefix": "ISG",
+    "scope": "hp42s",
+    "body": [
+      "ISG IND ${1:number}$0"
+    ],
+    "description": "ISG IND <number>: Increment, skip if greater. Given ccccccc.fffii in a variable or register, increments ccccccc by ii and skips the next program line if ccccccc is now > fff. Parameter: register or variable (indirect allowed)."
+  },
+  "ISG ST <stack>": {
+    "prefix": "ISG",
+    "scope": "hp42s",
+    "body": [
+      "ISG ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "ISG ST <stack>: Increment, skip if greater. Given ccccccc.fffii in a variable or register, increments ccccccc by ii and skips the next program line if ccccccc is now > fff. Parameter: register or variable (indirect allowed)."
+  },
+  "ISG IND ST <stack>": {
+    "prefix": "ISG",
+    "scope": "hp42s",
+    "body": [
+      "ISG IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "ISG IND ST <stack>: Increment, skip if greater. Given ccccccc.fffii in a variable or register, increments ccccccc by ii and skips the next program line if ccccccc is now > fff. Parameter: register or variable (indirect allowed)."
+  },
+  "ISG \"<name>\"": {
+    "prefix": "ISG",
+    "scope": "hp42s",
+    "body": [
+      "ISG \"${1:name}\"$0"
+    ],
+    "description": "ISG \"<name>\": Increment, skip if greater. Given ccccccc.fffii in a variable or register, increments ccccccc by ii and skips the next program line if ccccccc is now > fff. Parameter: register or variable (indirect allowed)."
+  },
+  "ISG IND \"<name>\"": {
+    "prefix": "ISG",
+    "scope": "hp42s",
+    "body": [
+      "ISG IND \"${1:name}\"$0"
+    ],
+    "description": "ISG IND \"<name>\": Increment, skip if greater. Given ccccccc.fffii in a variable or register, increments ccccccc by ii and skips the next program line if ccccccc is now > fff. Parameter: register or variable (indirect allowed)."
+  },
+  "J+": {
+    "prefix": "J",
+    "scope": "hp42s",
+    "body": [
+      "J+$0"
+    ],
+    "description": "J+: Increment the column pointer in the indexed matrix."
+  },
+  "J-": {
+    "prefix": "J",
+    "scope": "hp42s",
+    "body": [
+      "J-$0"
+    ],
+    "description": "J-: Decrement the column pointer in the indexed matrix."
+  },
+  "KEYASN": {
+    "prefix": "KEYASN",
+    "scope": "hp42s",
+    "body": [
+      "KEYASN$0"
+    ],
+    "description": "KEYASN: Selects key-assignments mode for the custom menu."
+  },
+  "KEY <number> GTO <number>": {
+    "prefix": "KEY",
+    "scope": "hp42s",
+    "body": [
+      "KEY ${1:number} GTO ${2:number}$0"
+    ],
+    "description": "KEY <number> GTO <number>: On menu key, go to. Branch to specified label to when a particular menu key is pressed. Parameter 1: Key number (1 through 9), Parameter 2: program label (global or local)."
+  },
+  "KEY <number> GTO IND <number>": {
+    "prefix": "KEY",
+    "scope": "hp42s",
+    "body": [
+      "KEY ${1:number} GTO IND ${2:number}$0"
+    ],
+    "description": "KEY <number> GTO IND <number>: On menu key, go to. Branch to specified label to when a particular menu key is pressed. Parameter 1: Key number (1 through 9), Parameter 2: program label (global or local)."
+  },
+  "KEY <number> GTO IND ST <stack>": {
+    "prefix": "KEY",
+    "scope": "hp42s",
+    "body": [
+      "KEY ${1:number} GTO IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "KEY <number> GTO IND ST <stack>: On menu key, go to. Branch to specified label to when a particular menu key is pressed. Parameter 1: Key number (1 through 9), Parameter 2: program label (global or local)."
+  },
+  "KEY <number> GTO <alpha_local_label>": {
+    "prefix": "KEY",
+    "scope": "hp42s",
+    "body": [
+      "KEY ${1:number} GTO ${2:A|B|C|D|E|F|G|H|I|J|a|b|c|d|e}$0"
+    ],
+    "description": "KEY <number> GTO <alpha_local_label>: On menu key, go to. Branch to specified label to when a particular menu key is pressed. Parameter 1: Key number (1 through 9), Parameter 2: program label (global or local)."
+  },
+  "KEY <number> GTO \"<name>\"": {
+    "prefix": "KEY",
+    "scope": "hp42s",
+    "body": [
+      "KEY ${1:number} GTO \"${2:name}\"$0"
+    ],
+    "description": "KEY <number> GTO \"<name>\": On menu key, go to. Branch to specified label to when a particular menu key is pressed. Parameter 1: Key number (1 through 9), Parameter 2: program label (global or local)."
+  },
+  "KEY <number> GTO IND \"<name>\"": {
+    "prefix": "KEY",
+    "scope": "hp42s",
+    "body": [
+      "KEY ${1:number} GTO IND \"${2:name}\"$0"
+    ],
+    "description": "KEY <number> GTO IND \"<name>\": On menu key, go to. Branch to specified label to when a particular menu key is pressed. Parameter 1: Key number (1 through 9), Parameter 2: program label (global or local)."
+  },
+  "KEY <number> XEQ <number>": {
+    "prefix": "KEY",
+    "scope": "hp42s",
+    "body": [
+      "KEY ${1:number} XEQ ${2:number}$0"
+    ],
+    "description": "KEY <number> XEQ <number>: On menu key, execute. Execute (as a subroutine) specified label when a particular menu key is pressed. Parameter 1: Key number (1 through 9), Parameter 2: program label (global or local)."
+  },
+  "KEY <number> XEQ IND <number>": {
+    "prefix": "KEY",
+    "scope": "hp42s",
+    "body": [
+      "KEY ${1:number} XEQ IND ${2:number}$0"
+    ],
+    "description": "KEY <number> XEQ IND <number>: On menu key, execute. Execute (as a subroutine) specified label when a particular menu key is pressed. Parameter 1: Key number (1 through 9), Parameter 2: program label (global or local)."
+  },
+  "KEY <number> XEQ IND ST <stack>": {
+    "prefix": "KEY",
+    "scope": "hp42s",
+    "body": [
+      "KEY ${1:number} XEQ IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "KEY <number> XEQ IND ST <stack>: On menu key, execute. Execute (as a subroutine) specified label when a particular menu key is pressed. Parameter 1: Key number (1 through 9), Parameter 2: program label (global or local)."
+  },
+  "KEY <number> XEQ <alpha_local_label>": {
+    "prefix": "KEY",
+    "scope": "hp42s",
+    "body": [
+      "KEY ${1:number} XEQ ${2:A|B|C|D|E|F|G|H|I|J|a|b|c|d|e}$0"
+    ],
+    "description": "KEY <number> XEQ <alpha_local_label>: On menu key, execute. Execute (as a subroutine) specified label when a particular menu key is pressed. Parameter 1: Key number (1 through 9), Parameter 2: program label (global or local)."
+  },
+  "KEY <number> XEQ \"<name>\"": {
+    "prefix": "KEY",
+    "scope": "hp42s",
+    "body": [
+      "KEY ${1:number} XEQ \"${2:name}\"$0"
+    ],
+    "description": "KEY <number> XEQ \"<name>\": On menu key, execute. Execute (as a subroutine) specified label when a particular menu key is pressed. Parameter 1: Key number (1 through 9), Parameter 2: program label (global or local)."
+  },
+  "KEY <number> XEQ IND \"<name>\"": {
+    "prefix": "KEY",
+    "scope": "hp42s",
+    "body": [
+      "KEY ${1:number} XEQ IND \"${2:name}\"$0"
+    ],
+    "description": "KEY <number> XEQ IND \"<name>\": On menu key, execute. Execute (as a subroutine) specified label when a particular menu key is pressed. Parameter 1: Key number (1 through 9), Parameter 2: program label (global or local)."
+  },
+  "LASTX": {
+    "prefix": "LASTX",
+    "scope": "hp42s",
+    "body": [
+      "LASTX$0"
+    ],
+    "description": "LASTX: Last x. Recall the last value of x used in a calculation."
+  },
+  "LBL \"<name>\"": {
+    "prefix": "LBL",
+    "scope": "hp42s",
+    "body": [
+      "LBL \"${1:name}\"$0"
+    ],
+    "description": "LBL \"<name>\": Label. Identify programs and routines for execution and branching. Parameter: local or global label."
+  },
+  "LBL <number>": {
+    "prefix": "LBL",
+    "scope": "hp42s",
+    "body": [
+      "LBL ${1:number}$0"
+    ],
+    "description": "LBL <number>: Label. Identify programs and routines for execution and branching. Parameter: local or global label."
+  },
+  "LBL <alpha_local_label>": {
+    "prefix": "LBL",
+    "scope": "hp42s",
+    "body": [
+      "LBL ${1:A|B|C|D|E|F|G|H|I|J|a|b|c|d|e}$0"
+    ],
+    "description": "LBL <alpha_local_label>: Label. Identify programs and routines for execution and branching. Parameter: local or global label."
+  },
+  "LCLBL": {
+    "prefix": "LCLBL",
+    "scope": "hp42s",
+    "body": [
+      "LCLBL$0"
+    ],
+    "description": "LCLBL: Select local label mode for the custom menu (to use custom menu assignments to execute local labels within the current program)."
+  },
+  "LINF": {
+    "prefix": "LINF",
+    "scope": "hp42s",
+    "body": [
+      "LINF$0"
+    ],
+    "description": "LINF: Select the linear curve-fitting model."
+  },
+  "LINΣ": {
+    "prefix": "LINΣ",
+    "scope": "hp42s",
+    "body": [
+      "LINΣ$0"
+    ],
+    "description": "LINΣ: Select linear statistics mode, which uses six summation coefficients."
+  },
+  "LN": {
+    "prefix": "LN",
+    "scope": "hp42s",
+    "body": [
+      "LN$0"
+    ],
+    "description": "LN: Natural logarithm. Returns ln(x)."
+  },
+  "LN1+X": {
+    "prefix": "LN",
+    "scope": "hp42s",
+    "body": [
+      "LN1+X$0"
+    ],
+    "description": "LN1+X: Natural logarithm for values close to zero. Returns ln(1 + x), which provides a much higher accuracy in the fractional part of the result."
+  },
+  "LOG": {
+    "prefix": "LOG",
+    "scope": "hp42s",
+    "body": [
+      "LOG$0"
+    ],
+    "description": "LOG: Common logarithm. Returns log10(x)."
+  },
+  "LOGF": {
+    "prefix": "LOGF",
+    "scope": "hp42s",
+    "body": [
+      "LOGF$0"
+    ],
+    "description": "LOGF: Select the logarithmic curve-fitting model."
+  },
+  "MAN": {
+    "prefix": "MAN",
+    "scope": "hp42s",
+    "body": [
+      "MAN$0"
+    ],
+    "description": "MAN: Select manual print mode."
+  },
+  "MAT?": {
+    "prefix": "MAT",
+    "scope": "hp42s",
+    "body": [
+      "MAT?$0"
+    ],
+    "description": "MAT?: If the x-register contains a matrix, execute the next program line; if the X-register does not contain a matrix, skip the next program line."
+  },
+  "MEAN": {
+    "prefix": "MEAN",
+    "scope": "hp42s",
+    "body": [
+      "MEAN$0"
+    ],
+    "description": "MEAN: Mean. Returns the mean of x-values (Σx / n) and the mean of y-values (Σy / n)."
+  },
+  "MENU": {
+    "prefix": "MENU",
+    "scope": "hp42s",
+    "body": [
+      "MENU$0"
+    ],
+    "description": "MENU: Select the programmable menu."
+  },
+  "MOD": {
+    "prefix": "MOD",
+    "scope": "hp42s",
+    "body": [
+      "MOD$0"
+    ],
+    "description": "MOD: Modulo. Returns the remainder for y / x."
+  },
+  "MVAR \"<name>\"": {
+    "prefix": "MVAR",
+    "scope": "hp42s",
+    "body": [
+      "MVAR \"${1:name}\"$0"
+    ],
+    "description": "MVAR \"<name>\": Declare a menu variable in a SOLVER program. Parameter: variable name."
+  },
+  "N!": {
+    "prefix": "N",
+    "scope": "hp42s",
+    "body": [
+      "N!$0"
+    ],
+    "description": "N!: Factorial. Returns x!."
+  },
+  "NEWMAT": {
+    "prefix": "NEWMAT",
+    "scope": "hp42s",
+    "body": [
+      "NEWMAT$0"
+    ],
+    "description": "NEWMAT: New matrix. Creates a y × x matrix in the x-register."
+  },
+  "NORM": {
+    "prefix": "NORM",
+    "scope": "hp42s",
+    "body": [
+      "NORM$0"
+    ],
+    "description": "NORM: Select normal print mode, which prints a record of keystrokes."
+  },
+  "NOT": {
+    "prefix": "NOT",
+    "scope": "hp42s",
+    "body": [
+      "NOT$0"
+    ],
+    "description": "NOT: Logical NOT. Returns NOT(x)."
+  },
+  "OCTM": {
+    "prefix": "OCTM",
+    "scope": "hp42s",
+    "body": [
+      "OCTM$0"
+    ],
+    "description": "OCTM: Select octal mode."
+  },
+  "OFF": {
+    "prefix": "OFF",
+    "scope": "hp42s",
+    "body": [
+      "OFF$0"
+    ],
+    "description": "OFF: Turn the calculator off (programmable). Pressing ■OFF does not execute the programmable OFF function."
+  },
+  "OLD": {
+    "prefix": "OLD",
+    "scope": "hp42s",
+    "body": [
+      "OLD$0"
+    ],
+    "description": "OLD: Recall the current element from the indexed matrix. (Equivalent to RCLEL.)"
+  },
+  "ON": {
+    "prefix": "ON",
+    "scope": "hp42s",
+    "body": [
+      "ON$0"
+    ],
+    "description": "ON: Continuous on. Prevent the calculator from automatically turning off after ten minutes of inactivity."
+  },
+  "OR": {
+    "prefix": "OR",
+    "scope": "hp42s",
+    "body": [
+      "OR$0"
+    ],
+    "description": "OR: Logical OR. Returns x OR y."
+  },
+  "PERM": {
+    "prefix": "PERM",
+    "scope": "hp42s",
+    "body": [
+      "PERM$0"
+    ],
+    "description": "PERM: Permutations of y items taken x at a time. Returns y!/(y – x)!"
+  },
+  "PGMINT IND <number>": {
+    "prefix": "PGMINT",
+    "scope": "hp42s",
+    "body": [
+      "PGMINT IND ${1:number}$0"
+    ],
+    "description": "PGMINT IND <number>: Program to integrate"
+  },
+  "PGMINT IND ST <stack>": {
+    "prefix": "PGMINT",
+    "scope": "hp42s",
+    "body": [
+      "PGMINT IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "PGMINT IND ST <stack>: Select a program to integrate. Parameter: global label (indirect allowed)."
+  },
+  "PGMINT \"<name>\"": {
+    "prefix": "PGMINT",
+    "scope": "hp42s",
+    "body": [
+      "PGMINT \"${1:name}\"$0"
+    ],
+    "description": "PGMINT \"<name>\": Select a program to integrate. Parameter: global label (indirect allowed)."
+  },
+  "PGMINT IND \"<name>\"": {
+    "prefix": "PGMINT",
+    "scope": "hp42s",
+    "body": [
+      "PGMINT IND \"${1:name}\"$0"
+    ],
+    "description": "PGMINT IND \"<name>\": Select a program to integrate. Parameter: global label (indirect allowed)."
+  },
+  "PGMSLV IND <number>": {
+    "prefix": "PGMSLV",
+    "scope": "hp42s",
+    "body": [
+      "PGMSLV IND ${1:number}$0"
+    ],
+    "description": "PGMSLV IND <number>: Select a program to solve. Parameter: global label (indirect allowed)."
+  },
+  "PGMSLV IND ST <stack>": {
+    "prefix": "PGMSLV",
+    "scope": "hp42s",
+    "body": [
+      "PGMSLV IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "PGMSLV IND ST <stack>: Select a program to solve. Parameter: global label (indirect allowed)."
+  },
+  "PGMSLV \"<name>\"": {
+    "prefix": "PGMSLV",
+    "scope": "hp42s",
+    "body": [
+      "PGMSLV \"${1:name}\"$0"
+    ],
+    "description": "PGMSLV \"<name>\": Select a program to solve. Parameter: global label (indirect allowed)."
+  },
+  "PGMSLV IND \"<name>\"": {
+    "prefix": "PGMSLV",
+    "scope": "hp42s",
+    "body": [
+      "PGMSLV IND \"${1:name}\"$0"
+    ],
+    "description": "PGMSLV IND \"<name>\": Select a program to solve. Parameter: global label (indirect allowed)."
+  },
+  "PI": {
+    "prefix": "PI",
+    "scope": "hp42s",
+    "body": [
+      "PI$0"
+    ],
+    "description": "PI: Put an approximation of π into the x-register (3.14159265359)."
+  },
+  "PIXEL": {
+    "prefix": "PIXEL",
+    "scope": "hp42s",
+    "body": [
+      "PIXEL$0"
+    ],
+    "description": "PIXEL: Turn on a single pixel (dot) in the display. The location of the pixel is given by the numbers in the x- and y-registers."
+  },
+  "POLAR": {
+    "prefix": "POLAR",
+    "scope": "hp42s",
+    "body": [
+      "POLAR$0"
+    ],
+    "description": "POLAR: Select polar coordinate mode for displaying complex numbers."
+  },
+  "POSA": {
+    "prefix": "POSA",
+    "scope": "hp42s",
+    "body": [
+      "POSA$0"
+    ],
+    "description": "POSA: Position in alpha. Searches the alpha register for the target specified in the x-register. If found, returns the character position; if not found, returns -1."
+  },
+  "PRA": {
+    "prefix": "PRA",
+    "scope": "hp42s",
+    "body": [
+      "PRA$0"
+    ],
+    "description": "PRA: Print alpha register."
+  },
+  "PRLCD": {
+    "prefix": "PRLCD",
+    "scope": "hp42s",
+    "body": [
+      "PRLCD$0"
+    ],
+    "description": "PRLCD: Print LCD (liquid crystal display). Prints the entire display."
+  },
+  "PROFF": {
+    "prefix": "PROFF",
+    "scope": "hp42s",
+    "body": [
+      "PROFF$0"
+    ],
+    "description": "PROFF: Printing off. Clears flags 21 and 55."
+  },
+  "PROMPT": {
+    "prefix": "PROMPT",
+    "scope": "hp42s",
+    "body": [
+      "PROMPT$0"
+    ],
+    "description": "PROMPT: Display the alpha register and halt program execution."
+  },
+  "PRON": {
+    "prefix": "PRON",
+    "scope": "hp42s",
+    "body": [
+      "PRON$0"
+    ],
+    "description": "PRON: Printing on. Sets flags 21 and 55."
+  },
+  "PRSTK": {
+    "prefix": "PRSTK",
+    "scope": "hp42s",
+    "body": [
+      "PRSTK$0"
+    ],
+    "description": "PRSTK: Print stack. Print the contents of the stack registers (x, y, z and t)."
+  },
+  "PRUSR": {
+    "prefix": "PRUSR",
+    "scope": "hp42s",
+    "body": [
+      "PRUSR$0"
+    ],
+    "description": "PRUSR: Print user variables and programs."
+  },
+  "PRV IND <number>": {
+    "prefix": "PRV",
+    "scope": "hp42s",
+    "body": [
+      "PRV IND ${1:number}$0"
+    ],
+    "description": "PRV IND <number>: Print variable. Parameter: variable name (indirect allowed)."
+  },
+  "PRV IND ST <stack>": {
+    "prefix": "PRV",
+    "scope": "hp42s",
+    "body": [
+      "PRV IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "PRV IND ST <stack>: Print variable. Parameter: variable name (indirect allowed)."
+  },
+  "PRV \"<name>\"": {
+    "prefix": "PRV",
+    "scope": "hp42s",
+    "body": [
+      "PRV \"${1:name}\"$0"
+    ],
+    "description": "PRV \"<name>\": Print variable. Parameter: variable name (indirect allowed)."
+  },
+  "PRV IND \"<name>\"": {
+    "prefix": "PRV",
+    "scope": "hp42s",
+    "body": [
+      "PRV IND \"${1:name}\"$0"
+    ],
+    "description": "PRV IND \"<name>\": Print variable. Parameter: variable name (indirect allowed)."
+  },
+  "PRX": {
+    "prefix": "PRX",
+    "scope": "hp42s",
+    "body": [
+      "PRX$0"
+    ],
+    "description": "PRX: Print x-register."
+  },
+  "PRΣ": {
+    "prefix": "PRΣ",
+    "scope": "hp42s",
+    "body": [
+      "PRΣ$0"
+    ],
+    "description": "PRΣ: Print statistics. Prints the contents of the summation registers."
+  },
+  "PSE": {
+    "prefix": "PSE",
+    "scope": "hp42s",
+    "body": [
+      "PSE$0"
+    ],
+    "description": "PSE: Pause program execution for about 1 second."
+  },
+  "PUTM": {
+    "prefix": "PUTM",
+    "scope": "hp42s",
+    "body": [
+      "PUTM$0"
+    ],
+    "description": "PUTM: Put matrix. Stores the matrix in the X-register into the indexed matrix beginning at the current element."
+  },
+  "PWRF": {
+    "prefix": "PWRF",
+    "scope": "hp42s",
+    "body": [
+      "PWRF$0"
+    ],
+    "description": "PWRF: Select the power curve-fitting model."
+  },
+  "RAD": {
+    "prefix": "RAD",
+    "scope": "hp42s",
+    "body": [
+      "RAD$0"
+    ],
+    "description": "RAD: Select radians angular mode"
+  },
+  "RAN": {
+    "prefix": "RAN",
+    "scope": "hp42s",
+    "body": [
+      "RAN$0"
+    ],
+    "description": "RAN: Returns a random number (0 ≤ x < 1)"
+  },
+  "RCL <number>": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL ${1:number}$0"
+    ],
+    "description": "RCL <number>: Recall data into the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL IND <number>": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL IND ${1:number}$0"
+    ],
+    "description": "RCL IND <number>: Recall data into the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL ST <stack>": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "RCL ST <stack>: Recall data into the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL IND ST <stack>": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "RCL IND ST <stack>: Recall data into the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL \"<name>\"": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL \"${1:name}\"$0"
+    ],
+    "description": "RCL \"<name>\": Recall data into the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL IND \"<name>\"": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL IND \"${1:name}\"$0"
+    ],
+    "description": "RCL IND \"<name>\": Recall data into the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL+ <number>": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL+ ${1:number}$0"
+    ],
+    "description": "RCL+ <number>: Recall addition. Recall data and add it to the contents of the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL+ IND <number>": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL+ IND ${1:number}$0"
+    ],
+    "description": "RCL+ IND <number>: Recall addition. Recall data and add it to the contents of the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL+ ST <stack>": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL+ ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "RCL+ ST <stack>: Recall addition. Recall data and add it to the contents of the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL+ IND ST <stack>": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL+ IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "RCL+ IND ST <stack>: Recall addition. Recall data and add it to the contents of the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL+ \"<name>\"": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL+ \"${1:name}\"$0"
+    ],
+    "description": "RCL+ \"<name>\": Recall addition. Recall data and add it to the contents of the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL+ IND \"<name>\"": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL+ IND \"${1:name}\"$0"
+    ],
+    "description": "RCL+ IND \"<name>\": Recall addition. Recall data and add it to the contents of the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL- <number>": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL- ${1:number}$0"
+    ],
+    "description": "RCL- <number>: Recall subtraction. Recall data and subtract it from the contents of the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL- IND <number>": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL- IND ${1:number}$0"
+    ],
+    "description": "RCL- IND <number>: Recall subtraction. Recall data and subtract it from the contents of the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL- ST <stack>": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL- ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "RCL- ST <stack>: Recall subtraction. Recall data and subtract it from the contents of the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL- IND ST <stack>": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL- IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "RCL- IND ST <stack>: Recall subtraction. Recall data and subtract it from the contents of the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL- \"<name>\"": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL- \"${1:name}\"$0"
+    ],
+    "description": "RCL- \"<name>\": Recall subtraction. Recall data and subtract it from the contents of the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL- IND \"<name>\"": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL- IND \"${1:name}\"$0"
+    ],
+    "description": "RCL- IND \"<name>\": Recall subtraction. Recall data and subtract it from the contents of the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL× <number>": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL× ${1:number}$0"
+    ],
+    "description": "RCL× <number>: Recall multiplication. Recall data and multiply it by the contents of the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL× IND <number>": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL× IND ${1:number}$0"
+    ],
+    "description": "RCL× IND <number>: Recall multiplication. Recall data and multiply it by the contents of the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL× ST <stack>": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL× ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "RCL× ST <stack>: Recall multiplication. Recall data and multiply it by the contents of the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL× IND ST <stack>": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL× IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "RCL× IND ST <stack>: Recall multiplication. Recall data and multiply it by the contents of the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL× \"<name>\"": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL× \"${1:name}\"$0"
+    ],
+    "description": "RCL× \"<name>\": Recall multiplication. Recall data and multiply it by the contents of the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL× IND \"<name>\"": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL× IND \"${1:name}\"$0"
+    ],
+    "description": "RCL× IND \"<name>\": Recall multiplication. Recall data and multiply it by the contents of the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL÷ <number>": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL÷ ${1:number}$0"
+    ],
+    "description": "RCL÷ <number>: Recall division. Recall data and divide it into the contents of the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL÷ IND <number>": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL÷ IND ${1:number}$0"
+    ],
+    "description": "RCL÷ IND <number>: Recall division. Recall data and divide it into the contents of the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL÷ ST <stack>": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL÷ ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "RCL÷ ST <stack>: Recall division. Recall data and divide it into the contents of the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL÷ IND ST <stack>": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL÷ IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "RCL÷ IND ST <stack>: Recall division. Recall data and divide it into the contents of the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL÷ \"<name>\"": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL÷ \"${1:name}\"$0"
+    ],
+    "description": "RCL÷ \"<name>\": Recall division. Recall data and divide it into the contents of the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCL÷ IND \"<name>\"": {
+    "prefix": "RCL",
+    "scope": "hp42s",
+    "body": [
+      "RCL÷ IND \"${1:name}\"$0"
+    ],
+    "description": "RCL÷ IND \"<name>\": Recall division. Recall data and divide it into the contents of the x-register. Parameter: register or variable (indirect allowed)."
+  },
+  "RCLEL": {
+    "prefix": "RCLEL",
+    "scope": "hp42s",
+    "body": [
+      "RCLEL$0"
+    ],
+    "description": "RCLEL: Recall element. Recalls the current matrix element from the indexed matrix."
+  },
+  "RCLIJ": {
+    "prefix": "RCLIJ",
+    "scope": "hp42s",
+    "body": [
+      "RCLIJ$0"
+    ],
+    "description": "RCLIJ: Recall the row- and column-pointer values (I and J) for the indexed matrix."
+  },
+  "RDX,": {
+    "prefix": "RDX",
+    "scope": "hp42s",
+    "body": [
+      "RDX,$0"
+    ],
+    "description": "RDX,: Select a comma to be used as the radix mark (decimal point)."
+  },
+  "RDX.": {
+    "prefix": "RDX",
+    "scope": "hp42s",
+    "body": [
+      "RDX.$0"
+    ],
+    "description": "RDX.: Select a period to be used as the radix mark (decimal point)."
+  },
+  "REALRES": {
+    "prefix": "REALRES",
+    "scope": "hp42s",
+    "body": [
+      "REALRES$0"
+    ],
+    "description": "REALRES: Real-results. Disables the calculator's ability to return a complex result using real-number inputs."
+  },
+  "REAL?": {
+    "prefix": "REAL",
+    "scope": "hp42s",
+    "body": [
+      "REAL?$0"
+    ],
+    "description": "REAL?: If the x-register contains a real number, execute the next program line; if the x-register does not contain a real number, skip the next program line."
+  },
+  "RECT": {
+    "prefix": "RECT",
+    "scope": "hp42s",
+    "body": [
+      "RECT$0"
+    ],
+    "description": "RECT: Select rectangular coordinate mode for displaying complex numbers."
+  },
+  "RND": {
+    "prefix": "RND",
+    "scope": "hp42s",
+    "body": [
+      "RND$0"
+    ],
+    "description": "RND: Round the number in the x-register using the current display format."
+  },
+  "RNRM": {
+    "prefix": "RNRM",
+    "scope": "hp42s",
+    "body": [
+      "RNRM$0"
+    ],
+    "description": "RNRM: Return the row norm of the matrix in the x-register."
+  },
+  "ROTXY": {
+    "prefix": "ROTXY",
+    "scope": "hp42s",
+    "body": [
+      "ROTXY$0"
+    ],
+    "description": "ROTXY: Rotate the 36-bit number in the y-register by x bits."
+  },
+  "RSUM": {
+    "prefix": "RSUM",
+    "scope": "hp42s",
+    "body": [
+      "RSUM$0"
+    ],
+    "description": "RSUM: Return the row sum of each row of the matrix in the x-register and returns the sums in a column matrix."
+  },
+  "RTN": {
+    "prefix": "RTN",
+    "scope": "hp42s",
+    "body": [
+      "RTN$0"
+    ],
+    "description": "RTN: Return. In a running program, branches the program pointer back to the line following the most recent XEQ instruction. If there is no matching XEQ instruction, program execution halts. From the keyboard, RTN moves the program pointer to line 00 of the current program."
+  },
+  "R<>R": {
+    "prefix": "R<>R",
+    "scope": "hp42s",
+    "body": [
+      "R<>R$0"
+    ],
+    "description": "R<>R: Row swap row. Swaps the elements in rows x and y in the indexed matrix."
+  },
+  "R↑": {
+    "prefix": "R",
+    "scope": "hp42s",
+    "body": [
+      "R↑$0"
+    ],
+    "description": "R↑: Roll up the contents of the four stack registers one position."
+  },
+  "R↓": {
+    "prefix": "R",
+    "scope": "hp42s",
+    "body": [
+      "R↓$0"
+    ],
+    "description": "R↓: Roll down the contents of the four stack registers one position."
+  },
+  "SCI <number>": {
+    "prefix": "SCI",
+    "scope": "hp42s",
+    "body": [
+      "SCI ${1:number}$0"
+    ],
+    "description": "SCI <number>: Select scientific notation display format. Parameter: number of digits (indirect allowed)."
+  },
+  "SCI IND <number>": {
+    "prefix": "SCI",
+    "scope": "hp42s",
+    "body": [
+      "SCI IND ${1:number}$0"
+    ],
+    "description": "SCI IND <number>: Select scientific notation display format. Parameter: number of digits (indirect allowed)."
+  },
+  "SCI IND ST <stack>": {
+    "prefix": "SCI",
+    "scope": "hp42s",
+    "body": [
+      "SCI IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "SCI IND ST <stack>: Select scientific notation display format. Parameter: number of digits (indirect allowed)."
+  },
+  "SCI IND \"<name>\"": {
+    "prefix": "SCI",
+    "scope": "hp42s",
+    "body": [
+      "SCI IND \"${1:name}\"$0"
+    ],
+    "description": "SCI IND \"<name>\": Select scientific notation display format. Parameter: number of digits (indirect allowed)."
+  },
+  "SDEV": {
+    "prefix": "SDEV",
+    "scope": "hp42s",
+    "body": [
+      "SDEV$0"
+    ],
+    "description": "SDEV: Standard deviation. Returns sx and sy using the current statistical data."
+  },
+  "SEED": {
+    "prefix": "SEED",
+    "scope": "hp42s",
+    "body": [
+      "SEED$0"
+    ],
+    "description": "SEED: Store a seed for the random number generator."
+  },
+  "SF <number>": {
+    "prefix": "SF",
+    "scope": "hp42s",
+    "body": [
+      "SF ${1:number}$0"
+    ],
+    "description": "SF <number>: Set flag nn (00 ≤ nn ≤ 35; 81 ≤ nn ≤ 99). Parameter: flag number (indirect allowed)."
+  },
+  "SF IND <number>": {
+    "prefix": "SF",
+    "scope": "hp42s",
+    "body": [
+      "SF IND ${1:number}$0"
+    ],
+    "description": "SF IND <number>: Set flag nn (00 ≤ nn ≤ 35; 81 ≤ nn ≤ 99). Parameter: flag number (indirect allowed)."
+  },
+  "SF IND ST <stack>": {
+    "prefix": "SF",
+    "scope": "hp42s",
+    "body": [
+      "SF IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "SF IND ST <stack>: Set flag nn (00 ≤ nn ≤ 35; 81 ≤ nn ≤ 99). Parameter: flag number (indirect allowed)."
+  },
+  "SF IND \"<name>\"": {
+    "prefix": "SF",
+    "scope": "hp42s",
+    "body": [
+      "SF IND \"${1:name}\"$0"
+    ],
+    "description": "SF IND \"<name>\": Set flag nn (00 ≤ nn ≤ 35; 81 ≤ nn ≤ 99). Parameter: flag number (indirect allowed)."
+  },
+  "SIGN": {
+    "prefix": "SIGN",
+    "scope": "hp42s",
+    "body": [
+      "SIGN$0"
+    ],
+    "description": "SIGN: Sign. Return 1 for x ≥ 0, –1 for x < 0, and 0 for non-numbers. Returns the unit vector of a complex number."
+  },
+  "SIN": {
+    "prefix": "SIN",
+    "scope": "hp42s",
+    "body": [
+      "SIN$0"
+    ],
+    "description": "SIN: Sine. Returns sin(x)."
+  },
+  "SINH": {
+    "prefix": "SINH",
+    "scope": "hp42s",
+    "body": [
+      "SINH$0"
+    ],
+    "description": "SINH: Hyperbolic sine. Returns sinh(x)."
+  },
+  "SIZE <number>": {
+    "prefix": "SIZE",
+    "scope": "hp42s",
+    "body": [
+      "SIZE ${1:number}$0"
+    ],
+    "description": "SIZE <number>: Set the number of storage registers. Parameter: number of registers."
+  },
+  "SLOPE": {
+    "prefix": "SLOPE",
+    "scope": "hp42s",
+    "body": [
+      "SLOPE$0"
+    ],
+    "description": "SLOPE: Return the slope of the linear transformation of the current curve-fitting model."
+  },
+  "SOLVE IND <number>": {
+    "prefix": "SOLVE",
+    "scope": "hp42s",
+    "body": [
+      "SOLVE IND ${1:number}$0"
+    ],
+    "description": "SOLVE IND <number>: Solve for an unknown variable. Parameter: variable name (indirect allowed)."
+  },
+  "SOLVE IND ST <stack>": {
+    "prefix": "SOLVE",
+    "scope": "hp42s",
+    "body": [
+      "SOLVE IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "SOLVE IND ST <stack>: Solve for an unknown variable. Parameter: variable name (indirect allowed)."
+  },
+  "SOLVE \"<name>\"": {
+    "prefix": "SOLVE",
+    "scope": "hp42s",
+    "body": [
+      "SOLVE \"${1:name}\"$0"
+    ],
+    "description": "SOLVE \"<name>\": Solve for an unknown variable. Parameter: variable name (indirect allowed)."
+  },
+  "SOLVE IND \"<name>\"": {
+    "prefix": "SOLVE",
+    "scope": "hp42s",
+    "body": [
+      "SOLVE IND \"${1:name}\"$0"
+    ],
+    "description": "SOLVE IND \"<name>\": Solve for an unknown variable. Parameter: variable name (indirect allowed)."
+  },
+  "SQRT": {
+    "prefix": "SQRT",
+    "scope": "hp42s",
+    "body": [
+      "SQRT$0"
+    ],
+    "description": "SQRT: Square root. Returns √x."
+  },
+  "STO <number>": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO ${1:number}$0"
+    ],
+    "description": "STO <number>: Store a copy of x into a destination register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "STO IND <number>": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO IND ${1:number}$0"
+    ],
+    "description": "STO IND <number>: Store a copy of x into a destination register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "STO ST <stack>": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "STO ST <stack>: Store a copy of x into a destination register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "STO IND ST <stack>": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "STO IND ST <stack>: Store a copy of x into a destination register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "STO \"<name>\"": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO \"${1:name}\"$0"
+    ],
+    "description": "STO \"<name>\": Store a copy of x into a destination register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "STO IND \"<name>\"": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO IND \"${1:name}\"$0"
+    ],
+    "description": "STO IND \"<name>\": Store a copy of x into a destination register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "STO+ <number>": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO+ ${1:number}$0"
+    ],
+    "description": "STO+ <number>: Store addition. Adds x to an existing register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "STO+ IND <number>": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO+ IND ${1:number}$0"
+    ],
+    "description": "STO+ IND <number>: Store addition. Adds x to an existing register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "STO+ ST <stack>": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO+ ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "STO+ ST <stack>: Store addition. Adds x to an existing register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "STO+ IND ST <stack>": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO+ IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "STO+ IND ST <stack>: Store addition. Adds x to an existing register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "STO+ \"<name>\"": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO+ \"${1:name}\"$0"
+    ],
+    "description": "STO+ \"<name>\": Store addition. Adds x to an existing register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "STO+ IND \"<name>\"": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO+ IND \"${1:name}\"$0"
+    ],
+    "description": "STO+ IND \"<name>\": Store addition. Adds x to an existing register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "STO- <number>": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO- ${1:number}$0"
+    ],
+    "description": "STO- <number>: Store subtraction. Subtracts x from an existing register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "STO- IND <number>": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO- IND ${1:number}$0"
+    ],
+    "description": "STO- IND <number>: Store subtraction. Subtracts x from an existing register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "STO- ST <stack>": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO- ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "STO- ST <stack>: Store subtraction. Subtracts x from an existing register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "STO- IND ST <stack>": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO- IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "STO- IND ST <stack>: Store subtraction. Subtracts x from an existing register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "STO- \"<name>\"": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO- \"${1:name}\"$0"
+    ],
+    "description": "STO- \"<name>\": Store subtraction. Subtracts x from an existing register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "STO- IND \"<name>\"": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO- IND \"${1:name}\"$0"
+    ],
+    "description": "STO- IND \"<name>\": Store subtraction. Subtracts x from an existing register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "STO× <number>": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO× ${1:number}$0"
+    ],
+    "description": "STO× <number>: Store multiplication. Multiplies an existing register or variable by x. Parameter: register or variable (indirect allowed)."
+  },
+  "STO× IND <number>": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO× IND ${1:number}$0"
+    ],
+    "description": "STO× IND <number>: Store multiplication. Multiplies an existing register or variable by x. Parameter: register or variable (indirect allowed)."
+  },
+  "STO× ST <stack>": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO× ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "STO× ST <stack>: Store multiplication. Multiplies an existing register or variable by x. Parameter: register or variable (indirect allowed)."
+  },
+  "STO× IND ST <stack>": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO× IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "STO× IND ST <stack>: Store multiplication. Multiplies an existing register or variable by x. Parameter: register or variable (indirect allowed)."
+  },
+  "STO× \"<name>\"": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO× \"${1:name}\"$0"
+    ],
+    "description": "STO× \"<name>\": Store multiplication. Multiplies an existing register or variable by x. Parameter: register or variable (indirect allowed)."
+  },
+  "STO× IND \"<name>\"": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO× IND \"${1:name}\"$0"
+    ],
+    "description": "STO× IND \"<name>\": Store multiplication. Multiplies an existing register or variable by x. Parameter: register or variable (indirect allowed)."
+  },
+  "STO÷ <number>": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO÷ ${1:number}$0"
+    ],
+    "description": "STO÷ <number>: Store division. Divides an existing register or variable by x. Parameter: register or variable (indirect allowed)."
+  },
+  "STO÷ IND <number>": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO÷ IND ${1:number}$0"
+    ],
+    "description": "STO÷ IND <number>: Store division. Divides an existing register or variable by x. Parameter: register or variable (indirect allowed)."
+  },
+  "STO÷ ST <stack>": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO÷ ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "STO÷ ST <stack>: Store division. Divides an existing register or variable by x. Parameter: register or variable (indirect allowed)."
+  },
+  "STO÷ IND ST <stack>": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO÷ IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "STO÷ IND ST <stack>: Store division. Divides an existing register or variable by x. Parameter: register or variable (indirect allowed)."
+  },
+  "STO÷ \"<name>\"": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO÷ \"${1:name}\"$0"
+    ],
+    "description": "STO÷ \"<name>\": Store division. Divides an existing register or variable by x. Parameter: register or variable (indirect allowed)."
+  },
+  "STO÷ IND \"<name>\"": {
+    "prefix": "STO",
+    "scope": "hp42s",
+    "body": [
+      "STO÷ IND \"${1:name}\"$0"
+    ],
+    "description": "STO÷ IND \"<name>\": Store division. Divides an existing register or variable by x. Parameter: register or variable (indirect allowed)."
+  },
+  "STOEL": {
+    "prefix": "STOEL",
+    "scope": "hp42s",
+    "body": [
+      "STOEL$0"
+    ],
+    "description": "STOEL: Store element. Stores a copy of x into the current element of the indexed matrix."
+  },
+  "STOIJ": {
+    "prefix": "STOIJ",
+    "scope": "hp42s",
+    "body": [
+      "STOIJ$0"
+    ],
+    "description": "STOIJ: Moves the row- and column-pointers to I = x and J = y in the indexed matrix."
+  },
+  "STOP": {
+    "prefix": "STOP",
+    "scope": "hp42s",
+    "body": [
+      "STOP$0"
+    ],
+    "description": "STOP: Stop program execution. (R/S in program entry mode)."
+  },
+  "STR?": {
+    "prefix": "STR",
+    "scope": "hp42s",
+    "body": [
+      "STR?$0"
+    ],
+    "description": "STR?: If the x-register contains an alpha string, execute the next program line; if the x-register does not contain an alpha string, skip the next program line."
+  },
+  "SUM": {
+    "prefix": "SUM",
+    "scope": "hp42s",
+    "body": [
+      "SUM$0"
+    ],
+    "description": "SUM: Returns the sums Σx and Σy into the x- and y-registers."
+  },
+  "TAN": {
+    "prefix": "TAN",
+    "scope": "hp42s",
+    "body": [
+      "TAN$0"
+    ],
+    "description": "TAN: Tangent. Returns tan(x)."
+  },
+  "TANH": {
+    "prefix": "TANH",
+    "scope": "hp42s",
+    "body": [
+      "TANH$0"
+    ],
+    "description": "TANH: Hyperbolic tangent. Returns tanh(x)."
+  },
+  "TONE <number>": {
+    "prefix": "TONE",
+    "scope": "hp42s",
+    "body": [
+      "TONE {1:number}$0"
+    ],
+    "description": "TONE <number>: Sounds a tone. Parameter: tone number (0–9) (indirect allowed)."
+  },
+  "TONE IND <number>": {
+    "prefix": "TONE",
+    "scope": "hp42s",
+    "body": [
+      "TONE IND ${1:number}$0"
+    ],
+    "description": "TONE IND <number>: Sounds a tone. Parameter: tone number (0–9) (indirect allowed)."
+  },
+  "TONE IND ST <stack>": {
+    "prefix": "TONE",
+    "scope": "hp42s",
+    "body": [
+      "TONE IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "TONE IND ST <stack>: Sounds a tone. Parameter: tone number (0–9) (indirect allowed)."
+  },
+  "TONE IND \"<name>\"": {
+    "prefix": "TONE",
+    "scope": "hp42s",
+    "body": [
+      "TONE IND \"${1:name}\"$0"
+    ],
+    "description": "TONE IND \"<name>\": Sounds a tone. Parameter: tone number (0–9) (indirect allowed)."
+  },
+  "TRACE": {
+    "prefix": "TRACE",
+    "scope": "hp42s",
+    "body": [
+      "TRACE$0"
+    ],
+    "description": "TRACE: Select trace printing mode, which prints a record of keystrokes and results."
+  },
+  "TRANS": {
+    "prefix": "TRANS",
+    "scope": "hp42s",
+    "body": [
+      "TRANS$0"
+    ],
+    "description": "TRANS: Return the transpose of the matrix in the x-register."
+  },
+  "UVEC": {
+    "prefix": "UVEC",
+    "scope": "hp42s",
+    "body": [
+      "UVEC$0"
+    ],
+    "description": "UVEC: Unit vector. Return the unit vector for the matrix or complex number in the x-register."
+  },
+  "VARMENU IND <number>": {
+    "prefix": "VARMENU",
+    "scope": "hp42s",
+    "body": [
+      "VARMENU IND ${1:number}$0"
+    ],
+    "description": "VARMENU IND <number>: Create a variable menu using MVAR instructions following the specified global label. Parameter: global program label (indirect allowed)."
+  },
+  "VARMENU IND ST <stack>": {
+    "prefix": "VARMENU",
+    "scope": "hp42s",
+    "body": [
+      "VARMENU IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "VARMENU IND ST <stack>: Create a variable menu using MVAR instructions following the specified global label. Parameter: global program label (indirect allowed)."
+  },
+  "VARMENU \"<name>\"": {
+    "prefix": "VARMENU",
+    "scope": "hp42s",
+    "body": [
+      "VARMENU \"${1:name}\"$0"
+    ],
+    "description": "VARMENU \"<name>\": Create a variable menu using MVAR instructions following the specified global label. Parameter: global program label (indirect allowed)."
+  },
+  "VARMENU IND \"<name>\"": {
+    "prefix": "VARMENU",
+    "scope": "hp42s",
+    "body": [
+      "VARMENU IND \"${1:name}\"$0"
+    ],
+    "description": "VARMENU IND \"<name>\": Create a variable menu using MVAR instructions following the specified global label. Parameter: global program label (indirect allowed)."
+  },
+  "VIEW <number>": {
+    "prefix": "VIEW",
+    "scope": "hp42s",
+    "body": [
+      "VIEW ${1:number}$0"
+    ],
+    "description": "VIEW <number>: View the contents of a register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "VIEW IND <number>": {
+    "prefix": "VIEW",
+    "scope": "hp42s",
+    "body": [
+      "VIEW IND ${1:number}$0"
+    ],
+    "description": "VIEW IND <number>: View the contents of a register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "VIEW ST <stack>": {
+    "prefix": "VIEW",
+    "scope": "hp42s",
+    "body": [
+      "VIEW ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "VIEW ST <stack>: View the contents of a register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "VIEW IND ST <stack>": {
+    "prefix": "VIEW",
+    "scope": "hp42s",
+    "body": [
+      "VIEW IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "VIEW IND ST <stack>: View the contents of a register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "VIEW \"<name>\"": {
+    "prefix": "VIEW",
+    "scope": "hp42s",
+    "body": [
+      "VIEW \"${1:name}\"$0"
+    ],
+    "description": "VIEW \"<name>\": View the contents of a register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "VIEW IND \"<name>\"": {
+    "prefix": "VIEW",
+    "scope": "hp42s",
+    "body": [
+      "VIEW IND \"${1:name}\"$0"
+    ],
+    "description": "VIEW IND \"<name>\": View the contents of a register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "WMEAN": {
+    "prefix": "WMEAN",
+    "scope": "hp42s",
+    "body": [
+      "WMEAN$0"
+    ],
+    "description": "WMEAN: Weighted mean. Return the mean of x-values weighted by the y-values  Σxy / Σ y."
+  },
+  "WRAP": {
+    "prefix": "WRAP",
+    "scope": "hp42s",
+    "body": [
+      "WRAP$0"
+    ],
+    "description": "WRAP: Select wrap mode, which prevents the indexed matrix from growing."
+  },
+  "X<> <number>": {
+    "prefix": "X",
+    "scope": "hp42s",
+    "body": [
+      "X<> ${1:number}$0"
+    ],
+    "description": "X<> <number>: Swaps the contents of the x-register with another register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "X<> IND <number>": {
+    "prefix": "X",
+    "scope": "hp42s",
+    "body": [
+      "X<> IND ${1:number}$0"
+    ],
+    "description": "X<> IND <number>: Swaps the contents of the x-register with another register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "X<> ST <stack>": {
+    "prefix": "X",
+    "scope": "hp42s",
+    "body": [
+      "X<> ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "X<> ST <stack>: Swaps the contents of the x-register with another register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "X<> IND ST <stack>": {
+    "prefix": "X",
+    "scope": "hp42s",
+    "body": [
+      "X<> IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "X<> IND ST <stack>: Swaps the contents of the x-register with another register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "X<> \"<name>\"": {
+    "prefix": "X",
+    "scope": "hp42s",
+    "body": [
+      "X<> \"${1:name}\"$0"
+    ],
+    "description": "X<> \"<name>\": Swaps the contents of the x-register with another register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "X<> IND \"<name>\"": {
+    "prefix": "X",
+    "scope": "hp42s",
+    "body": [
+      "X<> IND \"${1:name}\"$0"
+    ],
+    "description": "X<> IND \"<name>\": Swaps the contents of the x-register with another register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "X<>Y": {
+    "prefix": "X",
+    "scope": "hp42s",
+    "body": [
+      "X<>Y$0"
+    ],
+    "description": "X<>Y: Swaps the contents of the x- and y-registers."
+  },
+  "X<0?": {
+    "prefix": "X",
+    "scope": "hp42s",
+    "body": [
+      "X<0?$0"
+    ],
+    "description": "X<0?: X less than zero test. If true, execute the next program line; if false, skip the next program line."
+  },
+  "X<Y?": {
+    "prefix": "X",
+    "scope": "hp42s",
+    "body": [
+      "X<Y?$0"
+    ],
+    "description": "X<Y?: X less than y test. If true, execute the next program line; if false, skip the next program line."
+  },
+  "X≤0?": {
+    "prefix": "X",
+    "scope": "hp42s",
+    "body": [
+      "X≤0?$0"
+    ],
+    "description": "X≤0?: X less than or equal to zero test. If true, execute the next program line; if false, skip the next program line."
+  },
+  "X≤Y?": {
+    "prefix": "X",
+    "scope": "hp42s",
+    "body": [
+      "X≤Y?$0"
+    ],
+    "description": "X≤Y?: X less than or equal to y test. If true, execute the next program line; if false, skip the next program line."
+  },
+  "X=0?": {
+    "prefix": "X",
+    "scope": "hp42s",
+    "body": [
+      "X=0?$0"
+    ],
+    "description": "X=0?: X equal to zero test. If true, execute the next program line; if false, skip the next program line."
+  },
+  "X=Y?": {
+    "prefix": "X",
+    "scope": "hp42s",
+    "body": [
+      "X=Y?$0"
+    ],
+    "description": "X=Y?: X equal to y test. If true, execute the next program line; if false, skip the next program line."
+  },
+  "X≠0?": {
+    "prefix": "X",
+    "scope": "hp42s",
+    "body": [
+      "X≠0?$0"
+    ],
+    "description": "X≠0?: X not equal to zero test. If true, execute the next program line; if false, skip the next program line."
+  },
+  "X≠Y?": {
+    "prefix": "X",
+    "scope": "hp42s",
+    "body": [
+      "X≠Y?$0"
+    ],
+    "description": "X≠Y?: X not equal to y test. If true, execute the next program line; if false, skip the next program line."
+  },
+  "X>0?": {
+    "prefix": "X",
+    "scope": "hp42s",
+    "body": [
+      "X>0?$0"
+    ],
+    "description": "X>0?: X greater than zero test. If true, execute the next program line; if false, skip the next program line."
+  },
+  "X>Y?": {
+    "prefix": "X",
+    "scope": "hp42s",
+    "body": [
+      "X>Y?$0"
+    ],
+    "description": "X>Y?: X greater than y test. If true, execute the next program line; if false, skip the next program line."
+  },
+  "X≥0?": {
+    "prefix": "X",
+    "scope": "hp42s",
+    "body": [
+      "X≥0?$0"
+    ],
+    "description": "X≥0?: X greater than or equal to zero test. If true, execute the next program line; if false, skip the next program line."
+  },
+  "X≥Y?": {
+    "prefix": "X",
+    "scope": "hp42s",
+    "body": [
+      "X≥Y?$0"
+    ],
+    "description": "X≥Y?: X greater than or equal to y test. If true, execute the next program line; if false, skip the next program line."
+  },
+  "XEQ <number>": {
+    "prefix": "XEQ",
+    "scope": "hp42s",
+    "body": [
+      "XEQ ${1:number}$0"
+    ],
+    "description": "XEQ <number>: Execute a function or program. Parameter: function or label (indirect allowed)."
+  },
+  "XEQ IND <number>": {
+    "prefix": "XEQ",
+    "scope": "hp42s",
+    "body": [
+      "XEQ IND ${1:number}$0"
+    ],
+    "description": "XEQ IND <number>: Execute a function or program. Parameter: function or label (indirect allowed)."
+  },
+  "XEQ <alpha_local_label>": {
+    "prefix": "XEQ",
+    "scope": "hp42s",
+    "body": [
+      "XEQ ${1:A|B|C|D|E|F|G|H|I|J|a|b|c|d|e}$0"
+    ],
+    "description": "XEQ <alpha_local_label>: Execute a function or program. Parameter: function or label (indirect allowed)."
+  },
+  "XEQ IND ST <stack>": {
+    "prefix": "XEQ",
+    "scope": "hp42s",
+    "body": [
+      "XEQ IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "XEQ IND ST <stack>: Execute a function or program. Parameter: function or label (indirect allowed)."
+  },
+  "XEQ \"<name>\"": {
+    "prefix": "XEQ",
+    "scope": "hp42s",
+    "body": [
+      "XEQ \"${1:name}\"$0"
+    ],
+    "description": "XEQ \"<name>\": Execute a function or program. Parameter: function or label (indirect allowed)."
+  },
+  "XEQ IND \"<name>\"": {
+    "prefix": "XEQ",
+    "scope": "hp42s",
+    "body": [
+      "XEQ IND \"${1:name}\"$0"
+    ],
+    "description": "XEQ IND \"<name>\": Execute a function or program. Parameter: function or label (indirect allowed)."
+  },
+  "XOR": {
+    "prefix": "XOR",
+    "scope": "hp42s",
+    "body": [
+      "XOR$0"
+    ],
+    "description": "XOR: Logical XOR (exclusive OR). Returns x XOR y."
+  },
+  "XTOA": {
+    "prefix": "XTOA",
+    "scope": "hp42s",
+    "body": [
+      "XTOA$0"
+    ],
+    "description": "XTOA: X to alpha. Appends a character (specified by the code in the x-register) to the alpha register. If the x-register contains an alpha string, appends the entire string."
+  },
+  "X↑2": {
+    "prefix": "X",
+    "scope": "hp42s",
+    "body": [
+      "X↑2$0"
+    ],
+    "description": "X↑2: Square. Returns x2."
+  },
+  "YINT": {
+    "prefix": "YINT",
+    "scope": "hp42s",
+    "body": [
+      "YINT$0"
+    ],
+    "description": "YINT: y-intercept. Returns the y-intercept of the curve fitted to the current statistical data."
+  },
+  "Y↑X": {
+    "prefix": "Y",
+    "scope": "hp42s",
+    "body": [
+      "Y↑X$0"
+    ],
+    "description": "Y↑X: Power. Returns yx."
+  },
+  "1/X": {
+    "prefix": "X",
+    "scope": "hp42s",
+    "body": [
+      "1/X$0"
+    ],
+    "description": "1/X: Reciprocal. Returns 1/x."
+  },
+  "10↑X": {
+    "prefix": "X",
+    "scope": "hp42s",
+    "body": [
+      "10↑X$0"
+    ],
+    "description": "10↑X: Common exponential. Returns 10x."
+  },
+  "+": {
+    "prefix": "OP",
+    "scope": "hp42s",
+    "body": [
+      "+$0"
+    ],
+    "description": "+: Addition. Returns y + x."
+  },
+  "-": {
+    "prefix": "OP",
+    "scope": "hp42s",
+    "body": [
+      "-$0"
+    ],
+    "description": "-: Subtraction. Returns y – x."
+  },
+  "×": {
+    "prefix": "OP",
+    "scope": "hp42s",
+    "body": [
+      "×$0"
+    ],
+    "description": "×: Multiplication. Returns x × y."
+  },
+  "÷": {
+    "prefix": "OP",
+    "scope": "hp42s",
+    "body": [
+      "÷$0"
+    ],
+    "description": "÷: Division. Returns y / x."
+  },
+  "±": {
+    "prefix": "OP",
+    "scope": "hp42s",
+    "body": [
+      "±$0"
+    ],
+    "description": "±: Change the sign of the number in the x-register. While entering an exponent, can also be used to change the sign of the exponent."
+  },
+  "Σ+": {
+    "prefix": "OP",
+    "scope": "hp42s",
+    "body": [
+      "Σ+$0"
+    ],
+    "description": "Σ+: Summation plus. Accumulate a pair of x- and y values into the summation registers."
+  },
+  "Σ-": {
+    "prefix": "OP",
+    "scope": "hp42s",
+    "body": [
+      "Σ-$0"
+    ],
+    "description": "Σ-: Summation minus. Subtract a pair of x- and y-values from the summation registers."
+  },
+  "ΣREG <number>": {
+    "prefix": "REG",
+    "scope": "hp42s",
+    "body": [
+      "ΣREG ${1:number}$0"
+    ],
+    "description": "ΣREG <number>: Summation registers. Defines which storage register begins the block of summation registers. Parameter: register number (indirect allowed)."
+  },
+  "ΣREG IND <number>": {
+    "prefix": "REG",
+    "scope": "hp42s",
+    "body": [
+      "ΣREG IND ${1:number}$0"
+    ],
+    "description": "ΣREG IND <number>: Summation registers. Defines which storage register begins the block of summation registers. Parameter: register number (indirect allowed)."
+  },
+  "ΣREG IND ST <stack>": {
+    "prefix": "REG",
+    "scope": "hp42s",
+    "body": [
+      "ΣREG IND ST ${1:L|T|X|Y|Z}$0"
+    ],
+    "description": "ΣREG IND ST <stack>: Summation registers. Defines which storage register begins the block of summation registers. Parameter: register number (indirect allowed)."
+  },
+  "ΣREG IND \"<name>\"": {
+    "prefix": "REG",
+    "scope": "hp42s",
+    "body": [
+      "ΣREG IND \"${1:name}\"$0"
+    ],
+    "description": "ΣREG IND \"<name>\": Summation registers. Defines which storage register begins the block of summation registers. Parameter: register number (indirect allowed)."
+  },
+  "ΣREG?": {
+    "prefix": "REG",
+    "scope": "hp42s",
+    "body": [
+      "ΣREG?$0"
+    ],
+    "description": "ΣREG?: Return the register number of the first summation register."
+  },
+  "→DEC": {
+    "prefix": "DEC",
+    "scope": "hp42s",
+    "body": [
+      "→DEC$0"
+    ],
+    "description": "→DEC: To decimal. Converts the octal (base 8) representation of a number to decimal (base 10). Note: This function is included to provide program compatibility with the HP-41 (which uses the function name DEC)."
+  },
+  "→DEG": {
+    "prefix": "DEG",
+    "scope": "hp42s",
+    "body": [
+      "→DEG$0"
+    ],
+    "description": "→DEG: To degrees. Convert an angle-value from radians to degrees. Returns x×(180/π)."
+  },
+  "→HMS": {
+    "prefix": "HMS",
+    "scope": "hp42s",
+    "body": [
+      "→HMS$0"
+    ],
+    "description": "→HMS: To hours, minutes, and seconds. Convert x from a decimal fraction to a minutes-seconds format."
+  },
+  "→HR": {
+    "prefix": "HR",
+    "scope": "hp42s",
+    "body": [
+      "→HR$0"
+    ],
+    "description": "→HR: To hours. Converts x from a minutes-seconds format to a decimal fraction."
+  },
+  "→OCT": {
+    "prefix": "OCT",
+    "scope": "hp42s",
+    "body": [
+      "→OCT$0"
+    ],
+    "description": "→OCT: To octal. Converts a decimal number to the octal representation. Note: This function is included to provide program compatibility with the HP-41 (which uses the function name OCT)."
+  },
+  "→POL": {
+    "prefix": "→POL",
+    "scope": "hp42s",
+    "body": [
+      "→POL$0"
+    ],
+    "description": "→POL: To polar. Converts x and y to the corresponding polar coordinates r and θ. If the x-register contains a complex number, converts the two parts of the number to polar values."
+  },
+  "→RAD": {
+    "prefix": "RAD",
+    "scope": "hp42s",
+    "body": [
+      "→RAD$0"
+    ],
+    "description": "→RAD: To radians. Converts a angle value in degrees to radians. Returns x×(π/180)."
+  },
+  "→REC": {
+    "prefix": "REC",
+    "scope": "hp42s",
+    "body": [
+      "→REC$0"
+    ],
+    "description": "→REC: To rectangular. Converts r (in the x-register) and θ (in the y-register) to the corresponding rectangular coordinates, x and y. If the X-register contains a complex number, converts the two parts of the number to rectangular values."
+  },
+  "←": {
+    "prefix": "OP",
+    "scope": "hp42s",
+    "body": [
+      "←$0"
+    ],
+    "description": "←: Move left one element in the indexed matrix."
+  },
+  "↑": {
+    "prefix": "OP",
+    "scope": "hp42s",
+    "body": [
+      "↑$0"
+    ],
+    "description": "↑: Move up one element in the indexed matrix."
+  },
+  "↓": {
+    "prefix": "OP",
+    "scope": "hp42s",
+    "body": [
+      "↓$0"
+    ],
+    "description": "↓: Move down one element in the indexed matrix."
+  },
+  "→": {
+    "prefix": "OP",
+    "scope": "hp42s",
+    "body": [
+      "→$0"
+    ],
+    "description": "→: Move right one element in the indexed matrix."
+  },
+  "%": {
+    "prefix": "OP",
+    "scope": "hp42s",
+    "body": [
+      "%$0"
+    ],
+    "description": "%: Percent. Returns (x × y) / 100. Leaves the y value in the y-register.⊢"
+  },
+  "⊢": {
+    "prefix": "OP",
+    "scope": "hp42s",
+    "body": [
+      "⊢$0"
+    ],
+    "description": "⊢: Concat a string."
+  },
+  "%CH": {
+    "prefix": "OP",
+    "scope": "hp42s",
+    "body": [
+      "%CH$0"
+    ],
+    "description": "%CH: Percent change. Returns (x – y)×(100 / y)."
+  },
+  "[FIND]": {
+    "prefix": "FIND",
+    "scope": "hp42s",
+    "body": [
+      "[FIND]$0"
+    ],
+    "description": "[FIND]"
+  },
+  "[MAX]": {
+    "prefix": "MAX",
+    "scope": "hp42s",
+    "body": [
+      "[MAX]$0"
+    ],
+    "description": "[MAX]"
+  },
+  "[MIN]": {
+    "prefix": "MIN",
+    "scope": "hp42s",
+    "body": [
+      "[MIN]$0"
+    ],
+    "description": "[MIN]"
+  },
+  "√": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "√$0"
+    ],
+    "description": "√: FOCAL character."
+  },
+  "∫": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "∫$0"
+    ],
+    "description": "∫: FOCAL character."
+  },
+  "░": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "░$0"
+    ],
+    "description": "░: FOCAL character."
+  },
+  "Σ": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "Σ$0"
+    ],
+    "description": "Σ: FOCAL character."
+  },
+  "▶": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "▶$0"
+    ],
+    "description": "▶: FOCAL character."
+  },
+  "π": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "π$0"
+    ],
+    "description": "π: FOCAL character."
+  },
+  "¿": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "¿$0"
+    ],
+    "description": "¿: FOCAL character."
+  },
+  "≤": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "≤$0"
+    ],
+    "description": "≤: FOCAL character."
+  },
+  "≥": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "≥$0"
+    ],
+    "description": "≥: FOCAL character."
+  },
+  "≠": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "≠$0"
+    ],
+    "description": "≠: FOCAL character."
+  },
+  "↵": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "↵$0"
+    ],
+    "description": "↵: FOCAL character."
+  },
+  "µ": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "µ$0"
+    ],
+    "description": "µ: FOCAL character."
+  },
+  "£": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "£$0"
+    ],
+    "description": "£: FOCAL character."
+  },
+  "°": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "°$0"
+    ],
+    "description": "°: FOCAL character."
+  },
+  "Å": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "Å$0"
+    ],
+    "description": "Å: FOCAL character."
+  },
+  "Ñ": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "Ñ$0"
+    ],
+    "description": "Ñ: FOCAL character."
+  },
+  "Ä": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "Ä$0"
+    ],
+    "description": "Ä: FOCAL character."
+  },
+  "∡": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "∡$0"
+    ],
+    "description": "∡: FOCAL character."
+  },
+  "ᴇ": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "ᴇ$0"
+    ],
+    "description": "ᴇ: FOCAL character."
+  },
+  "Æ": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "Æ$0"
+    ],
+    "description": "Æ: FOCAL character."
+  },
+  "…": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "…$0"
+    ],
+    "description": "…: FOCAL character."
+  },
+  "␛": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "␛$0"
+    ],
+    "description": "␛: FOCAL character."
+  },
+  "Ö": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "Ö$0"
+    ],
+    "description": "Ö: FOCAL character."
+  },
+  "Ü": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "Ü$0"
+    ],
+    "description": "Ü: FOCAL character."
+  },
+  "▒": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "▒$0"
+    ],
+    "description": "▒: FOCAL character."
+  },
+  "■": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "■$0"
+    ],
+    "description": "■: FOCAL character."
+  }
+}
