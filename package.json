@@ -1,9 +1,13 @@
 {
   "name": "vscode-hp42s-free42",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/heilingbrunner/vscode-hp42s-free42.git"
+  },
   "displayName": "HP42S-free42",
   "description": "HP42S/free42 RPN programming language support",
   "version": "0.0.1",
-  "publisher": "J.Heilingbrunner",
+  "publisher": "JHeilingbrunner",
   "engines": {
     "vscode": "^1.27.0"
   },
