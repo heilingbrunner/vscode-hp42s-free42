@@ -1,6 +1,8 @@
-# vscode-hp42s-free42
+# HP42S - free42
 
-![hp42s-free42-extension-logo](images/vscode-hp42s-free42-logo.png)
+![hp42s-free42-extension-logo](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/vscode-hp42s-free42-logo.png)
+
+![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)
 
 Language support for HP42S/free42 programming language.
 
@@ -21,13 +23,13 @@ Useful for [FREE42](http://thomasokken.com/free42/) applications and  [SwissMicr
 
 ### Syntax Highligthing
 
-![Syntax Highligthing](images/syntax-highlighting.gif)
+![Syntax Highligthing](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/syntax-highlighting.gif)
 
 ### Snippets with description
 
 Every keystroke command and its variations with a description.
 
-![Snippets with description](images/snippets-with-description.gif)
+![Snippets with description](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/snippets-with-description.gif)
 
 - Normal snippets appear when writing the command
 - Snippets for commands with leading special character appear when writing the command name (eg: use `DEC` for `→DEC`, use `REG` for `ΣREG`)
@@ -38,11 +40,11 @@ Every keystroke command and its variations with a description.
 
 ### Comments
 
-![Comments](images/comments.gif)
+![Comments](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/comments.gif)
 
 ### Document Formatter
 
-![Document Formatter](images/document-formatter.gif)
+![Document Formatter](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/document-formatter.gif)
 
 Formatter Configuration:
 
@@ -55,13 +57,13 @@ Formatter Configuration:
 
 The `hp42s/free42: Encode Code` command generates a `*.hp42s.raw` or `*.free42.raw` file. These files can be loaded by `free42` or `DM42`.
 
-![Encode Code](images/encode-code.gif)
+![Encode Code](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/encode-code.gif)
 
 #### Encoding Success
 
 Encoding with no errors: The raw program size is reported in the first line.
 
-![Encode Success](images/encode-success.gif)
+![Encode Success](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/encode-success.gif)
 
 The command generates two output files:
 
@@ -72,11 +74,11 @@ The command generates two output files:
 
 Encoding with errors: The first line line contains the first error.
 
-![Encode Error](images/encode-error.gif)
+![Encode Error](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/encode-error.gif)
 
 Encoding with errors: All errors are logged to the *.log file.
 
-![Encode Log](images/encode-log.gif)
+![Encode Log](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/encode-log.gif)
 
 ## Used References
 

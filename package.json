@@ -2,18 +2,32 @@
   "name": "vscode-hp42s-free42",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/heilingbrunner/vscode-hp42s-free42.git"
+    "url": "https://github.com/heilingbrunner/vscode-hp42s-free42.git"
   },
   "displayName": "HP42S-free42",
   "description": "HP42S/free42 RPN programming language support",
   "version": "0.0.1",
   "publisher": "JHeilingbrunner",
+  "icon": "images/vscode-hp42s-free42-logo.png",
   "engines": {
     "vscode": "^1.27.0"
   },
   "categories": [
-    "Programming Languages"
+    "Programming Languages",
+    "Snippets",
+    "Other"
   ],
+  "keywords": [
+     "HP42S/free42",
+     "syntax highlighting",
+     "snippets",
+     "document formatter",
+     "encoder"
+  ],
+  "galleryBanner": {
+    "color": "#1e1e1e",
+    "theme": "dark"
+  },
   "activationEvents": [
     "onLanguage:hp42s",
     "onLanguage:free42",
@@ -69,7 +83,6 @@
         "command": "extension.Encode",
         "title": "hp42s/free42: Encode Code"
       }
-      
     ],
     "configuration": {
       "type": "object",
