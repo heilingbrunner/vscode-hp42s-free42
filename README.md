@@ -14,7 +14,7 @@ Features
 - document formatter
 - encoding code
   
-Supported filetypes `*.hp42s` and `*.free42`.
+Supported filetypes __`*.hp42s`__ and __`*.free42`__.
 Depending on the file type, snippets, syntax highlighting with the additional commands of free42 are supported or not.
 
 Useful for [FREE42](http://thomasokken.com/free42/) applications and  [SwissMicros-DM42](https://www.swissmicros.com/dm42.php) calculators.
@@ -40,20 +40,26 @@ Every keystroke command and its variations with a description.
 
 ### Comments
 
+Comments are possible in several variants.
+
 ![Comments](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/comments.gif)
 
 ### Document Formatter
 
+Right-click in the editor to get the context menu, then select menu `Format Document` or press keyboard-shortcut __Win__: `SHIFT+ALT+F`/ __Linux__: `SHIFT+ALT+F`/ __Mac-OSX__: `⇧⌥F`.
+
 ![Document Formatter](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/document-formatter.gif)
 
-Formatter Configuration:
+The formatter has several configurations:
 
-- Remove Line Numbers
-- Remove Too Long Spaces
-- Replace Abbreviations
-- Trim Line
+- Remove Line Numbers: This will remove all leading line numbers.
+- Remove Too Long Spaces: This will reduce whitespaces in the code.
+- Replace Abbreviations: Abbreviations for special characters will be replaced by the correct intended character.
+- Trim Line: This removes whitespaces at the beginnning and at the end of a code line.
 
 ### `Encode Code` - Comand
+
+Press __Win/Linux__: `Ctrl+Shift+P`, __Mac-OSX__: `⇧⌘P`, then write `HP42S` to get the command `hp42s/free42: Encode Code` in the drop down list.
 
 The `hp42s/free42: Encode Code` command generates a `*.hp42s.raw` or `*.free42.raw` file. These files can be loaded by `free42` or `DM42`.
 
@@ -82,11 +88,13 @@ Encoding with errors: All errors are logged to the *.log file.
 
 ## Used References
 
-- http://thomasokken.com/free42/
-- https://www.swissmicros.com/
-- http://www.hpmuseum.org/
-- https://en.wikipedia.org/wiki/FOCAL_character_set
-- perl script `txt2raw.pl V1.0` by Vini Matangrano
+- [Thomas Okken - free42](http://thomasokken.com/free42/)
+- [SwissMicros](https://www.swissmicros.com/)
+- [SwissMicros - Forum](https://forum.swissmicros.com/viewtopic.php?f=2&t=2011)
+- [MoHPC, The Museum of HP Calculators](http://www.hpmuseum.org/)
+- [MoHPC - Forum](http://www.hpmuseum.org/forum/thread-11743.html)
+- [FOCAL character set](https://en.wikipedia.org/wiki/FOCAL_character_set)
+- perl script [txt2raw.pl V1.0](https://forum.swissmicros.com/viewtopic.php?t=285&start=10) by Vini Matangrano
 
 ## Documents
 
@@ -101,10 +109,10 @@ None.
 
 Document Formatter Settings:
 
-- HP42S/free42.formatterRemoveLineNumbers
-- HP42S/free42.formatterReplaceAbreviations
-- HP42S/free42.formatterRemoveTooLongSpaces
-- HP42S/free42.formatterRemoveTooLongSpaces
+- HP42S/free42.formatterRemoveLineNumbers: see above Document Formatter
+- HP42S/free42.formatterReplaceAbreviations: see above Document Formatter
+- HP42S/free42.formatterRemoveTooLongSpaces: see above Document Formatter
+- HP42S/free42.formatterTrimLines: see above Document Formatter
 
 ## Known Issues
 
