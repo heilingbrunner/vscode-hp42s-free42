@@ -125,25 +125,25 @@ export class Parser {
 
       this.out = line;
 
-      if (progErrorText === undefined) {
+      if (this.str && progErrorText === undefined) {
         progErrorText = this.checkString(this.str);
       }
-      if (progErrorText === undefined) {
+      if (this.nam && progErrorText === undefined) {
         progErrorText = this.checkName(this.nam);
       }
-      if (progErrorText === undefined) {
+      if (this.key && progErrorText === undefined) {
         progErrorText = this.checkKey(this.key);
       }
-      if (progErrorText === undefined) {
+      if (this.csk && progErrorText === undefined) {
         progErrorText = this.checkCustomKey(this.csk);
       }
-      if (progErrorText === undefined) {
+      if (this.ton && progErrorText === undefined) {
         progErrorText = this.checkTone(this.ton);
       }
-      if (progErrorText === undefined) {
+      if (this.lbl && progErrorText === undefined) {
         progErrorText = this.checkGlobalLabel(this.lbl);
       }
-      if (progErrorText === undefined) {
+      if (this.clb && progErrorText === undefined) {
         progErrorText = this.checkLocalCharLabel(this.clb);
       }
     }
@@ -169,12 +169,14 @@ export class Parser {
 
   /** Prepare line */
   private formatLine(line: string): string {
-    // Comment //...
-    line = line.replace(/\/\/.*$/, '');
-    // Comment @...
-    line = line.replace(/@.*$/, '');
-    // Comment #...
-    line = line.replace(/#.*$/, '');
+
+    // Comment //|@|#...
+    let match = line.match(/"/);
+    if(match){
+      line = line.replace(/(.*")\s*(\/\/|@|#).*$/, '$1');
+    } else {
+      line = line.replace(/(\/\/|@|#).*$/, '');
+    }
 
     // Replace too long spaces (?<!".*)\s{2,} , but not in strings
     //let regex = new RegExp(/\s{2,}/, "g");
@@ -196,10 +198,11 @@ export class Parser {
   /** Replace a string with `str` */
   private replaceString(line: string): [string, unstring] {
     let str: unstring = undefined;
-    let match = line.match(/^\s*(⊢|\|-|├|)\"(.*)\"/);
+    // ⊢ or |- or ├
+    let match = line.match(/^\s*(⊢|\|-|├|)(".*")/);
     if (match) {
-      str = match[2]; //this.removeDoubleQuotes(match[0]);
-      line = line.replace(/^\s*(⊢|\|-|├|)\"(.*)\"/, '$1`str`');
+      str = this.removeDoubleQuotes(match[2]);
+      line = line.replace(/^\s*(⊢|\|-|├|)"(.*)"/, '$1`str`');
     }
 
     return [line, str];
@@ -223,12 +226,12 @@ export class Parser {
     //               unique to calculator
     let lbl: unstring = undefined;
     let match = line.match(
-      /(LBL|GTO|XEQ|CLP|INTEG|PGMSLV|PGMINT|SOLVE)\s+(\".{1,7}\")/
+      /(LBL|GTO|XEQ|CLP|INTEG|PGMSLV|PGMINT|SOLVE)\s+(".{1,7}")/
     );
     if (match) {
       lbl = this.removeDoubleQuotes(match[2]);
       line = line.replace(
-        /(LBL|GTO|XEQ|CLP|INTEG|PGMSLV|PGMINT|SOLVE)\s+\".{1,7}\"/,
+        /(LBL|GTO|XEQ|CLP|INTEG|PGMSLV|PGMINT|SOLVE)\s+".{1,7}"/,
         '$1 `lbl`'
       );
     }
@@ -239,10 +242,10 @@ export class Parser {
   /** Replace a variable with `nam` */
   private replaceName(line: string): [string, unstring] {
     let nam: unstring = undefined;
-    let match = line.match(/\".*\"/);
+    let match = line.match(/".*"/);
     if (match) {
       nam = this.removeDoubleQuotes(match[0]);
-      line = line.replace(/\".*\"/, '`nam`');
+      line = line.replace(/".*"/, '`nam`');
     }
 
     return [line, nam];
@@ -469,7 +472,10 @@ export class Parser {
   /** Removes double quotes */
   private removeDoubleQuotes(str: string): string {
     if (str) {
-      str = str.replace(/"/g, '');
+      // too simple
+      //str = str.replace(/"/g, '');
+      // cut start and end
+      str = str.substr(1, str.length - 2);
     }
     return str;
   }
@@ -479,7 +485,7 @@ export class Parser {
   //#region checks
   private checkString(str: unstring): unstring {
     if (str !== undefined) {
-      return this.inRange(str.length, 0, 44) ? undefined : 'alpha too long';
+      return this.inRange(str.length, 0, 15) ? undefined : 'alpha too long';
     }
     return undefined;
   }
