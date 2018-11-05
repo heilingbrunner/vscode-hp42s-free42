@@ -14,7 +14,7 @@ Features
 - document formatter
 - encoding code
   
-Supported filetypes `*.hp42` and `*.free42`.
+Supported filetypes `*.hp42s` and `*.free42`.
 Depending on the file type, snippets, syntax highlighting with the additional commands of free42 are supported or not.
 
 Useful for [FREE42](http://thomasokken.com/free42/) applications and  [SwissMicros-DM42](https://www.swissmicros.com/dm42.php) calculators.
