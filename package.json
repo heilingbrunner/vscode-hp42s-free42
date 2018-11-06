@@ -6,7 +6,7 @@
   },
   "displayName": "HP42S-free42",
   "description": "HP42S/free42 RPN programming language support",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "JHeilingbrunner",
   "icon": "images/vscode-hp42s-free42-logo.png",
   "engines": {

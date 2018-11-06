@@ -431,11 +431,11 @@ export class Free42 {
       // "1.234E-455" -> 11 1A 12 13 14 1B 1C 14 15 15 00
       num =
         num
-          .replace(/(\d)/g, ' 1$1') // replace 123 -> 11 12 13
-          .replace(/\./, ' 1A') // replace . -> 1A
-          .replace(/(ᴇ|e|E)/, ' 1B') // replace (ᴇ|e|E) -> 1B
-          .replace(/-/g, ' 1C') // replace - -> 1C
-          .replace(' ', '') + ' 00'; // remove first leading space + append 00
+          .replace(/(\d)/g, ' 1$1') // replace 1234E-455                 -> 11 .  12 13 14 E  -  14 15 15
+          .replace(/\./, ' 1A') // replace .                             -> 11 1A 12 13 14 E  -  14 15 15
+          .replace(/(ᴇ|e|E)/, ' 1B') // replace (ᴇ|e|E)                  -> 11 1A 12 13 14 1B -  14 15 15
+          .replace(/-/g, ' 1C') // replace - -> 1C                       -> 11 1A 12 13 14 1B 1C 14 15 15
+          .replace(' ', '') + ' 00'; // remove first space + append 00   ->11 1A 12 13 14 1B 1C 14 15 15 00
     }
 
     return num;
