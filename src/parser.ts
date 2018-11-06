@@ -125,25 +125,25 @@ export class Parser {
 
       this.out = line;
 
-      if (this.str && progErrorText === undefined) {
+      if (this.str) {
         progErrorText = this.checkString(this.str);
       }
-      if (this.nam && progErrorText === undefined) {
+      if (this.nam) {
         progErrorText = this.checkName(this.nam);
       }
-      if (this.key && progErrorText === undefined) {
+      if (this.key) {
         progErrorText = this.checkKey(this.key);
       }
-      if (this.csk && progErrorText === undefined) {
+      if (this.csk) {
         progErrorText = this.checkCustomKey(this.csk);
       }
-      if (this.ton && progErrorText === undefined) {
+      if (this.ton) {
         progErrorText = this.checkTone(this.ton);
       }
-      if (this.lbl && progErrorText === undefined) {
+      if (this.lbl) {
         progErrorText = this.checkGlobalLabel(this.lbl);
       }
-      if (this.clb && progErrorText === undefined) {
+      if (this.clb) {
         progErrorText = this.checkLocalCharLabel(this.clb);
       }
     }
@@ -184,10 +184,6 @@ export class Parser {
 
     // Remove leading line numbers 01▸LBL "AA" or 07 SIN
     line = line.replace(/^\d+(▸|\s+)/, '');
-
-    // remove \r\n at the end
-    line = line.replace('\r', '');
-    line = line.replace('\n', '');
 
     // Trim spaces
     line = line.trim();
