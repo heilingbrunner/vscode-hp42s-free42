@@ -50,7 +50,7 @@ Right-click in the editor to get the context menu, then select menu `Format Docu
 
 ![Document Formatter](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/document-formatter.gif)
 
-The formatter has several configurations:
+The formatter has several settings:
 
 - Remove Line Numbers: This will remove all leading line numbers.
 - Remove Too Long Spaces: This will reduce whitespaces in the code.
@@ -62,6 +62,10 @@ The formatter has several configurations:
 Press __Win/Linux__: `Ctrl+Shift+P`, __Mac-OSX__: `⇧⌘P`, then write `HP42S` to get the command `hp42s/free42: Encode Code` in the drop down list.
 
 The `hp42s/free42: Encode Code` command generates a `*.hp42s.raw` or `*.free42.raw` file. These files can be loaded by `free42` or `DM42`.
+
+Depending on the setting `HP42S/free42.encoderGenerateHexFile` setting, the command will generate a readable hex file.
+
+Although the program size will be calculated and shown in the first line (`{ n-Byte Prgm }`). For some reason, the last ending `END` command is ignored (see: `HP42S/free42.encoderIgnoreLastEndCommandForBytePrgm`). Real raw file size will be 3 bytes more.
 
 ![Encode Code](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/encode-code.gif)
 
@@ -107,12 +111,17 @@ None.
 
 ## Extension Settings
 
+Encoding Settings:
+
+- `HP42S/free42.encoderGenerateHexFile`: This will although generate a *.hex file, to see the correct hex encoding.
+- `HP42S/free42.encoderIgnoreLastEndCommandForBytePrgm`: This is for the program size calculation, which ignores the last `END` command or not.
+  
 Document Formatter Settings:
 
-- HP42S/free42.formatterRemoveLineNumbers: see above Document Formatter
-- HP42S/free42.formatterReplaceAbreviations: see above Document Formatter
-- HP42S/free42.formatterRemoveTooLongSpaces: see above Document Formatter
-- HP42S/free42.formatterTrimLines: see above Document Formatter
+- `HP42S/free42.formatterRemoveLineNumbers`: see above __Document Formatter__
+- `HP42S/free42.formatterReplaceAbreviations`: see above __Document Formatter__
+- `HP42S/free42.formatterRemoveTooLongSpaces`: see above __Document Formatter__
+- `HP42S/free42.formatterTrimLines`: see above __Document Formatter__
 
 ## Known Issues
 

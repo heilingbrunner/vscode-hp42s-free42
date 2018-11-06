@@ -6,7 +6,7 @@
   },
   "displayName": "HP42S-free42",
   "description": "HP42S/free42 RPN programming language support",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "JHeilingbrunner",
   "icon": "images/vscode-hp42s-free42-logo.png",
   "engines": {
@@ -88,7 +88,12 @@
       "type": "object",
       "title": "HP42S/free42 Configuration",
       "properties": {
-        "HP42S/free42.bytePrgmIgnoreLastEnd": {
+        "HP42S/free42.encoderGenerateHexFile": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "The `Encode Code` command will although generate a readable hex file."
+        },
+        "HP42S/free42.encoderIgnoreLastEndCommandForBytePrgm": {
           "type": "boolean",
           "default": true,
           "markdownDescription": "Ignore last `END` command at program size calculation (see: `{ n-Byte Prgm }`)."

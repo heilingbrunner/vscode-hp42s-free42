@@ -20,6 +20,7 @@ export class Tool {
   encode(editor: vscode.TextEditor) {
     const debug = 1; // debug level 0=nothing,1=minimal,2=verbose
     if (editor) {
+      let config = vscode.workspace.getConfiguration('HP42S/free42');
       let document = editor.document;
       let languageId = document.languageId.toLowerCase();
 
@@ -34,10 +35,9 @@ export class Tool {
               let hex = result.output.join('\r\n').replace(/ /g,'');
 
               let size = 0;
-
-              let config = vscode.workspace.getConfiguration('HP42S/free42');
-              let bytePrgmIgnoreLastEnd = config.get('bytePrgmIgnoreLastEnd');
-              if(bytePrgmIgnoreLastEnd && raw.endsWith('C0 00 0D')){
+              
+              let encoderIgnoreLastEndCommandForBytePrgm = config.get('encoderIgnoreLastEndCommandForBytePrgm');
+              if(encoderIgnoreLastEndCommandForBytePrgm && raw.endsWith('C0 00 0D')){
                 // ignore last END, substract 3 bytes
                 size = Bytes.toBytes(raw).length - 3;
               } else {
@@ -48,7 +48,10 @@ export class Tool {
               this.fileSystem.writeBytes(document.fileName + '.raw', raw);
 
               // Save *.hex output ...
-              this.fileSystem.writeText(document.fileName + '.hex', hex);
+              let encoderGenerateHexFile = config.get('encoderGenerateHexFile');
+              if(encoderGenerateHexFile){
+                this.fileSystem.writeText(document.fileName + '.hex', hex);
+              }
   
               // Show Info ...
               vscode.window.showInformationMessage('hp42s/free42: { ' + size + '-Byte Prgm }');
