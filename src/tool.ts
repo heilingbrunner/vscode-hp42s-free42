@@ -32,7 +32,17 @@ export class Tool {
             if (result.output !== undefined) {
               let raw = result.output.join(' ').trim();
               let hex = result.output.join('\r\n').replace(/ /g,'');
-              let size = Bytes.toBytes(raw).length;
+
+              let size = 0;
+
+              let config = vscode.workspace.getConfiguration('HP42S/free42');
+              let bytePrgmIgnoreLastEnd = config.get('bytePrgmIgnoreLastEnd');
+              if(bytePrgmIgnoreLastEnd && raw.endsWith('C0 00 0D')){
+                // ignore last END, substract 3 bytes
+                size = Bytes.toBytes(raw).length - 3;
+              } else {
+                size = Bytes.toBytes(raw).length;
+              }
 
               // Save *.raw output ...
               this.fileSystem.writeBytes(document.fileName + '.raw', raw);

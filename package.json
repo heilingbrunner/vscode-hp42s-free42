@@ -88,25 +88,30 @@
       "type": "object",
       "title": "HP42S/free42 Configuration",
       "properties": {
+        "HP42S/free42.bytePrgmIgnoreLastEnd": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Ignore last `END` command at program size calculation (see: `{ n-Byte Prgm }`)."
+        },
         "HP42S/free42.formatterRemoveLineNumbers": {
           "type": "boolean",
           "default": true,
-          "description": "Formatter removes leading line numbers."
+          "markdownDescription": "Formatter removes leading line numbers."
         },
         "HP42S/free42.formatterReplaceAbbreviations": {
           "type": "boolean",
           "default": true,
-          "description": "Formatter replaces abbreviations."
+          "markdownDescription": "Formatter replaces abbreviations."
         },
         "HP42S/free42.formatterRemoveTooLongSpaces": {
           "type": "boolean",
           "default": true,
-          "description": "Formatter removes too long spaces."
+          "markdownDescription": "Formatter removes too long whitespaces."
         },
         "HP42S/free42.formatterTrimLine": {
           "type": "boolean",
           "default": true,
-          "description": "Formatter trims start and end of line."
+          "markdownDescription": "Formatter trims start and end of line."
         }
       }
     }
