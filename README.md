@@ -123,11 +123,22 @@ Document Formatter Settings:
 - `HP42S/free42.formatterRemoveTooLongSpaces`: see above __Document Formatter__
 - `HP42S/free42.formatterTrimLines`: see above __Document Formatter__
 
+## Recommendations
+
+Visual Studio Extensions:
+
+- [hexdump for VSCode](https://marketplace.visualstudio.com/items?itemName=slevesque.vscode-hexdump) for raw file inspections
+
 ## Known Issues
 
 None.
 
 ## Release Notes
+
+### 0.0.3
+
+- new setting bit for program size calculation adjustment
+- new setting bit for hex file generation
 
 ### 0.0.2
 
