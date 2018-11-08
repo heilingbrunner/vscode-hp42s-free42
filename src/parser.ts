@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
 
-import { unstring, unProgError } from './contracts';
+import { unstring, unProgError, configBit } from './contracts';
 import { ProgError } from './progerror';
+import { Configuration } from './configuration';
 
 /** Command Parser for HP42S code */
 export class Parser {
@@ -47,11 +48,12 @@ export class Parser {
     this.progError = undefined;
   }
 
-  read(textline: vscode.TextLine) {
+  read(config: Configuration, textline: vscode.TextLine) {
     let progErrorText: unstring;
     let tpl: [string, unstring] = ['', undefined];
 
     this.reset();
+
     this.code = String(textline.text);
 
     if (!textline.isEmptyOrWhitespace) {
@@ -67,11 +69,14 @@ export class Parser {
       //#endregion
 
       // get line number from code
-      let match = line.match(/(^\d+)\s+/);
-      if(match){
-        this.codeLineNr = parseInt(match[1]);
+      if (config.useLineNumbers) {
+        let match = line.match(/(^\d+)\s+/);
+        if (match) {
+          this.codeLineNr = parseInt(match[1]);
+        }
       }
-      
+
+
       line = line.replace(/(^\d+\s+)(.*)/, '$2');
 
       //#region prepare line
@@ -141,11 +146,11 @@ export class Parser {
 
       this.lineNr++;
 
-      if(this.lineNr !== this.codeLineNr){
+      if (config.useLineNumbers && (this.lineNr !== this.codeLineNr)) {
         progErrorText = 'line number not correct';
       }
-      
-      if (this.str && progErrorText === undefined){
+
+      if (this.str && progErrorText === undefined) {
         progErrorText = this.checkString(this.str);
       }
       if (this.nam && progErrorText === undefined) {

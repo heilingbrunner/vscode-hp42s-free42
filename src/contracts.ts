@@ -1,12 +1,14 @@
 import * as vscode from 'vscode';
 import { ProgError } from './progerror';
 import { Result } from './result';
+import { Configuration } from './configuration';
 
 export type unstring = string | undefined;
 export type unProgError = ProgError | undefined;
+export type configBit = {} | undefined;
 
 export interface IConverter {
-  encode(languageId: string, editor: vscode.TextEditor): Result;
+  encode(config: Configuration, languageId: string, editor: vscode.TextEditor): Result;
   dispose(): void;
 }
 

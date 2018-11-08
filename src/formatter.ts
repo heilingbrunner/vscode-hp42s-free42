@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { IFormatter } from './contracts';
+import { Configuration } from './configuration';
 
 export class Formatter implements IFormatter {
   constructor() {}
@@ -10,11 +11,7 @@ export class Formatter implements IFormatter {
     let edits: vscode.TextEdit[] = [];
 
     // read Configuration
-    let config = vscode.workspace.getConfiguration('HP42S/free42');
-    let useLineNumbers = config.get('formatterUseLineNumbers');
-    let replaceAbbreviations = config.get('formatterReplaceAbbreviations');
-    let removeTooLongSpaces = config.get('formatterRemoveTooLongSpaces');
-    let trimLine = config.get('formatterTrimLine');
+    let config = new Configuration();
 
     let codeLineNr = 0;
 
@@ -29,7 +26,7 @@ export class Formatter implements IFormatter {
         text = text.replace(/(^\s*\d+)(▸|▶|\s+)(.*)/, '$3');
 
         // Refresh line numbers, when not removing line numbers
-        if (useLineNumbers) {
+        if (config.useLineNumbers) {
           if (!text.match(/^\s*(@|#|\/\/)/)) {
 
             // When first code line is not { n-Byte Prgm }, then increment codeLineNr
@@ -46,7 +43,7 @@ export class Formatter implements IFormatter {
           }
         }
 
-        if (replaceAbbreviations) {
+        if (config.replaceAbbreviations) {
           // see https://www.swissmicros.com/dm42/decoder/ see 2. tab
           text = text.replace(/RCLx/, 'RCL×');
           text = text.replace(/RCL\//, 'RCL÷');
@@ -106,7 +103,7 @@ export class Formatter implements IFormatter {
           text = text.replace(/├/, '⊢');
         }
 
-        if (removeTooLongSpaces) {
+        if (config.removeTooLongSpaces) {
           if (!/".*"/.test(text)) {
             // All without double quotes
             text = text.replace(/\s{2,}/g, ' ');
@@ -130,7 +127,7 @@ export class Formatter implements IFormatter {
           }
         }
 
-        if (trimLine) {
+        if (config.trimLine) {
           text = text.trim();
         }
 

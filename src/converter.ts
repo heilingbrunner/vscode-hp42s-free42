@@ -1,11 +1,12 @@
 import * as vscode from 'vscode';
 
-import { IConverter, unstring } from './contracts';
+import { IConverter, configBit } from './contracts';
 import { ProgError } from './progerror';
 import { Free42 } from './free42';
 import { Parser } from './parser';
 import { RawLine } from './rawline';
 import { Result } from './result';
+import { Configuration } from './configuration';
 
 /** Translator for HP42S code */
 export class Converter implements IConverter {
@@ -14,6 +15,7 @@ export class Converter implements IConverter {
   }
 
   encode(
+    config: Configuration,
     languageId: string,
     editor: vscode.TextEditor
   ): Result {
@@ -34,7 +36,7 @@ export class Converter implements IConverter {
           console.log('[' + index + ']: ' + line);
         }
   
-        parser.read(line);
+        parser.read(config, line);
   
         // no parser error ...
         if (parser.progError === undefined) {

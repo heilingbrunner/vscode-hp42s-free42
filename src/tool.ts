@@ -4,6 +4,7 @@ import { IConverter, IFormatter, IFileSystem } from './contracts';
 import { Bytes } from './bytes';
 import { Factory } from './factory';
 import { Result } from './result';
+import { Configuration } from './configuration';
 
 export class Tool {
   // The team players ...
@@ -19,17 +20,14 @@ export class Tool {
 
   encode(editor: vscode.TextEditor) {
     if (editor) {
-      let config = vscode.workspace.getConfiguration('HP42S/free42');
-      let ignoreLastEndCommandForBytePrgm = config.get('encoderIgnoreLastEndCommandForBytePrgm');
-      let useLineNumbers = config.get('formatterUseLineNumbers');
-      let generateHexFile = config.get('encoderGenerateHexFile');
+      let config = new Configuration();
       
       let document = editor.document;
       let languageId = document.languageId.toLowerCase();
 
       if (document && languageId.match(/(hp42s|free42)/)) {
         // start encoding ...
-        let result = this.converter.encode(languageId, editor);
+        let result = this.converter.encode(config, languageId, editor);
         if(result){
           // no encoding errors ...
           if (result.progErrors === undefined) {
@@ -42,7 +40,7 @@ export class Tool {
               
               // calculate raw program size ...
               // when END = 'C0 00 0D' at the end, ...
-              if(ignoreLastEndCommandForBytePrgm && raw.endsWith('C0 00 0D')){
+              if(config.ignoreLastEndCommandForBytePrgm && raw.endsWith('C0 00 0D')){
                 // ignore last END, substract 3 bytes
                 size = Bytes.toBytes(raw).length - 3;
               } else {
@@ -54,7 +52,7 @@ export class Tool {
               this.fileSystem.writeBytes(document.fileName + '.raw', raw);
 
               // Save *.hex output ...
-              if(generateHexFile){
+              if(config.generateHexFile){
                 this.fileSystem.writeText(document.fileName + '.hex', hex);
               }
   
@@ -62,7 +60,7 @@ export class Tool {
               vscode.window.showInformationMessage('hp42s/free42: { ' + size + '-Byte Prgm }');
   
               // Insert/Replace { xxx-Byte Prgm } ...
-              this.insertBytePrgmLine(document, editor, (useLineNumbers? '00 ': '') + '{ ' + size + '-Byte Prgm }');
+              this.insertBytePrgmLine(document, editor, (config.useLineNumbers? '00 ': '') + '{ ' + size + '-Byte Prgm }');
             } else {
               // nothing happend ...
               vscode.window.showInformationMessage('hp42s/free42: No code found.');
@@ -83,7 +81,7 @@ export class Tool {
               );
   
               // Insert/Replace first line { Error } ...
-              this.insertProgErrorLine(document, editor, (useLineNumbers? '00 ': '') + '{ ' + firstProgErrorText + ' }');
+              this.insertProgErrorLine(document, editor, (config.useLineNumbers? '00 ': '') + '{ ' + firstProgErrorText + ' }');
             }
   
             // Create log file
