@@ -12,7 +12,7 @@ export class ProgError {
   toString() {
     return (
       'Error [' +
-      this.lineNr.toString() +
+      (this.lineNr < 10 ? '0' + this.lineNr : this.lineNr) +
       ']: Code: ' +
       this.code +
       '; Message: ' +

@@ -21,6 +21,7 @@ export class Tool {
     const debug = 1; // debug level 0=nothing,1=minimal,2=verbose
     if (editor) {
       let config = vscode.workspace.getConfiguration('HP42S/free42');
+      let useLineNumbers = config.get('formatterUseLineNumbers');
       let document = editor.document;
       let languageId = document.languageId.toLowerCase();
 
@@ -56,7 +57,7 @@ export class Tool {
               vscode.window.showInformationMessage('hp42s/free42: { ' + size + '-Byte Prgm }');
   
               // Insert/Replace { xxx-Byte Prgm } ...
-              let useLineNumbers = config.get('formatterUseLineNumbers');
+              
               this.insertBytePrgmLine(document, editor, (useLineNumbers? '00 ': '') + '{ ' + size + '-Byte Prgm }');
             } else {
               vscode.window.showInformationMessage('hp42s/free42: No code found.');
@@ -75,7 +76,7 @@ export class Tool {
               );
   
               // Insert/Replace { Error } ...
-              this.insertProgErrorLine(document, editor, firstProgErrorText);
+              this.insertProgErrorLine(document, editor, (useLineNumbers? '00 ': '') + '{ ' + firstProgErrorText + ' }');
             }
   
             // Create log file
@@ -122,12 +123,12 @@ export class Tool {
     let firstLine = document.lineAt(0);
     if (/\{ .+ \}/.test(firstLine.text)) {
       editor
-        .edit(e => e.replace(new vscode.Range(firstLine.range.start, firstLine.range.end), '{ ' + firstProgErrorText + ' }'))
+        .edit(e => e.replace(new vscode.Range(firstLine.range.start, firstLine.range.end), firstProgErrorText))
         .then(() => console.log(firstProgErrorText + ' replaced'));
     }
     else {
       editor
-        .edit(e => e.insert(firstLine.range.start, '{ ' + firstProgErrorText + ' }' + '\r\n'))
+        .edit(e => e.insert(firstLine.range.start, firstProgErrorText + '\r\n'))
         .then(() => console.log(firstProgErrorText + ' inserted'));
     }
   }

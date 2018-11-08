@@ -52,7 +52,7 @@ Right-click in the editor to get the context menu, then select menu `Format Docu
 
 The formatter has several settings:
 
-- Remove Line Numbers: This will remove all leading line numbers.
+- Use Line Numbers: This will insert/refresh the leading line numbers.
 - Remove Too Long Spaces: This will reduce whitespaces in the code.
 - Replace Abbreviations: Abbreviations for special characters will be replaced by the correct intended character.
 - Trim Line: This removes whitespaces at the beginnning and at the end of a code line.
@@ -118,7 +118,7 @@ Encoding Settings:
   
 Document Formatter Settings:
 
-- `HP42S/free42.formatterRemoveLineNumbers`: see above __Document Formatter__
+- `HP42S/free42.formatterUseLineNumbers`: see above __Document Formatter__
 - `HP42S/free42.formatterReplaceAbreviations`: see above __Document Formatter__
 - `HP42S/free42.formatterRemoveTooLongSpaces`: see above __Document Formatter__
 - `HP42S/free42.formatterTrimLines`: see above __Document Formatter__

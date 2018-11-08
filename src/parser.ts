@@ -10,6 +10,7 @@ export class Parser {
   token: unstring = undefined;
   lastError: unstring = undefined;
   lineNr: number = 0;
+  codeLineNr: number = 0;
   code: string = '';
   str: unstring = undefined;
   num: unstring = undefined;
@@ -29,6 +30,7 @@ export class Parser {
     this.tokenLength = 0;
     this.token = undefined;
     //this.lineNr = 0;
+    this.codeLineNr = 0;
     this.code = '';
     this.str = undefined;
     this.num = undefined;
@@ -64,9 +66,13 @@ export class Parser {
 
       //#endregion
 
+      // get line number from code
+      let match = line.match(/(^\d+)\s+/);
+      if(match){
+        this.codeLineNr = parseInt(match[1]);
+      }
+      
       line = line.replace(/(^\d+\s+)(.*)/, '$2');
-
-      this.lineNr++;
 
       //#region prepare line
 
@@ -132,25 +138,31 @@ export class Parser {
 
       this.out = line;
 
-      if (this.str) {
+      this.lineNr++;
+
+      if(this.lineNr !== this.codeLineNr){
+        progErrorText = 'line number not correct';
+      }
+      
+      if (this.str && progErrorText === undefined){
         progErrorText = this.checkString(this.str);
       }
-      if (this.nam) {
+      if (this.nam && progErrorText === undefined) {
         progErrorText = this.checkName(this.nam);
       }
-      if (this.key) {
+      if (this.key && progErrorText === undefined) {
         progErrorText = this.checkKey(this.key);
       }
-      if (this.csk) {
+      if (this.csk && progErrorText === undefined) {
         progErrorText = this.checkCustomKey(this.csk);
       }
-      if (this.ton) {
+      if (this.ton && progErrorText === undefined) {
         progErrorText = this.checkTone(this.ton);
       }
-      if (this.lbl) {
+      if (this.lbl && progErrorText === undefined) {
         progErrorText = this.checkGlobalLabel(this.lbl);
       }
-      if (this.clb) {
+      if (this.clb && progErrorText === undefined) {
         progErrorText = this.checkLocalCharLabel(this.clb);
       }
     }
@@ -179,7 +191,7 @@ export class Parser {
     // Comment //|@|#...
     let match = line.match(/"/);
     if (match) {
-      line = line.replace(/(.*")\s*(\/\/|@|#).*$/, '$1');
+      line = line.replace(/(".*")\s*(\/\/|@|#).*$/, '$1');
     } else {
       line = line.replace(/(\/\/|@|#).*$/, '');
     }
