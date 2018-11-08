@@ -6,7 +6,7 @@ export type unstring = string | undefined;
 export type unProgError = ProgError | undefined;
 
 export interface IConverter {
-  encode(languageId: string, text: string): Result;
+  encode(languageId: string, editor: vscode.TextEditor): Result;
   dispose(): void;
 }
 

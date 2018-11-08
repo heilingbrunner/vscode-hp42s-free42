@@ -1,3 +1,5 @@
+import * as vscode from 'vscode';
+
 import { unstring, unProgError } from './contracts';
 import { ProgError } from './progerror';
 
@@ -26,7 +28,7 @@ export class Parser {
     this.tokens = [];
     this.tokenLength = 0;
     this.token = undefined;
-    this.lineNr = 0;
+    //this.lineNr = 0;
     this.code = '';
     this.str = undefined;
     this.num = undefined;
@@ -43,15 +45,16 @@ export class Parser {
     this.progError = undefined;
   }
 
-  read(lineNr: number, line: unstring) {
+  read(textline: vscode.TextLine) {
     let progErrorText: unstring;
     let tpl: [string, unstring] = ['', undefined];
 
     this.reset();
-    this.lineNr = lineNr;
-    this.code = String(line);
+    this.code = String(textline.text);
 
-    if (line !== undefined) {
+    if (!textline.isEmptyOrWhitespace) {
+      let line = textline.text;
+
       //#region ignored line
 
       if (this.ignoredLine(line)) {
@@ -60,6 +63,10 @@ export class Parser {
       }
 
       //#endregion
+
+      line = line.replace(/(^\d+\s+)(.*)/, '$2');
+
+      this.lineNr++;
 
       //#region prepare line
 
@@ -149,7 +156,7 @@ export class Parser {
     }
 
     this.progError = progErrorText
-      ? new ProgError(lineNr, this.code, String(progErrorText))
+      ? new ProgError(this.lineNr, this.code, String(progErrorText))
       : undefined;
   }
 
@@ -169,10 +176,9 @@ export class Parser {
 
   /** Prepare line */
   private formatLine(line: string): string {
-
     // Comment //|@|#...
     let match = line.match(/"/);
-    if(match){
+    if (match) {
       line = line.replace(/(.*")\s*(\/\/|@|#).*$/, '$1');
     } else {
       line = line.replace(/(\/\/|@|#).*$/, '');

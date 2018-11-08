@@ -25,9 +25,8 @@ export class Tool {
       let languageId = document.languageId.toLowerCase();
 
       if (document && languageId.match(/(hp42s|free42)/)) {
-        let input = document.getText();
 
-        let result = this.converter.encode(languageId, input);
+        let result = this.converter.encode(languageId, editor);
         if(result){
           if (result.progErrors === undefined) {
             if (result.output !== undefined) {
@@ -57,7 +56,8 @@ export class Tool {
               vscode.window.showInformationMessage('hp42s/free42: { ' + size + '-Byte Prgm }');
   
               // Insert/Replace { xxx-Byte Prgm } ...
-              this.insertBytePrgmLine(document, editor, '{ ' + size + '-Byte Prgm }');
+              let useLineNumbers = config.get('formatterUseLineNumbers');
+              this.insertBytePrgmLine(document, editor, (useLineNumbers? '00 ': '') + '{ ' + size + '-Byte Prgm }');
             } else {
               vscode.window.showInformationMessage('hp42s/free42: No code found.');
             }

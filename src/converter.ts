@@ -1,3 +1,5 @@
+import * as vscode from 'vscode';
+
 import { IConverter, unstring } from './contracts';
 import { ProgError } from './progerror';
 import { Free42 } from './free42';
@@ -13,52 +15,53 @@ export class Converter implements IConverter {
 
   encode(
     languageId: string,
-    input: string
+    editor: vscode.TextEditor
   ): Result {
     const debug = 1; // debug level 0=nothing,1=minimal,2=verbose
 
-    let lineNr: number = 0;
     let progErrors: ProgError[] = [];
     let output: string[] = [];
-    let hex: unstring = undefined;
-    let parseLine = new Parser();
+    let parser = new Parser();
     let rawLine: RawLine;
+    let document = editor.document;
+    let lineCount = document.lineCount;
 
-    // line end /\r?\n/ for *n*x & Windows
-    input.split(/\r?\n/).forEach(line => {
-      lineNr++;
+    for (let index = 0; index < lineCount; index++) {
+      let line = document.lineAt(index);
 
-      if (debug > 1) {
-        console.log('[' + lineNr + ']: ' + line);
-      }
-
-      parseLine.read(lineNr, line);
-
-      if (parseLine.progError === undefined) {
+      if(!line.isEmptyOrWhitespace){
         if (debug > 1) {
-          console.log('-> ' + parseLine.out);
+          console.log('[' + index + ']: ' + line);
         }
-
-        if (!parseLine.ignored) {
-          rawLine = Free42.toRaw(languageId, parseLine);
-          if (rawLine.progError === undefined) {
-            if (rawLine.raw !== undefined) {
-              if (debug > 0) {
-                console.log('-> ' + rawLine.raw);
+  
+        parser.read(line);
+  
+        if (parser.progError === undefined) {
+          if (debug > 1) {
+            console.log('-> ' + parser.out);
+          }
+  
+          if (!parser.ignored) {
+            rawLine = Free42.toRaw(languageId, parser);
+            if (rawLine.progError === undefined) {
+              if (rawLine.raw !== undefined) {
+                if (debug > 0) {
+                  console.log('-> ' + rawLine.raw);
+                }
+                output.push(rawLine.raw);
               }
-              output.push(rawLine.raw);
+            } else {
+              progErrors.push(rawLine.progError); // Free42.toRaw() failed
             }
           } else {
-            progErrors.push(rawLine.progError); // Free42.toRaw() failed
+            output.push('');
           }
         } else {
-          output.push('');
+          progErrors.push(parser.progError); // parseLine.read() failed
         }
-      } else {
-        progErrors.push(parseLine.progError); // parseLine.read() failed
       }
-    });
-
+    }
+    
     return new Result(
       output,
       progErrors.length > 0 ? progErrors : undefined

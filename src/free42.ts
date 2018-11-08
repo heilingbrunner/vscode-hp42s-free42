@@ -81,7 +81,7 @@ export class Free42 {
               }
             }
             if (raw === undefined) {
-              progErrorText = "'" + parser.str + "' in '" + parser.code + "'";
+              progErrorText = "'" + parser.str + "' in '" + parser.code + "' is unvalid";
             }
           }
   
@@ -252,7 +252,7 @@ export class Free42 {
           }
   
           if (raw === undefined && progErrorText === undefined) {
-            progErrorText = "'" + parser.code + "'";
+            progErrorText = "'" + parser.code + "' is unvalid";
           }
   
           return new RawLine(

@@ -98,10 +98,10 @@
           "default": true,
           "markdownDescription": "Ignore last `END` command at program size calculation (see: `{ n-Byte Prgm }`)."
         },
-        "HP42S/free42.formatterRemoveLineNumbers": {
+        "HP42S/free42.formatterUseLineNumbers": {
           "type": "boolean",
           "default": true,
-          "markdownDescription": "Formatter removes leading line numbers."
+          "markdownDescription": "Formatter uses and refreshes line numbers."
         },
         "HP42S/free42.formatterReplaceAbbreviations": {
           "type": "boolean",
