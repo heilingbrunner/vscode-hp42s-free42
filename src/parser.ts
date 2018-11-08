@@ -80,6 +80,7 @@ export class Parser {
 
       // variables 1 - 7 characters
       // alpha max. 44 characters
+      // max 15
 
       // alpha in `str`
       tpl = this.replaceString(line);

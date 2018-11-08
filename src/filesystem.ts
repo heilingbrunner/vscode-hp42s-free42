@@ -7,6 +7,7 @@ export class FileSystem implements IFileSystem {
 
   constructor() {}
 
+  /** Write bytes to file */
   writeBytes(fileName: string, content: string) {
     let data = new Buffer(Bytes.toBytes(content));
 
@@ -17,6 +18,7 @@ export class FileSystem implements IFileSystem {
     });
   }
 
+  /** Write text file */
   writeText(fileName: string, content: string) {
     fs.writeFile(fileName, content, (err) => {
       if (err) {
@@ -25,6 +27,7 @@ export class FileSystem implements IFileSystem {
     });
   }
 
+  /** Delete file */
   deleteFile(filename: string){
     fs.exists(filename,(exists)=>{
       if(exists){

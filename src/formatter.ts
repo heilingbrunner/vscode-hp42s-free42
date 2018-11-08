@@ -8,15 +8,17 @@ export class Formatter implements IFormatter {
     document: vscode.TextDocument
   ): vscode.ProviderResult<vscode.TextEdit[]> {
     let edits: vscode.TextEdit[] = [];
-    let config = vscode.workspace.getConfiguration('HP42S/free42');
 
+    // read Configuration
+    let config = vscode.workspace.getConfiguration('HP42S/free42');
     let useLineNumbers = config.get('formatterUseLineNumbers');
     let replaceAbbreviations = config.get('formatterReplaceAbbreviations');
     let removeTooLongSpaces = config.get('formatterRemoveTooLongSpaces');
     let trimLine = config.get('formatterTrimLine');
-    let codeLineNr = 0;
-    let firstCommentDetected = false;
 
+    let codeLineNr = 0;
+
+    // go through document line by line
     for (let i = 0; i < document.lineCount; i++) {
       let line = document.lineAt(i);
       let text = line.text;

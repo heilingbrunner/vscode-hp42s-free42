@@ -36,28 +36,37 @@ export class Converter implements IConverter {
   
         parser.read(line);
   
+        // no parser error ...
         if (parser.progError === undefined) {
           if (debug > 1) {
             console.log('-> ' + parser.out);
           }
   
+          // handle parsed code line ...
           if (!parser.ignored) {
+            // now convert to raw ...
             rawLine = Free42.toRaw(languageId, parser);
+
+            // when no toRaw error ...
             if (rawLine.progError === undefined) {
               if (rawLine.raw !== undefined) {
                 if (debug > 0) {
                   console.log('-> ' + rawLine.raw);
                 }
+                // add raw line ...
                 output.push(rawLine.raw);
               }
             } else {
-              progErrors.push(rawLine.progError); // Free42.toRaw() failed
+              // Free42.toRaw() failed, collect errors ...
+              progErrors.push(rawLine.progError);
             }
           } else {
+            // add empty line ...
             output.push('');
           }
         } else {
-          progErrors.push(parser.progError); // parseLine.read() failed
+          // parser.read() failed, collect parser error ...
+          progErrors.push(parser.progError);
         }
       }
     }

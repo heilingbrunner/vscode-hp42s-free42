@@ -1,5 +1,6 @@
 export class Bytes {
 
+  /** Convert text to bytes */
   static toBytes(content: string): number[] {
     var bytes: number[] = [];
 

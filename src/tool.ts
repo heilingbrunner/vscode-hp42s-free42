@@ -18,29 +18,35 @@ export class Tool {
   }
 
   encode(editor: vscode.TextEditor) {
-    const debug = 1; // debug level 0=nothing,1=minimal,2=verbose
     if (editor) {
       let config = vscode.workspace.getConfiguration('HP42S/free42');
+      let ignoreLastEndCommandForBytePrgm = config.get('encoderIgnoreLastEndCommandForBytePrgm');
       let useLineNumbers = config.get('formatterUseLineNumbers');
+      let generateHexFile = config.get('encoderGenerateHexFile');
+      
       let document = editor.document;
       let languageId = document.languageId.toLowerCase();
 
       if (document && languageId.match(/(hp42s|free42)/)) {
-
+        // start encoding ...
         let result = this.converter.encode(languageId, editor);
         if(result){
+          // no encoding errors ...
           if (result.progErrors === undefined) {
+            // save result and show messages
             if (result.output !== undefined) {
               let raw = result.output.join(' ').trim();
               let hex = result.output.join('\r\n').replace(/ /g,'');
 
               let size = 0;
               
-              let encoderIgnoreLastEndCommandForBytePrgm = config.get('encoderIgnoreLastEndCommandForBytePrgm');
-              if(encoderIgnoreLastEndCommandForBytePrgm && raw.endsWith('C0 00 0D')){
+              // calculate raw program size ...
+              // when END = 'C0 00 0D' at the end, ...
+              if(ignoreLastEndCommandForBytePrgm && raw.endsWith('C0 00 0D')){
                 // ignore last END, substract 3 bytes
                 size = Bytes.toBytes(raw).length - 3;
               } else {
+                // get real byte size ...
                 size = Bytes.toBytes(raw).length;
               }
 
@@ -48,8 +54,7 @@ export class Tool {
               this.fileSystem.writeBytes(document.fileName + '.raw', raw);
 
               // Save *.hex output ...
-              let encoderGenerateHexFile = config.get('encoderGenerateHexFile');
-              if(encoderGenerateHexFile){
+              if(generateHexFile){
                 this.fileSystem.writeText(document.fileName + '.hex', hex);
               }
   
@@ -57,25 +62,27 @@ export class Tool {
               vscode.window.showInformationMessage('hp42s/free42: { ' + size + '-Byte Prgm }');
   
               // Insert/Replace { xxx-Byte Prgm } ...
-              
               this.insertBytePrgmLine(document, editor, (useLineNumbers? '00 ': '') + '{ ' + size + '-Byte Prgm }');
             } else {
+              // nothing happend ...
               vscode.window.showInformationMessage('hp42s/free42: No code found.');
             }
             
             // Delete log file
             this.fileSystem.deleteFile(document.fileName + '.log');
           } else {
+            // handle ecoding errors ...
             if (result && result.progErrors.length > 0) {
+              // get first error ...
               let firstProgError = result.progErrors[0];
               let firstProgErrorText = firstProgError!== undefined ? firstProgError.toString():'';
 
-              // Show Error ...
+              // Show error ...
               vscode.window.showErrorMessage(
                 'hp42s/free42: Encoding failed. \r\n' + firstProgErrorText
               );
   
-              // Insert/Replace { Error } ...
+              // Insert/Replace first line { Error } ...
               this.insertProgErrorLine(document, editor, (useLineNumbers? '00 ': '') + '{ ' + firstProgErrorText + ' }');
             }
   
@@ -85,6 +92,7 @@ export class Tool {
         }
         
       } else {
+        // wrong file
         vscode.window.showWarningMessage(
           'hp42s/free42: Document is not a *.hp42s/*.free42 file type.'
         );
