@@ -22,10 +22,10 @@ export class Formatter implements IFormatter {
 
       if (!line.isEmptyOrWhitespace) {
 
-        // Remove line numbers
-        text = text.replace(/(^\s*\d+)(▸|▶|\s+)(.*)/, '$3');
+        // 1. Remove line numbers
+        text = text.replace(/(^\s*\d+)(▸|▶|\s+|)(.*)/, '$3');
 
-        // Refresh line numbers, when not removing line numbers
+        // 2. Insert/Refresh line numbers, when using line numbers
         if (config.useLineNumbers) {
           if (!text.match(/^\s*(@|#|\/\/)/)) {
 
@@ -52,6 +52,7 @@ export class Formatter implements IFormatter {
           text = text.replace(/STO\//, 'STO÷');
 
           text = text.replace(/BASEx/, 'BASE×');
+          text = text.replace(/BASE\*/, 'BASE×');
           text = text.replace(/BASE\//, 'BASE÷');
           text = text.replace(/BASE\+\/-/, 'BASE±');
 

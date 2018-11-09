@@ -70,7 +70,7 @@ export class Parser {
 
       // get line number from code
       if (config.useLineNumbers) {
-        let match = line.match(/(^\d+)\s+/);
+        let match = line.match(/(^\d+)(▸|▶|\s+)/);
         if (match) {
           this.codeLineNr = parseInt(match[1]);
         }

@@ -3,7 +3,8 @@
 ## [0.0.4] - 2018-11-08
 
 - setting `formatterRemoveLineNumbers` changed to `formatterUseLineNumbers`
-
+- document formatter inserts/refreshes line numbers, when `formatterUseLineNumbers` is set
+  
 ## [0.0.3] - 2018-11-07
 
 - new setting bit for program size calculation adjustment

@@ -14,7 +14,11 @@ Features
 - document formatter
 - encoding code
   
-Supported filetypes __`*.hp42s`__ and __`*.free42`__.
+Supported filetypes
+
+- __`*.hp42s`__ for the __original__ operation set of the __HP-42S__
+- __`*.free42`__ for the __extended__ operation set of the __free42__
+
 Depending on the file type, snippets, syntax highlighting with the additional commands of free42 are supported or not.
 
 Useful for [FREE42](http://thomasokken.com/free42/) applications and  [SwissMicros-DM42](https://www.swissmicros.com/dm42.php) calculators.
@@ -134,6 +138,11 @@ Visual Studio Extensions:
 None.
 
 ## Release Notes
+
+### 0.0.4
+
+- setting `formatterRemoveLineNumbers` changed to `formatterUseLineNumbers`
+- document formatter inserts/refreshes line numbers, when `formatterUseLineNumbers` is set
 
 ### 0.0.3
 
