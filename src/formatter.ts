@@ -86,7 +86,6 @@ export class Formatter implements IFormatter {
           text = text.replace(/X<=Y0\?/, 'X≤Y?');
           text = text.replace(/X>=Y\?/, 'X≥Y?');
 
-          text = text.replace(/\b\+\/-\b/, '±');
           text = text.replace(/10\^X/, '10↑X');
           text = text.replace(/E\^X/, 'E↑X');
           text = text.replace(/X\^2/, 'X↑2');

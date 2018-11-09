@@ -38,7 +38,7 @@ Every keystroke command and its variations with a description.
 - Normal snippets appear when writing the command
 - Snippets for commands with leading special character appear when writing the command name (eg: use `DEC` for `→DEC`, use `REG` for `ΣREG`)
 - Use `e`, `ᴇ` or `E` for `ᴇ` in `1.2ᴇ-23`
-- Use `OP` for `+,-,×,÷,+/-,Σ+,Σ-,←,↑,↓,→,%,⊢,%CH`
+- Use `OP` for `×,÷,+/-,Σ+,Σ-,←,↑,↓,→,%,⊢,%CH`
 - Use `FLAG` for all flags `01` to `99`
 - Use `FOC` for `√,∫,░,Σ,▶,π,¿,≤,≥,≠,↵,↓,→,←,µ,£,°,Å,Ñ,Ä,∡,ᴇ,Æ,…,␛,Ö,Ü,▒,■`
 
@@ -156,8 +156,3 @@ Handling of comments improved.
 ### 0.0.1
 
 Initial release.
-
-## Snippets
-
-
-
