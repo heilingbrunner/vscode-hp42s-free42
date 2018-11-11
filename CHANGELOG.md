@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.5] - 2018-11-11
+
+- further formatter rule
+
 ## [0.0.4] - 2018-11-08
 
 - setting `formatterRemoveLineNumbers` changed to `formatterUseLineNumbers`
