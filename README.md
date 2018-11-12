@@ -50,18 +50,22 @@ Comments are possible in several variants.
 
 ### Document Formatter
 
+The formatter prepares the code for encoding. It will replace all abbreviations, which are used for ascii text editing. When using Visua Studio Code, the code is displayed in UTF8, though all original characters of the HP42S/free42 can be displayed correct.
+
 Right-click in the editor to get the context menu, then select menu `Format Document` or press keyboard-shortcut __Win__: `SHIFT+ALT+F`/ __Linux__: `SHIFT+ALT+F`/ __Mac-OSX__: `⇧⌥F`.
 
 ![Document Formatter](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/document-formatter.gif)
 
 The formatter has several settings:
 
-- Use Line Numbers: This will insert/refresh the leading line numbers.
-- Remove Too Long Spaces: This will reduce whitespaces in the code.
-- Replace Abbreviations: Abbreviations for special characters will be replaced by the correct intended character.
-- Trim Line: This removes whitespaces at the beginnning and at the end of a code line.
+- `Use Line Numbers`: This will insert/refresh the leading line numbers.
+- `Remove Too Long Spaces`: This will reduce whitespaces in the code.
+- `Replace Abbreviations`: Abbreviations for special characters will be replaced by the correct intended character.
+- `Trim Line`: This removes whitespaces at the beginnning and at the end of a code line.
 
 ### `Encode Code` - Comand
+
+Before encoding, please format the code. This avoids further special cases that would otherwise have to be taken into account.
 
 Press __Win/Linux__: `Ctrl+Shift+P`, __Mac-OSX__: `⇧⌘P`, then write `HP42S` to get the command `hp42s/free42: Encode Code` in the drop down list.
 
@@ -132,13 +136,17 @@ Document Formatter Settings:
 Visual Studio Extensions:
 
 - [hexdump for VSCode](https://marketplace.visualstudio.com/items?itemName=slevesque.vscode-hexdump) for raw file inspections
-- [gitLens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens)
+- [gitLens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens) for better integration of the source code management
 
 ## Known Issues
 
 None.
 
 ## Release Notes
+
+### 0.0.6
+
+- formatter and parser improved
 
 ### 0.0.5
 

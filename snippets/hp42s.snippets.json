@@ -743,6 +743,14 @@
     ],
     "description": "END: End of a program."
   },
+  ".END.": {
+    "prefix": "END",
+    "scope": "hp42s",
+    "body": [
+      ".END.$0"
+    ],
+    "description": ".END.: End of a program. Use `.END.` for standard program end."
+  },
   "ENG <number>": {
     "prefix": "ENG",
     "scope": "hp42s",

@@ -831,6 +831,14 @@
     ],
     "description": "END: End of a program."
   },
+  ".END.": {
+    "prefix": "END",
+    "scope": "free42",
+    "body": [
+      ".END.$0"
+    ],
+    "description": ".END.: End of a program. Use `.END.` for standard program end."
+  },
   "ENG <number>": {
     "prefix": "ENG",
     "scope": "free42",

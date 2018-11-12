@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 import { unstring, unProgError, configBit } from './contracts';
 import { ProgError } from './progerror';
 import { Configuration } from './configuration';
+import { Free42 } from './free42';
 
 /** Command Parser for HP42S code */
 export class Parser {
@@ -70,14 +71,11 @@ export class Parser {
 
       // get line number from code
       if (config.useLineNumbers) {
-        let match = line.match(/(^\d+)(▸|▶|\s+)/);
+        let match = line.match(/(^\d+)(▸|▶|>|\s+)/);
         if (match) {
           this.codeLineNr = parseInt(match[1]);
         }
       }
-
-
-      line = line.replace(/(^\d+\s+)(.*)/, '$2');
 
       //#region prepare line
 
@@ -146,7 +144,7 @@ export class Parser {
 
       this.lineNr++;
 
-      if (config.useLineNumbers && (this.lineNr !== this.codeLineNr)) {
+      if (config.useLineNumbers && this.lineNr !== this.codeLineNr) {
         progErrorText = 'line number not correct';
       }
 
@@ -194,20 +192,20 @@ export class Parser {
 
   /** Prepare line */
   private formatLine(line: string): string {
+    // Remove leading line numbers 01▸LBL "AA" or 07 SIN
+    line = line.replace(/^\d+(▸|▶|>|\s+)/, '');
+
     // Comment //|@|#...
     let match = line.match(/"/);
     if (match) {
       line = line.replace(/(".*")\s*(\/\/|@|#).*$/, '$1');
     } else {
       line = line.replace(/(\/\/|@|#).*$/, '');
+
+      // Replace too long spaces (?<!".*)\s{2,} , but not in strings
+      //let regex = new RegExp(/\s{2,}/, "g");
+      line = line.replace(/\s{2,}/g, ' ');
     }
-
-    // Replace too long spaces (?<!".*)\s{2,} , but not in strings
-    //let regex = new RegExp(/\s{2,}/, "g");
-    line = line.replace(/\s{2,}/g, ' ');
-
-    // Remove leading line numbers 01▸LBL "AA" or 07 SIN
-    line = line.replace(/^\d+(▸|\s+)/, '');
 
     // Trim spaces
     line = line.trim();
@@ -223,6 +221,21 @@ export class Parser {
     if (match) {
       str = this.removeDoubleQuotes(match[2]);
       line = line.replace(/^\s*(⊢|\|-|├|)"(.*)"/, '$1`str`');
+    }
+
+    // replace all occurences of focal character
+    if (
+      str &&
+      str.match(
+        /(÷|×|√|∫|░|Σ|▶|π|¿|≤|\[LF\]|≥|≠|↵|↓|→|←|µ|μ|£|₤|°|Å|Ñ|Ä|∡|ᴇ|Æ|…|␛|Ö|Ü|▒|■|•|\\\\|↑)/
+      )
+    ) {
+      Free42.charFocal.forEach((value, key) => {
+        const regex = new RegExp(key, 'g');
+        if (str) {
+          str = str.replace(regex, String.fromCharCode(value));
+        }
+      });
     }
 
     return [line, str];

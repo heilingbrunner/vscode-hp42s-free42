@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.6] - 2018-11-12
+
+- formatter and parser improved
+
 ## [0.0.5] - 2018-11-11
 
 - further formatter rule

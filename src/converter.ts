@@ -11,7 +11,8 @@ import { Configuration } from './configuration';
 /** Translator for HP42S code */
 export class Converter implements IConverter {
   constructor() {
-    Free42.initialize();
+    Free42.initializeForEncode();
+    Free42.initializeForDecode();
   }
 
   encode(
