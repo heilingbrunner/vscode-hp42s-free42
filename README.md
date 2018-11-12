@@ -50,7 +50,7 @@ Comments are possible in several variants.
 
 ### Document Formatter
 
-The formatter prepares the code for encoding. It will replace all abbreviations, which are used for ascii text editing. When using Visua Studio Code, the code is displayed in UTF8, though all original characters of the HP42S/free42 can be displayed correct.
+The formatter prepares the code for encoding. It will replace all abbreviations, which are used for ascii text editing. When using __Visual Studio Code__, the code is displayed in UTF8, though all original characters of the HP42S/free42 can be displayed correct.
 
 Right-click in the editor to get the context menu, then select menu `Format Document` or press keyboard-shortcut __Win__: `SHIFT+ALT+F`/ __Linux__: `SHIFT+ALT+F`/ __Mac-OSX__: `⇧⌥F`.
 
