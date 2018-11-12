@@ -132,12 +132,17 @@ Document Formatter Settings:
 Visual Studio Extensions:
 
 - [hexdump for VSCode](https://marketplace.visualstudio.com/items?itemName=slevesque.vscode-hexdump) for raw file inspections
+- [gitLens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens)
 
 ## Known Issues
 
 None.
 
 ## Release Notes
+
+### 0.0.5
+
+- further formatter rule
 
 ### 0.0.4
 

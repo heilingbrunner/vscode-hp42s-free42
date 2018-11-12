@@ -125,6 +125,11 @@ export class Formatter implements IFormatter {
           if (/\s+TO\s+/.test(text)) {
             text = text.replace(/\s+TO\s+/, ' TO ');
           }
+
+          // LBL "A" -> LBL A, without doublequotes
+          if(/(LBL|GTO|XEQ) "([A-J,a-e])"/.test(text)){
+            text = text.replace(/(LBL|GTO|XEQ) "([A-J,a-e])"/, '$1 $2');
+          }
         }
 
         if (config.trimLine) {
