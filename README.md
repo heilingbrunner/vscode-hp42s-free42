@@ -12,7 +12,7 @@ Features
 - snipptes with description
 - comments
 - document formatter
-- encoding code
+- encoding code to raw
   
 Supported filetypes
 
@@ -21,7 +21,7 @@ Supported filetypes
 
 Depending on the file type, snippets, syntax highlighting with the additional commands of free42 are supported or not.
 
-Useful for [FREE42](http://thomasokken.com/free42/) applications and  [SwissMicros-DM42](https://www.swissmicros.com/dm42.php) calculators.
+Useful for [Hewlett Packard HP-42S](https://en.wikipedia.org/wiki/HP-42S) calculators, [SwissMicros-DM42](https://www.swissmicros.com/dm42.php) calculators and [FREE42](http://thomasokken.com/free42/) applications.
 
 ## Features
 
