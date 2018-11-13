@@ -1,7 +1,6 @@
 language: node_js
 node_js:
- - "node"
- before_script:
- - npm install
+  - "node" 
 script: 
- - npm run compile
+  - npm install
+  - npm run compile
