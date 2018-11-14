@@ -1,12 +1,12 @@
 import * as vscode from 'vscode';
 
 import { Bytes } from './helper/bytes';
-import { RpnResult } from './encoder/rpnresult';
 import { Configuration } from './helper/configuration';
-import { Encoder } from './encoder/encoder';
-import { Decoder } from './decoder/Decoder';
-import { RpnFormatter } from './encoder/rpnformatter';
 import { FileSystem } from './helper/filesystem';
+import { RpnResult } from './encoder/rpnresult';
+import { Encoder } from './encoder/encoder';
+import { RpnFormatter } from './encoder/rpnformatter';
+import { Decoder } from './decoder/decoder';
 
 export class Tool {
   // The team players ...
