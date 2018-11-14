@@ -1,31 +1,31 @@
 import * as vscode from 'vscode';
 
-import { IConverter, configBit } from './contracts';
-import { ProgError } from './progerror';
-import { Free42 } from './free42';
-import { Parser } from './parser';
+import { Configuration } from '../helper/configuration';
+import { RpnError } from './rpnerror';
+import { Rpn2Raw } from './rpn2raw';
+import { RpnResult } from './rpnresult';
+import { RpnParser } from './rpnparser';
 import { RawLine } from './rawline';
-import { Result } from './result';
-import { Configuration } from './configuration';
 
-/** Translator for HP42S code */
-export class Converter implements IConverter {
+export class Encoder {
   constructor() {
-    Free42.initializeForEncode();
-    Free42.initializeForDecode();
+    Rpn2Raw.initializeForEncode();
   }
 
+  /** Encode RPN to raw */
   encode(
     config: Configuration,
     languageId: string,
     editor: vscode.TextEditor
-  ): Result {
+  ): RpnResult {
     const debug = 1; // debug level 0=nothing,1=minimal,2=verbose
 
-    let progErrors: ProgError[] = [];
+    let errors: RpnError[] = [];
     let output: string[] = [];
-    let parser = new Parser();
+
+    let parser = new RpnParser();
     let rawLine: RawLine;
+
     let document = editor.document;
     let lineCount = document.lineCount;
 
@@ -40,7 +40,7 @@ export class Converter implements IConverter {
         parser.read(config, line);
   
         // no parser error ...
-        if (parser.progError === undefined) {
+        if (parser.rpnError === undefined) {
           if (debug > 1) {
             console.log('-> ' + parser.out);
           }
@@ -48,10 +48,10 @@ export class Converter implements IConverter {
           // handle parsed code line ...
           if (!parser.ignored) {
             // now convert to raw ...
-            rawLine = Free42.toRaw(languageId, parser);
+            rawLine = Rpn2Raw.toRaw(languageId, parser);
 
             // when no toRaw error ...
-            if (rawLine.progError === undefined) {
+            if (rawLine.rpnError === undefined) {
               if (rawLine.raw !== undefined) {
                 if (debug > 0) {
                   console.log('-> ' + rawLine.raw);
@@ -61,7 +61,7 @@ export class Converter implements IConverter {
               }
             } else {
               // Free42.toRaw() failed, collect errors ...
-              progErrors.push(rawLine.progError);
+              errors.push(rawLine.rpnError);
             }
           } else {
             // add empty line ...
@@ -69,39 +69,16 @@ export class Converter implements IConverter {
           }
         } else {
           // parser.read() failed, collect parser error ...
-          progErrors.push(parser.progError);
+          errors.push(parser.rpnError);
         }
       }
     }
     
-    return new Result(
+    return new RpnResult(
       output,
-      progErrors.length > 0 ? progErrors : undefined
+      errors.length > 0 ? errors : undefined
     );
   }
-
-  /** Decode raw input to readable code string */
-  //decode(input: string): [string, unstring, unarrerror] {
-  //  let languageId: string;
-  //  let code : unstring;
-  //	let errors: unarrerror = [];
-  //  let output: string[] = [];
-  //
-  //  // TODO: ...
-  //  let result = FREE42.fromRaw(input);
-  //  languageId = result[0];
-  //  code = result[1];
-  //  errors = result[2];
-  //  if (errors === undefined) {
-  //    if (code !== undefined) {
-  //      //...
-  //    }
-  //  } else {
-  //    //errors.push(error);
-  //  }
-  //
-  //  return [languageId, output.length > 0 ? output.join('\r\n') : undefined, errors];
-  //}
-
+  
   dispose() {}
 }

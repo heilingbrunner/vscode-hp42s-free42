@@ -1,9 +1,8 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
-import { IFileSystem } from "./contracts";
 import { Bytes } from './bytes';
 
-export class FileSystem implements IFileSystem {
+export class FileSystem {
 
   constructor() {}
 

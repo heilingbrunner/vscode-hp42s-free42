@@ -1,12 +1,12 @@
 import * as vscode from 'vscode';
 
-import { unstring, unProgError, configBit } from './contracts';
-import { ProgError } from './progerror';
-import { Configuration } from './configuration';
-import { Free42 } from './free42';
+import { unstring } from '../typedefs';
+import { RpnError } from './rpnerror';
+import { Configuration } from '../helper/configuration';
+import { Rpn2Raw } from './rpn2raw';
 
 /** Command Parser for HP42S code */
-export class Parser {
+export class RpnParser {
   tokens: string[] = [];
   tokenLength: number = 0;
   token: unstring = undefined;
@@ -25,7 +25,7 @@ export class Parser {
   csk: unstring = undefined;
   out: unstring = undefined;
   ignored: boolean = false;
-  progError: unProgError = undefined;
+  rpnError: RpnError | undefined = undefined;
 
   private reset() {
     this.tokens = [];
@@ -46,7 +46,7 @@ export class Parser {
     this.out = undefined;
     this.lastError = undefined;
     this.ignored = false;
-    this.progError = undefined;
+    this.rpnError = undefined;
   }
 
   read(config: Configuration, textline: vscode.TextLine) {
@@ -171,8 +171,8 @@ export class Parser {
       }
     }
 
-    this.progError = progErrorText
-      ? new ProgError(this.lineNr, this.code, String(progErrorText))
+    this.rpnError = progErrorText
+      ? new RpnError(this.lineNr, this.code, String(progErrorText))
       : undefined;
   }
 
@@ -230,7 +230,7 @@ export class Parser {
         /(÷|×|√|∫|░|Σ|▶|π|¿|≤|\[LF\]|≥|≠|↵|↓|→|←|µ|μ|£|₤|°|Å|Ñ|Ä|∡|ᴇ|Æ|…|␛|Ö|Ü|▒|■|•|\\\\|↑)/
       )
     ) {
-      Free42.charFocal.forEach((value, key) => {
+      Rpn2Raw.charFocal.forEach((value, key) => {
         const regex = new RegExp(key, 'g');
         if (str) {
           str = str.replace(regex, String.fromCharCode(value));

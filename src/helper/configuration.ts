@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { configBit } from './contracts';
+import { configBit } from '../typedefs';
 
 export class Configuration {
     ignoreLastEndCommandForBytePrgm: configBit;

@@ -1,4 +1,4 @@
-export class ProgError {
+export class RawError {
   lineNr: number = 0;
   code: string;
   message: string = '';

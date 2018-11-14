@@ -1,8 +1,7 @@
 import * as vscode from 'vscode';
-import { IFormatter } from './contracts';
-import { Configuration } from './configuration';
+import { Configuration } from '../helper/configuration';
 
-export class Formatter implements IFormatter {
+export class RpnFormatter {
   constructor() {}
 
   provideDocumentFormattingEdits(
