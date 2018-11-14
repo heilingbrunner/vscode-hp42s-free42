@@ -1,3 +1,6 @@
+# Visual Studio Code Documentation:
+# see https://github.com/Microsoft/vscode-docs/blob/1d7b84b51c92faed1737e499d7fa08d182b1b9f9/docs/extensions/testing-extensions.md
+
 language: node_js
 
 node_js:
