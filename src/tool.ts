@@ -24,7 +24,7 @@ export class Tool {
 
   encode(editor: vscode.TextEditor) {
     if (editor) {
-      let config = new Configuration();
+      let config = new Configuration(true);
 
       let document = editor.document;
       let languageId = document.languageId.toLowerCase();
@@ -125,7 +125,7 @@ export class Tool {
 
   decode(editor: vscode.TextEditor) {
     if (editor) {
-      let config = new Configuration();
+      let config = new Configuration(true);
 
       let document = editor.document;
       let languageId = document.languageId.toLowerCase();

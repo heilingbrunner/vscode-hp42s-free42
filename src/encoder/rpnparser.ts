@@ -4,6 +4,7 @@ import { unstring } from '../typedefs';
 import { RpnError } from './rpnerror';
 import { Configuration } from '../helper/configuration';
 import { Rpn2Raw } from './rpn2raw';
+import { stringify } from 'querystring';
 
 /** Command Parser for HP42S code */
 export class RpnParser {
@@ -26,6 +27,11 @@ export class RpnParser {
   out: unstring = undefined;
   ignored: boolean = false;
   rpnError: RpnError | undefined = undefined;
+  config: Configuration;
+
+  constructor(useWorkspaceConfiguration: boolean){
+    this.config = new Configuration(useWorkspaceConfiguration);
+  }
 
   private reset() {
     this.tokens = [];
@@ -49,16 +55,16 @@ export class RpnParser {
     this.rpnError = undefined;
   }
 
-  read(config: Configuration, textline: vscode.TextLine) {
+  read(textline: string) {
     let progErrorText: unstring;
     let tpl: [string, unstring] = ['', undefined];
 
     this.reset();
 
-    this.code = String(textline.text);
+    this.code = textline;
 
-    if (!textline.isEmptyOrWhitespace) {
-      let line = textline.text;
+    if (textline.length > 0) {
+      let line = textline;
 
       //#region ignored line
 
@@ -70,7 +76,7 @@ export class RpnParser {
       //#endregion
 
       // get line number from code
-      if (config.useLineNumbers) {
+      if (this.config.useLineNumbers) {
         let match = line.match(/(^\d+)(▸|▶|>|\s+)/);
         if (match) {
           this.codeLineNr = parseInt(match[1]);
@@ -144,7 +150,7 @@ export class RpnParser {
 
       this.lineNr++;
 
-      if (config.useLineNumbers && this.lineNr !== this.codeLineNr) {
+      if (this.config.useLineNumbers && this.lineNr !== this.codeLineNr) {
         progErrorText = 'line number not correct';
       }
 
@@ -296,7 +302,7 @@ export class RpnParser {
     return [line, stk];
   }
 
-  /** Replace stack with `stk` */
+  /** Replace tone with `tn` */
   private replaceTone(line: string): [string, unstring] {
     let stk: unstring = undefined;
     let match = line.match(/TONE\s+(\d{1})\b/);

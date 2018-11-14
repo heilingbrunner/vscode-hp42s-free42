@@ -23,7 +23,7 @@ export class Encoder {
     let errors: RpnError[] = [];
     let output: string[] = [];
 
-    let parser = new RpnParser();
+    let parser = new RpnParser(true);
     let rawLine: RawLine;
 
     let document = editor.document;
@@ -37,7 +37,7 @@ export class Encoder {
           console.log('[' + index + ']: ' + line);
         }
   
-        parser.read(config, line);
+        parser.read(line.text);
   
         // no parser error ...
         if (parser.rpnError === undefined) {

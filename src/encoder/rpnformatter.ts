@@ -10,7 +10,7 @@ export class RpnFormatter {
     let edits: vscode.TextEdit[] = [];
 
     // read Configuration
-    let config = new Configuration();
+    let config = new Configuration(true);
 
     let codeLineNr = 0;
 
