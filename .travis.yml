@@ -3,4 +3,5 @@ node_js:
   - "node" 
 script: 
   - npm install
-  - npm run compile && node ./node_modules/vscode/bin/test
+  - npm run compile 
+  - node ./node_modules/vscode/bin/test
