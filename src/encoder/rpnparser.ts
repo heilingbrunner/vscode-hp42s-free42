@@ -1,10 +1,9 @@
 import * as vscode from 'vscode';
 
 import { unstring } from '../typedefs';
-import { RpnError } from './rpnerror';
+import { CodeError } from '../common/codeerror';
 import { Configuration } from '../helper/configuration';
-import { Rpn2Raw } from './rpn2raw';
-import { stringify } from 'querystring';
+import { RPN } from './rpn';
 
 /** Command Parser for HP42S code */
 export class RpnParser {
@@ -12,11 +11,12 @@ export class RpnParser {
   tokenLength: number = 0;
   token: unstring = undefined;
   lastError: unstring = undefined;
-  lineNr: number = 0;
-  codeLineNr: number = 0;
+  prgmLineNo: number = 0;
+  codeLineNo: number = 0;
   code: string = '';
   str: unstring = undefined;
   num: unstring = undefined;
+  flg: unstring = undefined;
   key: unstring = undefined;
   lbl: unstring = undefined;
   clb: unstring = undefined;
@@ -26,10 +26,10 @@ export class RpnParser {
   csk: unstring = undefined;
   out: unstring = undefined;
   ignored: boolean = false;
-  rpnError: RpnError | undefined = undefined;
+  rpnError: CodeError | undefined = undefined;
   config: Configuration;
 
-  constructor(useWorkspaceConfiguration: boolean){
+  constructor(useWorkspaceConfiguration: boolean) {
     this.config = new Configuration(useWorkspaceConfiguration);
   }
 
@@ -37,11 +37,11 @@ export class RpnParser {
     this.tokens = [];
     this.tokenLength = 0;
     this.token = undefined;
-    //this.lineNr = 0;
-    this.codeLineNr = 0;
+    this.codeLineNo = 0;
     this.code = '';
     this.str = undefined;
     this.num = undefined;
+    this.flg = undefined;
     this.key = undefined;
     this.lbl = undefined;
     this.clb = undefined;
@@ -55,41 +55,29 @@ export class RpnParser {
     this.rpnError = undefined;
   }
 
-  read(textline: string) {
+  read(line: string) {
     let progErrorText: unstring;
     let tpl: [string, unstring] = ['', undefined];
 
     this.reset();
+    this.code = line;
 
-    this.code = textline;
+    if (this.ignoredLine(line)) {
+      this.ignored = true;
+      return undefined;
+    } else {
 
-    if (textline.length > 0) {
-      let line = textline;
-
-      //#region ignored line
-
-      if (this.ignoredLine(line)) {
-        this.ignored = true;
-        return undefined;
-      }
-
-      //#endregion
-
-      // get line number from code
+      // read codeLineNo from code line 
       if (this.config.useLineNumbers) {
         let match = line.match(/(^\d+)(▸|▶|>|\s+)/);
         if (match) {
-          this.codeLineNr = parseInt(match[1]);
+          this.codeLineNo = parseInt(match[1]);
         }
       }
 
       //#region prepare line
 
       line = this.formatLine(line);
-
-      // variables 1 - 7 characters
-      // alpha max. 44 characters
-      // max 15
 
       // alpha in `str`
       tpl = this.replaceString(line);
@@ -131,6 +119,11 @@ export class RpnParser {
       line = tpl[0];
       this.stk = tpl[1];
 
+      // flag in rr
+      tpl = this.replaceFlag(line);
+      line = tpl[0];
+      this.flg = tpl[1];
+
       // number in `num`/local labels in `sl|ll`/number in sr/rr/sd/10/11
       tpl = this.replaceNumber(line);
       line = tpl[0];
@@ -148,9 +141,26 @@ export class RpnParser {
 
       this.out = line;
 
-      this.lineNr++;
+      // get line number from code
+      if (this.config.useLineNumbers) {
+        switch (true) {
+          // code line is { n-Byte Prgm }
+          case /^\{ .* \}/.test(line):
+            this.codeLineNo = 0;
+            this.prgmLineNo = 0;
+            break;
+          // LBL "..."
+          case /^LBL `lbl`/.test(line):
+            this.codeLineNo = 1;
+            this.prgmLineNo = 1;
+            break;
+          // increment
+          default:
+            this.prgmLineNo++;
+        }
+      }
 
-      if (this.config.useLineNumbers && this.lineNr !== this.codeLineNr) {
+      if (this.config.useLineNumbers && this.prgmLineNo !== this.codeLineNo) {
         progErrorText = 'line number not correct';
       }
 
@@ -169,6 +179,9 @@ export class RpnParser {
       if (this.ton && progErrorText === undefined) {
         progErrorText = this.checkTone(this.ton);
       }
+      if (this.flg && progErrorText === undefined) {
+        progErrorText = this.checkFlag(this.flg);
+      }
       if (this.lbl && progErrorText === undefined) {
         progErrorText = this.checkGlobalLabel(this.lbl);
       }
@@ -178,7 +191,7 @@ export class RpnParser {
     }
 
     this.rpnError = progErrorText
-      ? new RpnError(this.lineNr, this.code, String(progErrorText))
+      ? new CodeError(this.prgmLineNo, this.code, String(progErrorText))
       : undefined;
   }
 
@@ -189,6 +202,7 @@ export class RpnParser {
     // ignore blank lines, length === 0
     // ignore { 33-Byte Prgm }...
     // ignore comments (#|//)
+    line = line.trim();
     const ignored =
       line.length === 0 ||
       line.match(/\{ .* \}/) !== null ||
@@ -236,7 +250,7 @@ export class RpnParser {
         /(÷|×|√|∫|░|Σ|▶|π|¿|≤|\[LF\]|≥|≠|↵|↓|→|←|µ|μ|£|₤|°|Å|Ñ|Ä|∡|ᴇ|Æ|…|␛|Ö|Ü|▒|■|•|\\\\|↑)/
       )
     ) {
-      Rpn2Raw.charFocal.forEach((value, key) => {
+      RPN.charFocal.forEach((value, key) => {
         const regex = new RegExp(key, 'g');
         if (str) {
           str = str.replace(regex, String.fromCharCode(value));
@@ -305,10 +319,10 @@ export class RpnParser {
   /** Replace tone with `tn` */
   private replaceTone(line: string): [string, unstring] {
     let stk: unstring = undefined;
-    let match = line.match(/TONE\s+(\d{1})\b/);
+    let match = line.match(/TONE\s+(\d+)\b/);
     if (match) {
       stk = match[1];
-      line = line.replace(/TONE\s+(\d{1})\b/, 'TONE tn');
+      line = line.replace(/TONE\s+(\d+)\b/, 'TONE tn');
     }
 
     return [line, stk];
@@ -318,11 +332,11 @@ export class RpnParser {
   private replaceCustomKey(line: string): [string, unstring] {
     // others use 1-18 -> csk
     let csk: unstring = undefined;
-    let match = line.match(/\bTO\s+(\d{2})/);
+    let match = line.match(/\bTO\s+(\d+)/);
     if (match) {
       let int = parseInt(match[1]);
       csk = String(int - 1);
-      line = line.replace(/\bTO\s+(\d{2})/, 'TO `csk`');
+      line = line.replace(/\bTO\s+(\d+)/, 'TO `csk`');
     }
 
     return [line, csk];
@@ -381,6 +395,29 @@ export class RpnParser {
 
     return [line, num];
   }
+
+  /** Replace number */
+  private replaceFlag(line: string): [string, unstring] {
+    let num: unstring = undefined;
+    let match: RegExpMatchArray | null;
+
+    switch (true) {
+      case /(CF|SF|F[CS]\?|F[CS]\?C)\s+(\d+)/.test(line):
+        match = line.match(/(CF|SF|F[CS]\?|F[CS]\?C)\s+(\d+)/);
+        if (match) {
+          num = match[2];
+          line = line.replace(/(CF|SF|F[CS]\?|F[CS]\?C)\s+(\d+)/, '$1 rr');
+        }
+        break;
+
+      default:
+        // nothing
+        break;
+    }
+
+    return [line, num];
+  }
+
 
   /** Replace number */
   private replaceNumber(line: string): [string, unstring] {
@@ -466,15 +503,6 @@ export class RpnParser {
         }
         break;
 
-      case /TONE\s+(\d)/.test(line):
-        // TONE 0-9
-        match = line.match(/TONE\s+(\d)/);
-        if (match) {
-          num = match[1];
-          line = line.replace(/TONE\s+(\d)/, 'TONE rr');
-        }
-        break;
-
       case /X<>\s+\d{2}/.test(line):
         match = line.match(/X<>\s+(\d{2})/);
         if (match) {
@@ -512,7 +540,7 @@ export class RpnParser {
   private removeDoubleQuotes(str: string): string {
     if (str) {
       // too simple
-      //str = str.replace(/"/g, '');
+      // str = str.replace(/"/g, '');
       // cut start and end
       str = str.substr(1, str.length - 2);
     }
@@ -552,6 +580,16 @@ export class RpnParser {
       return this.inRange(parseInt(ton), 1, 9) && ton.length === 1
         ? undefined
         : 'tone value invalid';
+    }
+    return undefined;
+  }
+
+  /** Check flag of global label */
+  private checkFlag(flg: unstring): unstring {
+    if (flg !== undefined) {
+      return this.inRange(parseInt(flg), 0, 99) && flg.length === 2
+        ? undefined
+        : 'flag value invalid';
     }
     return undefined;
   }

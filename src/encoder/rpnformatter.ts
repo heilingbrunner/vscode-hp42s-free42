@@ -12,7 +12,7 @@ export class RpnFormatter {
     // read Configuration
     let config = new Configuration(true);
 
-    let codeLineNr = 0;
+    let codeLineNo = 0;
 
     // go through document line by line
     for (let i = 0; i < document.lineCount; i++) {
@@ -85,7 +85,6 @@ export class RpnFormatter {
 
           text = text.replace(/(^\s*)\|-/, '$1⊢');
           text = text.replace(/(^\s*)├/, '$1⊢');
-
         }
 
         // 4. Reduce whitspace
@@ -119,7 +118,6 @@ export class RpnFormatter {
           if (/(LBL|GTO|XEQ) "([A-J,a-e])"/.test(text)) {
             text = text.replace(/(LBL|GTO|XEQ) "([A-J,a-e])"/, '$1 $2');
           }
-          
         }
 
         // 5. Trim
@@ -129,18 +127,26 @@ export class RpnFormatter {
 
         // 6. Insert/Refresh line numbers, when using line numbers
         if (config.useLineNumbers) {
+          // when not comment line ...
           if (!text.match(/^\s*(@|#|\/\/)/)) {
-            // When first code line is not { n-Byte Prgm }, then increment codeLineNr
-            if (codeLineNr === 0 && !text.match(/^\{ .* \}/)) {
-              codeLineNr++;
+            switch (true) {
+              // code line is { n-Byte Prgm }
+              case /^\{ .* \}/.test(text):
+                codeLineNo = 0;
+                break;
+              // LBL "..."
+              case /^LBL ".*"/.test(text):
+                codeLineNo = 1;
+                break;
+              default:
+                codeLineNo++;
             }
 
             // line format min. two digits
             text = text.replace(
               /^(\d+\s+|)(.+)/,
-              (codeLineNr < 10 ? '0' + codeLineNr : codeLineNr) + ' $2'
+              (codeLineNo < 10 ? '0' + codeLineNo : codeLineNo) + ' $2'
             );
-            codeLineNr++;
           }
         }
 

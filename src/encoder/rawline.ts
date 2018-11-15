@@ -1,12 +1,21 @@
 import { unstring } from '../typedefs';
-import { RpnError } from './rpnerror';
+import { CodeError } from '../common/codeerror';
 
 export class RawLine {
+  program: string = '';
   raw: unstring;
-  rpnError: RpnError | undefined;
+  error: CodeError | undefined;
 
-  constructor(raw: unstring, rpnError: RpnError | undefined) {
+  constructor(raw: unstring, rpnError: CodeError | undefined) {
     this.raw = raw;
-    this.rpnError = rpnError;
+    this.error = rpnError;
+  }
+
+  hasError(): boolean{
+    return !(this.error === undefined);
+  }
+
+  toString(): string {
+    	return this.program + ' ' + this.raw + ' ' + this.error;
   }
 }

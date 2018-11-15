@@ -1,9 +1,9 @@
 import { unstring } from '../typedefs';
 import { RpnParser } from './rpnparser';
-import { RpnError } from './rpnerror';
+import { CodeError } from '../common/codeerror';
 import { RawLine } from './rawline';
 
-export class Rpn2Raw {
+export class RPN {
   //#region Members
 
   static rawCode: Map<string, string> = new Map<string, string>();
@@ -17,23 +17,23 @@ export class Rpn2Raw {
   //#region public
 
   static initializeForEncode() {
-    if (!Rpn2Raw.initializedForEncode) {
+    if (!RPN.initializedForEncode) {
       // transform arr_rawCode -> rawCode
-      Rpn2Raw.arr_rawCode.forEach((e: { key: string; value: string }) => {
-        Rpn2Raw.rawCode.set(e.key, e.value);
+      RPN.arr_rawCode.forEach((e: { key: string; value: string }) => {
+        RPN.rawCode.set(e.key, e.value);
       });
 
       // transform arr_stack -> dic_stack
-      Rpn2Raw.arr_stack.forEach((e: { key: string; value: number }) => {
-        Rpn2Raw.stack.set(e.key, e.value);
+      RPN.arr_stack.forEach((e: { key: string; value: number }) => {
+        RPN.stack.set(e.key, e.value);
       });
 
       // transform arr_special -> dic_special
-      Rpn2Raw.arr_special.forEach((e: { key: string; value: number }) => {
-        Rpn2Raw.charFocal.set(e.key, e.value);
+      RPN.arr_special.forEach((e: { key: string; value: number }) => {
+        RPN.charFocal.set(e.key, e.value);
       });
 
-      Rpn2Raw.initializedForEncode = true;
+      RPN.initializedForEncode = true;
     }
   }
 
@@ -80,10 +80,10 @@ export class Rpn2Raw {
             parser.str &&
             parser.out.match(/`str`/)
           ) {
-            if (Rpn2Raw.rawCode.has(parser.out)) {
-              raw = Rpn2Raw.rawCode.get(parser.out);
+            if (RPN.rawCode.has(parser.out)) {
+              raw = RPN.rawCode.get(parser.out);
               if (raw !== undefined) {
-                raw = Rpn2Raw.insertStringInRaw(raw, parser.str);
+                raw = RPN.insertStringInRaw(raw, parser.str);
               }
             }
             if (raw === undefined) {
@@ -99,7 +99,7 @@ export class Rpn2Raw {
             parser.num &&
             parser.out.match(/`num`/)
           ) {
-            raw = Rpn2Raw.convertNumberToRaw(parser.num);
+            raw = RPN.convertNumberToRaw(parser.num);
             //useless: if (raw === undefined) {..}
           }
 
@@ -108,9 +108,9 @@ export class Rpn2Raw {
             raw === undefined &&
             progErrorText === undefined &&
             parser.token &&
-            Rpn2Raw.rawCode.has(parser.out)
+            RPN.rawCode.has(parser.out)
           ) {
-            raw = Rpn2Raw.rawCode.get(parser.out);
+            raw = RPN.rawCode.get(parser.out);
             //useless: if (raw === undefined) {..}
           }
 
@@ -121,7 +121,7 @@ export class Rpn2Raw {
           return new RawLine(
             raw,
             progErrorText
-              ? new RpnError(parser.lineNr, parser.code, String(progErrorText))
+              ? new CodeError(parser.prgmLineNo, parser.code, String(progErrorText))
               : undefined
           );
 
@@ -132,11 +132,11 @@ export class Rpn2Raw {
           // is it a key ...
           // KEY `key` GTO IND `nam` - Part 1
           if (parser.key && parser.out.match(/`key`/)) {
-            if (raw === undefined && Rpn2Raw.rawCode.has(parser.out)) {
-              raw = Rpn2Raw.rawCode.get(parser.out);
+            if (raw === undefined && RPN.rawCode.has(parser.out)) {
+              raw = RPN.rawCode.get(parser.out);
             }
             if (raw !== undefined && progErrorText === undefined) {
-              raw = Rpn2Raw.insertNumberInRaw(raw, parser.key);
+              raw = RPN.insertNumberInRaw(raw, parser.key);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.key + "' in '" + parser.code + "'";
@@ -147,11 +147,11 @@ export class Rpn2Raw {
           // KEY `key` GTO IND `nam` - Part 2
           // ASSIGN `nam` TO `csk` - Part 1
           if (parser.nam && parser.out.match(/`nam`/)) {
-            if (raw === undefined && Rpn2Raw.rawCode.has(parser.out)) {
-              raw = Rpn2Raw.rawCode.get(parser.out);
+            if (raw === undefined && RPN.rawCode.has(parser.out)) {
+              raw = RPN.rawCode.get(parser.out);
             }
             if (raw !== undefined && progErrorText === undefined) {
-              raw = Rpn2Raw.insertStringInRaw(raw, parser.nam);
+              raw = RPN.insertStringInRaw(raw, parser.nam);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.nam + "' in '" + parser.code + "'";
@@ -162,7 +162,7 @@ export class Rpn2Raw {
           // ASSIGN `nam` TO `csk` - Part 2
           if (parser.csk && parser.out.match(/`csk`/)) {
             if (raw !== undefined && progErrorText === undefined) {
-              raw = Rpn2Raw.insertNumberInRaw(raw, parser.csk);
+              raw = RPN.insertNumberInRaw(raw, parser.csk);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.csk + "' in '" + parser.code + "'";
@@ -171,11 +171,11 @@ export class Rpn2Raw {
 
           // is it a global label ...
           if (parser.lbl && parser.out.match(/`lbl`/)) {
-            if (raw === undefined && Rpn2Raw.rawCode.has(parser.out)) {
-              raw = Rpn2Raw.rawCode.get(parser.out);
+            if (raw === undefined && RPN.rawCode.has(parser.out)) {
+              raw = RPN.rawCode.get(parser.out);
             }
             if (raw !== undefined && progErrorText === undefined) {
-              raw = Rpn2Raw.insertStringInRaw(raw, parser.lbl);
+              raw = RPN.insertStringInRaw(raw, parser.lbl);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.lbl + "' in '" + parser.code + "'";
@@ -184,11 +184,11 @@ export class Rpn2Raw {
 
           // is it a tone ...
           if (parser.ton && parser.out.match(/tn/)) {
-            if (raw === undefined && Rpn2Raw.rawCode.has(parser.out)) {
-              raw = Rpn2Raw.rawCode.get(parser.out);
+            if (raw === undefined && RPN.rawCode.has(parser.out)) {
+              raw = RPN.rawCode.get(parser.out);
             }
             if (raw !== undefined && progErrorText === undefined) {
-              raw = Rpn2Raw.insertNumberInRaw(raw, parser.ton);
+              raw = RPN.insertNumberInRaw(raw, parser.ton);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.ton + "' in '" + parser.code + "'";
@@ -197,24 +197,37 @@ export class Rpn2Raw {
 
           // is it a local char label A-J,a-e coded as number ......
           if (parser.clb && parser.out.match(/(ll)/)) {
-            if (raw === undefined && Rpn2Raw.rawCode.has(parser.out)) {
-              raw = Rpn2Raw.rawCode.get(parser.out);
+            if (raw === undefined && RPN.rawCode.has(parser.out)) {
+              raw = RPN.rawCode.get(parser.out);
             }
             if (raw !== undefined && progErrorText === undefined) {
-              raw = Rpn2Raw.insertNumberInRaw(raw, parser.clb);
+              raw = RPN.insertNumberInRaw(raw, parser.clb);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.clb + "' in '" + parser.code + "'";
             }
           }
 
-          // is it a register, number labels, digits, local number label 15-99 ......
-          if (parser.num && parser.out.match(/(sd|sl|sr|ll|nn|rr)/)) {
-            if (raw === undefined && Rpn2Raw.rawCode.has(parser.out)) {
-              raw = Rpn2Raw.rawCode.get(parser.out);
+          // flags
+          if (parser.flg && parser.out.match(/(rr)/)) {
+            if (raw === undefined && RPN.rawCode.has(parser.out)) {
+              raw = RPN.rawCode.get(parser.out);
             }
             if (raw !== undefined && progErrorText === undefined) {
-              raw = Rpn2Raw.insertNumberInRaw(raw, parser.num);
+              raw = RPN.insertNumberInRaw(raw, parser.flg);
+            }
+            if (raw === undefined) {
+              progErrorText = "'" + parser.flg + "' in '" + parser.code + "'";
+            }
+          }
+
+          // is it a register, number labels, digits, local number label 15-99 ......
+          if (parser.num && parser.out.match(/(sd|sl|sr|ll|nn|rr)/)) {
+            if (raw === undefined && RPN.rawCode.has(parser.out)) {
+              raw = RPN.rawCode.get(parser.out);
+            }
+            if (raw !== undefined && progErrorText === undefined) {
+              raw = RPN.insertNumberInRaw(raw, parser.num);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.num + "' in '" + parser.code + "'";
@@ -223,8 +236,8 @@ export class Rpn2Raw {
 
           // 10 or 11 digits
           if (parser.out.match(/(ENG|FIX|SCI) (10|11)/)) {
-            if (raw === undefined && Rpn2Raw.rawCode.has(parser.out)) {
-              raw = Rpn2Raw.rawCode.get(parser.out);
+            if (raw === undefined && RPN.rawCode.has(parser.out)) {
+              raw = RPN.rawCode.get(parser.out);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.code + "'";
@@ -233,11 +246,11 @@ export class Rpn2Raw {
 
           // is it a register/indirect count of digit/flag ...
           if (parser.num && parser.out.match(/rr/)) {
-            if (raw === undefined && Rpn2Raw.rawCode.has(parser.out)) {
-              raw = Rpn2Raw.rawCode.get(parser.out);
+            if (raw === undefined && RPN.rawCode.has(parser.out)) {
+              raw = RPN.rawCode.get(parser.out);
             }
             if (raw !== undefined && progErrorText === undefined) {
-              raw = Rpn2Raw.insertNumberInRaw(raw, parser.num);
+              raw = RPN.insertNumberInRaw(raw, parser.num);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.num + "' in '" + parser.code + "'";
@@ -246,12 +259,12 @@ export class Rpn2Raw {
 
           // is it a stack ...
           if (parser.stk && parser.out.match(/`stk`/)) {
-            if (raw === undefined && Rpn2Raw.rawCode.has(parser.out)) {
-              raw = Rpn2Raw.rawCode.get(parser.out);
+            if (raw === undefined && RPN.rawCode.has(parser.out)) {
+              raw = RPN.rawCode.get(parser.out);
             }
             if (raw !== undefined && progErrorText === undefined) {
-              const int = Rpn2Raw.stack.get(parser.stk);
-              raw = Rpn2Raw.insertNumberInRaw(raw, String(int));
+              const int = RPN.stack.get(parser.stk);
+              raw = RPN.insertNumberInRaw(raw, String(int));
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.stk + "' in '" + parser.code + "'";
@@ -265,7 +278,7 @@ export class Rpn2Raw {
           return new RawLine(
             raw,
             progErrorText
-              ? new RpnError(parser.lineNr, parser.code, String(progErrorText))
+              ? new CodeError(parser.prgmLineNo, parser.code, String(progErrorText))
               : undefined
           );
 
@@ -277,7 +290,7 @@ export class Rpn2Raw {
     return new RawLine(
       raw,
       progErrorText
-        ? new RpnError(parser.lineNr, parser.code, String(progErrorText))
+        ? new CodeError(parser.prgmLineNo, parser.code, String(progErrorText))
         : undefined
     );
   }
@@ -312,7 +325,7 @@ export class Rpn2Raw {
 
         // loop each character in str and append hex to opcode
         str.split('').forEach(character => {
-          raw += ' ' + Rpn2Raw.convertByteAsHex(character.charCodeAt(0));
+          raw += ' ' + RPN.convertByteAsHex(character.charCodeAt(0));
         });
 
         // ASSIGN opcode search, replace aa
@@ -327,7 +340,7 @@ export class Rpn2Raw {
         // concat three parts ...
         raw =
           raw.substr(0, pos_Fn) + // 1. part
-          Rpn2Raw.convertByteAsHex(240 + length_hex_after_Fn) + // 2. part
+          RPN.convertByteAsHex(240 + length_hex_after_Fn) + // 2. part
           raw.substr(pos_Fn + 2); // 3. part
       } else {
         raw = undefined;
@@ -345,30 +358,30 @@ export class Rpn2Raw {
 
       switch (true) {
         case /kk/.test(raw):
-          raw = raw.replace(/kk/, Rpn2Raw.convertByteAsHex(int));
+          raw = raw.replace(/kk/, RPN.convertByteAsHex(int));
           break;
 
         case /rr/.test(raw):
-          raw = raw.replace(/rr/, Rpn2Raw.convertByteAsHex(int));
+          raw = raw.replace(/rr/, RPN.convertByteAsHex(int));
           break;
 
         case /nn/.test(raw):
           // numbered label 00-99, digits 00-11
-          raw = raw.replace(/nn/, Rpn2Raw.convertByteAsHex(int));
+          raw = raw.replace(/nn/, RPN.convertByteAsHex(int));
           break;
 
         case /ll/.test(raw):
           // char label as number A-J,a-e
-          raw = raw.replace(/ll/, 'CF ' + Rpn2Raw.convertByteAsHex(int));
+          raw = raw.replace(/ll/, 'CF ' + RPN.convertByteAsHex(int));
           break;
 
         case /ww ww/.test(raw):
           // SIZE
           raw = raw.replace(
             /ww ww/,
-            Rpn2Raw.convertByteAsHex(int / 256) +
+            RPN.convertByteAsHex(int / 256) +
               ' ' +
-              Rpn2Raw.convertByteAsHex(int % 256)
+              RPN.convertByteAsHex(int % 256)
           );
           break;
 
@@ -378,7 +391,7 @@ export class Rpn2Raw {
           if (match) {
             raw = raw.replace(
               /([\dA-F])l/,
-              Rpn2Raw.convertByteAsHex(parseInt('0x' + match[1] + '0') + 1 + int)
+              RPN.convertByteAsHex(parseInt('0x' + match[1] + '0') + 1 + int)
             );
           }
           break;
@@ -389,7 +402,7 @@ export class Rpn2Raw {
           if (match) {
             raw = raw.replace(
               /(\d)r/,
-              Rpn2Raw.convertByteAsHex(parseInt(match[1]) * 16 + int)
+              RPN.convertByteAsHex(parseInt(match[1]) * 16 + int)
             );
           }
           break;

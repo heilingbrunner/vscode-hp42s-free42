@@ -1,7 +1,7 @@
 import { unstring } from '../typedefs';
-import { RawError } from './rawerror';
+import { CodeError } from '../common/codeerror';
 
-export class Raw2Rpn {
+export class RAW {
   //#region Members
 
   static opCode: Map<string, string> = new Map<string, string>();
@@ -13,13 +13,13 @@ export class Raw2Rpn {
   //#region public
 
   static initializeForDecode() {
-    if (!Raw2Rpn.initializedForDecode) {
+    if (!RAW.initializedForDecode) {
       // transform arr_opCode -> opCode
-      Raw2Rpn.arr_opCode.forEach((e: { key: string; value: string }) => {
-        Raw2Rpn.opCode.set(e.key, e.value);
+      RAW.arr_opCode.forEach((e: { key: string; value: string }) => {
+        RAW.opCode.set(e.key, e.value);
       });
 
-      Raw2Rpn.initializedForDecode = true;
+      RAW.initializedForDecode = true;
     }
   }
 
@@ -32,8 +32,8 @@ export class Raw2Rpn {
    * code: The code
    * error: error
    */
-  static toRpn(hex: string): [string, unstring, RawError] {
-    let error: RawError = new RawError(0,"","Not implemented yet!");
+  static toRpn(hex: string): [string, unstring, CodeError] {
+    let error: CodeError = new CodeError(0,"","Not implemented yet!");
     let languageId: string = "free42";
   
   	return [languageId, undefined, error];
@@ -69,7 +69,7 @@ export class Raw2Rpn {
 
         // loop each character in str and append hex to opcode
         str.split('').forEach(character => {
-          raw += ' ' + Raw2Rpn.convertByteAsHex(character.charCodeAt(0));
+          raw += ' ' + RAW.convertByteAsHex(character.charCodeAt(0));
         });
 
         // ASSIGN opcode search, replace aa
@@ -84,7 +84,7 @@ export class Raw2Rpn {
         // concat three parts ...
         raw =
           raw.substr(0, pos_Fn) + // 1. part
-          Raw2Rpn.convertByteAsHex(240 + length_hex_after_Fn) + // 2. part
+          RAW.convertByteAsHex(240 + length_hex_after_Fn) + // 2. part
           raw.substr(pos_Fn + 2); // 3. part
       } else {
         raw = undefined;
@@ -102,30 +102,30 @@ export class Raw2Rpn {
 
       switch (true) {
         case /kk/.test(raw):
-          raw = raw.replace(/kk/, Raw2Rpn.convertByteAsHex(int));
+          raw = raw.replace(/kk/, RAW.convertByteAsHex(int));
           break;
 
         case /rr/.test(raw):
-          raw = raw.replace(/rr/, Raw2Rpn.convertByteAsHex(int));
+          raw = raw.replace(/rr/, RAW.convertByteAsHex(int));
           break;
 
         case /nn/.test(raw):
           // numbered label 00-99, digits 00-11
-          raw = raw.replace(/nn/, Raw2Rpn.convertByteAsHex(int));
+          raw = raw.replace(/nn/, RAW.convertByteAsHex(int));
           break;
 
         case /ll/.test(raw):
           // char label as number A-J,a-e
-          raw = raw.replace(/ll/, 'CF ' + Raw2Rpn.convertByteAsHex(int));
+          raw = raw.replace(/ll/, 'CF ' + RAW.convertByteAsHex(int));
           break;
 
         case /ww ww/.test(raw):
           // SIZE
           raw = raw.replace(
             /ww ww/,
-            Raw2Rpn.convertByteAsHex(int / 256) +
+            RAW.convertByteAsHex(int / 256) +
               ' ' +
-              Raw2Rpn.convertByteAsHex(int % 256)
+              RAW.convertByteAsHex(int % 256)
           );
           break;
 
@@ -135,7 +135,7 @@ export class Raw2Rpn {
           if (match) {
             raw = raw.replace(
               /([\dA-F])l/,
-              Raw2Rpn.convertByteAsHex(parseInt('0x' + match[1] + '0') + 1 + int)
+              RAW.convertByteAsHex(parseInt('0x' + match[1] + '0') + 1 + int)
             );
           }
           break;
@@ -146,7 +146,7 @@ export class Raw2Rpn {
           if (match) {
             raw = raw.replace(
               /(\d)r/,
-              Raw2Rpn.convertByteAsHex(parseInt(match[1]) * 16 + int)
+              RAW.convertByteAsHex(parseInt(match[1]) * 16 + int)
             );
           }
           break;

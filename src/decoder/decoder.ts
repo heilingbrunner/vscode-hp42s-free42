@@ -1,29 +1,27 @@
 import * as vscode from 'vscode';
 
-import { Configuration } from '../helper/configuration';
-import { RawError } from './rawerror';
-import { Raw2Rpn } from './raw2rpn';
-import { RawResult } from './rawresult';
+import { CodeError } from '../common/codeerror';
+import { RAW } from './raw';
+import { DecoderResult } from './decoderresult';
 
 export class Decoder {
   constructor() {
-    Raw2Rpn.initializeForDecode();
+    RAW.initializeForDecode();
   }
 
   /** Decode raw input to readable code string */
   decode(
-    config: Configuration,
     languageId: string,
     editor: vscode.TextEditor
-  ): RawResult {
+  ): DecoderResult {
     const debug = 1; // debug level 0=nothing,1=minimal,2=verbose
     
-    let errors: RawError[] = [];
+    let errors: CodeError[] = [];
     let output: string[] = [];
 
     // TODO: ...
 
-    return new RawResult(output, errors.length > 0 ? errors : undefined);
+    return new DecoderResult(output, errors.length > 0 ? errors : undefined);
   }
 
   dispose() {}

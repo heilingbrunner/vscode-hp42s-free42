@@ -1,84 +1,83 @@
 import * as vscode from 'vscode';
 
-import { Configuration } from '../helper/configuration';
-import { RpnError } from './rpnerror';
-import { Rpn2Raw } from './rpn2raw';
-import { RpnResult } from './rpnresult';
+import { RPN } from './rpn';
+import { EncoderResult } from './encoderesult';
 import { RpnParser } from './rpnparser';
 import { RawLine } from './rawline';
+import { RawProgram } from './rawprogram';
 
 export class Encoder {
   constructor() {
-    Rpn2Raw.initializeForEncode();
+    RPN.initializeForEncode();
   }
 
   /** Encode RPN to raw */
   encode(
-    config: Configuration,
     languageId: string,
     editor: vscode.TextEditor
-  ): RpnResult {
+  ): EncoderResult {
     const debug = 1; // debug level 0=nothing,1=minimal,2=verbose
 
-    let errors: RpnError[] = [];
-    let output: string[] = [];
+    let programs: RawProgram[] = [];
 
     let parser = new RpnParser(true);
     let rawLine: RawLine;
 
     let document = editor.document;
     let lineCount = document.lineCount;
+    let program: RawProgram | undefined;
 
-    for (let index = 0; index < lineCount; index++) {
-      let line = document.lineAt(index);
+    for (let docLineNo = 0; docLineNo < lineCount; docLineNo++) {
+      let line = document.lineAt(docLineNo);
 
-      if(!line.isEmptyOrWhitespace){
-        if (debug > 1) {
-          console.log('[' + index + ']: ' + line);
+      if (debug > 1) {
+        console.log('[' + docLineNo + ']: ' + line);
+      }
+
+      //LBL-line detected -> Prgm Start
+      let match = line.text.match(/LBL "(.*)"/);
+      if (match) {
+        program = new RawProgram(match[1]);
+        if (program) {
+          // push lst program
+          programs.push(program);
         }
-  
+      }
+
+      if (program) {
+        // Parse line
         parser.read(line.text);
-  
+
         // no parser error ...
         if (parser.rpnError === undefined) {
           if (debug > 1) {
             console.log('-> ' + parser.out);
           }
-  
+
           // handle parsed code line ...
           if (!parser.ignored) {
             // now convert to raw ...
-            rawLine = Rpn2Raw.toRaw(languageId, parser);
+            rawLine = RPN.toRaw(languageId, parser);
+            // add raw line ...
+            program.addLine(rawLine);
 
             // when no toRaw error ...
-            if (rawLine.rpnError === undefined) {
-              if (rawLine.raw !== undefined) {
-                if (debug > 0) {
-                  console.log('-> ' + rawLine.raw);
-                }
-                // add raw line ...
-                output.push(rawLine.raw);
-              }
-            } else {
-              // Free42.toRaw() failed, collect errors ...
-              errors.push(rawLine.rpnError);
+            if (debug > 0) {
+              console.log('-> ' + rawLine.raw !== undefined ? rawLine.raw: 'XX');
             }
           } else {
             // add empty line ...
-            output.push('');
+            program.addLine(new RawLine('', undefined));
           }
         } else {
-          // parser.read() failed, collect parser error ...
-          errors.push(parser.rpnError);
+          // parse error
+          program.addLine(new RawLine('XX', parser.rpnError));
         }
       }
     }
-    
-    return new RpnResult(
-      output,
-      errors.length > 0 ? errors : undefined
-    );
+
+    return new EncoderResult(programs);
   }
-  
+
   dispose() {}
 }

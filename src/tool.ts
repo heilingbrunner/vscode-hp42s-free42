@@ -1,9 +1,8 @@
 import * as vscode from 'vscode';
 
-import { Bytes } from './helper/bytes';
 import { Configuration } from './helper/configuration';
 import { FileSystem } from './helper/filesystem';
-import { RpnResult } from './encoder/rpnresult';
+import { EncoderResult } from './encoder/encoderesult';
 import { Encoder } from './encoder/encoder';
 import { RpnFormatter } from './encoder/rpnformatter';
 import { Decoder } from './decoder/decoder';
@@ -31,29 +30,15 @@ export class Tool {
 
       if (document && languageId.match(/(hp42s|free42)/)) {
         // start encoding ...
-        let result = this.encoder.encode(config, languageId, editor);
+        let result = this.encoder.encode(languageId, editor);
         if (result) {
           // no encoding errors ...
-          if (result.rpnErrors === undefined) {
+          if (!result.hasErrors()) {
             // save result and show messages
-            if (result.raw !== undefined) {
-              let raw = result.raw.join(' ').trim();
-              let hex = result.raw.join('\r\n').replace(/ /g, '');
-
-              let size = 0;
-
-              // calculate raw program size ...
-              // when END = 'C0 00 0D' at the end, ...
-              if (
-                config.ignoreLastEndCommandForBytePrgm &&
-                raw.endsWith('C0 00 0D')
-              ) {
-                // ignore last END, substract 3 bytes
-                size = Bytes.toBytes(raw).length - 3;
-              } else {
-                // get real byte size ...
-                size = Bytes.toBytes(raw).length;
-              }
+            if (result.programs !== undefined) {
+              let raw = result.getRaw();
+              let hex = result.getHex();
+              let size = result.getSize();
 
               // Save *.raw output ...
               this.fileSystem.writeBytes(document.fileName + '.raw', raw);
@@ -88,30 +73,27 @@ export class Tool {
             this.fileSystem.deleteFile(document.fileName + '.log');
           } else {
             // handle ecoding errors ...
-            if (result && result.rpnErrors.length > 0) {
-              // get first error ...
-              let firstRpnError = result.rpnErrors[0];
-              let firstRpnErrorText =
-                firstRpnError !== undefined ? firstRpnError.toString() : '';
+            let firstError = result.getFirstError();
+            let firstErrorText =
+              firstError !== undefined ? firstError.toString() : '';
 
-              // Show error ...
-              vscode.window.showErrorMessage(
-                'hp42s/free42: Encoding failed. \r\n' + firstRpnErrorText
-              );
+            // Show error ...
+            vscode.window.showErrorMessage(
+              'hp42s/free42: Encoding failed. \r\n' + firstErrorText
+            );
 
-              // Insert/Replace first line { Error } ...
-              this.insertProgErrorLine(
-                document,
-                editor,
-                (config.useLineNumbers ? '00 ' : '') +
-                  '{ ' +
-                  firstRpnErrorText +
-                  ' }'
-              );
-            }
+            // Insert/Replace first line { Error } ...
+            this.insertErrorLine(
+              document,
+              editor,
+              (config.useLineNumbers ? '00 ' : '') +
+                '{ ' +
+                firstErrorText +
+                ' }'
+            );
 
             // Create log file
-            this.writeProgErrorsToLog(document.fileName + '.log', result);
+            this.writeErrorsToLog(document.fileName + '.log', result);
           }
         }
       } else {
@@ -125,17 +107,15 @@ export class Tool {
 
   decode(editor: vscode.TextEditor) {
     if (editor) {
-      let config = new Configuration(true);
-
       let document = editor.document;
       let languageId = document.languageId.toLowerCase();
 
       if (document && languageId.match(/raw/)) {
         // start decoding ...
-        let result = this.decoder.decode(config, languageId, editor);
+        let result = this.decoder.decode(languageId, editor);
         if (result) {
           // no decoding errors ...
-          if (result.rawErrors === undefined) {
+          if (result.errors === undefined) {
             // save result and show messages
             if (result.rpn !== undefined) {
               let rpn = result.rpn.join(' ').trim();
@@ -147,15 +127,12 @@ export class Tool {
                 'hp42s/free42: No raw found.'
               );
             }
-            
           } else {
-            if (result.rawErrors && result.rawErrors.length > 0) {
+            if (result.errors && result.errors.length > 0) {
               // get first error ...
-              let firstRawError = result.rawErrors[0];
+              let firstRawError = result.errors[0];
               let firstRawErrorText =
                 firstRawError !== undefined ? firstRawError.toString() : '';
-
-              
             }
           }
         }
@@ -176,13 +153,19 @@ export class Tool {
   }
 
   /** Create log file */
-  private writeProgErrorsToLog(filename: string, result: RpnResult) {
-    let allProgErrors = '';
-    if (result.rpnErrors) {
-      result.rpnErrors.forEach(progError => {
-        allProgErrors += progError ? progError.toString() + '\r\n' : '';
+  private writeErrorsToLog(filename: string, result: EncoderResult) {
+    let allErrors = '';
+    if (result.programs) {
+      result.programs.forEach(program => {
+        let errors = program.getErrors();
+        if (errors) {
+          errors.forEach(rpnError => {
+            allErrors += rpnError ? rpnError.toString() + '\r\n' : '';
+          });
+        }
       });
-      this.fileSystem.writeText(filename, allProgErrors);
+
+      this.fileSystem.writeText(filename, allErrors);
     }
   }
 
@@ -210,7 +193,7 @@ export class Tool {
   }
 
   /** Insert/Replace { Prog-Error ... } ... */
-  private insertProgErrorLine(
+  private insertErrorLine(
     document: vscode.TextDocument,
     editor: vscode.TextEditor,
     firstProgErrorText: string
@@ -234,6 +217,7 @@ export class Tool {
 
   dispose() {
     this.encoder.dispose();
+    this.decoder.dispose();
     this.formatter.dispose();
     this.fileSystem.dispose();
   }
