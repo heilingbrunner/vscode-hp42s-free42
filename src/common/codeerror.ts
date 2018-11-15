@@ -1,4 +1,5 @@
 export class CodeError {
+  docLineNo: number = 0;
   codeLineNo: number = 0;
   code: string;
   message: string = '';
@@ -9,9 +10,12 @@ export class CodeError {
     this.message = message;
   }
 
+  
+
   toString(): string {
     return (
       'Error [' +
+      (this.docLineNo > 0 ? this.docLineNo + ', ': '') +
       (this.codeLineNo < 10 ? '0' + this.codeLineNo : this.codeLineNo) +
       "]: Code: '" +
       this.code +

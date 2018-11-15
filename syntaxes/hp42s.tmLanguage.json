@@ -131,6 +131,9 @@
           "include": "#comment-program-size"
         },
         {
+          "include": "#comment-program-info"
+        },
+        {
           "include": "#comment-line-full"
         },
         {
@@ -407,6 +410,14 @@
       "patterns": [
         {
           "match": "\\{ \\d+\\-Byte Prgm \\}",
+          "name": "comment.line.hp42s"
+        }
+      ]
+    },
+    "comment-program-info": {
+      "patterns": [
+        {
+          "match": "\\{ .* \\}",
           "name": "comment.line.hp42s"
         }
       ]

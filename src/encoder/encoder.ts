@@ -24,10 +24,10 @@ export class Encoder {
     let rawLine: RawLine;
 
     let document = editor.document;
-    let lineCount = document.lineCount;
+    let docLineCount = document.lineCount;
     let program: RawProgram | undefined;
 
-    for (let docLineNo = 0; docLineNo < lineCount; docLineNo++) {
+    for (let docLineNo = 0; docLineNo < docLineCount; docLineNo++) {
       let line = document.lineAt(docLineNo);
 
       if (debug > 1) {
@@ -38,18 +38,17 @@ export class Encoder {
       let match = line.text.match(/LBL "(.*)"/);
       if (match) {
         program = new RawProgram(match[1]);
-        if (program) {
-          // push lst program
-          programs.push(program);
-        }
+        program.startLineNo = docLineNo;
+        programs.push(program);
       }
 
       if (program) {
         // Parse line
         parser.read(line.text);
+        parser.docLineNo = docLineNo;
 
         // no parser error ...
-        if (parser.rpnError === undefined) {
+        if (parser.error === undefined) {
           if (debug > 1) {
             console.log('-> ' + parser.out);
           }
@@ -71,7 +70,8 @@ export class Encoder {
           }
         } else {
           // parse error
-          program.addLine(new RawLine('XX', parser.rpnError));
+          parser.error.docLineNo = docLineNo;
+          program.addLine(new RawLine('XX', parser.error));
         }
       }
     }

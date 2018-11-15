@@ -20,6 +20,7 @@ export class RpnFormatter {
       let text = line.text;
 
       if (!line.isEmptyOrWhitespace) {
+
         // 1. Remove line numbers
         text = text.replace(/(^\s*\d+)(\s+|▸|▶|>)(.*)/, '$3');
 
@@ -157,7 +158,24 @@ export class RpnFormatter {
           )
         );
       }
+
+      // insert {} before LBL ".*"
+      let match = text.match(/LBL "(.*)"/);
+      if(match){
+        let previousline = '';
+        if(i > 0){
+          previousline = document.lineAt(i-1).text;
+        }
+
+        if(!previousline.match(/\{ .* \}/)){
+          edits.push(
+            vscode.TextEdit.insert(line.range.start, (config.useLineNumbers ? '00 ': '') + '{ ' + match[1] + ' }' + '\r\n')
+          );
+        }
+      }
+
     }
+
     return edits;
   }
 

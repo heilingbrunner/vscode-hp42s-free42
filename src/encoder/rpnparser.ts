@@ -7,13 +7,23 @@ import { RPN } from './rpn';
 
 /** Command Parser for HP42S code */
 export class RpnParser {
-  tokens: string[] = [];
-  tokenLength: number = 0;
-  token: unstring = undefined;
   lastError: unstring = undefined;
+  error: CodeError | undefined = undefined;
+  config: Configuration;
+  
+  // parsed
+  code: string = '';
+  ignored: boolean = false;
+
+  // line numbers
   prgmLineNo: number = 0;
   codeLineNo: number = 0;
-  code: string = '';
+  docLineNo: number = 0;
+
+  token: unstring = undefined;
+  tokens: string[] = [];
+  tokenLength: number = 0;
+  // parameters
   str: unstring = undefined;
   num: unstring = undefined;
   flg: unstring = undefined;
@@ -25,9 +35,6 @@ export class RpnParser {
   ton: unstring = undefined;
   csk: unstring = undefined;
   out: unstring = undefined;
-  ignored: boolean = false;
-  rpnError: CodeError | undefined = undefined;
-  config: Configuration;
 
   constructor(useWorkspaceConfiguration: boolean) {
     this.config = new Configuration(useWorkspaceConfiguration);
@@ -38,6 +45,7 @@ export class RpnParser {
     this.tokenLength = 0;
     this.token = undefined;
     this.codeLineNo = 0;
+    this.docLineNo = 0;
     this.code = '';
     this.str = undefined;
     this.num = undefined;
@@ -52,7 +60,7 @@ export class RpnParser {
     this.out = undefined;
     this.lastError = undefined;
     this.ignored = false;
-    this.rpnError = undefined;
+    this.error = undefined;
   }
 
   read(line: string) {
@@ -190,7 +198,7 @@ export class RpnParser {
       }
     }
 
-    this.rpnError = progErrorText
+    this.error = progErrorText
       ? new CodeError(this.prgmLineNo, this.code, String(progErrorText))
       : undefined;
   }

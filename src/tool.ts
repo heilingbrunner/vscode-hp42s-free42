@@ -6,6 +6,7 @@ import { EncoderResult } from './encoder/encoderesult';
 import { Encoder } from './encoder/encoder';
 import { RpnFormatter } from './encoder/rpnformatter';
 import { Decoder } from './decoder/decoder';
+import { configBit } from './typedefs';
 
 export class Tool {
   // The team players ...
@@ -52,16 +53,6 @@ export class Tool {
               vscode.window.showInformationMessage(
                 'hp42s/free42: { ' + size + '-Byte Prgm }'
               );
-
-              // Insert/Replace { xxx-Byte Prgm } ...
-              this.insertBytePrgmLine(
-                document,
-                editor,
-                (config.useLineNumbers ? '00 ' : '') +
-                  '{ ' +
-                  size +
-                  '-Byte Prgm }'
-              );
             } else {
               // nothing happend ...
               vscode.window.showInformationMessage(
@@ -74,27 +65,27 @@ export class Tool {
           } else {
             // handle ecoding errors ...
             let firstError = result.getFirstError();
-            let firstErrorText =
-              firstError !== undefined ? firstError.toString() : '';
+            let firstErrorText = firstError !== undefined ? firstError.toString() : '';
 
             // Show error ...
             vscode.window.showErrorMessage(
               'hp42s/free42: Encoding failed. \r\n' + firstErrorText
             );
 
-            // Insert/Replace first line { Error } ...
-            this.insertErrorLine(
-              document,
-              editor,
-              (config.useLineNumbers ? '00 ' : '') +
-                '{ ' +
-                firstErrorText +
-                ' }'
-            );
-
             // Create log file
             this.writeErrorsToLog(document.fileName + '.log', result);
           }
+
+          result.programs.forEach(program => {
+            if(!program.hasErrors()){
+              // Insert/Replace { xxx-Byte Prgm } ...
+              this.insertBytePrgm( editor, config.useLineNumbers, program.startLineNo, program.getSize());
+            } else {
+              // Insert/Replace first line { Error } ...
+              this.insertError(editor, config.useLineNumbers, program.startLineNo, program.getFirstError()+ '');
+            }
+            
+          });
         }
       } else {
         // wrong file
@@ -170,48 +161,44 @@ export class Tool {
   }
 
   /** Insert/Replace { xxx-Byte Prgm } */
-  private insertBytePrgmLine(
-    document: vscode.TextDocument,
+  private insertBytePrgm(
     editor: vscode.TextEditor,
-    msg: string
+    useLineNumbers: configBit,
+    startLineNo: number,
+    size: number
   ) {
-    let firstLine = document.lineAt(0);
-    if (/\{ .+ \}/.test(firstLine.text)) {
+    let braceLine = editor.document.lineAt(startLineNo - 1);
+    let line = (useLineNumbers ? '00 ' : '') + '{ ' + size + '-Byte Prgm }';
+
+    if (/\{ .* \}/.test(braceLine.text)) {
       editor
-        .edit(e =>
-          e.replace(
-            new vscode.Range(firstLine.range.start, firstLine.range.end),
-            msg
-          )
-        )
-        .then(() => console.log(msg + ' replaced'));
+        .edit(e => e.replace(new vscode.Range(braceLine.range.start, braceLine.range.end), line))
+        .then(() => console.log(line + ' replaced'));
     } else {
       editor
-        .edit(e => e.insert(firstLine.range.start, msg + '\r\n'))
-        .then(() => console.log(msg + ' inserted'));
+        .edit(e => e.insert(braceLine.range.start, line + '\r\n'))
+        .then(() => console.log(line + ' inserted'));
     }
   }
 
   /** Insert/Replace { Prog-Error ... } ... */
-  private insertErrorLine(
-    document: vscode.TextDocument,
+  private insertError(
     editor: vscode.TextEditor,
-    firstProgErrorText: string
+    useLineNumbers: configBit,
+    startLineNo: number,
+    errorText: string
   ) {
-    let firstLine = document.lineAt(0);
-    if (/\{ .+ \}/.test(firstLine.text)) {
+    let braceLine = editor.document.lineAt(startLineNo - 1);
+    let line = (useLineNumbers ? '00 ' : '') + '{ ' + errorText  +  ' }';
+
+    if (/\{ .* \}/.test(braceLine.text)) {
       editor
-        .edit(e =>
-          e.replace(
-            new vscode.Range(firstLine.range.start, firstLine.range.end),
-            firstProgErrorText
-          )
-        )
-        .then(() => console.log(firstProgErrorText + ' replaced'));
+        .edit(e => e.replace( new vscode.Range(braceLine.range.start, braceLine.range.end), line))
+        .then(() => console.log(line + ' replaced'));
     } else {
       editor
-        .edit(e => e.insert(firstLine.range.start, firstProgErrorText + '\r\n'))
-        .then(() => console.log(firstProgErrorText + ' inserted'));
+        .edit(e => e.insert(braceLine.range.start, line + '\r\n'))
+        .then(() => console.log(line + ' inserted'));
     }
   }
 
