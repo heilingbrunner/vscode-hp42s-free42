@@ -25,6 +25,8 @@ Depending on the file type, snippets, syntax highlighting with the additional co
 
 Useful for [Hewlett Packard HP-42S](https://en.wikipedia.org/wiki/HP-42S) calculators, [SwissMicros-DM42](https://www.swissmicros.com/dm42.php) calculators and [FREE42](http://thomasokken.com/free42/) applications.
 
+![Demo](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/demo.gif)
+
 ## Features
 
 ### Syntax Highligthing

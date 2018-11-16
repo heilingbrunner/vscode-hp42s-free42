@@ -22,7 +22,19 @@ export class RpnFormatter {
       if (!line.isEmptyOrWhitespace) {
 
         // 1. Remove line numbers
-        text = text.replace(/(^\s*\d+)(\s+|▸|▶|>)(.*)/, '$3');
+        switch (true) {
+          // no replace for 123 @ comment
+          case /^\s*\d+\s+(@|#|\/\/)(.*)/.test(text):
+            //do nothing
+            break;
+        
+          // all others
+          default:
+            text = text.replace(/(^\s*\d+)\s+(\d+)(.+)/, '$2$3');      //01 33 -> 33
+            text = text.replace(/(^\s*\d+)\s+(\w+)/, '$2');            //01 ABC -> ABC
+            text = text.replace(/(^\s*\d+)(▸|▶|>)(LBL.+)/, '$3');     //01>LBL -> LBL
+            break;
+        }
 
         // 2. Remove LBL arrows ...
         //text = text.replace(/^(▸|▶|>)LBL/, 'LBL');
@@ -86,6 +98,8 @@ export class RpnFormatter {
 
           text = text.replace(/(^\s*)\|-/, '$1⊢');
           text = text.replace(/(^\s*)├/, '$1⊢');
+
+          text = text.replace(/(\d+)\s*(e|E)(.*)/, '$1ᴇ$3');
         }
 
         // 4. Reduce whitspace
@@ -143,11 +157,8 @@ export class RpnFormatter {
                 codeLineNo++;
             }
 
-            // line format min. two digits
-            text = text.replace(
-              /^(\d+\s+|)(.+)/,
-              (codeLineNo < 10 ? '0' + codeLineNo : codeLineNo) + ' $2'
-            );
+            // prepend line number
+            text =  (codeLineNo < 10 ? '0' + codeLineNo : codeLineNo) + ' ' + text;
           }
         }
 
