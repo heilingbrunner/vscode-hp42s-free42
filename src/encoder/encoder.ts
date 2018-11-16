@@ -38,14 +38,14 @@ export class Encoder {
       let match = line.text.match(/LBL "(.*)"/);
       if (match) {
         program = new RawProgram(match[1]);
-        program.startLineNo = docLineNo;
+        program.startdocLineIndex = docLineNo;
         programs.push(program);
       }
 
       if (program) {
         // Parse line
         parser.read(line.text);
-        parser.docLineNo = docLineNo;
+        parser.docLineIndex = docLineNo;
 
         // no parser error ...
         if (parser.error === undefined) {
@@ -70,8 +70,8 @@ export class Encoder {
           }
         } else {
           // parse error
-          parser.error.docLineNo = docLineNo;
-          program.addLine(new RawLine('XX', parser.error));
+          parser.error.docLineIndex = docLineNo;
+          program.addLine(new RawLine('??', parser.error));
         }
       }
     }

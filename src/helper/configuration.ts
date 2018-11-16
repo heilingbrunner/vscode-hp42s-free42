@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import { configBit } from '../typedefs';
 
 export class Configuration {
-    ignoreLastEndCommandForBytePrgm: configBit;
     generateHexFile: configBit;
     
     useLineNumbers: configBit;
@@ -14,7 +13,6 @@ export class Configuration {
         if(useWorkspaceConfiguration){
           let config = vscode.workspace.getConfiguration('HP42S/free42');
 
-          this.ignoreLastEndCommandForBytePrgm = config.get('encoderIgnoreLastEndCommandForBytePrgm');
           this.generateHexFile = config.get('encoderGenerateHexFile');
 
           this.useLineNumbers = config.get('formatterUseLineNumbers');

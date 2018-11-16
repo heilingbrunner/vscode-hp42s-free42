@@ -1,5 +1,10 @@
 # Change Log
 
+## [0.0.7] - 2018-11-16
+
+- multi program support in *.hp42s/*.free42 files
+- `HP42S/free42.encoderIgnoreLastEndCommandForBytePrgm` setting removed
+
 ## [0.0.6] - 2018-11-12
 
 - formatter and parser improved

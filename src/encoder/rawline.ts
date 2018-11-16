@@ -3,8 +3,8 @@ import { CodeError } from '../common/codeerror';
 
 export class RawLine {
   program: string = '';
-  prgmLineNo: number = 0;
-  docLineNo: number = 0;
+  codeLineNo: number = 0;
+  docLineIndex: number = -1;
   raw: unstring;
   error: CodeError | undefined;
 
@@ -18,6 +18,6 @@ export class RawLine {
   }
 
   toString(): string {
-    	return this.program + ', ' + (this.docLineNo > 0 ? this.docLineNo + ', ': '') + (this.prgmLineNo ? this.prgmLineNo  + ', ' : '') + this.raw + ' ' + this.error + '';
+    	return this.program + ', ' + (this.docLineIndex > -1 ? this.docLineIndex + ', ': '') + (this.codeLineNo ? this.codeLineNo  + ', ' : '') + this.raw + ' ' + this.error + '';
   }
 }

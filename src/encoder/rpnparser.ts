@@ -16,9 +16,9 @@ export class RpnParser {
   ignored: boolean = false;
 
   // line numbers
-  prgmLineNo: number = 0;
-  codeLineNo: number = 0;
-  docLineNo: number = 0;
+  prgmLineNo: number = 0; // by parser auto incremented number
+  codeLineNo: number = 0; // 03 SIN -> 3
+  docLineIndex: number = -1;
 
   token: unstring = undefined;
   tokens: string[] = [];
@@ -45,7 +45,7 @@ export class RpnParser {
     this.tokenLength = 0;
     this.token = undefined;
     this.codeLineNo = 0;
-    this.docLineNo = 0;
+    this.docLineIndex = -1;
     this.code = '';
     this.str = undefined;
     this.num = undefined;
@@ -199,7 +199,7 @@ export class RpnParser {
     }
 
     this.error = progErrorText
-      ? new CodeError(this.prgmLineNo, this.code, String(progErrorText))
+      ? new CodeError((this.config.useLineNumbers ? this.prgmLineNo: -1), this.code, String(progErrorText))
       : undefined;
   }
 

@@ -1,0 +1,34 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "hex",
+  "fileTypes": ["hex"],
+  "patterns": [
+    {
+      "include": "#constants"
+    },
+    {
+      "include": "#invalid"
+    }
+  ],
+  "repository": {
+    "constants": {
+      "patterns": [
+        {
+          "include": "#constant-number-hex"
+        }
+      ]
+    },
+    "constant-number-hex": {
+      "patterns": [
+        {
+          "match": "[0-9a-fA-F]+",
+          "name": "constant.numeric.hex"
+        }
+      ]
+    },
+    "invalid": {
+      "patterns": []
+    }
+  },
+  "scopeName": "source.hex"
+}

@@ -54,6 +54,8 @@ Comments are possible in several variants.
 
 The formatter prepares the code for encoding. It will replace all abbreviations, which are used for ascii text editing. When using __Visual Studio Code__, the code is displayed in UTF8, though all original characters of the HP42S/free42 can be displayed correct.
 
+> __However when I enter a program manually into a real calculator it helps to have line numbers. If I miss a command it helps to find the error.__
+
 Right-click in the editor to get the context menu, then select menu `Format Document` or press keyboard-shortcut __Win__: `SHIFT+ALT+F`/ __Linux__: `SHIFT+ALT+F`/ __Mac-OSX__: `⇧⌥F`.
 
 ![Document Formatter](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/document-formatter.gif)
@@ -75,7 +77,9 @@ The `hp42s/free42: Encode Code` command generates a `*.hp42s.raw` or `*.free42.r
 
 Depending on the setting `HP42S/free42.encoderGenerateHexFile` setting, the command will generate a readable hex file.
 
-Although the program size will be calculated and shown in the first line (`{ n-Byte Prgm }`). For some reason, the last ending `END` command is ignored (see: `HP42S/free42.encoderIgnoreLastEndCommandForBytePrgm`). Real raw file size will be 3 bytes more.
+Although the program size will be calculated and shown in the first line (`{ n-Byte Prgm }`). For some reason, the last ending `END` command is ignored. Real program size will be 3 bytes more.
+
+> __That's what the real HP-42S does. It is strange, since the END is, in fact, a part of the program... but that's the way it is.__
 
 ![Encode Code](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/encode-code.gif)
 
@@ -124,7 +128,6 @@ None.
 Encoding Settings:
 
 - `HP42S/free42.encoderGenerateHexFile`: This will although generate a *.hex file, to see the correct hex encoding.
-- `HP42S/free42.encoderIgnoreLastEndCommandForBytePrgm`: This is for the program size calculation, which ignores the last `END` command or not.
   
 Document Formatter Settings:
 
@@ -145,6 +148,11 @@ Visual Studio Extensions:
 None.
 
 ## Release Notes
+
+### 0.0.7
+
+- multi program support in *.hp42s/*.free42 files
+- `HP42S/free42.encoderIgnoreLastEndCommandForBytePrgm` setting removed
 
 ### 0.0.6
 

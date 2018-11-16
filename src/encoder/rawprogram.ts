@@ -5,7 +5,7 @@ import { CodeError } from '../common/codeerror';
 export class RawProgram {
   private lines: RawLine[] = [];
   private size: number = 0;
-  startLineNo: number = 0;
+  startdocLineIndex: number = -1;
   name: string = '';
 
   constructor(name: string) {
@@ -28,8 +28,8 @@ export class RawProgram {
     return hexAll; //no trin() !
   }
 
-  hasErrors(): boolean{
-    return (this.getFirstError() !== undefined);
+  succeeded(): boolean{
+    return !(this.getFirstError() !== undefined);
   }
 
   getFirstError(): CodeError | undefined{

@@ -34,7 +34,7 @@ export class Tool {
         let result = this.encoder.encode(languageId, editor);
         if (result) {
           // no encoding errors ...
-          if (!result.hasErrors()) {
+          if (result.succeeded()) {
             // save result and show messages
             if (result.programs !== undefined) {
               let raw = result.getRaw();
@@ -65,7 +65,8 @@ export class Tool {
           } else {
             // handle ecoding errors ...
             let firstError = result.getFirstError();
-            let firstErrorText = firstError !== undefined ? firstError.toString() : '';
+            let firstErrorText =
+              firstError !== undefined ? firstError.toString() : '';
 
             // Show error ...
             vscode.window.showErrorMessage(
@@ -76,16 +77,8 @@ export class Tool {
             this.writeErrorsToLog(document.fileName + '.log', result);
           }
 
-          result.programs.forEach(program => {
-            if(!program.hasErrors()){
-              // Insert/Replace { xxx-Byte Prgm } ...
-              this.insertBytePrgm( editor, config.useLineNumbers, program.startLineNo, program.getSize());
-            } else {
-              // Insert/Replace first line { Error } ...
-              this.insertError(editor, config.useLineNumbers, program.startLineNo, program.getFirstError()+ '');
-            }
-            
-          });
+          // Update all {...} line
+          this.updateHeadLines(editor, result, config.useLineNumbers);
         }
       } else {
         // wrong file
@@ -150,8 +143,8 @@ export class Tool {
       result.programs.forEach(program => {
         let errors = program.getErrors();
         if (errors) {
-          errors.forEach(rpnError => {
-            allErrors += rpnError ? rpnError.toString() + '\r\n' : '';
+          errors.forEach(error => {
+            allErrors += error ? error.toString() + '\r\n' : '';
           });
         }
       });
@@ -160,46 +153,52 @@ export class Tool {
     }
   }
 
-  /** Insert/Replace { xxx-Byte Prgm } */
-  private insertBytePrgm(
+  private updateHeadLines(
     editor: vscode.TextEditor,
-    useLineNumbers: configBit,
-    startLineNo: number,
-    size: number
+    result: EncoderResult,
+    useLineNumbers: configBit
   ) {
-    let braceLine = editor.document.lineAt(startLineNo - 1);
-    let line = (useLineNumbers ? '00 ' : '') + '{ ' + size + '-Byte Prgm }';
+    editor
+      .edit(e => {
+        // Walk through reverse (!!) all programs and insert/update head line.
+        // Reverse iteration for easier insert of new header lines.
+        result.programs.reverse().forEach(program => {
+          const startdocLineIndex = program.startdocLineIndex;
+          const size = program.getSize();
+          const firstError = program.getFirstError();
+          const firstErrorText = firstError ? firstError.toString() : '';
+          
+          const braceLine = startdocLineIndex > 0 ? editor.document.lineAt(startdocLineIndex - 1): undefined;
+          const startLine = editor.document.lineAt(startdocLineIndex);
+          let line = '';
 
-    if (/\{ .* \}/.test(braceLine.text)) {
-      editor
-        .edit(e => e.replace(new vscode.Range(braceLine.range.start, braceLine.range.end), line))
-        .then(() => console.log(line + ' replaced'));
-    } else {
-      editor
-        .edit(e => e.insert(braceLine.range.start, line + '\r\n'))
-        .then(() => console.log(line + ' inserted'));
-    }
-  }
+          if (program.succeeded()) {
+            line = (useLineNumbers ? '00 ' : '') + '{ ' + size + '-Byte Prgm }';
+          } else {
+            line = (useLineNumbers ? '00 ' : '') + '{ ' + firstErrorText + ' }';
+          }
 
-  /** Insert/Replace { Prog-Error ... } ... */
-  private insertError(
-    editor: vscode.TextEditor,
-    useLineNumbers: configBit,
-    startLineNo: number,
-    errorText: string
-  ) {
-    let braceLine = editor.document.lineAt(startLineNo - 1);
-    let line = (useLineNumbers ? '00 ' : '') + '{ ' + errorText  +  ' }';
+          if(braceLine){
+            if (/\{ .* \}/.test(braceLine.text)) {
+              e.replace(
+                new vscode.Range(braceLine.range.start, braceLine.range.end),
+                line
+              );
+            } else {
 
-    if (/\{ .* \}/.test(braceLine.text)) {
-      editor
-        .edit(e => e.replace( new vscode.Range(braceLine.range.start, braceLine.range.end), line))
-        .then(() => console.log(line + ' replaced'));
-    } else {
-      editor
-        .edit(e => e.insert(braceLine.range.start, line + '\r\n'))
-        .then(() => console.log(line + ' inserted'));
-    }
+              // insert before LBL ".*" ...
+              e.insert(startLine.range.start, line + '\r\n');
+            }
+          } else {
+            // insert before first line ...
+            e.insert(startLine.range.start, line + '\r\n');
+          }
+          
+        });
+      })
+      .then(success => {
+        console.log('{}-Update: ' + success);
+      });
   }
 
   dispose() {

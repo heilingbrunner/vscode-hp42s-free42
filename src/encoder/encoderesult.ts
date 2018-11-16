@@ -8,13 +8,13 @@ export class EncoderResult {
     this.programs = programs;
   }
 
-  hasErrors(): boolean {
-    let hasErrors = false;
+  succeeded(): boolean {
+    let succeeded = true;
     this.programs.forEach(program => {
-      hasErrors = hasErrors || program.hasErrors();
+      succeeded = succeeded && program.succeeded();
     });
 
-    return hasErrors;
+    return succeeded;
   }
 
   getFirstError(): CodeError | undefined {

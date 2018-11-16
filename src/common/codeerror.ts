@@ -1,6 +1,6 @@
 export class CodeError {
-  docLineNo: number = 0;
-  codeLineNo: number = 0;
+  docLineIndex: number = -1; //index 0,... but document line numer starts at 1 !!
+  codeLineNo: number = -1;
   code: string;
   message: string = '';
 
@@ -15,8 +15,8 @@ export class CodeError {
   toString(): string {
     return (
       'Error [' +
-      (this.docLineNo > 0 ? this.docLineNo + ', ': '') +
-      (this.codeLineNo < 10 ? '0' + this.codeLineNo : this.codeLineNo) +
+      (this.docLineIndex > -1 ? (this.docLineIndex + 1) : '') +
+      (this.codeLineNo > -1 ? ', ' + (this.codeLineNo < 10 ? '0' + this.codeLineNo : this.codeLineNo): '') +
       "]: Code: '" +
       this.code +
       "'; Message: \'" +
