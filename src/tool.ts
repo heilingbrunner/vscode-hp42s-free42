@@ -168,8 +168,7 @@ export class Tool {
           const firstError = program.getFirstError();
           const firstErrorText = firstError ? firstError.toString() : '';
           
-          const braceLine = startdocLineIndex > 0 ? editor.document.lineAt(startdocLineIndex - 1): undefined;
-          const startLine = editor.document.lineAt(startdocLineIndex);
+          const headLine = editor.document.lineAt(startdocLineIndex);
           let line = '';
 
           if (program.succeeded()) {
@@ -178,22 +177,14 @@ export class Tool {
             line = (useLineNumbers ? '00 ' : '') + '{ ' + firstErrorText + ' }';
           }
 
-          if(braceLine){
-            if (/\{ .* \}/.test(braceLine.text)) {
+          if(headLine){
+            if (/\{ .* \}/.test(headLine.text)) {
               e.replace(
-                new vscode.Range(braceLine.range.start, braceLine.range.end),
+                new vscode.Range(headLine.range.start, headLine.range.end),
                 line
               );
-            } else {
-
-              // insert before LBL ".*" ...
-              e.insert(startLine.range.start, line + '\r\n');
             }
-          } else {
-            // insert before first line ...
-            e.insert(startLine.range.start, line + '\r\n');
           }
-          
         });
       })
       .then(success => {

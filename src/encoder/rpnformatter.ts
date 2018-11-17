@@ -27,25 +27,42 @@ export class RpnFormatter {
           case /^\s*\d+\s+(@|#|\/\/)(.*)/.test(text):
             //do nothing
             break;
-        
-          // all others
-          default:
-            text = text.replace(/(^\s*\d+)\s+(\d+)(.+)/, '$2$3');      //01 33 -> 33
+
+          case /(^\s*\d+)\s+(\d+)(.+)/.test(text):
+           text = text.replace(/(^\s*\d+)\s+(\d+)(.+)/, '$2$3');      //01 33  -> 33
+            break;
+          case /(^\s*\d+)\s+(\w+)/.test(text):
             text = text.replace(/(^\s*\d+)\s+(\w+)/, '$2');            //01 ABC -> ABC
-            text = text.replace(/(^\s*\d+)(▸|▶|>)(LBL.+)/, '$3');     //01>LBL -> LBL
+            break;
+          case /(^\s*\d+)\s+(\W)/.test(text):
+            text = text.replace(/(^\s*\d+)\s+(\W)/, '$2');             //01 +   -> +
+            break;
+          case /(^\s*\d+)\s+(\{.*)/.test(text):
+            text = text.replace(/(^\s*\d+)\s+(\{.*)/, '$2');           //01 { 1 -> { 1
+            break;
+          case /(^\s*\d+)(▸|▶|>)(LBL.+)/.test(text):
+            text = text.replace(/(^\s*\d+)(▸|▶|>)(LBL.+)/, '$3');      //01>LBL  -> LBL
+            break;
+          
+          default:
             break;
         }
 
-        // 2. Remove LBL arrows ...
-        //text = text.replace(/^(▸|▶|>)LBL/, 'LBL');
+        // 2. Replace always ...
+        text = text.replace(/“/, '"');   // ->“RSAST”
+        text = text.replace(/”/, '"');   //   “RSAST”<-
+        text = text.replace(/^\*/, '×'); //  * -> ×
+        text = text.replace(/–/g, '-');  //  – -> -
 
         // 3. Remove abbreviarion \Sigma, \GS, +/-, ...
         if (config.replaceAbbreviations) {
           // see https://www.swissmicros.com/dm42/decoder/ see 2. tab
           text = text.replace(/(^\s*)RCLx/, '$1RCL×');
+          text = text.replace(/(^\s*)RCL\*/, '$1RCL×');
           text = text.replace(/(^\s*)RCL\//, '$1RCL÷');
 
           text = text.replace(/(^\s*)STOx/, '$1STO×');
+          text = text.replace(/(^\s*)STO\*/, '$1STO×');
           text = text.replace(/(^\s*)STO\//, '$1STO÷');
 
           text = text.replace(/(^\s*)BASEx/, '$1BASE×');
@@ -80,7 +97,7 @@ export class RpnFormatter {
           text = text.replace(/(^\s*)X<=0\?/, '$1X≤0?');
           text = text.replace(/(^\s*)X>=0\?/, '$1X≥0?');
           text = text.replace(/(^\s*)X!=Y\?/, '$1X≠Y');
-          text = text.replace(/(^\s*)X<=Y0\?/, '$1X≤Y?');
+          text = text.replace(/(^\s*)X<=Y\?/, '$1X≤Y?');
           text = text.replace(/(^\s*)X>=Y\?/, '$1X≥Y?');
 
           text = text.replace(/(^\s*)10\^X/, '$110↑X');
@@ -149,10 +166,6 @@ export class RpnFormatter {
               case /^\{ .* \}/.test(text):
                 codeLineNo = 0;
                 break;
-              // LBL "..."
-              case /^LBL ".*"/.test(text):
-                codeLineNo = 1;
-                break;
               default:
                 codeLineNo++;
             }
@@ -168,21 +181,6 @@ export class RpnFormatter {
             text
           )
         );
-      }
-
-      // insert {} before LBL ".*"
-      let match = text.match(/LBL "(.*)"/);
-      if(match){
-        let previousline = '';
-        if(i > 0){
-          previousline = document.lineAt(i-1).text;
-        }
-
-        if(!previousline.match(/\{ .* \}/)){
-          edits.push(
-            vscode.TextEdit.insert(line.range.start, (config.useLineNumbers ? '00 ': '') + '{ ' + match[1] + ' }' + '\r\n')
-          );
-        }
       }
 
     }

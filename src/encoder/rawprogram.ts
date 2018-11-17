@@ -8,8 +8,8 @@ export class RawProgram {
   startdocLineIndex: number = -1;
   name: string = '';
 
-  constructor(name: string) {
-    this.name = name;
+  constructor(startdocLineIndex: number) {
+    this.startdocLineIndex = startdocLineIndex;
   }
 
   getRaw(): string {

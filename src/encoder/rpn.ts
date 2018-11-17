@@ -325,7 +325,12 @@ export class RPN {
 
         // loop each character in str and append hex to opcode
         str.split('').forEach(character => {
-          raw += ' ' + RPN.convertByteAsHex(character.charCodeAt(0));
+          let hexcode = character.charCodeAt(0);
+          if(RPN.charFocal.has(character)){
+            let v = RPN.charFocal.get(character);
+            hexcode = v ? v : 0;
+          }
+          raw += ' ' + RPN.convertByteAsHex(hexcode);
         });
 
         // ASSIGN opcode search, replace aa

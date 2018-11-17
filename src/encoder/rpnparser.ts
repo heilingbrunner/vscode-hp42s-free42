@@ -70,6 +70,20 @@ export class RpnParser {
     this.reset();
     this.code = line;
 
+    // get line number from code
+    if (this.config.useLineNumbers) {
+      switch (true) {
+        // code line is { n-Byte Prgm }
+        case /^00 { .* \}/.test(line):
+          this.codeLineNo = 0;
+          this.prgmLineNo = 0;
+          break;
+        // increment
+        default:
+          this.prgmLineNo++;
+      }
+    }
+
     if (this.ignoredLine(line)) {
       this.ignored = true;
       return undefined;
@@ -149,24 +163,7 @@ export class RpnParser {
 
       this.out = line;
 
-      // get line number from code
-      if (this.config.useLineNumbers) {
-        switch (true) {
-          // code line is { n-Byte Prgm }
-          case /^\{ .* \}/.test(line):
-            this.codeLineNo = 0;
-            this.prgmLineNo = 0;
-            break;
-          // LBL "..."
-          case /^LBL `lbl`/.test(line):
-            this.codeLineNo = 1;
-            this.prgmLineNo = 1;
-            break;
-          // increment
-          default:
-            this.prgmLineNo++;
-        }
-      }
+      
 
       if (this.config.useLineNumbers && this.prgmLineNo !== this.codeLineNo) {
         progErrorText = 'line number not correct';
