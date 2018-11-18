@@ -178,7 +178,7 @@ export class Tool {
           }
 
           if(headLine){
-            if (/\{ .* \}/.test(headLine.text)) {
+            if (/\{.*\}/.test(headLine.text)) {
               e.replace(
                 new vscode.Range(headLine.range.start, headLine.range.end),
                 line

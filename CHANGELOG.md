@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.8] - 2018-11-18
+
+- multi program support in *.hp42s/*.free42 files debugged
+
 ## [0.0.7] - 2018-11-16
 
 - multi program support in *.hp42s/*.free42 files

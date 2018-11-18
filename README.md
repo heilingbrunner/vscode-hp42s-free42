@@ -151,6 +151,10 @@ None.
 
 ## Release Notes
 
+### 0.0.8
+
+- multi program support in *.hp42s/*.free42 files debugged
+
 ### 0.0.7
 
 - multi program support in *.hp42s/*.free42 files

@@ -4167,6 +4167,22 @@
     ],
     "description": "[MIN]"
   },
+  "÷ ": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "÷$0"
+    ],
+    "description": "÷: FOCAL character."
+  },
+  "× ": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "×$0"
+    ],
+    "description": "×: FOCAL character."
+  },
   "√": {
     "prefix": "FOC",
     "scope": "hp42s",
@@ -4254,6 +4270,38 @@
       "↵$0"
     ],
     "description": "↵: FOCAL character."
+  },
+  "↓ ": {
+    "prefix": "FOC",
+    "scope": "free42",
+    "body": [
+      "↓$0"
+    ],
+    "description": "↓: FOCAL character."
+  },
+  "→ ": {
+    "prefix": "FOC",
+    "scope": "free42",
+    "body": [
+      "→$0"
+    ],
+    "description": "→: FOCAL character."
+  },
+  "← ": {
+    "prefix": "FOC",
+    "scope": "free42",
+    "body": [
+      "←$0"
+    ],
+    "description": "←: FOCAL character."
+  },
+  "↑ ": {
+    "prefix": "FOC",
+    "scope": "free42",
+    "body": [
+      "↑$0"
+    ],
+    "description": "↑: FOCAL character."
   },
   "µ": {
     "prefix": "FOC",

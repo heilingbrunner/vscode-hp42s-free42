@@ -10,7 +10,7 @@ export class RpnParser {
   lastError: unstring = undefined;
   error: CodeError | undefined = undefined;
   config: Configuration;
-  
+
   // parsed
   code: string = '';
   ignored: boolean = false;
@@ -74,7 +74,7 @@ export class RpnParser {
     if (this.config.useLineNumbers) {
       switch (true) {
         // code line is { n-Byte Prgm }
-        case /^00 { .* \}/.test(line):
+        case /^00 {.*\}/.test(line):
           this.codeLineNo = 0;
           this.prgmLineNo = 0;
           break;
@@ -163,8 +163,6 @@ export class RpnParser {
 
       this.out = line;
 
-      
-
       if (this.config.useLineNumbers && this.prgmLineNo !== this.codeLineNo) {
         progErrorText = 'line number not correct';
       }
@@ -196,7 +194,7 @@ export class RpnParser {
     }
 
     this.error = progErrorText
-      ? new CodeError((this.config.useLineNumbers ? this.prgmLineNo: -1), this.code, String(progErrorText))
+      ? new CodeError((this.config.useLineNumbers ? this.prgmLineNo : -1), this.code, String(progErrorText))
       : undefined;
   }
 
@@ -210,7 +208,7 @@ export class RpnParser {
     line = line.trim();
     const ignored =
       line.length === 0 ||
-      line.match(/\{ .* \}/) !== null ||
+      line.match(/\{.*\}/) !== null ||
       line.match(/^\s*(#|@|\/\/)/) !== null;
     return ignored;
   }

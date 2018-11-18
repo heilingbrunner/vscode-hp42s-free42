@@ -163,7 +163,7 @@ export class RpnFormatter {
           if (!text.match(/^\s*(@|#|\/\/)/)) {
             switch (true) {
               // code line is { n-Byte Prgm }
-              case /^\{ .* \}/.test(text):
+              case /^\{.*\}/.test(text):
                 codeLineNo = 0;
                 break;
               default:

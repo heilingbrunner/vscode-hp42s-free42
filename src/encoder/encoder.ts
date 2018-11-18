@@ -35,7 +35,7 @@ export class Encoder {
       }
 
       //{ ... }-line detected -> Prgm Start
-      let match = line.text.match(/\{ .* \}/);
+      let match = line.text.match(/\{.*\}/);
       if (match) {
         program = new RawProgram(docLineIndex);
         programs.push(program);
