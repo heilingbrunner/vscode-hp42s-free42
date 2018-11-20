@@ -364,13 +364,10 @@
       ]
     },
     "constant-string": {
-      "name": "string.quoted.double.string.hp42s",
-      "begin": "\\b\"",
-      "end": "\"",
       "patterns": [
         {
-          "name": "constant.character.escape.hp42s",
-          "match": "\\\\."
+          "match": "\".*\"",
+          "name": "constant.numeric.hp42s"
         }
       ]
     },
@@ -417,7 +414,7 @@
     "comment-program-info": {
       "patterns": [
         {
-          "match": "\\{ .* \\}",
+          "match": "\\{.*\\}",
           "name": "comment.line.hp42s"
         }
       ]
