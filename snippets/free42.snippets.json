@@ -4359,6 +4359,14 @@
     ],
     "description": "¿: FOCAL character."
   },
+  "␊: line feed": {
+    "prefix": "FOC",
+    "scope": "hp42s",
+    "body": [
+      "␊$0"
+    ],
+    "description": "␊: Line feed replacement."
+  },
   "≤": {
     "prefix": "FOC",
     "scope": "free42",

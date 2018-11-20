@@ -3,7 +3,8 @@ import { RpnParser } from './rpnparser';
 import { CodeError } from '../common/codeerror';
 import { RawLine } from './rawline';
 
-export class RPN {
+/** FOCAL (Forty-one calculator language) see https://en.wikipedia.org/wiki/FOCAL_(Hewlett-Packard) */
+export class FOCAL {
   //#region Members
 
   static rawCode: Map<string, string> = new Map<string, string>();
@@ -17,27 +18,25 @@ export class RPN {
   //#region public
 
   static initializeForEncode() {
-    if (!RPN.initializedForEncode) {
+    if (!FOCAL.initializedForEncode) {
       // transform arr_rawCode -> rawCode
-      RPN.arr_rawCode.forEach((e: { key: string; value: string }) => {
-        RPN.rawCode.set(e.key, e.value);
+      FOCAL.arr_rawCode.forEach((e: { key: string; value: string }) => {
+        FOCAL.rawCode.set(e.key, e.value);
       });
 
       // transform arr_stack -> dic_stack
-      RPN.arr_stack.forEach((e: { key: string; value: number }) => {
-        RPN.stack.set(e.key, e.value);
+      FOCAL.arr_stack.forEach((e: { key: string; value: number }) => {
+        FOCAL.stack.set(e.key, e.value);
       });
 
       // transform arr_special -> dic_special
-      RPN.arr_special.forEach((e: { key: string; value: number }) => {
-        RPN.charFocal.set(e.key, e.value);
+      FOCAL.arr_charFocal.forEach((e: { key: string; value: number }) => {
+        FOCAL.charFocal.set(e.key, e.value);
       });
 
-      RPN.initializedForEncode = true;
+      FOCAL.initializedForEncode = true;
     }
   }
-
-  
 
   /** Code to raw
    * Input:
@@ -52,17 +51,9 @@ export class RPN {
     let languageIdFromCode: string = '';
 
     if (parser.out !== undefined) {
+
       // free42 commands: ACCEL|LOCAT|HEADING|ADATE|ATIME|ATIME24|CLK12|CLK24|DATE|DATE+|DDAYS|DMY|DOW|MDY|TIME
-      if (
-        parser.token &&
-        parser.token.match(
-          /(ACCEL|LOCAT|HEADING|ADATE|ATIME|ATIME24|CLK12|CLK24|DATE|DATE\+|DDAYS|DMY|DOW|MDY|TIME)/
-        )
-      ) {
-        languageIdFromCode = 'free42';
-      } else {
-        languageIdFromCode = languageId;
-      }
+      languageIdFromCode = FOCAL.getLanguageIdFromCode(parser, languageId);
 
       if (languageId !== languageIdFromCode) {
         progErrorText =
@@ -80,10 +71,10 @@ export class RPN {
             parser.str &&
             parser.out.match(/`str`/)
           ) {
-            if (RPN.rawCode.has(parser.out)) {
-              raw = RPN.rawCode.get(parser.out);
+            if (FOCAL.rawCode.has(parser.out)) {
+              raw = FOCAL.rawCode.get(parser.out);
               if (raw !== undefined) {
-                raw = RPN.insertStringInRaw(raw, parser.str);
+                raw = FOCAL.insertStringInRaw(raw, parser.str);
               }
             }
             if (raw === undefined) {
@@ -99,7 +90,7 @@ export class RPN {
             parser.num &&
             parser.out.match(/`num`/)
           ) {
-            raw = RPN.convertNumberToRaw(parser.num);
+            raw = FOCAL.convertNumberToRaw(parser.num);
             //useless: if (raw === undefined) {..}
           }
 
@@ -108,9 +99,9 @@ export class RPN {
             raw === undefined &&
             progErrorText === undefined &&
             parser.token &&
-            RPN.rawCode.has(parser.out)
+            FOCAL.rawCode.has(parser.out)
           ) {
-            raw = RPN.rawCode.get(parser.out);
+            raw = FOCAL.rawCode.get(parser.out);
             //useless: if (raw === undefined) {..}
           }
 
@@ -121,7 +112,11 @@ export class RPN {
           return new RawLine(
             raw,
             progErrorText
-              ? new CodeError(parser.prgmLineNo, parser.code, String(progErrorText))
+              ? new CodeError(
+                  parser.prgmLineNo,
+                  parser.code,
+                  String(progErrorText)
+                )
               : undefined
           );
 
@@ -132,11 +127,11 @@ export class RPN {
           // is it a key ...
           // KEY `key` GTO IND `nam` - Part 1
           if (parser.key && parser.out.match(/`key`/)) {
-            if (raw === undefined && RPN.rawCode.has(parser.out)) {
-              raw = RPN.rawCode.get(parser.out);
+            if (raw === undefined && FOCAL.rawCode.has(parser.out)) {
+              raw = FOCAL.rawCode.get(parser.out);
             }
             if (raw !== undefined && progErrorText === undefined) {
-              raw = RPN.insertNumberInRaw(raw, parser.key);
+              raw = FOCAL.insertNumberInRaw(raw, parser.key);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.key + "' in '" + parser.code + "'";
@@ -147,11 +142,11 @@ export class RPN {
           // KEY `key` GTO IND `nam` - Part 2
           // ASSIGN `nam` TO `csk` - Part 1
           if (parser.nam && parser.out.match(/`nam`/)) {
-            if (raw === undefined && RPN.rawCode.has(parser.out)) {
-              raw = RPN.rawCode.get(parser.out);
+            if (raw === undefined && FOCAL.rawCode.has(parser.out)) {
+              raw = FOCAL.rawCode.get(parser.out);
             }
             if (raw !== undefined && progErrorText === undefined) {
-              raw = RPN.insertStringInRaw(raw, parser.nam);
+              raw = FOCAL.insertStringInRaw(raw, parser.nam);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.nam + "' in '" + parser.code + "'";
@@ -162,7 +157,7 @@ export class RPN {
           // ASSIGN `nam` TO `csk` - Part 2
           if (parser.csk && parser.out.match(/`csk`/)) {
             if (raw !== undefined && progErrorText === undefined) {
-              raw = RPN.insertNumberInRaw(raw, parser.csk);
+              raw = FOCAL.insertNumberInRaw(raw, parser.csk);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.csk + "' in '" + parser.code + "'";
@@ -171,11 +166,11 @@ export class RPN {
 
           // is it a global label ...
           if (parser.lbl && parser.out.match(/`lbl`/)) {
-            if (raw === undefined && RPN.rawCode.has(parser.out)) {
-              raw = RPN.rawCode.get(parser.out);
+            if (raw === undefined && FOCAL.rawCode.has(parser.out)) {
+              raw = FOCAL.rawCode.get(parser.out);
             }
             if (raw !== undefined && progErrorText === undefined) {
-              raw = RPN.insertStringInRaw(raw, parser.lbl);
+              raw = FOCAL.insertStringInRaw(raw, parser.lbl);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.lbl + "' in '" + parser.code + "'";
@@ -184,11 +179,11 @@ export class RPN {
 
           // is it a tone ...
           if (parser.ton && parser.out.match(/tn/)) {
-            if (raw === undefined && RPN.rawCode.has(parser.out)) {
-              raw = RPN.rawCode.get(parser.out);
+            if (raw === undefined && FOCAL.rawCode.has(parser.out)) {
+              raw = FOCAL.rawCode.get(parser.out);
             }
             if (raw !== undefined && progErrorText === undefined) {
-              raw = RPN.insertNumberInRaw(raw, parser.ton);
+              raw = FOCAL.insertNumberInRaw(raw, parser.ton);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.ton + "' in '" + parser.code + "'";
@@ -197,11 +192,11 @@ export class RPN {
 
           // is it a local char label A-J,a-e coded as number ......
           if (parser.clb && parser.out.match(/(ll)/)) {
-            if (raw === undefined && RPN.rawCode.has(parser.out)) {
-              raw = RPN.rawCode.get(parser.out);
+            if (raw === undefined && FOCAL.rawCode.has(parser.out)) {
+              raw = FOCAL.rawCode.get(parser.out);
             }
             if (raw !== undefined && progErrorText === undefined) {
-              raw = RPN.insertNumberInRaw(raw, parser.clb);
+              raw = FOCAL.insertNumberInRaw(raw, parser.clb);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.clb + "' in '" + parser.code + "'";
@@ -210,11 +205,11 @@ export class RPN {
 
           // flags
           if (parser.flg && parser.out.match(/(rr)/)) {
-            if (raw === undefined && RPN.rawCode.has(parser.out)) {
-              raw = RPN.rawCode.get(parser.out);
+            if (raw === undefined && FOCAL.rawCode.has(parser.out)) {
+              raw = FOCAL.rawCode.get(parser.out);
             }
             if (raw !== undefined && progErrorText === undefined) {
-              raw = RPN.insertNumberInRaw(raw, parser.flg);
+              raw = FOCAL.insertNumberInRaw(raw, parser.flg);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.flg + "' in '" + parser.code + "'";
@@ -223,11 +218,11 @@ export class RPN {
 
           // is it a register, number labels, digits, local number label 15-99 ......
           if (parser.num && parser.out.match(/(sd|sl|sr|ll|nn|rr)/)) {
-            if (raw === undefined && RPN.rawCode.has(parser.out)) {
-              raw = RPN.rawCode.get(parser.out);
+            if (raw === undefined && FOCAL.rawCode.has(parser.out)) {
+              raw = FOCAL.rawCode.get(parser.out);
             }
             if (raw !== undefined && progErrorText === undefined) {
-              raw = RPN.insertNumberInRaw(raw, parser.num);
+              raw = FOCAL.insertNumberInRaw(raw, parser.num);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.num + "' in '" + parser.code + "'";
@@ -236,8 +231,8 @@ export class RPN {
 
           // 10 or 11 digits
           if (parser.out.match(/(ENG|FIX|SCI) (10|11)/)) {
-            if (raw === undefined && RPN.rawCode.has(parser.out)) {
-              raw = RPN.rawCode.get(parser.out);
+            if (raw === undefined && FOCAL.rawCode.has(parser.out)) {
+              raw = FOCAL.rawCode.get(parser.out);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.code + "'";
@@ -246,11 +241,11 @@ export class RPN {
 
           // is it a register/indirect count of digit/flag ...
           if (parser.num && parser.out.match(/rr/)) {
-            if (raw === undefined && RPN.rawCode.has(parser.out)) {
-              raw = RPN.rawCode.get(parser.out);
+            if (raw === undefined && FOCAL.rawCode.has(parser.out)) {
+              raw = FOCAL.rawCode.get(parser.out);
             }
             if (raw !== undefined && progErrorText === undefined) {
-              raw = RPN.insertNumberInRaw(raw, parser.num);
+              raw = FOCAL.insertNumberInRaw(raw, parser.num);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.num + "' in '" + parser.code + "'";
@@ -259,12 +254,12 @@ export class RPN {
 
           // is it a stack ...
           if (parser.stk && parser.out.match(/`stk`/)) {
-            if (raw === undefined && RPN.rawCode.has(parser.out)) {
-              raw = RPN.rawCode.get(parser.out);
+            if (raw === undefined && FOCAL.rawCode.has(parser.out)) {
+              raw = FOCAL.rawCode.get(parser.out);
             }
             if (raw !== undefined && progErrorText === undefined) {
-              const int = RPN.stack.get(parser.stk);
-              raw = RPN.insertNumberInRaw(raw, String(int));
+              const int = FOCAL.stack.get(parser.stk);
+              raw = FOCAL.insertNumberInRaw(raw, String(int));
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.stk + "' in '" + parser.code + "'";
@@ -278,7 +273,11 @@ export class RPN {
           return new RawLine(
             raw,
             progErrorText
-              ? new CodeError(parser.prgmLineNo, parser.code, String(progErrorText))
+              ? new CodeError(
+                  parser.prgmLineNo,
+                  parser.code,
+                  String(progErrorText)
+                )
               : undefined
           );
 
@@ -299,10 +298,26 @@ export class RPN {
 
   //#region Hex Operations
 
+  /** Check if free42 command used */
+  private static getLanguageIdFromCode(parser: RpnParser, languageId: string): string {
+    let languageIdFromCode: string;
+    // free42 commands: ACCEL|LOCAT|HEADING|ADATE|ATIME|ATIME24|CLK12|CLK24|DATE|DATE+|DDAYS|DMY|DOW|MDY|TIME
+    if (parser.token &&
+      parser.token.match(/(ACCEL|LOCAT|HEADING|ADATE|ATIME|ATIME24|CLK12|CLK24|DATE|DATE\+|DDAYS|DMY|DOW|MDY|TIME)/)) {
+      languageIdFromCode = 'free42';
+    }
+    else {
+      languageIdFromCode = languageId;
+    }
+    return languageIdFromCode;
+  }
+
+  
+
   /** Changing strings into corresponding opcodes (also adjusting the
    * instruction length in "Fn" byte).
    */
-  static insertStringInRaw(raw: unstring, str: unstring): unstring {
+  private static insertStringInRaw(raw: unstring, str: unstring): unstring {
     if (raw !== undefined) {
       if (str !== undefined) {
         let len_str = str.length;
@@ -326,11 +341,11 @@ export class RPN {
         // loop each character in str and append hex to opcode
         str.split('').forEach(character => {
           let hexcode = character.charCodeAt(0);
-          if(RPN.charFocal.has(character)){
-            let v = RPN.charFocal.get(character);
+          if (FOCAL.charFocal.has(character)) {
+            let v = FOCAL.charFocal.get(character);
             hexcode = v ? v : 0;
           }
-          raw += ' ' + RPN.convertByteAsHex(hexcode);
+          raw += ' ' + FOCAL.convertByteAsHex(hexcode);
         });
 
         // ASSIGN opcode search, replace aa
@@ -345,7 +360,7 @@ export class RPN {
         // concat three parts ...
         raw =
           raw.substr(0, pos_Fn) + // 1. part
-          RPN.convertByteAsHex(240 + length_hex_after_Fn) + // 2. part
+          FOCAL.convertByteAsHex(240 + length_hex_after_Fn) + // 2. part
           raw.substr(pos_Fn + 2); // 3. part
       } else {
         raw = undefined;
@@ -356,37 +371,37 @@ export class RPN {
   }
 
   /** Insert a number into raw */
-  static insertNumberInRaw(raw: unstring, num: unstring): unstring {
+  private static insertNumberInRaw(raw: unstring, num: unstring): unstring {
     if (raw !== undefined && num !== undefined) {
       let int = parseInt(num);
       let match: RegExpMatchArray | null = null;
 
       switch (true) {
         case /kk/.test(raw):
-          raw = raw.replace(/kk/, RPN.convertByteAsHex(int));
+          raw = raw.replace(/kk/, FOCAL.convertByteAsHex(int));
           break;
 
         case /rr/.test(raw):
-          raw = raw.replace(/rr/, RPN.convertByteAsHex(int));
+          raw = raw.replace(/rr/, FOCAL.convertByteAsHex(int));
           break;
 
         case /nn/.test(raw):
           // numbered label 00-99, digits 00-11
-          raw = raw.replace(/nn/, RPN.convertByteAsHex(int));
+          raw = raw.replace(/nn/, FOCAL.convertByteAsHex(int));
           break;
 
         case /ll/.test(raw):
           // char label as number A-J,a-e
-          raw = raw.replace(/ll/, 'CF ' + RPN.convertByteAsHex(int));
+          raw = raw.replace(/ll/, 'CF ' + FOCAL.convertByteAsHex(int));
           break;
 
         case /ww ww/.test(raw):
           // SIZE
           raw = raw.replace(
             /ww ww/,
-            RPN.convertByteAsHex(int / 256) +
+            FOCAL.convertByteAsHex(int / 256) +
               ' ' +
-              RPN.convertByteAsHex(int % 256)
+              FOCAL.convertByteAsHex(int % 256)
           );
           break;
 
@@ -396,7 +411,7 @@ export class RPN {
           if (match) {
             raw = raw.replace(
               /([\dA-F])l/,
-              RPN.convertByteAsHex(parseInt('0x' + match[1] + '0') + 1 + int)
+              FOCAL.convertByteAsHex(parseInt('0x' + match[1] + '0') + 1 + int)
             );
           }
           break;
@@ -407,7 +422,7 @@ export class RPN {
           if (match) {
             raw = raw.replace(
               /(\d)r/,
-              RPN.convertByteAsHex(parseInt(match[1]) * 16 + int)
+              FOCAL.convertByteAsHex(parseInt(match[1]) * 16 + int)
             );
           }
           break;
@@ -433,7 +448,7 @@ export class RPN {
   /** Changing numbers into corresponding opcodes.
    * "1.234E-455" -> 11 1A 12 13 14 1B 1C 14 15 15 00
    */
-  static convertNumberToRaw(num: unstring): unstring {
+  private static convertNumberToRaw(num: unstring): unstring {
     if (num !== undefined) {
       // "1.234E-455" -> 11 1A 12 13 14 1B 1C 14 15 15 00
       num =
@@ -451,7 +466,7 @@ export class RPN {
   /** Changing integers (size one byte, 0-255) into hex string .
    * 123 -> 7B, 255 -> FF
    */
-  static convertByteAsHex(byte: number): string {
+  private static convertByteAsHex(byte: number): string {
     let hex = ('0' + (byte & 0xff).toString(16)).slice(-2).toUpperCase();
     return hex;
   }
@@ -930,7 +945,7 @@ export class RPN {
   // FOCAL character set
   // https://en.wikipedia.org/wiki/FOCAL_character_set
   // key is used as regex
-  private static arr_special = [
+  private static arr_charFocal = [
     { key: '÷', value: 0 },
     { key: '×', value: 1 },
     { key: '√', value: 2 },
@@ -941,15 +956,16 @@ export class RPN {
     { key: 'π', value: 7 },
     { key: '¿', value: 8 },
     { key: '≤', value: 9 },
-    { key: '\\\[LF\\\]', value: 10 }, // for [LF]
+    { key: '\\[LF\\]', value: 10 }, // for [LF] line feed
+    { key: '␊', value: 10 }, // ␊ see: https://www.compart.com/de/unicode/U+240A
     { key: '≥', value: 11 },
     { key: '≠', value: 12 },
     { key: '↵', value: 13 },
     { key: '↓', value: 14 },
     { key: '→', value: 15 },
     { key: '←', value: 16 },
-    { key: 'µ', value: 17 },
-    { key: 'μ', value: 17 },
+    { key: 'µ', value: 17 }, // different bytes B5
+    { key: 'μ', value: 17 }, // different bytes N<
     { key: '£', value: 18 },
     { key: '₤', value: 18 },
     { key: '°', value: 19 },
@@ -960,108 +976,111 @@ export class RPN {
     { key: 'ᴇ', value: 24 },
     { key: 'Æ', value: 25 },
     { key: '…', value: 26 },
-    { key: '␛', value: 27 },
+    { key: '␛', value: 27 }, // ␛ see: https://www.compart.com/de/unicode/U+241B
     { key: 'Ö', value: 28 },
     { key: 'Ü', value: 29 },
     { key: '▒', value: 30 },
     { key: '■', value: 31 },
     { key: '•', value: 31 },
-    // { key: "SP", value: 32 },
-    // { key: "!", value: 33 },
-    // { key: """, value: 34 },
-    // { key: "#", value: 35 },
-    // { key: "$", value: 36 },
-    // { key: "%", value: 37 },
-    // { key: "&", value: 38 },
-    // { key: "'", value: 39 },
-    // { key: "(", value: 40 },
-    // { key: ")", value: 41 },
-    // { key: "*", value: 42 },
-    // { key: "+", value: 43 },
-    // { key: ",", value: 44 },
-    // { key: "-", value: 45 },
-    // { key: ".", value: 46 },
-    // { key: "/", value: 47 },
-    // { key: "0", value: 48 },
-    // { key: "1", value: 49 },
-    // { key: "2", value: 50 },
-    // { key: "3", value: 51 },
-    // { key: "4", value: 52 },
-    // { key: "5", value: 53 },
-    // { key: "6", value: 54 },
-    // { key: "7", value: 55 },
-    // { key: "8", value: 56 },
-    // { key: "9", value: 57 },
-    // { key: ":", value: 58 },
-    // { key: ";", value: 59 },
-    // { key: "<", value: 60 },
-    // { key: "=", value: 61 },
-    // { key: ">", value: 62 },
-    // { key: "?", value: 63 },
-    // { key: "@", value: 64 },
-    // { key: "A", value: 65 },
-    // { key: "B", value: 66 },
-    // { key: "C", value: 67 },
-    // { key: "D", value: 68 },
-    // { key: "E", value: 69 },
-    // { key: "F", value: 70 },
-    // { key: "G", value: 71 },
-    // { key: "H", value: 72 },
-    // { key: "I", value: 73 },
-    // { key: "J", value: 74 },
-    // { key: "K", value: 75 },
-    // { key: "L", value: 76 },
-    // { key: "M", value: 77 },
-    // { key: "N", value: 78 },
-    // { key: "O", value: 79 },
-    // { key: "P", value: 80 },
-    // { key: "Q", value: 81 },
-    // { key: "R", value: 82 },
-    // { key: "S", value: 83 },
-    // { key: "T", value: 84 },
-    // { key: "U", value: 85 },
-    // { key: "V", value: 86 },
-    // { key: "W", value: 87 },
-    // { key: "X", value: 88 },
-    // { key: "Y", value: 89 },
-    // { key: "Z", value: 90 },
-    // { key: "[", value: 91 },
+    // { key: 'SP', value: 32 },
+    // { key: '!', value: 33 },
+    // { key: ''', value: 34 },
+    // { key: '#', value: 35 },
+    // { key: '$', value: 36 },
+    // { key: '%', value: 37 },
+    // { key: '&', value: 38 },
+    // { key: "'", value: 39 }, // double quotes !!
+    // { key: '(', value: 40 },
+    // { key: ')', value: 41 },
+    // { key: '*', value: 42 },
+    // { key: '+', value: 43 },
+    // { key: ',', value: 44 },
+    // { key: '-', value: 45 },
+    // { key: '.', value: 46 },
+    // { key: '/', value: 47 },
+    // { key: '0', value: 48 },
+    // { key: '1', value: 49 },
+    // { key: '2', value: 50 },
+    // { key: '3', value: 51 },
+    // { key: '4', value: 52 },
+    // { key: '5', value: 53 },
+    // { key: '6', value: 54 },
+    // { key: '7', value: 55 },
+    // { key: '8', value: 56 },
+    // { key: '9', value: 57 },
+    // { key: ':', value: 58 },
+    // { key: ';', value: 59 },
+    // { key: '<', value: 60 },
+    // { key: '=', value: 61 },
+    // { key: '>', value: 62 },
+    // { key: '?', value: 63 },
+    // { key: '@', value: 64 },
+    // { key: 'A', value: 65 },
+    // { key: 'B', value: 66 },
+    // { key: 'C', value: 67 },
+    // { key: 'D', value: 68 },
+    // { key: 'E', value: 69 },
+    // { key: 'F', value: 70 },
+    // { key: 'G', value: 71 },
+    // { key: 'H', value: 72 },
+    // { key: 'I', value: 73 },
+    // { key: 'J', value: 74 },
+    // { key: 'K', value: 75 },
+    // { key: 'L', value: 76 },
+    // { key: 'M', value: 77 },
+    // { key: 'N', value: 78 },
+    // { key: 'O', value: 79 },
+    // { key: 'P', value: 80 },
+    // { key: 'Q', value: 81 },
+    // { key: 'R', value: 82 },
+    // { key: 'S', value: 83 },
+    // { key: 'T', value: 84 },
+    // { key: 'U', value: 85 },
+    // { key: 'V', value: 86 },
+    // { key: 'W', value: 87 },
+    // { key: 'X', value: 88 },
+    // { key: 'Y', value: 89 },
+    // { key: 'Z', value: 90 },
+    // { key: '[', value: 91 },
     { key: '\\\\', value: 92 }, // for \
-    // { key: "]", value: 93 },
-    { key: '↑', value: 94 }
-    // { key: "_", value: 95 },
-    // { key: "`", value: 96 },
-    // { key: "a", value: 97 },
-    // { key: "b", value: 98 },
-    // { key: "c", value: 99 },
-    // { key: "d", value: 100 },
-    // { key: "e", value: 101 },
-    // { key: "f", value: 102 },
-    // { key: "g", value: 103 },
-    // { key: "h", value: 104 },
-    // { key: "i", value: 105 },
-    // { key: "j", value: 106 },
-    // { key: "k", value: 107 },
-    // { key: "l", value: 108 },
-    // { key: "m", value: 109 },
-    // { key: "n", value: 110 },
-    // { key: "o", value: 111 },
-    // { key: "p", value: 112 },
-    // { key: "q", value: 113 },
-    // { key: "r", value: 114 },
-    // { key: "s", value: 115 },
-    // { key: "t", value: 116 },
-    // { key: "u", value: 117 },
-    // { key: "v", value: 118 },
-    // { key: "w", value: 119 },
-    // { key: "x", value: 120 },
-    // { key: "y", value: 121 },
-    // { key: "z", value: 122 },
-    // { key: "{", value: 123 },
-    // { key: "|", value: 124 },
-    // { key: "}", value: 125 },
-    // { key: "~", value: 126 },
-    // { key: "⊦", value: 127 }
+    // { key: ']', value: 93 },
+    { key: '↑', value: 94 },
+    // { key: '_', value: 95 },
+    // { key: '`', value: 96 },
+    // { key: '´', value: ??? },
+    // { key: 'a', value: 97 },
+    // { key: 'b', value: 98 },
+    // { key: 'c', value: 99 },
+    // { key: 'd', value: 100 },
+    // { key: 'e', value: 101 },
+    // { key: 'f', value: 102 },
+    // { key: 'g', value: 103 },
+    // { key: 'h', value: 104 },
+    // { key: 'i', value: 105 },
+    // { key: 'j', value: 106 },
+    // { key: 'k', value: 107 },
+    // { key: 'l', value: 108 },
+    // { key: 'm', value: 109 },
+    // { key: 'n', value: 110 },
+    // { key: 'o', value: 111 },
+    // { key: 'p', value: 112 },
+    // { key: 'q', value: 113 },
+    // { key: 'r', value: 114 },
+    // { key: 's', value: 115 },
+    // { key: 't', value: 116 },
+    // { key: 'u', value: 117 },
+    // { key: 'v', value: 118 },
+    // { key: 'w', value: 119 },
+    // { key: 'x', value: 120 },
+    // { key: 'y', value: 121 },
+    // { key: 'z', value: 122 },
+    // { key: '{', value: 123 },
+    // { key: '|', value: 124 },
+    // { key: '}', value: 125 },
+    // { key: '~', value: 126 }
+    // { key: '⊦', value: 127 }
+
+    // { key: '´', value: ??? }
   ];
 
   // #endregion

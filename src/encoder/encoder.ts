@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { RPN } from './rpn';
+import { FOCAL } from './focal';
 import { EncoderResult } from './encoderesult';
 import { RpnParser } from './rpnparser';
 import { RawLine } from './rawline';
@@ -8,7 +8,7 @@ import { RawProgram } from './rawprogram';
 
 export class Encoder {
   constructor() {
-    RPN.initializeForEncode();
+    FOCAL.initializeForEncode();
   }
 
   /** Encode RPN to raw */
@@ -55,7 +55,7 @@ export class Encoder {
           // handle parsed code line ...
           if (!parser.ignored) {
             // now convert to raw ...
-            rawLine = RPN.toRaw(languageId, parser);
+            rawLine = FOCAL.toRaw(languageId, parser);
             // add raw line ...
             program.addLine(rawLine);
 

@@ -44,7 +44,8 @@ Every keystroke command and its variations with a description.
 - Use `e`, `ᴇ` or `E` for `ᴇ` in `1.2ᴇ-23`
 - Use `OP` for `×,÷,+/-,Σ+,Σ-,←,↑,↓,→,%,⊢,%CH`
 - Use `FLAG` for all flags `01` to `99`
-- Use `FOC` for `√,∫,░,Σ,▶,π,¿,≤,≥,≠,↵,↓,→,←,µ,£,°,Å,Ñ,Ä,∡,ᴇ,Æ,…,␛,Ö,Ü,▒,■`
+- Use `FOC` for `√,∫,░,Σ,▶,π,¿,␊,≤,≥,≠,↵,↓,→,←,µ,£,°,Å,Ñ,Ä,∡,ᴇ,Æ,…,␛,Ö,Ü,▒,■`
+- Use `[LF]` or `␊` for a line feed in a string. Formatter will replace `[LF]` to `␊`.
 
 ### Comments
 
@@ -150,6 +151,11 @@ Visual Studio Extensions:
 None.
 
 ## Release Notes
+
+### 0.0.9
+
+- multi program line numbers debugged
+- new formatter rules
 
 ### 0.0.8
 

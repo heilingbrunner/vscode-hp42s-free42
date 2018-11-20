@@ -1,6 +1,7 @@
 import { unstring } from '../typedefs';
 import { CodeError } from '../common/codeerror';
 
+/** Class for a raw line */
 export class RawLine {
   program: string = '';
   codeLineNo: number = 0;

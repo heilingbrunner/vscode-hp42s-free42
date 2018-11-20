@@ -2,6 +2,7 @@ import { Bytes } from '../helper/bytes';
 import { RawLine } from './rawline';
 import { CodeError } from '../common/codeerror';
 
+/** Class for a program, which contains several raw lines */
 export class RawProgram {
   private lines: RawLine[] = [];
   private size: number = 0;

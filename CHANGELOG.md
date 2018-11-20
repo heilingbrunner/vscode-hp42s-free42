@@ -1,5 +1,10 @@
 # Change Log
 
+## [0.0.9] - 2018-11-20
+
+- multi program line numbers debugged
+- new formatter rules
+
 ## [0.0.8] - 2018-11-18
 
 - multi program support in *.hp42s/*.free42 files debugged

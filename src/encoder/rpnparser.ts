@@ -3,9 +3,9 @@ import * as vscode from 'vscode';
 import { unstring } from '../typedefs';
 import { CodeError } from '../common/codeerror';
 import { Configuration } from '../helper/configuration';
-import { RPN } from './rpn';
+import { FOCAL } from './focal';
 
-/** Command Parser for HP42S code */
+/** Command parser for a code line */
 export class RpnParser {
   lastError: unstring = undefined;
   error: CodeError | undefined = undefined;
@@ -70,26 +70,30 @@ export class RpnParser {
     this.reset();
     this.code = line;
 
-    // get line number from code
-    if (this.config.useLineNumbers) {
-      switch (true) {
-        // code line is { n-Byte Prgm }
-        case /^00 {.*\}/.test(line):
-          this.codeLineNo = 0;
-          this.prgmLineNo = 0;
-          break;
-        // increment
-        default:
-          this.prgmLineNo++;
-      }
-    }
-
     if (this.ignoredLine(line)) {
       this.ignored = true;
+
+      // reset line number when {} header line
+      if (this.config.useLineNumbers) {
+        switch (true) {
+          // code line is { n-Byte Prgm }
+          case /^00 {.*\}/.test(line):
+            this.codeLineNo = 0;
+            this.prgmLineNo = 0;
+            break;
+          
+          default:
+            //nothing
+        }
+      }
+
       return undefined;
     } else {
+      
+      // increment
+      this.prgmLineNo++;
 
-      // read codeLineNo from code line 
+      // read codeLineNo from code line
       if (this.config.useLineNumbers) {
         let match = line.match(/(^\d+)(▸|▶|>|\s+)/);
         if (match) {
@@ -164,7 +168,11 @@ export class RpnParser {
       this.out = line;
 
       if (this.config.useLineNumbers && this.prgmLineNo !== this.codeLineNo) {
-        progErrorText = 'line number not correct';
+        progErrorText =
+          'line number not correct: ' +
+          this.prgmLineNo +
+          '!==' +
+          this.codeLineNo;
       }
 
       if (this.str && progErrorText === undefined) {
@@ -194,7 +202,11 @@ export class RpnParser {
     }
 
     this.error = progErrorText
-      ? new CodeError((this.config.useLineNumbers ? this.prgmLineNo : -1), this.code, String(progErrorText))
+      ? new CodeError(
+          this.config.useLineNumbers ? this.prgmLineNo : -1,
+          this.code,
+          String(progErrorText)
+        )
       : undefined;
   }
 
@@ -253,7 +265,7 @@ export class RpnParser {
         /(÷|×|√|∫|░|Σ|▶|π|¿|≤|\[LF\]|≥|≠|↵|↓|→|←|µ|μ|£|₤|°|Å|Ñ|Ä|∡|ᴇ|Æ|…|␛|Ö|Ü|▒|■|•|\\\\|↑)/
       )
     ) {
-      RPN.charFocal.forEach((value, key) => {
+      FOCAL.charFocal.forEach((value, key) => {
         const regex = new RegExp(key, 'g');
         if (str) {
           str = str.replace(regex, String.fromCharCode(value));
@@ -420,7 +432,6 @@ export class RpnParser {
 
     return [line, num];
   }
-
 
   /** Replace number */
   private replaceNumber(line: string): [string, unstring] {

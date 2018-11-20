@@ -1,6 +1,7 @@
 import { CodeError } from '../common/codeerror';
 import { RawProgram } from './rawprogram';
 
+/** Encoding result of the complete code content */
 export class EncoderResult {
   programs: RawProgram[];
 

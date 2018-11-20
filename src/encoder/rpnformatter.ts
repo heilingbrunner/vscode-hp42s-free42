@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { Configuration } from '../helper/configuration';
 
+/** Formatter for the code */
 export class RpnFormatter {
   constructor() {}
 
@@ -53,6 +54,7 @@ export class RpnFormatter {
         text = text.replace(/”/, '"');   //   “RSAST”<-
         text = text.replace(/^\*/, '×'); //  * -> ×
         text = text.replace(/–/g, '-');  //  – -> -
+        text = text.replace(/\[LF\]/g, '␊');  //  [LF] -> ␊
 
         // 3. Remove abbreviarion \Sigma, \GS, +/-, ...
         if (config.replaceAbbreviations) {
@@ -93,6 +95,7 @@ export class RpnFormatter {
           text = text.replace(/(^\s*)(\\|)->POL/, '$1→POL');
 
           text = text.replace(/(^\s*)X!=0\?/, '$1X≠0?');
+          text = text.replace(/(^\s*)X#Y\?/, '$1X≠Y?');
           text = text.replace(/(^\s*)X#0\?/, '$1X≠0?');
           text = text.replace(/(^\s*)X<=0\?/, '$1X≤0?');
           text = text.replace(/(^\s*)X>=0\?/, '$1X≥0?');
@@ -100,11 +103,11 @@ export class RpnFormatter {
           text = text.replace(/(^\s*)X<=Y\?/, '$1X≤Y?');
           text = text.replace(/(^\s*)X>=Y\?/, '$1X≥Y?');
 
-          text = text.replace(/(^\s*)10\^X/, '$110↑X');
-          text = text.replace(/(^\s*)E\^X/, '$1E↑X');
-          text = text.replace(/(^\s*)X\^2/, '$1X↑2');
-          text = text.replace(/(^\s*)Y\^X/, '$1Y↑X');
-          text = text.replace(/(^\s*)E\^X-1/, '$1E↑X-1');
+          text = text.replace(/(^\s*)10\^(x|X)/, '$110↑X');
+          text = text.replace(/(^\s*)(x|X)\^2/, '$1X↑2');
+          text = text.replace(/(^\s*)Y\^(x|X)/, '$1Y↑X');
+          text = text.replace(/(^\s*)(e|E)\^(x|X)/, '$1E↑X');
+          text = text.replace(/(^\s*)(e|E)\^(x|X)-1/, '$1E↑X-1');
 
           text = text.replace(/(^\s*)<-\b/, '$1←');
           text = text.replace(/(^\s*)\^\b/, '$1↑');
