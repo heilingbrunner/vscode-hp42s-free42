@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.10] - 2018-11-21
+
+- more snippets
+
 ## [0.0.9] - 2018-11-20
 
 - multi program line numbers debugged

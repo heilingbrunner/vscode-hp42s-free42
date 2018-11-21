@@ -152,6 +152,10 @@ None.
 
 ## Release Notes
 
+### 0.0.10
+
+- more snippets
+
 ### 0.0.9
 
 - multi program line numbers debugged
