@@ -131,7 +131,7 @@
     "prefix": "ARCL",
     "scope": "free42",
     "body": [
-      "ARCL ST ${1:L|T|X|Y|Z}$0"
+      "ARCL ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "ARCL ST <stack>: Alpha recall. Copy data into the alpha register, appending it to the current contents. Numbers are formatted using the current display format. Parameter: register or variable (indirect allowed)."
   },
@@ -139,7 +139,7 @@
     "prefix": "ARCL",
     "scope": "free42",
     "body": [
-      "ARCL IND ST ${1:L|T|X|Y|Z}$0"
+      "ARCL IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "ARCL IND ST <stack>: Alpha recall. Copy data into the alpha register, appending it to the current contents. Numbers are formatted using the current display format. Parameter: register or variable (indirect allowed)."
   },
@@ -219,7 +219,7 @@
     "prefix": "ASTO",
     "scope": "free42",
     "body": [
-      "ASTO ST ${1:L|T|X|Y|Z}$0"
+      "ASTO ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "ASTO ST <stack>: Alpha store. Copy the first six characters in the alpha register into a register or variable. Parameter: register or variable (indirect allowed)."
   },
@@ -227,7 +227,7 @@
     "prefix": "ASTO",
     "scope": "free42",
     "body": [
-      "ASTO IND ST ${1:L|T|X|Y|Z}$0"
+      "ASTO IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "ASTO IND ST <stack>: Alpha store. Copy the first six characters in the alpha register into a register or variable. Parameter: register or variable (indirect allowed)."
   },
@@ -387,7 +387,7 @@
     "prefix": "CF",
     "scope": "free42",
     "body": [
-      "CF IND ST ${1:L|T|X|Y|Z}$0"
+      "CF IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "CF IND ST <stack>: Clear flag nn (00 ≤  nn ≤ 35 or 81 ≤  nn ≤ 99). Parameter: flag number (indirect allowed)."
   },
@@ -491,7 +491,7 @@
     "prefix": "CL",
     "scope": "free42",
     "body": [
-      "CLV IND ST ${1:L|T|X|Y|Z}$0"
+      "CLV IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "CLV IND ST <stack>: Clear a variable from memory. Parameter: variable name (indirect allowed)."
   },
@@ -675,7 +675,7 @@
     "prefix": "DIM",
     "scope": "free42",
     "body": [
-      "DIM IND ST ${1:L|T|X|Y|Z}$0"
+      "DIM IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "DIM IND ST <stack>: Dimension a matrix to x columns and y rows. If the matrix does not exist, DIM creates it. Parameter: variable name (indirect allowed)."
   },
@@ -747,7 +747,7 @@
     "prefix": "DSE",
     "scope": "free42",
     "body": [
-      "DSE ST ${1:L|T|X|Y|Z}$0"
+      "DSE ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "DSE ST <stack>: Decrement, skip if (less than or) equal. Given ccccccc.fffii in a variable or register, decrements ccccccc by ii and skips the next program line if ccccccc is now ≤  fff. Parameter: register or variable (indirect allowed)."
   },
@@ -755,7 +755,7 @@
     "prefix": "DSE",
     "scope": "free42",
     "body": [
-      "DSE IND ST ${1:L|T|X|Y|Z}$0"
+      "DSE IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "DSE IND ST <stack>: Decrement, skip if (less than or) equal. Given ccccccc.fffii in a variable or register, decrements ccccccc by ii and skips the next program line if ccccccc is now ≤  fff. Parameter: register or variable (indirect allowed)."
   },
@@ -803,7 +803,7 @@
     "prefix": "EDITN",
     "scope": "free42",
     "body": [
-      "EDITN IND ST ${1:L|T|X|Y|Z}$0"
+      "EDITN IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "EDITN IND ST <stack>: Edit a named matrix. Parameter: variable name (indirect allowed)."
   },
@@ -859,7 +859,7 @@
     "prefix": "ENG",
     "scope": "free42",
     "body": [
-      "ENG IND ST ${1:L|T|X|Y|Z}$0"
+      "ENG IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "ENG IND ST <stack>: Select engineering display format. Parameter: number of digits (indirect allowed)."
   },
@@ -931,7 +931,7 @@
     "prefix": "FC?",
     "scope": "free42",
     "body": [
-      "FC? IND ST ${1:L|T|X|Y|Z}$0"
+      "FC? IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "FC? IND ST <stack>: Flag clear test. If the specified flag is clear, executes the next program line; if the flag is set, skips the next program line. Parameter: flag number (indirect allowed)."
   },
@@ -963,7 +963,7 @@
     "prefix": "FC?C",
     "scope": "free42",
     "body": [
-      "FC?C IND ST ${1:L|T|X|Y|Z}$0"
+      "FC?C IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "FC?C IND ST <stack>: Flag clear test and clear. If the specified flag is clear, execute the next program line; if the flag is set, skip the next program line. Cleared after the test is complete. (This function can be used only with flags 00 through 35 and 81 through 99.) Parameter: flag number (indirect allowed)."
   },
@@ -1011,7 +1011,7 @@
     "prefix": "FIX",
     "scope": "free42",
     "body": [
-      "FIX IND ST ${1:L|T|X|Y|Z}$0"
+      "FIX IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "FIX IND ST <stack>: Select fixed-decimal display format. Parameter: number of digits (indirect allowed)."
   },
@@ -1859,7 +1859,7 @@
     "prefix": "FS?",
     "scope": "free42",
     "body": [
-      "FS? IND ST ${1:L|T|X|Y|Z}$0"
+      "FS? IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "FS? IND ST <stack>: Flag set test. If the specified flag is set, execute the next program line; if the flag is clear, skip the next program line. Parameter: flag number (indirect allowed)."
   },
@@ -1891,7 +1891,7 @@
     "prefix": "FS?C",
     "scope": "free42",
     "body": [
-      "FS?C IND ST ${1:L|T|X|Y|Z}$0"
+      "FS?C IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "FS?C IND ST <stack>: Flag set test and clear. If the specified flag is set, execute the next program line; if the flag is clear, skip the next program line. Clear the flag after the test is complete. (This function can be used only with flags 00 through 35 and 81 through 99.) Parameter: flag number (indirect allowed)."
   },
@@ -1963,7 +1963,7 @@
     "prefix": "GTO",
     "scope": "free42",
     "body": [
-      "GTO IND ST ${1:L|T|X|Y|Z}$0"
+      "GTO IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "GTO IND ST <stack>: Go to label. From the keyboard, move the program pointer to the specified label. In a running program, cause the program to branch to the specified label. Parameter: local or global label (indirect allowed)."
   },
@@ -1971,7 +1971,7 @@
     "prefix": "GTO",
     "scope": "free42",
     "body": [
-      "GTO ${1:A|B|C|D|E|F|G|H|I|J|a|b|c|d|e}$0"
+      "GTO ${1|A,B,C,D,E,F,G,H,I,J,a,b,c,d,e|}$0"
     ],
     "description": "GTO <alpha_local_label>: Go to label. From the keyboard, move the program pointer to the specified label. In a running program, cause the program to branch to the specified label. Parameter: local or global label (indirect allowed)."
   },
@@ -2051,7 +2051,7 @@
     "prefix": "INDEX",
     "scope": "free42",
     "body": [
-      "INDEX IND ST ${1:L|T|X|Y|Z}$0"
+      "INDEX IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "INDEX IND ST <stack>: Index a named matrix. Parameter: variable name (indirect allowed)."
   },
@@ -2091,7 +2091,7 @@
     "prefix": "INPUT",
     "scope": "free42",
     "body": [
-      "INPUT ST ${1:L|T|X|Y|Z}$0"
+      "INPUT ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "INPUT ST <stack>: Recall a register or variable to the x-register, display the name of the register or variable along with the contents of the x-register, and halt program execution. Pressing R/S (or ■SST) stores x into the register or variable; pressing EXIT cancels. (Used only in programs.) Parameter: register or variable (indirect allowed)."
   },
@@ -2099,7 +2099,7 @@
     "prefix": "INPUT",
     "scope": "free42",
     "body": [
-      "INPUT IND ST ${1:L|T|X|Y|Z}$0"
+      "INPUT IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "INPUT IND ST <stack>: Recall a register or variable to the x-register, display the name of the register or variable along with the contents of the x-register, and halt program execution. Pressing R/S (or ■SST) stores x into the register or variable; pressing EXIT cancels. (Used only in programs.) Parameter: register or variable (indirect allowed)."
   },
@@ -2139,7 +2139,7 @@
     "prefix": "INTEG",
     "scope": "free42",
     "body": [
-      "INTEG IND ST ${1:L|T|X|Y|Z}$0"
+      "INTEG IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "INTEG IND ST <stack>: Integrate the selected integration program with respect to the specified variable. Parameter: variable name (indirect allowed)."
   },
@@ -2195,7 +2195,7 @@
     "prefix": "ISG",
     "scope": "free42",
     "body": [
-      "ISG ST ${1:L|T|X|Y|Z}$0"
+      "ISG ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "ISG ST <stack>: Increment, skip if greater. Given ccccccc.fffii in a variable or register, increments ccccccc by ii and skips the next program line if ccccccc is now > fff. Parameter: register or variable (indirect allowed)."
   },
@@ -2203,7 +2203,7 @@
     "prefix": "ISG",
     "scope": "free42",
     "body": [
-      "ISG IND ST ${1:L|T|X|Y|Z}$0"
+      "ISG IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "ISG IND ST <stack>: Increment, skip if greater. Given ccccccc.fffii in a variable or register, increments ccccccc by ii and skips the next program line if ccccccc is now > fff. Parameter: register or variable (indirect allowed)."
   },
@@ -2267,7 +2267,7 @@
     "prefix": "KEY",
     "scope": "free42",
     "body": [
-      "KEY ${1:number} GTO IND ST ${1:L|T|X|Y|Z}$0"
+      "KEY ${1:number} GTO IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "KEY <number> GTO IND ST <stack>: On menu key, go to. Branch to specified label to when a particular menu key is pressed. Parameter 1: Key number (1 through 9), Parameter 2: program label (global or local)."
   },
@@ -2275,7 +2275,7 @@
     "prefix": "KEY",
     "scope": "free42",
     "body": [
-      "KEY ${1:number} GTO ${2:A|B|C|D|E|F|G|H|I|J|a|b|c|d|e}$0"
+      "KEY ${1:number} GTO ${2|A,B,C,D,E,F,G,H,I,J,a,b,c,d,e|}$0"
     ],
     "description": "KEY <number> GTO <alpha_local_label>: On menu key, go to. Branch to specified label to when a particular menu key is pressed. Parameter 1: Key number (1 through 9), Parameter 2: program label (global or local)."
   },
@@ -2315,7 +2315,7 @@
     "prefix": "KEY",
     "scope": "free42",
     "body": [
-      "KEY ${1:number} XEQ IND ST ${1:L|T|X|Y|Z}$0"
+      "KEY ${1:number} XEQ IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "KEY <number> XEQ IND ST <stack>: On menu key, execute. Execute (as a subroutine) specified label when a particular menu key is pressed. Parameter 1: Key number (1 through 9), Parameter 2: program label (global or local)."
   },
@@ -2323,7 +2323,7 @@
     "prefix": "KEY",
     "scope": "free42",
     "body": [
-      "KEY ${1:number} XEQ ${2:A|B|C|D|E|F|G|H|I|J|a|b|c|d|e}$0"
+      "KEY ${1:number} XEQ ${2|A,B,C,D,E,F,G,H,I,J,a,b,c,d,e|}$0"
     ],
     "description": "KEY <number> XEQ <alpha_local_label>: On menu key, execute. Execute (as a subroutine) specified label when a particular menu key is pressed. Parameter 1: Key number (1 through 9), Parameter 2: program label (global or local)."
   },
@@ -2371,7 +2371,7 @@
     "prefix": "LBL",
     "scope": "free42",
     "body": [
-      "LBL ${1:A|B|C|D|E|F|G|H|I|J|a|b|c|d|e}$0"
+      "LBL ${1|A,B,C,D,E,F,G,H,I,J,a,b,c,d,e|}$0"
     ],
     "description": "LBL <alpha_local_label>: Label. Identify programs and routines for execution and branching. Parameter: local or global label."
   },
@@ -2587,7 +2587,7 @@
     "prefix": "PGMINT",
     "scope": "free42",
     "body": [
-      "PGMINT IND ST ${1:L|T|X|Y|Z}$0"
+      "PGMINT IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "PGMINT IND ST <stack>: Select a program to integrate. Parameter: global label (indirect allowed)."
   },
@@ -2619,7 +2619,7 @@
     "prefix": "PGMSLV",
     "scope": "free42",
     "body": [
-      "PGMSLV IND ST ${1:L|T|X|Y|Z}$0"
+      "PGMSLV IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "PGMSLV IND ST <stack>: Select a program to solve. Parameter: global label (indirect allowed)."
   },
@@ -2739,7 +2739,7 @@
     "prefix": "PRV",
     "scope": "free42",
     "body": [
-      "PRV IND ST ${1:L|T|X|Y|Z}$0"
+      "PRV IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "PRV IND ST <stack>: Print variable. Parameter: variable name (indirect allowed)."
   },
@@ -2835,7 +2835,7 @@
     "prefix": "RCL",
     "scope": "free42",
     "body": [
-      "RCL ST ${1:L|T|X|Y|Z}$0"
+      "RCL ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "RCL ST <stack>: Recall data into the x-register. Parameter: register or variable (indirect allowed)."
   },
@@ -2843,7 +2843,7 @@
     "prefix": "RCL",
     "scope": "free42",
     "body": [
-      "RCL IND ST ${1:L|T|X|Y|Z}$0"
+      "RCL IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "RCL IND ST <stack>: Recall data into the x-register. Parameter: register or variable (indirect allowed)."
   },
@@ -2883,7 +2883,7 @@
     "prefix": "RCL",
     "scope": "free42",
     "body": [
-      "RCL+ ST ${1:L|T|X|Y|Z}$0"
+      "RCL+ ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "RCL+ ST <stack>: Recall addition. Recall data and add it to the contents of the x-register. Parameter: register or variable (indirect allowed)."
   },
@@ -2891,7 +2891,7 @@
     "prefix": "RCL",
     "scope": "free42",
     "body": [
-      "RCL+ IND ST ${1:L|T|X|Y|Z}$0"
+      "RCL+ IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "RCL+ IND ST <stack>: Recall addition. Recall data and add it to the contents of the x-register. Parameter: register or variable (indirect allowed)."
   },
@@ -2931,7 +2931,7 @@
     "prefix": "RCL",
     "scope": "free42",
     "body": [
-      "RCL- ST ${1:L|T|X|Y|Z}$0"
+      "RCL- ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "RCL- ST <stack>: Recall subtraction. Recall data and subtract it from the contents of the x-register. Parameter: register or variable (indirect allowed)."
   },
@@ -2939,7 +2939,7 @@
     "prefix": "RCL",
     "scope": "free42",
     "body": [
-      "RCL- IND ST ${1:L|T|X|Y|Z}$0"
+      "RCL- IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "RCL- IND ST <stack>: Recall subtraction. Recall data and subtract it from the contents of the x-register. Parameter: register or variable (indirect allowed)."
   },
@@ -2979,7 +2979,7 @@
     "prefix": "RCL",
     "scope": "free42",
     "body": [
-      "RCL× ST ${1:L|T|X|Y|Z}$0"
+      "RCL× ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "RCL× ST <stack>: Recall multiplication. Recall data and multiply it by the contents of the x-register. Parameter: register or variable (indirect allowed)."
   },
@@ -2987,7 +2987,7 @@
     "prefix": "RCL",
     "scope": "free42",
     "body": [
-      "RCL× IND ST ${1:L|T|X|Y|Z}$0"
+      "RCL× IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "RCL× IND ST <stack>: Recall multiplication. Recall data and multiply it by the contents of the x-register. Parameter: register or variable (indirect allowed)."
   },
@@ -3027,7 +3027,7 @@
     "prefix": "RCL",
     "scope": "free42",
     "body": [
-      "RCL÷ ST ${1:L|T|X|Y|Z}$0"
+      "RCL÷ ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "RCL÷ ST <stack>: Recall division. Recall data and divide it into the contents of the x-register. Parameter: register or variable (indirect allowed)."
   },
@@ -3035,7 +3035,7 @@
     "prefix": "RCL",
     "scope": "free42",
     "body": [
-      "RCL÷ IND ST ${1:L|T|X|Y|Z}$0"
+      "RCL÷ IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "RCL÷ IND ST <stack>: Recall division. Recall data and divide it into the contents of the x-register. Parameter: register or variable (indirect allowed)."
   },
@@ -3195,7 +3195,7 @@
     "prefix": "SCI",
     "scope": "free42",
     "body": [
-      "SCI IND ST ${1:L|T|X|Y|Z}$0"
+      "SCI IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "SCI IND ST <stack>: Select scientific notation display format. Parameter: number of digits (indirect allowed)."
   },
@@ -3243,7 +3243,7 @@
     "prefix": "SF",
     "scope": "free42",
     "body": [
-      "SF IND ST ${1:L|T|X|Y|Z}$0"
+      "SF IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "SF IND ST <stack>: Set flag nn (00 ≤ nn ≤ 35; 81 ≤ nn ≤ 99). Parameter: flag number (indirect allowed)."
   },
@@ -3307,7 +3307,7 @@
     "prefix": "SOLVE",
     "scope": "free42",
     "body": [
-      "SOLVE IND ST ${1:L|T|X|Y|Z}$0"
+      "SOLVE IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "SOLVE IND ST <stack>: Solve for an unknown variable. Parameter: variable name (indirect allowed)."
   },
@@ -3355,7 +3355,7 @@
     "prefix": "STO",
     "scope": "free42",
     "body": [
-      "STO ST ${1:L|T|X|Y|Z}$0"
+      "STO ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "STO ST <stack>: Store a copy of x into a destination register or variable. Parameter: register or variable (indirect allowed)."
   },
@@ -3363,7 +3363,7 @@
     "prefix": "STO",
     "scope": "free42",
     "body": [
-      "STO IND ST ${1:L|T|X|Y|Z}$0"
+      "STO IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "STO IND ST <stack>: Store a copy of x into a destination register or variable. Parameter: register or variable (indirect allowed)."
   },
@@ -3403,7 +3403,7 @@
     "prefix": "STO",
     "scope": "free42",
     "body": [
-      "STO+ ST ${1:L|T|X|Y|Z}$0"
+      "STO+ ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "STO+ ST <stack>: Store addition. Adds x to an existing register or variable. Parameter: register or variable (indirect allowed)."
   },
@@ -3411,7 +3411,7 @@
     "prefix": "STO",
     "scope": "free42",
     "body": [
-      "STO+ IND ST ${1:L|T|X|Y|Z}$0"
+      "STO+ IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "STO+ IND ST <stack>: Store addition. Adds x to an existing register or variable. Parameter: register or variable (indirect allowed)."
   },
@@ -3451,7 +3451,7 @@
     "prefix": "STO",
     "scope": "free42",
     "body": [
-      "STO- ST ${1:L|T|X|Y|Z}$0"
+      "STO- ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "STO- ST <stack>: Store subtraction. Subtracts x from an existing register or variable. Parameter: register or variable (indirect allowed)."
   },
@@ -3459,7 +3459,7 @@
     "prefix": "STO",
     "scope": "free42",
     "body": [
-      "STO- IND ST ${1:L|T|X|Y|Z}$0"
+      "STO- IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "STO- IND ST <stack>: Store subtraction. Subtracts x from an existing register or variable. Parameter: register or variable (indirect allowed)."
   },
@@ -3499,7 +3499,7 @@
     "prefix": "STO",
     "scope": "free42",
     "body": [
-      "STO× ST ${1:L|T|X|Y|Z}$0"
+      "STO× ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "STO× ST <stack>: Store multiplication. Multiplies an existing register or variable by x. Parameter: register or variable (indirect allowed)."
   },
@@ -3507,7 +3507,7 @@
     "prefix": "STO",
     "scope": "free42",
     "body": [
-      "STO× IND ST ${1:L|T|X|Y|Z}$0"
+      "STO× IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "STO× IND ST <stack>: Store multiplication. Multiplies an existing register or variable by x. Parameter: register or variable (indirect allowed)."
   },
@@ -3547,7 +3547,7 @@
     "prefix": "STO",
     "scope": "free42",
     "body": [
-      "STO÷ ST ${1:L|T|X|Y|Z}$0"
+      "STO÷ ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "STO÷ ST <stack>: Store division. Divides an existing register or variable by x. Parameter: register or variable (indirect allowed)."
   },
@@ -3555,7 +3555,7 @@
     "prefix": "STO",
     "scope": "free42",
     "body": [
-      "STO÷ IND ST ${1:L|T|X|Y|Z}$0"
+      "STO÷ IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "STO÷ IND ST <stack>: Store division. Divides an existing register or variable by x. Parameter: register or variable (indirect allowed)."
   },
@@ -3659,7 +3659,7 @@
     "prefix": "TONE",
     "scope": "free42",
     "body": [
-      "TONE IND ST ${1:L|T|X|Y|Z}$0"
+      "TONE IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "TONE IND ST <stack>: Sounds a tone. Parameter: tone number (0–9) (indirect allowed)."
   },
@@ -3707,7 +3707,7 @@
     "prefix": "VARMENU",
     "scope": "free42",
     "body": [
-      "VARMENU IND ST ${1:L|T|X|Y|Z}$0"
+      "VARMENU IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "VARMENU IND ST <stack>: Create a variable menu using MVAR instructions following the specified global label. Parameter: global program label (indirect allowed)."
   },
@@ -3747,7 +3747,7 @@
     "prefix": "VIEW",
     "scope": "free42",
     "body": [
-      "VIEW ST ${1:L|T|X|Y|Z}$0"
+      "VIEW ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "VIEW ST <stack>: View the contents of a register or variable. Parameter: register or variable (indirect allowed)."
   },
@@ -3755,7 +3755,7 @@
     "prefix": "VIEW",
     "scope": "free42",
     "body": [
-      "VIEW IND ST ${1:L|T|X|Y|Z}$0"
+      "VIEW IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "VIEW IND ST <stack>: View the contents of a register or variable. Parameter: register or variable (indirect allowed)."
   },
@@ -3811,7 +3811,7 @@
     "prefix": "X",
     "scope": "free42",
     "body": [
-      "X<> ST ${1:L|T|X|Y|Z}$0"
+      "X<> ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "X<> ST <stack>: Swaps the contents of the x-register with another register or variable. Parameter: register or variable (indirect allowed)."
   },
@@ -3819,7 +3819,7 @@
     "prefix": "X",
     "scope": "free42",
     "body": [
-      "X<> IND ST ${1:L|T|X|Y|Z}$0"
+      "X<> IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "X<> IND ST <stack>: Swaps the contents of the x-register with another register or variable. Parameter: register or variable (indirect allowed)."
   },
@@ -3963,7 +3963,7 @@
     "prefix": "XEQ",
     "scope": "free42",
     "body": [
-      "XEQ ${1:A|B|C|D|E|F|G|H|I|J|a|b|c|d|e}$0"
+      "XEQ ${1|A,B,C,D,E,F,G,H,I,J,a,b,c,d,e|}$0"
     ],
     "description": "XEQ <alpha_local_label>: Execute a function or program. Parameter: function or label (indirect allowed)."
   },
@@ -3971,7 +3971,7 @@
     "prefix": "XEQ",
     "scope": "free42",
     "body": [
-      "XEQ IND ST ${1:L|T|X|Y|Z}$0"
+      "XEQ IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "XEQ IND ST <stack>: Execute a function or program. Parameter: function or label (indirect allowed)."
   },
@@ -4123,7 +4123,7 @@
     "prefix": "REG",
     "scope": "free42",
     "body": [
-      "ΣREG IND ST ${1:L|T|X|Y|Z}$0"
+      "ΣREG IND ST ${1|L,T,X,Y,Z|}$0"
     ],
     "description": "ΣREG IND ST <stack>: Summation registers. Defines which storage register begins the block of summation registers. Parameter: register number (indirect allowed)."
   },
@@ -4289,7 +4289,7 @@
   },
   "÷ ": {
     "prefix": "FOC",
-    "scope": "hp42s",
+    "scope": "free42",
     "body": [
       "÷$0"
     ],
@@ -4297,7 +4297,7 @@
   },
   "× ": {
     "prefix": "FOC",
-    "scope": "hp42s",
+    "scope": "free42",
     "body": [
       "×$0"
     ],
@@ -4361,7 +4361,7 @@
   },
   "␊: line feed": {
     "prefix": "FOC",
-    "scope": "hp42s",
+    "scope": "free42",
     "body": [
       "␊$0"
     ],
@@ -4550,5 +4550,147 @@
       "■$0"
     ],
     "description": "■: FOCAL character."
+  },
+  "LOOP control number [ccccccc.fffii]": {
+    "prefix": "LOOP",
+    "scope": "free42",
+    "body": [
+      "${1:ccccccc}.${2:fff}${3:ii}$0"
+    ],
+    "description": "Loop initial value [ccccccc.fffii]: ccccccc is the current counter value, fff is the counter test value, ii is the increment/decrement value."
+  },
+  "LOOP with ISG template": {
+    "prefix": "LOOP",
+    "scope": "free42",
+    "body": [
+      "${1:ccccccc}.${2:fff}${3:ii}",
+      "STO ${4:number}",
+      "LBL ${5:number}",
+      "$0",
+      "ISG ${4:number}",
+      "GTO ${5:number}"
+    ],
+    "description": "Loop ISG: Increment, skip if greater ! Sets and stores initial value, creates a label, creates a placeholder for the loop code and inserts the ISG loop check at the end."
+  },
+  "LOOP with DSE template": {
+    "prefix": "LOOP",
+    "scope": "free42",
+    "body": [
+      "${1:ccccccc}.${2:fff}${3:ii}",
+      "STO ${4:number}",
+      "LBL ${5:number}",
+      "$0",
+      "DSE ${4:number}",
+      "GTO ${5:number}"
+    ],
+    "description": "Loop DSE: Decrement, skip if less than or equal ! Sets and stores initial value, creates a label, creates a placeholder for the loop code and inserts the DSE loop check at the end."
+  },
+  "LOOP with condition template": {
+    "prefix": "LOOP",
+    "scope": "free42",
+    "body": [
+      "LBL ${1:number}",
+      "$0",
+      "${2|X<Y?,X=0?,X=Y?,X>0?,X>Y?,X≠0?,X≠Y?,X≤0?,X≤Y?,X≥0?,X≥Y?|}",
+      "GTO ${1:number}"
+    ],
+    "description": "Loop with condition: Creates a label, creates a placeholder for the loop code and inserts the condition at the end."
+  },
+  "LBL program template": {
+    "prefix": "LBL",
+    "scope": "free42",
+    "body": [
+      "{ Template }",
+      "LBL \"${1:name}\"",
+      "$0",
+      "END"
+    ],
+    "description": "LBL program template: Creates a header line, a label and the program end."
+  },
+  "MENU controlled branching template": {
+    "prefix": "MENU",
+    "scope": "free42",
+    "body": [
+      "CLMENU",
+      "\"${1:A}\"",
+      "KEY 1 XEQ \"${2:PA}\"",
+      "\"${3:B}\"",
+      "KEY 2 XEQ \"${4:PB}\"",
+      "\"${5:C}\"",
+      "KEY 3 XEQ \"${6:PC}\"",
+      "MENU",
+      "STOP$0"
+    ],
+    "description": "Menu controlled branching: A menu template."
+  },
+  "SF 25 using error trap template": {
+    "prefix": "SF",
+    "scope": "free42",
+    "body": [
+      "SF 25",
+      "$0",
+      "FC?C 25",
+      "GTO ${1:on_error}"
+    ],
+    "description": "SF 25: A template to ignore next error."
+  },
+  "PROMPT using two-line display template": {
+    "prefix": "PROMPT",
+    "scope": "free42",
+    "body": [
+      "\"${1:A}\"",
+      "⊢\"${2:B}␊${3:C}\"",
+      "⊢\"${4:D}\"",
+      "PROMPT$0"
+    ],
+    "description": "PROMPT using two-line display: A template for two-line display. '␊' is for the line feed."
+  },
+  "VARMENU using menu variables template": {
+    "prefix": "VARMENU",
+    "scope": "free42",
+    "body": [
+      "LBL \"${1:menu}\"",
+      "MVAR \"${2:A}\"",
+      "MVAR \"${3:B}\"",
+      "MVAR \"${4:C}\"",
+      "VARMENU \"${1:menu}\"",
+      "STOP$0"
+    ],
+    "description": "PROMPT using two-line display: A template for two-line display. '␊' is for the line feed."
+  },
+  "SOLVE template": {
+    "prefix": "SOLVE",
+    "scope": "free42",
+    "body": [
+      "{ Template }",
+      "LBL \"${1:SOLVE1}\"",
+      "// Declare the variables.",
+      "MVAR \"${2:A}\"",
+      "MVAR \"${3:B}\"",
+      "MVAR \"${4:C}\"",
+      "// Express the eqution, such that its right side equals 0.",
+      "RCL \"${2:A}\"",
+      "$0",
+      "END"
+    ],
+    "description": "SOLVE template: A template for the solver. Equation must equal to 0. Refer to 'HP-42S Programming Examples' page 78."
+  },
+  "INTEG template": {
+    "prefix": "INTEG",
+    "scope": "free42",
+    "body": [
+      "{ Template }",
+      "LBL \"${1:INTEG1}\"",
+      "// Declare the variables.",
+      "MVAR \"${2:A}\"",
+      "MVAR \"${3:B}\"",
+      "MVAR \"${4:C}\"",
+      "MVAR \"${5:D}\"",
+      "// Express the integrand.",
+      "RCL \"${2:A}\"",
+      "$0",
+      "END"
+    ],
+    "description": "INTEG template: A template for the integration application. Refer to 'HP-42S Programming Examples' page 126."
   }
 }
