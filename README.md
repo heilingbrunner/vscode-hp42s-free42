@@ -1,4 +1,4 @@
-# HP42S - free42
+# HP42S-free42
 
 ![hp42s-free42-extension-logo](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/vscode-hp42s-free42-logo.png)
 
