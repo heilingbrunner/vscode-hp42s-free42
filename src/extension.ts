@@ -2,9 +2,6 @@ import * as vscode from 'vscode';
 import { Tool } from './tool';
 
 export function activate(context: vscode.ExtensionContext) {
-  console.log(
-    "Congratulations, your extension 'hp42s/free42-extension' is now active!"
-  );
 
   let tool = new Tool();
 
@@ -23,9 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
     () => {
       let editor = vscode.window.activeTextEditor;
       if (editor) {
-        //vscode.window.showInformationMessage('hp42s/free42: Encoding ...');
         tool.encode(editor);
-        //vscode.window.showInformationMessage('hp42s/free42: Encoding done.');
       }
     }
   );
