@@ -4,7 +4,7 @@ import { CodeError } from '../common/codeerror';
 import { RawLine } from './rawline';
 
 /** FOCAL (Forty-one calculator language) see https://en.wikipedia.org/wiki/FOCAL_(Hewlett-Packard) */
-export class FOCAL {
+export class EncoderFOCAL {
   //#region Members
 
   static rawCode: Map<string, string> = new Map<string, string>();
@@ -18,23 +18,23 @@ export class FOCAL {
   //#region public
 
   static initializeForEncode() {
-    if (!FOCAL.initializedForEncode) {
+    if (!EncoderFOCAL.initializedForEncode) {
       // transform arr_rawCode -> rawCode
-      FOCAL.arr_rawCode.forEach((e: { key: string; value: string }) => {
-        FOCAL.rawCode.set(e.key, e.value);
+      EncoderFOCAL.arr_rawCode.forEach((e: { key: string; value: string }) => {
+        EncoderFOCAL.rawCode.set(e.key, e.value);
       });
 
       // transform arr_stack -> dic_stack
-      FOCAL.arr_stack.forEach((e: { key: string; value: number }) => {
-        FOCAL.stack.set(e.key, e.value);
+      EncoderFOCAL.arr_stack.forEach((e: { key: string; value: number }) => {
+        EncoderFOCAL.stack.set(e.key, e.value);
       });
 
       // transform arr_special -> dic_special
-      FOCAL.arr_charFocal.forEach((e: { key: string; value: number }) => {
-        FOCAL.charFocal.set(e.key, e.value);
+      EncoderFOCAL.arr_charFocal.forEach((e: { key: string; value: number }) => {
+        EncoderFOCAL.charFocal.set(e.key, e.value);
       });
 
-      FOCAL.initializedForEncode = true;
+      EncoderFOCAL.initializedForEncode = true;
     }
   }
 
@@ -53,7 +53,7 @@ export class FOCAL {
     if (parser.out !== undefined) {
 
       // free42 commands: ACCEL|LOCAT|HEADING|ADATE|ATIME|ATIME24|CLK12|CLK24|DATE|DATE+|DDAYS|DMY|DOW|MDY|TIME
-      languageIdFromCode = FOCAL.getLanguageIdFromCode(parser, languageId);
+      languageIdFromCode = EncoderFOCAL.getLanguageIdFromCode(parser, languageId);
 
       if (languageId !== languageIdFromCode) {
         progErrorText =
@@ -71,10 +71,10 @@ export class FOCAL {
             parser.str &&
             parser.out.match(/`str`/)
           ) {
-            if (FOCAL.rawCode.has(parser.out)) {
-              raw = FOCAL.rawCode.get(parser.out);
+            if (EncoderFOCAL.rawCode.has(parser.out)) {
+              raw = EncoderFOCAL.rawCode.get(parser.out);
               if (raw !== undefined) {
-                raw = FOCAL.insertStringInRaw(raw, parser.str);
+                raw = EncoderFOCAL.insertStringInRaw(raw, parser.str);
               }
             }
             if (raw === undefined) {
@@ -90,7 +90,7 @@ export class FOCAL {
             parser.num &&
             parser.out.match(/`num`/)
           ) {
-            raw = FOCAL.convertNumberToRaw(parser.num);
+            raw = EncoderFOCAL.convertNumberToRaw(parser.num);
             //useless: if (raw === undefined) {..}
           }
 
@@ -99,9 +99,9 @@ export class FOCAL {
             raw === undefined &&
             progErrorText === undefined &&
             parser.token &&
-            FOCAL.rawCode.has(parser.out)
+            EncoderFOCAL.rawCode.has(parser.out)
           ) {
-            raw = FOCAL.rawCode.get(parser.out);
+            raw = EncoderFOCAL.rawCode.get(parser.out);
             //useless: if (raw === undefined) {..}
           }
 
@@ -127,11 +127,11 @@ export class FOCAL {
           // is it a key ...
           // KEY `key` GTO IND `nam` - Part 1
           if (parser.key && parser.out.match(/`key`/)) {
-            if (raw === undefined && FOCAL.rawCode.has(parser.out)) {
-              raw = FOCAL.rawCode.get(parser.out);
+            if (raw === undefined && EncoderFOCAL.rawCode.has(parser.out)) {
+              raw = EncoderFOCAL.rawCode.get(parser.out);
             }
             if (raw !== undefined && progErrorText === undefined) {
-              raw = FOCAL.insertNumberInRaw(raw, parser.key);
+              raw = EncoderFOCAL.insertNumberInRaw(raw, parser.key);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.key + "' in '" + parser.code + "'";
@@ -142,11 +142,11 @@ export class FOCAL {
           // KEY `key` GTO IND `nam` - Part 2
           // ASSIGN `nam` TO `csk` - Part 1
           if (parser.nam && parser.out.match(/`nam`/)) {
-            if (raw === undefined && FOCAL.rawCode.has(parser.out)) {
-              raw = FOCAL.rawCode.get(parser.out);
+            if (raw === undefined && EncoderFOCAL.rawCode.has(parser.out)) {
+              raw = EncoderFOCAL.rawCode.get(parser.out);
             }
             if (raw !== undefined && progErrorText === undefined) {
-              raw = FOCAL.insertStringInRaw(raw, parser.nam);
+              raw = EncoderFOCAL.insertStringInRaw(raw, parser.nam);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.nam + "' in '" + parser.code + "'";
@@ -157,7 +157,7 @@ export class FOCAL {
           // ASSIGN `nam` TO `csk` - Part 2
           if (parser.csk && parser.out.match(/`csk`/)) {
             if (raw !== undefined && progErrorText === undefined) {
-              raw = FOCAL.insertNumberInRaw(raw, parser.csk);
+              raw = EncoderFOCAL.insertNumberInRaw(raw, parser.csk);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.csk + "' in '" + parser.code + "'";
@@ -166,11 +166,11 @@ export class FOCAL {
 
           // is it a global label ...
           if (parser.lbl && parser.out.match(/`lbl`/)) {
-            if (raw === undefined && FOCAL.rawCode.has(parser.out)) {
-              raw = FOCAL.rawCode.get(parser.out);
+            if (raw === undefined && EncoderFOCAL.rawCode.has(parser.out)) {
+              raw = EncoderFOCAL.rawCode.get(parser.out);
             }
             if (raw !== undefined && progErrorText === undefined) {
-              raw = FOCAL.insertStringInRaw(raw, parser.lbl);
+              raw = EncoderFOCAL.insertStringInRaw(raw, parser.lbl);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.lbl + "' in '" + parser.code + "'";
@@ -179,11 +179,11 @@ export class FOCAL {
 
           // is it a tone ...
           if (parser.ton && parser.out.match(/tn/)) {
-            if (raw === undefined && FOCAL.rawCode.has(parser.out)) {
-              raw = FOCAL.rawCode.get(parser.out);
+            if (raw === undefined && EncoderFOCAL.rawCode.has(parser.out)) {
+              raw = EncoderFOCAL.rawCode.get(parser.out);
             }
             if (raw !== undefined && progErrorText === undefined) {
-              raw = FOCAL.insertNumberInRaw(raw, parser.ton);
+              raw = EncoderFOCAL.insertNumberInRaw(raw, parser.ton);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.ton + "' in '" + parser.code + "'";
@@ -192,11 +192,11 @@ export class FOCAL {
 
           // is it a local char label A-J,a-e coded as number ......
           if (parser.clb && parser.out.match(/(ll)/)) {
-            if (raw === undefined && FOCAL.rawCode.has(parser.out)) {
-              raw = FOCAL.rawCode.get(parser.out);
+            if (raw === undefined && EncoderFOCAL.rawCode.has(parser.out)) {
+              raw = EncoderFOCAL.rawCode.get(parser.out);
             }
             if (raw !== undefined && progErrorText === undefined) {
-              raw = FOCAL.insertNumberInRaw(raw, parser.clb);
+              raw = EncoderFOCAL.insertNumberInRaw(raw, parser.clb);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.clb + "' in '" + parser.code + "'";
@@ -205,11 +205,11 @@ export class FOCAL {
 
           // flags
           if (parser.flg && parser.out.match(/(rr)/)) {
-            if (raw === undefined && FOCAL.rawCode.has(parser.out)) {
-              raw = FOCAL.rawCode.get(parser.out);
+            if (raw === undefined && EncoderFOCAL.rawCode.has(parser.out)) {
+              raw = EncoderFOCAL.rawCode.get(parser.out);
             }
             if (raw !== undefined && progErrorText === undefined) {
-              raw = FOCAL.insertNumberInRaw(raw, parser.flg);
+              raw = EncoderFOCAL.insertNumberInRaw(raw, parser.flg);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.flg + "' in '" + parser.code + "'";
@@ -218,11 +218,11 @@ export class FOCAL {
 
           // is it a register, number labels, digits, local number label 15-99 ......
           if (parser.num && parser.out.match(/(sd|sl|sr|ll|nn|rr)/)) {
-            if (raw === undefined && FOCAL.rawCode.has(parser.out)) {
-              raw = FOCAL.rawCode.get(parser.out);
+            if (raw === undefined && EncoderFOCAL.rawCode.has(parser.out)) {
+              raw = EncoderFOCAL.rawCode.get(parser.out);
             }
             if (raw !== undefined && progErrorText === undefined) {
-              raw = FOCAL.insertNumberInRaw(raw, parser.num);
+              raw = EncoderFOCAL.insertNumberInRaw(raw, parser.num);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.num + "' in '" + parser.code + "'";
@@ -231,8 +231,8 @@ export class FOCAL {
 
           // 10 or 11 digits
           if (parser.out.match(/(ENG|FIX|SCI) (10|11)/)) {
-            if (raw === undefined && FOCAL.rawCode.has(parser.out)) {
-              raw = FOCAL.rawCode.get(parser.out);
+            if (raw === undefined && EncoderFOCAL.rawCode.has(parser.out)) {
+              raw = EncoderFOCAL.rawCode.get(parser.out);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.code + "'";
@@ -241,11 +241,11 @@ export class FOCAL {
 
           // is it a register/indirect count of digit/flag ...
           if (parser.num && parser.out.match(/rr/)) {
-            if (raw === undefined && FOCAL.rawCode.has(parser.out)) {
-              raw = FOCAL.rawCode.get(parser.out);
+            if (raw === undefined && EncoderFOCAL.rawCode.has(parser.out)) {
+              raw = EncoderFOCAL.rawCode.get(parser.out);
             }
             if (raw !== undefined && progErrorText === undefined) {
-              raw = FOCAL.insertNumberInRaw(raw, parser.num);
+              raw = EncoderFOCAL.insertNumberInRaw(raw, parser.num);
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.num + "' in '" + parser.code + "'";
@@ -254,12 +254,12 @@ export class FOCAL {
 
           // is it a stack ...
           if (parser.stk && parser.out.match(/`stk`/)) {
-            if (raw === undefined && FOCAL.rawCode.has(parser.out)) {
-              raw = FOCAL.rawCode.get(parser.out);
+            if (raw === undefined && EncoderFOCAL.rawCode.has(parser.out)) {
+              raw = EncoderFOCAL.rawCode.get(parser.out);
             }
             if (raw !== undefined && progErrorText === undefined) {
-              const int = FOCAL.stack.get(parser.stk);
-              raw = FOCAL.insertNumberInRaw(raw, String(int));
+              const int = EncoderFOCAL.stack.get(parser.stk);
+              raw = EncoderFOCAL.insertNumberInRaw(raw, String(int));
             }
             if (raw === undefined) {
               progErrorText = "'" + parser.stk + "' in '" + parser.code + "'";
@@ -341,11 +341,11 @@ export class FOCAL {
         // loop each character in str and append hex to opcode
         str.split('').forEach(character => {
           let hexcode = character.charCodeAt(0);
-          if (FOCAL.charFocal.has(character)) {
-            let v = FOCAL.charFocal.get(character);
+          if (EncoderFOCAL.charFocal.has(character)) {
+            let v = EncoderFOCAL.charFocal.get(character);
             hexcode = v ? v : 0;
           }
-          raw += ' ' + FOCAL.convertByteAsHex(hexcode);
+          raw += ' ' + EncoderFOCAL.convertByteAsHex(hexcode);
         });
 
         // ASSIGN opcode search, replace aa
@@ -360,7 +360,7 @@ export class FOCAL {
         // concat three parts ...
         raw =
           raw.substr(0, pos_Fn) + // 1. part
-          FOCAL.convertByteAsHex(240 + length_hex_after_Fn) + // 2. part
+          EncoderFOCAL.convertByteAsHex(240 + length_hex_after_Fn) + // 2. part
           raw.substr(pos_Fn + 2); // 3. part
       } else {
         raw = undefined;
@@ -378,30 +378,30 @@ export class FOCAL {
 
       switch (true) {
         case /kk/.test(raw):
-          raw = raw.replace(/kk/, FOCAL.convertByteAsHex(int));
+          raw = raw.replace(/kk/, EncoderFOCAL.convertByteAsHex(int));
           break;
 
         case /rr/.test(raw):
-          raw = raw.replace(/rr/, FOCAL.convertByteAsHex(int));
+          raw = raw.replace(/rr/, EncoderFOCAL.convertByteAsHex(int));
           break;
 
         case /nn/.test(raw):
           // numbered label 00-99, digits 00-11
-          raw = raw.replace(/nn/, FOCAL.convertByteAsHex(int));
+          raw = raw.replace(/nn/, EncoderFOCAL.convertByteAsHex(int));
           break;
 
         case /ll/.test(raw):
           // char label as number A-J,a-e
-          raw = raw.replace(/ll/, 'CF ' + FOCAL.convertByteAsHex(int));
+          raw = raw.replace(/ll/, 'CF ' + EncoderFOCAL.convertByteAsHex(int));
           break;
 
         case /ww ww/.test(raw):
           // SIZE
           raw = raw.replace(
             /ww ww/,
-            FOCAL.convertByteAsHex(int / 256) +
+            EncoderFOCAL.convertByteAsHex(int / 256) +
               ' ' +
-              FOCAL.convertByteAsHex(int % 256)
+              EncoderFOCAL.convertByteAsHex(int % 256)
           );
           break;
 
@@ -411,7 +411,7 @@ export class FOCAL {
           if (match) {
             raw = raw.replace(
               /([\dA-F])l/,
-              FOCAL.convertByteAsHex(parseInt('0x' + match[1] + '0') + 1 + int)
+              EncoderFOCAL.convertByteAsHex(parseInt('0x' + match[1] + '0') + 1 + int)
             );
           }
           break;
@@ -422,7 +422,7 @@ export class FOCAL {
           if (match) {
             raw = raw.replace(
               /(\d)r/,
-              FOCAL.convertByteAsHex(parseInt(match[1]) * 16 + int)
+              EncoderFOCAL.convertByteAsHex(parseInt(match[1]) * 16 + int)
             );
           }
           break;

@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import { unstring } from '../typedefs';
 import { CodeError } from '../common/codeerror';
 import { Configuration } from '../helper/configuration';
-import { FOCAL } from './focal';
+import { EncoderFOCAL } from './encoderfocal';
 
 /** Command parser for a code line */
 export class RpnParser {
@@ -265,7 +265,7 @@ export class RpnParser {
         /(÷|×|√|∫|░|Σ|▶|π|¿|≤|\[LF\]|≥|≠|↵|↓|→|←|µ|μ|£|₤|°|Å|Ñ|Ä|∡|ᴇ|Æ|…|␛|Ö|Ü|▒|■|•|\\\\|↑)/
       )
     ) {
-      FOCAL.charFocal.forEach((value, key) => {
+      EncoderFOCAL.charFocal.forEach((value, key) => {
         const regex = new RegExp(key, 'g');
         if (str) {
           str = str.replace(regex, String.fromCharCode(value));

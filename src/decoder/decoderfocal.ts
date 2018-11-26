@@ -1,7 +1,7 @@
 import { unstring } from '../typedefs';
 import { CodeError } from '../common/codeerror';
 
-export class RAW {
+export class DecoderFOCAL {
   //#region Members
 
   static opCode: Map<string, string> = new Map<string, string>();
@@ -13,13 +13,13 @@ export class RAW {
   //#region public
 
   static initializeForDecode() {
-    if (!RAW.initializedForDecode) {
+    if (!DecoderFOCAL.initializedForDecode) {
       // transform arr_opCode -> opCode
-      RAW.arr_opCode.forEach((e: { key: string; value: string }) => {
-        RAW.opCode.set(e.key, e.value);
+      DecoderFOCAL.arr_opCode.forEach((e: { key: string; value: string }) => {
+        DecoderFOCAL.opCode.set(e.key, e.value);
       });
 
-      RAW.initializedForDecode = true;
+      DecoderFOCAL.initializedForDecode = true;
     }
   }
 
@@ -69,7 +69,7 @@ export class RAW {
 
         // loop each character in str and append hex to opcode
         str.split('').forEach(character => {
-          raw += ' ' + RAW.convertByteAsHex(character.charCodeAt(0));
+          raw += ' ' + DecoderFOCAL.convertByteAsHex(character.charCodeAt(0));
         });
 
         // ASSIGN opcode search, replace aa
@@ -84,7 +84,7 @@ export class RAW {
         // concat three parts ...
         raw =
           raw.substr(0, pos_Fn) + // 1. part
-          RAW.convertByteAsHex(240 + length_hex_after_Fn) + // 2. part
+          DecoderFOCAL.convertByteAsHex(240 + length_hex_after_Fn) + // 2. part
           raw.substr(pos_Fn + 2); // 3. part
       } else {
         raw = undefined;
@@ -102,30 +102,30 @@ export class RAW {
 
       switch (true) {
         case /kk/.test(raw):
-          raw = raw.replace(/kk/, RAW.convertByteAsHex(int));
+          raw = raw.replace(/kk/, DecoderFOCAL.convertByteAsHex(int));
           break;
 
         case /rr/.test(raw):
-          raw = raw.replace(/rr/, RAW.convertByteAsHex(int));
+          raw = raw.replace(/rr/, DecoderFOCAL.convertByteAsHex(int));
           break;
 
         case /nn/.test(raw):
           // numbered label 00-99, digits 00-11
-          raw = raw.replace(/nn/, RAW.convertByteAsHex(int));
+          raw = raw.replace(/nn/, DecoderFOCAL.convertByteAsHex(int));
           break;
 
         case /ll/.test(raw):
           // char label as number A-J,a-e
-          raw = raw.replace(/ll/, 'CF ' + RAW.convertByteAsHex(int));
+          raw = raw.replace(/ll/, 'CF ' + DecoderFOCAL.convertByteAsHex(int));
           break;
 
         case /ww ww/.test(raw):
           // SIZE
           raw = raw.replace(
             /ww ww/,
-            RAW.convertByteAsHex(int / 256) +
+            DecoderFOCAL.convertByteAsHex(int / 256) +
               ' ' +
-              RAW.convertByteAsHex(int % 256)
+              DecoderFOCAL.convertByteAsHex(int % 256)
           );
           break;
 
@@ -135,7 +135,7 @@ export class RAW {
           if (match) {
             raw = raw.replace(
               /([\dA-F])l/,
-              RAW.convertByteAsHex(parseInt('0x' + match[1] + '0') + 1 + int)
+              DecoderFOCAL.convertByteAsHex(parseInt('0x' + match[1] + '0') + 1 + int)
             );
           }
           break;
@@ -146,7 +146,7 @@ export class RAW {
           if (match) {
             raw = raw.replace(
               /(\d)r/,
-              RAW.convertByteAsHex(parseInt(match[1]) * 16 + int)
+              DecoderFOCAL.convertByteAsHex(parseInt(match[1]) * 16 + int)
             );
           }
           break;

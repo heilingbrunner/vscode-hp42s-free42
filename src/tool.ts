@@ -96,28 +96,31 @@ export class Tool {
 
       if (document && languageId.match(/raw/)) {
         // start decoding ...
-        let result = this.decoder.decode(languageId, editor);
+        let result = this.decoder.decode(editor);
         if (result) {
           // no decoding errors ...
-          if (result.errors === undefined) {
+          if (result.succeeded) {
             // save result and show messages
-            if (result.rpn !== undefined) {
-              let rpn = result.rpn.join(' ').trim();
-              let hex = result.rpn.join('\r\n').replace(/ /g, '');
-              //this.fileSystem.writeText(filename, output);
+            if (result.programs !== undefined) {
+              // Save result
+              let rpn = result.getRpn();
+              let filename = '' + result.languageId;
+              //this.fileSystem.writeText(filename, rpn);
             } else {
               // nothing happend ...
               vscode.window.showInformationMessage(
-                'hp42s/free42: No raw found.'
+                'hp42s/free42: No raw format found.'
               );
             }
           } else {
-            if (result.errors && result.errors.length > 0) {
-              // get first error ...
-              let firstRawError = result.errors[0];
-              let firstRawErrorText =
-                firstRawError !== undefined ? firstRawError.toString() : '';
-            }
+            let firstError = result.getFirstError();
+            let firstErrorText =
+            firstError !== undefined ? firstError.toString() : '';
+
+            // Show error ...
+            vscode.window.showErrorMessage(
+              'hp42s/free42: Decoding failed. \r\n' + firstErrorText
+            );
           }
         }
       } else {

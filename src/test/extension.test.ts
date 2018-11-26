@@ -6,7 +6,7 @@
 // The module 'assert' provides assertion methods from node
 import * as assert from 'assert';
 import { RpnParser } from '../encoder/rpnparser';
-import { FOCAL } from '../encoder/focal';
+import { EncoderFOCAL } from '../encoder/encoderfocal';
 import { RawLine } from '../encoder/rawline';
 
 // You can import and use all API from the 'vscode' module
@@ -38,13 +38,13 @@ suite('Extension Tests', function() {
   });
 
   test('Encoder Tests', function() {
-    FOCAL.initializeForEncode();
+    EncoderFOCAL.initializeForEncode();
 
     let result: RawLine;
     let parser = new RpnParser(false);
 
     parser.read('LBL "ABC"');
-    result = FOCAL.toRaw('hp42s', parser);
+    result = EncoderFOCAL.toRaw('hp42s', parser);
     assert.equal(
       'C0 00 F4 00 41 42 43',
       result.raw,
@@ -52,7 +52,7 @@ suite('Extension Tests', function() {
     );
 
     parser.read('"Some Text"');
-    result = FOCAL.toRaw('hp42s', parser);
+    result = EncoderFOCAL.toRaw('hp42s', parser);
     assert.equal(
       'F9 53 6F 6D 65 20 54 65 78 74',
       result.raw,
@@ -60,7 +60,7 @@ suite('Extension Tests', function() {
     );
 
     parser.read('1234');
-    result = FOCAL.toRaw('hp42s', parser);
+    result = EncoderFOCAL.toRaw('hp42s', parser);
     assert.equal(
       '11 12 13 14 00',
       result.raw,
