@@ -30,7 +30,8 @@
   "activationEvents": [
     "onLanguage:hp42s",
     "onLanguage:free42",
-    "onCommand:extension.Encode"
+    "onCommand:extension.Encode",
+    "onCommand:extension.Decode"
   ],
   "contributes": {
     "languages": [
@@ -96,6 +97,10 @@
       {
         "command": "extension.Encode",
         "title": "hp42s/free42: Encode Code"
+      },
+      {
+        "command": "extension.Decode",
+        "title": "hp42s/free42: Decode Raw"
       }
     ],
     "configuration": {

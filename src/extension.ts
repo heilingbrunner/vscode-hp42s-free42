@@ -25,21 +25,19 @@ export function activate(context: vscode.ExtensionContext) {
     }
   );
 
-  //let disposableCommandDecode = vscode.commands.registerCommand(
-  //  'extension.Decode',
-  //  () => {
-  //    let editor = vscode.window.activeTextEditor;
-  //    if (editor) {
-  //      //vscode.window.showInformationMessage('hp42s/free42: Decoding ...');
-  //      tool.decode(editor);
-  //      vscode.window.showInformationMessage('hp42s/free42: Decoding done.');
-  //    }
-  //  }
-  //);
+  let disposableCommandDecode = vscode.commands.registerCommand(
+    'extension.Decode',
+    () => {
+      let editor = vscode.window.activeTextEditor;
+      if (editor) {
+        tool.decode(editor);
+      }
+    }
+  );
 
   context.subscriptions.push(tool);
   context.subscriptions.push(disposableCommandEncode);
-  //context.subscriptions.push(disposableCommandDecode);
+  context.subscriptions.push(disposableCommandDecode);
   context.subscriptions.push(disposableFormattingEditProvider);
 }
 

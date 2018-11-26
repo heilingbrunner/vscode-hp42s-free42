@@ -18,10 +18,41 @@ export class Decoder {
     
     let programs: RpnProgram[] = [];
 
-    // TODO: ...
+    let document = editor.document;
+    let bytes = this.readFile(document);
 
     return new DecoderResult(programs);
   }
 
+  readFile(document: vscode.TextDocument): number[] {
+    let docLineCount = document.lineCount;
+    let languageId = document.languageId;
+    let bytes: number[] = [];
+    let content: string = '';
+
+    for (let docLineIndex = 0; docLineIndex < docLineCount; docLineIndex++) {
+      let line = document.lineAt(docLineIndex);
+      let linetext = line.text;
+      switch (languageId) {
+        case "hexdump":
+
+          content.concat(linetext);
+          break;
+        case "plaintext":
+          break;
+        case "raw":
+          break;
+        default:
+          break;
+      }
+    }
+
+    return bytes;
+  }
+
   dispose() {}
 }
+
+
+
+
