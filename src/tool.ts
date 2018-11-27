@@ -94,7 +94,7 @@ export class Tool {
       let document = editor.document;
       let languageId = document.languageId.toLowerCase();
 
-      if (document && languageId.match(/(raw|hexdump|plaintext)/)) {
+      if (document && languageId.match(/hexdump/)) {
         // start decoding ...
         let result = this.decoder.decode(editor);
         if (result) {
