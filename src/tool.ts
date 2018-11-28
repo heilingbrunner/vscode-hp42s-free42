@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 import { Configuration } from './helper/configuration';
-import { FileSystem } from './helper/filesystem';
+import { writeBytes, writeText, deleteFile, getPhysicalPath, existsSync } from './helper/filesystem';
 import { EncoderResult } from './encoder/encoderesult';
 import { Encoder } from './encoder/encoder';
 import { RpnFormatter } from './encoder/rpnformatter';
@@ -13,13 +13,11 @@ export class Tool {
   private encoder: Encoder;
   private decoder: Decoder;
   private formatter: RpnFormatter;
-  private fileSystem: FileSystem;
 
   constructor() {
     this.encoder = new Encoder();
     this.decoder = new Decoder();
     this.formatter = new RpnFormatter();
-    this.fileSystem = new FileSystem();
   }
 
   encode(editor: vscode.TextEditor) {
@@ -42,11 +40,11 @@ export class Tool {
               let size = result.getSize();
 
               // Save *.raw output ...
-              this.fileSystem.writeBytes(document.fileName + '.raw', raw);
+              writeBytes(document.fileName + '.raw', raw);
 
               // Save *.hex output ...
               if (config.generateHexFile) {
-                this.fileSystem.writeText(document.fileName + '.hex', hex);
+                writeText(document.fileName + '.hex', hex);
               }
 
               // Show Info ...
@@ -61,7 +59,7 @@ export class Tool {
             }
 
             // Delete log file
-            this.fileSystem.deleteFile(document.fileName + '.log');
+            deleteFile(document.fileName + '.log');
           } else {
             // handle ecoding errors ...
             let firstError = result.getFirstError();
@@ -105,7 +103,7 @@ export class Tool {
               // Save result
               let rpn = result.getRpn();
               let filename = '' + result.languageId;
-              //this.fileSystem.writeText(filename, rpn);
+              //writeText(filename, rpn);
             } else {
               // nothing happend ...
               vscode.window.showInformationMessage(
@@ -139,6 +137,32 @@ export class Tool {
     }
   }
 
+  showRaw(fileUri: vscode.Uri | undefined){
+    if (typeof fileUri === 'undefined' || !(fileUri instanceof vscode.Uri)) {
+      if (vscode.window.activeTextEditor === undefined) {
+          vscode.commands.executeCommand('hexdump.hexdumpPath');
+          return;
+      }
+      fileUri = vscode.window.activeTextEditor.document.uri;
+    }
+
+    if (fileUri.scheme === 'hexdump') {
+        //toggle with actual file
+        var filePath = getPhysicalPath(fileUri);
+        for (const editor of vscode.window.visibleTextEditors) {
+            if (editor.document.uri.fsPath === filePath) {
+                vscode.window.showTextDocument(editor.document, editor.viewColumn);
+                return;
+            }
+        }
+
+        vscode.commands.executeCommand("vscode.open", vscode.Uri.file(filePath));
+
+    } else {
+        this.hexdumpFile(fileUri.fsPath);
+    }
+  }
+
   /** Create log file */
   private writeErrorsToLog(filename: string, result: EncoderResult) {
     let allErrors = '';
@@ -152,10 +176,11 @@ export class Tool {
         }
       });
 
-      this.fileSystem.writeText(filename, allErrors);
+      writeText(filename, allErrors);
     }
   }
 
+  /** {} Head lines */
   private updateHeadLines(
     editor: vscode.TextEditor,
     result: EncoderResult,
@@ -195,10 +220,24 @@ export class Tool {
       });
   }
 
+  private hexdumpFile(filePath: string) {
+    if (typeof filePath === 'undefined') {
+        return;
+    }
+    if (!existsSync(filePath)) {
+        return;
+    }
+
+    let fileUri = vscode.Uri.file(filePath.concat('.rawhex'));
+    // add 'rawhex' extension to assign an editorLangId
+    let hexUri = fileUri.with({ scheme: 'rawhex' });
+
+    vscode.commands.executeCommand('vscode.open', hexUri);
+}
+
   dispose() {
     this.encoder.dispose();
     this.decoder.dispose();
     this.formatter.dispose();
-    this.fileSystem.dispose();
   }
 }

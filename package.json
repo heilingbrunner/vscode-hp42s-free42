@@ -31,7 +31,8 @@
     "onLanguage:hp42s",
     "onLanguage:free42",
     "onCommand:extension.Encode",
-    "onCommand:extension.Decode"
+    "onCommand:extension.Decode",
+    "onCommand:extension.ShowRaw"
   ],
   "contributes": {
     "languages": [
@@ -101,6 +102,10 @@
       {
         "command": "extension.Decode",
         "title": "hp42s/free42: Decode Raw"
+      },
+      {
+        "command": "extension.ShowRaw",
+        "title": "hp42s/free42: Show Raw"
       }
     ],
     "configuration": {
@@ -133,6 +138,13 @@
           "markdownDescription": "Formatter trims start and end of line."
         }
       }
+    },
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "extension.ShowRaw"
+        }
+      ]
     }
   },
   "main": "./out/extension",
