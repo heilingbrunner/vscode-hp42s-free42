@@ -41,23 +41,39 @@ export default class RawHexContentProvider
               'Open'
             );
       if (proceed === 'Open') {
-        let hexString = '';
+
+        //Example:
+        //   Offset: 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+        // 00000000: C0 00 F8 00 45 51 55 45 45 4E 53 FD 38 20 51 75 
+        // 00000010: 65 65 6E 73 20 76 31 2E 30 F7 7F 20 52 65 61 64
+        //Offset
+        let content =
+          '  Offset: 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F\r\n00000000: ';
         let buf = getBuffer(uri);
         if (buf) {
           let length = buf.length > sizeDisplay ? sizeDisplay : buf.length;
+
           for (let index = 0; index < length; index++) {
             const byte = buf[index];
-            //hexString += element.toString(16).toUpperCase() + ' ';
-            hexString +=
-              ('0' + (byte & 0xff).toString(16)).slice(-2).toUpperCase() + ' ';
+            //leading address
+            const address = ('0000000' + ((index + 1) & 0xffffffff).toString(16)).slice(-8).toUpperCase();
+
+            // next line ?
+            //              not first line      &&     last line
+            const nl = ((index + 1) % 16 === 0) && (index < (length-1)) ? ' \r\n' + address + ': ' : ' ';
+
+            // add to string
+            content +=
+              ('0' + (byte & 0xff).toString(16)).slice(-2).toUpperCase() +
+              nl;
           }
 
           if (buf.length > sizeDisplay) {
-            hexString += tail;
+            content += tail;
           }
         }
 
-        return resolve(hexString.trim());
+        return resolve(content.trimRight());
       } else {
         return resolve('(rawhex cancelled.)');
       }

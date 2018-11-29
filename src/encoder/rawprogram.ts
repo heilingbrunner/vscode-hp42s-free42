@@ -1,5 +1,5 @@
-import { Bytes } from '../helper/bytes';
-import { RawLine } from './rawline';
+import { toBytes } from '../helper/bytes';
+import { RawLine } from '../common/rawline';
 import { CodeError } from '../common/codeerror';
 
 /** Class for a program, which contains several raw lines */
@@ -65,9 +65,9 @@ export class RawProgram {
     let rawAll = this.getRaw();
     if (rawAll.endsWith('C0 00 0D')) {
       // ignore last END, substract 3 bytes
-      this.size = Bytes.toBytes(rawAll).length - 3;
+      this.size = toBytes(rawAll).length - 3;
     } else {
-      this.size = Bytes.toBytes(rawAll).length;
+      this.size = toBytes(rawAll).length;
     }
 
     return this.size;

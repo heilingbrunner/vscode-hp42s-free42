@@ -1,5 +1,5 @@
 import { unstring } from '../typedefs';
-import { CodeError } from '../common/codeerror';
+import { CodeError } from './codeerror';
 
 /** Class for a raw line */
 export class RawLine {

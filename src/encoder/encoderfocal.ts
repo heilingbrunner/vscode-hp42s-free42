@@ -1,7 +1,7 @@
 import { unstring } from '../typedefs';
 import { RpnParser } from './rpnparser';
 import { CodeError } from '../common/codeerror';
-import { RawLine } from './rawline';
+import { RawLine } from '../common/rawline';
 
 /** FOCAL (Forty-one calculator language) see https://en.wikipedia.org/wiki/FOCAL_(Hewlett-Packard) */
 export class EncoderFOCAL {

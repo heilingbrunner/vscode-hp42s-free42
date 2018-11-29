@@ -1,14 +1,10 @@
-export class Bytes {
+/** Hex string AA BB CC to byte array */
+export function toBytes(content: string): number[] {
+  var bytes: number[] = [];
 
-  /** Convert text to bytes */
-  static toBytes(content: string): number[] {
-    var bytes: number[] = [];
+  content.split(/\s+/).forEach(hex => {
+    bytes.push(parseInt(hex, 16));
+  });
 
-    content.split(/\s+/).forEach(element => {
-      bytes.push(parseInt(element, 16));
-    });
-
-    return bytes;
-  }
-  
+  return bytes;
 }

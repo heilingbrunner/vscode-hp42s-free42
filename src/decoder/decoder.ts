@@ -18,12 +18,14 @@ export class Decoder {
 
     let document = editor.document;
 
-    let bytes = this.readFile(document);
+    let bytes = this.readBytes(document);
+
+    
 
     return new DecoderResult(programs);
   }
 
-  readFile(document: vscode.TextDocument): string[] {
+  readBytes(document: vscode.TextDocument): string[] {
     let docLineCount = document.lineCount;
     let languageId = document.languageId;
     let bytes: string[] = [];
@@ -35,15 +37,17 @@ export class Decoder {
 
       //   Offset: 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 	                   <----- not this
       // 00000000: C0 00 F8 00 54 4F 4F 2D 4C 4F 4E 99 16 C0 00 F4    @.x.TOO-LON..@.t <----- this
-      if (/(\d+: )([0-9a-fA-F]{2} )+/.test(linetext)) {
+
+      if (/(\d+:)( [0-9a-fA-F]{2})+/.test(linetext)) {
+        linetext = linetext.replace(/^\d{8}: /, '');
         let match = linetext.match(/([0-9a-fA-F]{2} )+/);
         if (match) {
           content += match[0];
         }
       }
-      // All together
-      bytes = content.trim().split(' ');
     }
+    // All together
+    bytes = content.trim().split(' ');
 
     return bytes;
   }

@@ -91,8 +91,9 @@ export class Tool {
     if (editor) {
       let document = editor.document;
       let languageId = document.languageId.toLowerCase();
+      let scheme = document.uri.scheme.toLowerCase();
 
-      if (document && languageId.match(/hexdump/)) {
+      if (document && languageId.match(/hex/) && scheme.match(/rawhex/)) {
         // start decoding ...
         let result = this.decoder.decode(editor);
         if (result) {
