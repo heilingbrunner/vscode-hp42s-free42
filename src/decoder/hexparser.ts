@@ -1,4 +1,6 @@
 import { RawLine } from '../common/rawline';
+import { DecoderFOCAL } from './decoderfocal';
+import { unstring } from '../typedefs';
 
 export class HexParser {
   parse(bytes: string[]): RawLine[] {
@@ -7,50 +9,73 @@ export class HexParser {
     let length = 0;
 
     while (index + length < bytes.length) {
+      length = 0;
       let b0 = bytes[index];
-      //first nibble
-      switch (b0[0]) {
-        case '0':
-          break;
-        case '2':
-          break;
-        case '3':
-          break;
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-        case '8':
-          length = 1;
-          break;
-        case '9':
-          switch (b0[1]) {
+      let n0 = b0[0];
+      let hex: unstring = undefined;
+      let rpn: unstring = undefined;
+
+      // new temp maps
+      let nibbleMap: Map<string, string> = new Map<string, string>();
+      let byteMap: Map<string, string> = new Map<string, string>();
+      let bytesMap: Map<string, string> = new Map<string, string>();
+
+      // test first nibble
+      DecoderFOCAL.opCode.forEach((value, key) => {
+        if (key.startsWith(n0)) {
+          console.log('nibbleMap: ' + key + ': ' + value);
+          nibbleMap.set(key, value);
+        }
+      });
+
+      if (nibbleMap.size > 0) {
+        // test first byte
+        nibbleMap.forEach((value, key) => {
+          if (key.startsWith(b0)) {
+            console.log('byteMap: ' + key + ': ' + value);
+            byteMap.set(key, value);
           }
-          break;
-        case 'A':
-          //A0-A7
-          switch (true) {
-            case /A[0-7]/.test(b0):
-              length = 2;
-              break;
+        });
+
+        if(byteMap.size > 0){
+          let minlength = 64;
+          byteMap.forEach((value, key) => {
+            // get min length
+            let keylength = key.split(' ').length;
+            minlength = (keylength<minlength) ? keylength : minlength;
+          });
+
+          // full match for fixed hex ?
+          let nbytes = bytes.slice(index, index + minlength).join(' ').trim();
+          if(byteMap.has(nbytes)){
+            hex = nbytes;
+            rpn = byteMap.get(nbytes);
+
+            length = minlength;
+
+            console.log(hex + ': ' + rpn);
           }
-          break;
-        case 'B':
-          break;
-        case 'C':
-          break;
-        case 'D':
-          break;
-        case 'E':
-          break;
-        case 'F':
-          break;
-        default:
-          length = 1;
-          break;
+
+          // parameter included ...match b0 + n2 ?
+          if(rpn !== undefined){
+            let b1 = bytes[index+1];
+            let n2 = b1[0];
+
+            if(byteMap.has(b1 + ' ' + n2)){
+              hex = nbytes;
+              rpn = byteMap.get(b1 + ' ' + n2);
+  
+              length = minlength;
+  
+              console.log(hex + ': ' + rpn);
+            }
+            
+
+            length = 1;
+          }
+        }
       }
 
-      let hex = bytes.slice(index, index + length);
       //rawlines.push(new RawLine{ raw=})
       index = index + length;
     }

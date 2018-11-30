@@ -323,14 +323,6 @@ export class EncoderFOCAL {
         let len_str = str.length;
         let pos_Fn = raw.indexOf('Fn');
 
-        // replace all occurences of focal character, see parser
-        //Free42.charFocal.forEach((value, key) => {
-        //  const regex = new RegExp(key, 'g');
-        //  if (str) {
-        //    str = str.replace(regex, String.fromCharCode(value));
-        //  }
-        //});
-
         len_str = str.length;
 
         // str too long ? len > 14: max concat string length; 15: opcodes with Fn; 7: else
