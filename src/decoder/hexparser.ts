@@ -1,6 +1,7 @@
-import { RawLine } from '../common/rawline';
-import { DecoderFOCAL } from './decoderfocal';
-import { unstring } from '../typedefs';
+import { RawLine } from "../common/rawline";
+import { DecoderFOCAL } from "./decoderfocal";
+import { unstring } from "../typedefs";
+import { CodeInfo } from "../common/codeinfo";
 
 export class HexParser {
   parse(bytes: string[]): RawLine[] {
@@ -16,14 +17,13 @@ export class HexParser {
       let rpn: unstring = undefined;
 
       // new temp maps
-      let nibbleMap: Map<string, string> = new Map<string, string>();
-      let byteMap: Map<string, string> = new Map<string, string>();
-      let bytesMap: Map<string, string> = new Map<string, string>();
+      let nibbleMap: Map<string, CodeInfo> = new Map<string, CodeInfo>();
+      let byteMap: Map<string, CodeInfo> = new Map<string, CodeInfo>();
 
       // test first nibble
       DecoderFOCAL.opCode.forEach((value, key) => {
         if (key.startsWith(n0)) {
-          console.log('nibbleMap: ' + key + ': ' + value);
+          console.log("nibbleMap: " + key + ": " + value);
           nibbleMap.set(key, value);
         }
       });
@@ -32,47 +32,29 @@ export class HexParser {
         // test first byte
         nibbleMap.forEach((value, key) => {
           if (key.startsWith(b0)) {
-            console.log('byteMap: ' + key + ': ' + value);
+            console.log("byteMap: " + key + ": " + value);
             byteMap.set(key, value);
           }
         });
 
-        if(byteMap.size > 0){
-          let minlength = 64;
+        if (byteMap.size > 0) {
           byteMap.forEach((value, key) => {
-            // get min length
-            let keylength = key.split(' ').length;
-            minlength = (keylength<minlength) ? keylength : minlength;
+            let hex = "";
+
+            for (let i = 0; i < value.len; i++) {
+              hex += bytes[index + i]+ ' ';
+            }
+
+            hex = hex.trim();
+            
+            let match = hex.match(key);
+            if (match) {
+              console.log("match: " + match + "; " + key);
+              length = value.len;
+            }
           });
 
-          // full match for fixed hex ?
-          let nbytes = bytes.slice(index, index + minlength).join(' ').trim();
-          if(byteMap.has(nbytes)){
-            hex = nbytes;
-            rpn = byteMap.get(nbytes);
-
-            length = minlength;
-
-            console.log(hex + ': ' + rpn);
-          }
-
-          // parameter included ...match b0 + n2 ?
-          if(rpn !== undefined){
-            let b1 = bytes[index+1];
-            let n2 = b1[0];
-
-            if(byteMap.has(b1 + ' ' + n2)){
-              hex = nbytes;
-              rpn = byteMap.get(b1 + ' ' + n2);
-  
-              length = minlength;
-  
-              console.log(hex + ': ' + rpn);
-            }
-            
-
-            length = 1;
-          }
+          length = length === 0 ? 1 : length;
         }
       }
 
