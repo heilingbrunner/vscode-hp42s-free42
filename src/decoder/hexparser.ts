@@ -1,60 +1,54 @@
-import { RawLine } from "../common/rawline";
-import { DecoderFOCAL } from "./decoderfocal";
-import { unstring } from "../typedefs";
-import { CodeInfo } from "../common/codeinfo";
+import { RawLine } from '../common/rawline';
+import { DecoderFOCAL } from './decoderfocal';
+import { unstring } from '../typedefs';
+import { CodeInfo } from '../common/codeinfo';
 
 export class HexParser {
-  parse(bytes: string[]): RawLine[] {
+  parse(raw: string[]): RawLine[] {
     let rawlines: RawLine[] = [];
     let index = 0;
     let length = 0;
 
-    while (index + length < bytes.length) {
+    while (index + length < raw.length) {
       length = 0;
-      let b0 = bytes[index];
+      let b0 = raw[index];
       let n0 = b0[0];
-      let hex: unstring = undefined;
-      let rpn: unstring = undefined;
 
       // new temp maps
-      let nibbleMap: Map<string, CodeInfo> = new Map<string, CodeInfo>();
-      let byteMap: Map<string, CodeInfo> = new Map<string, CodeInfo>();
+      let codeInfo: CodeInfo[] | undefined;
 
       // test first nibble
-      DecoderFOCAL.opCode.forEach((value, key) => {
-        if (key.startsWith(n0)) {
-          console.log("nibbleMap: " + key + ": " + value);
-          nibbleMap.set(key, value);
-        }
-      });
+      if (DecoderFOCAL.opCode.has(n0)) {
+        codeInfo = DecoderFOCAL.opCode.get(n0);
 
-      if (nibbleMap.size > 0) {
-        // test first byte
-        nibbleMap.forEach((value, key) => {
-          if (key.startsWith(b0)) {
-            console.log("byteMap: " + key + ": " + value);
-            byteMap.set(key, value);
-          }
-        });
+        if (codeInfo) {
+          length = 0;
+          // walk through all patterns
+          for (let i = 0; i < codeInfo.length; i++) {
+            const c = codeInfo[i];
+            let hex = '';
 
-        if (byteMap.size > 0) {
-          byteMap.forEach((value, key) => {
-            let hex = "";
-
-            for (let i = 0; i < value.len; i++) {
-              hex += bytes[index + i]+ ' ';
+            //get n-bytes from raw
+            for (let j = 0; j < c.len; j++) {
+              hex += raw[index + j] + ' ';
             }
-
             hex = hex.trim();
-            
-            let match = hex.match(key);
-            if (match) {
-              console.log("match: " + match + "; " + key);
-              length = value.len;
-            }
-          });
 
-          length = length === 0 ? 1 : length;
+            //match ?
+            let match = hex.match(c.regex);
+            if (match) {
+              length = c.len;
+              console.log(hex + ': ' + c.len + ', ' + c.rpn);
+              let rl = new RawLine(hex, undefined);
+              rawlines.push(rl);
+            }
+          }
+
+          // no match !
+          if (length === 0) {
+            // abort !
+            return rawlines;
+          }
         }
       }
 
