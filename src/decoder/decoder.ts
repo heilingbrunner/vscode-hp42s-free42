@@ -4,7 +4,7 @@ import { CodeError } from '../common/codeerror';
 import { DecoderFOCAL } from './decoderfocal';
 import { DecoderResult } from './decoderresult';
 import { RpnProgram } from './rpnprogram';
-import { HexParser } from './hexparser';
+import { RawParser } from './rawparser';
 
 export class Decoder {
   constructor() {
@@ -16,7 +16,7 @@ export class Decoder {
     const debug = 1; // debug level 0=nothing,1=minimal,2=verbose
 
     let programs: RpnProgram[] = [];
-    let parser = new HexParser();
+    let parser = new RawParser();
     let document = editor.document;
 
     let bytes = this.readBytes(document);

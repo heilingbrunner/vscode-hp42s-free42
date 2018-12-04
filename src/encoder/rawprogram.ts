@@ -1,5 +1,5 @@
 import { toBytes } from '../helper/bytes';
-import { RawLine } from '../common/rawline';
+import { RawLine } from './rawline';
 import { CodeError } from '../common/codeerror';
 
 /** Class for a program, which contains several raw lines */

@@ -10,8 +10,6 @@ export class CodeError {
     this.message = message;
   }
 
-  
-
   toString(): string {
     return (
       'Error [' +
