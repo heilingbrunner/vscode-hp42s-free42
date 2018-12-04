@@ -16,12 +16,11 @@ export class Decoder {
     const debug = 1; // debug level 0=nothing,1=minimal,2=verbose
 
     let programs: RpnProgram[] = [];
-    let parser = new RawParser();
     let document = editor.document;
+    let raw = this.readBytes(document);
 
-    let bytes = this.readBytes(document);
-
-    parser.parse(bytes);
+    let parser = new RawParser(raw);
+    parser.parse();
 
     return new DecoderResult(programs);
   }

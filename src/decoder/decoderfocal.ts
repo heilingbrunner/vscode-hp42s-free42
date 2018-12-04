@@ -1,11 +1,11 @@
 import { unstring } from '../typedefs';
 import { CodeError } from '../common/codeerror';
-import { RpnLine } from './rpnline';
+import { RpnPattern } from './rpnpattern';
 
 export class DecoderFOCAL {
   //#region Members
 
-  static opCode: Map<string, RpnLine[]> = new Map<string, RpnLine[]>();
+  static opCode: Map<string, RpnPattern[]> = new Map<string, RpnPattern[]>();
 
   static initializedForDecode: boolean = false;
 
@@ -16,7 +16,7 @@ export class DecoderFOCAL {
   static initializeForDecode() {
     if (!DecoderFOCAL.initializedForDecode) {
       // transform arr_opCode -> opCode
-      DecoderFOCAL.arr_opCode.forEach((e: { key: string; value: RpnLine[] }) => {
+      DecoderFOCAL.arr_opCode.forEach((e: { key: string; value: RpnPattern[] }) => {
         DecoderFOCAL.opCode.set(e.key, e.value);
       });
 
