@@ -43,8 +43,7 @@ export class Encoder {
 
       if (program) {
         // Parse line
-        parser.read(line.text);
-        parser.docLineIndex = docLineIndex;
+        parser.read(docLineIndex, line.text);
 
         // no parser error ...
         if (parser.error === undefined) {
@@ -55,7 +54,9 @@ export class Encoder {
           // handle parsed code line ...
           if (!parser.ignored) {
             // now convert to raw ...
-            rawLine = EncoderFOCAL.toRaw(languageId, parser);
+            rawLine = EncoderFOCAL.toRaw(docLineIndex, languageId, parser);
+
+            
             // add raw line ...
             program.addLine(rawLine);
 
@@ -69,7 +70,6 @@ export class Encoder {
           }
         } else {
           // parse error
-          parser.error.docLineIndex = docLineIndex;
           program.addLine(new RawLine('??', parser.error));
         }
       }

@@ -5,7 +5,7 @@ import { RpnPattern } from "./rpnpattern";
 import { CodeError } from "../common/codeerror";
 
 export class RawParser {
-  private rpnLines: RpnLine[] = [];
+  public rpnLines: RpnLine[] = [];
   private raw: string[];
   private codeLineNo: number = 0;
   private number: string = '';
@@ -167,7 +167,7 @@ export class RawParser {
     this.codeLineNo++;
     let rpnLine = new RpnLine(this.codeLineNo, hex, rpn, error);
 
-    this.printRpn(rpnLine);
+    //this.printRpn(rpnLine);
     this.rpnLines.push(rpnLine);
   }
 

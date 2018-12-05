@@ -22,6 +22,10 @@ export class Decoder {
     let parser = new RawParser(raw);
     parser.parse();
 
+    parser.rpnLines.forEach(rpnline => {
+      DecoderFOCAL.toRpn(0, rpnline);
+    });
+
     return new DecoderResult(programs);
   }
 

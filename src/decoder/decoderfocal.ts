@@ -1,6 +1,7 @@
 import { unstring } from '../typedefs';
 import { CodeError } from '../common/codeerror';
 import { RpnPattern } from './rpnpattern';
+import { RpnLine } from './rpnline';
 
 export class DecoderFOCAL {
   //#region Members
@@ -32,10 +33,12 @@ export class DecoderFOCAL {
    * code: The code
    * error: error
    */
-  static toRpn(hex: string): [string, unstring, CodeError] {
-    let error: CodeError = new CodeError(0, '', 'Not implemented yet!');
+  static toRpn(docLineIndex: number, rpnLine: RpnLine): [string, unstring, CodeError] {
+    let error: CodeError = new CodeError(docLineIndex, 0, '', 'Not implemented yet!');
     let languageId: string = 'free42';
 
+    console.log(rpnLine.toString());
+    
     return [languageId, undefined, error];
   }
 

@@ -4,7 +4,8 @@ export class CodeError {
   code: string;
   message: string = '';
 
-  constructor(codeLineNo: number, code: string, message: string) {
+  constructor(docLineIndex: number, codeLineNo: number, code: string, message: string) {
+    this.docLineIndex = docLineIndex;
     this.codeLineNo = codeLineNo;
     this.code = code;
     this.message = message;
@@ -13,8 +14,8 @@ export class CodeError {
   toString(): string {
     return (
       'Error [' +
-      (this.docLineIndex > -1 ? (this.docLineIndex + 1) : '') +
-      (this.codeLineNo > -1 ? ', ' + (this.codeLineNo < 10 ? '0' + this.codeLineNo : this.codeLineNo): '') +
+      (this.docLineIndex > -1 ? (this.docLineIndex + 1) +  ', ' : '') +
+      (this.codeLineNo > -1 ? (this.codeLineNo < 10 ? '0' + this.codeLineNo : this.codeLineNo): '') +
       "]: Code: '" +
       this.code +
       "'; Message: \'" +

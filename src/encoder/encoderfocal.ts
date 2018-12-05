@@ -45,7 +45,7 @@ export class EncoderFOCAL {
    * Return:
    * result: Tuple with raw and error
    */
-  static toRaw(languageId: string, parser: RpnParser): RawLine {
+  static toRaw(docLineIndex: number, languageId: string, parser: RpnParser): RawLine {
     let raw: unstring = undefined;
     let progErrorText: unstring = undefined;
     let languageIdFromCode: string = '';
@@ -113,6 +113,7 @@ export class EncoderFOCAL {
             raw,
             progErrorText
               ? new CodeError(
+                  docLineIndex,
                   parser.prgmLineNo,
                   parser.code,
                   String(progErrorText)
@@ -274,6 +275,7 @@ export class EncoderFOCAL {
             raw,
             progErrorText
               ? new CodeError(
+                  docLineIndex,
                   parser.prgmLineNo,
                   parser.code,
                   String(progErrorText)
@@ -289,7 +291,7 @@ export class EncoderFOCAL {
     return new RawLine(
       raw,
       progErrorText
-        ? new CodeError(parser.prgmLineNo, parser.code, String(progErrorText))
+        ? new CodeError(docLineIndex, parser.prgmLineNo, parser.code, String(progErrorText))
         : undefined
     );
   }
