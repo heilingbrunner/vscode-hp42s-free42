@@ -7,9 +7,10 @@ export class RpnLine {
   rpn: unstring;
   error?: CodeError;
 
-  constructor(codeLineNo: number, raw: unstring, error?: CodeError) {
+  constructor(codeLineNo: number, raw: unstring, rpn: string, error?: CodeError) {
     this.codeLineNo = codeLineNo;
     this.raw = raw;
+    this.rpn = rpn;
     this.error = error;
   }
 
@@ -20,7 +21,8 @@ export class RpnLine {
   toString(): string {
     return (
       this.codeLineNo + ": " +
-      this.raw +
+      this.raw + ', ' +
+      this.rpn +
       (this.error? ', ' + this.error : '')
     );
   }
