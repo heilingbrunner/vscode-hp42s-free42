@@ -4,7 +4,7 @@ import { CodeError } from '../common/codeerror';
 
 /** Class for a program, which contains several raw lines */
 export class RawProgram {
-  private lines: RawLine[] = [];
+  rawLines: RawLine[] = [];
   private size: number = 0;
   startdocLineIndex: number = -1;
   name: string = '';
@@ -15,7 +15,7 @@ export class RawProgram {
 
   getRaw(): string {
     let rawAll = '';
-    this.lines.forEach(rawLine => {
+    this.rawLines.forEach(rawLine => {
       rawAll += rawLine.raw + ' ';
     });
     return rawAll.trim();
@@ -23,7 +23,7 @@ export class RawProgram {
 
   getHex(): string {
     let hexAll = '';
-    this.lines.forEach(rawLine => {
+    this.rawLines.forEach(rawLine => {
       hexAll += rawLine.raw + '\r\n';
     });
     return hexAll; //no trin() !
@@ -43,7 +43,7 @@ export class RawProgram {
 
   getErrors(): CodeError[] | undefined {
     let rpnErrors: CodeError[] | undefined;
-    this.lines.forEach(rawLine => {
+    this.rawLines.forEach(rawLine => {
       // when error ...
       if (rawLine.error) {
         // check array ...
@@ -75,6 +75,6 @@ export class RawProgram {
 
   addLine(rawLine: RawLine) {
     rawLine.program = this.name;
-    this.lines.push(rawLine);
+    this.rawLines.push(rawLine);
   }
 }

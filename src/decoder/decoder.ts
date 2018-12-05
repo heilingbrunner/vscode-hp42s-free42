@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 
-import { CodeError } from '../common/codeerror';
 import { DecoderFOCAL } from './decoderfocal';
 import { DecoderResult } from './decoderresult';
 import { RpnProgram } from './rpnprogram';
@@ -13,11 +12,11 @@ export class Decoder {
 
   /** Decode raw input to readable code string */
   decode(editor: vscode.TextEditor): DecoderResult {
-    const debug = 1; // debug level 0=nothing,1=minimal,2=verbose
+    const debug = 1; // debug level 0=nothing, 1=minimal, 2=verbose
 
     let programs: RpnProgram[] = [];
     let document = editor.document;
-    let raw = this.readBytes(document);
+    let raw = this.readDocumentBytes(document);
 
     let parser = new RawParser(raw);
     parser.parse();
@@ -29,7 +28,7 @@ export class Decoder {
     return new DecoderResult(programs);
   }
 
-  readBytes(document: vscode.TextDocument): string[] {
+  readDocumentBytes(document: vscode.TextDocument): string[] {
     let docLineCount = document.lineCount;
     let languageId = document.languageId;
     let bytes: string[] = [];

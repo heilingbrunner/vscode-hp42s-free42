@@ -1,12 +1,12 @@
-import { unstring } from '../typedefs';
-import { CodeError } from '../common/codeerror';
-import { RpnPattern } from './rpnpattern';
-import { RpnLine } from './rpnline';
+import { unstring } from "../typedefs";
+import { CodeError } from "../common/codeerror";
+import { RpnPattern } from "./rpnpattern";
+import { RpnLine } from "./rpnline";
 
 export class DecoderFOCAL {
   //#region Members
 
-  static opCode: Map<string, RpnPattern[]> = new Map<string, RpnPattern[]>();
+  static rawMap: Map<string, RpnPattern[]> = new Map<string, RpnPattern[]>();
 
   static initializedForDecode: boolean = false;
 
@@ -16,29 +16,22 @@ export class DecoderFOCAL {
 
   static initializeForDecode() {
     if (!DecoderFOCAL.initializedForDecode) {
-      // transform arr_opCode -> opCode
-      DecoderFOCAL.arr_opCode.forEach((e: { key: string; value: RpnPattern[] }) => {
-        DecoderFOCAL.opCode.set(e.key, e.value);
+      // transform arr_rawMap -> rawMap
+      DecoderFOCAL.arr_rawMap.forEach((e: { key: string; value: RpnPattern[] }) => {
+        DecoderFOCAL.rawMap.set(e.key, e.value);
       });
 
       DecoderFOCAL.initializedForDecode = true;
     }
   }
 
-  /** Raw to code
-   * Input:
-   * raw: raw hex code
-   * Output:
-   * languageId: free42/hp42s
-   * code: The code
-   * error: error
-   */
   static toRpn(docLineIndex: number, rpnLine: RpnLine): [string, unstring, CodeError] {
-    let error: CodeError = new CodeError(docLineIndex, 0, '', 'Not implemented yet!');
-    let languageId: string = 'free42';
+    let error: CodeError = new CodeError(docLineIndex, 0, "", "Not implemented yet!");
+    let languageId: string = "free42";
 
+    //log
     console.log(rpnLine.toString());
-    
+
     return [languageId, undefined, error];
   }
 
@@ -193,7 +186,7 @@ export class DecoderFOCAL {
    * 123 -> 7B, 255 -> FF
    */
   static convertByteAsHex(byte: number): string {
-    let hex = ('0' + (byte & 0xff).toString(16)).slice(-2).toUpperCase();
+    let hex = ("0" + (byte & 0xff).toString(16)).slice(-2).toUpperCase();
     return hex;
   }
 
@@ -652,13 +645,7 @@ export class DecoderFOCAL {
   */
   // #endregion
 
-  private static arr_stack = [
-    { key: 'T', value: 0 },
-    { key: 'Z', value: 1 },
-    { key: 'Y', value: 2 },
-    { key: 'X', value: 3 },
-    { key: 'L', value: 4 }
-  ];
+  private static arr_stack = [{ key: "T", value: 0 }, { key: "Z", value: 1 }, { key: "Y", value: 2 }, { key: "X", value: 3 }, { key: "L", value: 4 }];
 
   // 0(?<lblno>[2-9A-F]): LBL 01-15
   // Fn: F([1-9A-F]) Label: max. length 14
@@ -670,8 +657,7 @@ export class DecoderFOCAL {
   // nn: (?<digits>0[1-9]); digits; dec:1-9; 01-09
   // nn: digits; dec:10,11
   // tone: (?<tone>0[0-9]); dec:1-9; hex:01-09
-  
-  
+
   // LBL 14  0F
   // LBL 99  CF63
   // LBL A   CF66
@@ -700,394 +686,396 @@ export class DecoderFOCAL {
 
   //#region Arrays
 
-  private static arr_opCode = [
+  private static arr_rawMap = [
     {
-      key: '0',
+      key: "0",
       value: [
-        { regex: /00/, len: 1, rpn: 'NULL' },
-        { regex: /0([1-9A-F])/, len: 1, rpn: 'LBL sl', params: 'lblno-1' } //+ LBL 00-14
+        { regex: /00/, len: 1, rpn: "NULL" },
+        { regex: /0([1-9A-F])/, len: 1, rpn: "LBL sl", params: "lblno-1" } //+ LBL 00-14
       ]
     },
     {
-      key: '1',
+      key: "1",
       value: [
-        { regex: /1D F([1-9A-F])/, len: 2, rpn: 'GTO `lbl`', params: 'strl' }, //+ lbl max length 14
-        { regex: /1E F([1-9A-F])/, len: 2, rpn: 'XEQ `lbl`', params: 'strl' } //+ lbl max length 14
+        { regex: /1D F([1-9A-F])/, len: 2, rpn: "GTO `lbl`", params: "strl" }, //+ lbl max length 14
+        { regex: /1E F([1-9A-F])/, len: 2, rpn: "XEQ `lbl`", params: "strl" } //+ lbl max length 14
         //no numbers here: { regex: /(1[0-9A-C] )+00/, len: 1, rpn: '<number>', params: 'number' }
       ]
     },
-    { key: '2', value: [{ regex: /2([0-9A-F])/, len: 1, rpn: 'RCL sr', params: 'reg' }
-      // RCL 01  21
-      // RCL 15  2F
-      ] 
-    },//+
-    { key: '3', value: [{ regex: /3([0-9A-F])/, len: 1, rpn: 'STO sr', params: 'reg' }] },//+
     {
-      key: '4',
+      key: "2",
       value: [
-        { regex: /40/, len: 1, rpn: '+' },//+
-        { regex: /41/, len: 1, rpn: '-' },//+
-        { regex: /42/, len: 1, rpn: '×' },//+
-        { regex: /43/, len: 1, rpn: '÷' },//+
-        { regex: /44/, len: 1, rpn: 'X<Y?' },//+
-        { regex: /45/, len: 1, rpn: 'X>Y?' },
-        { regex: /46/, len: 1, rpn: 'X≤Y?' },//+
-        { regex: /47/, len: 1, rpn: 'Σ+' },
-        { regex: /48/, len: 1, rpn: 'Σ-' },
-        { regex: /49/, len: 1, rpn: 'HMS+' },
-        { regex: /4A/, len: 1, rpn: 'HMS-' },
-        { regex: /4B/, len: 1, rpn: 'MOD' },
-        { regex: /4C/, len: 1, rpn: '%' },
-        { regex: /4D/, len: 1, rpn: '%CH' },
-        { regex: /4E/, len: 1, rpn: '→REC' },
-        { regex: /4F/, len: 1, rpn: '→POL' }
+        { regex: /2([0-9A-F])/, len: 1, rpn: "RCL sr", params: "reg" }
+        // RCL 01  21
+        // RCL 15  2F
+      ]
+    }, //+
+    { key: "3", value: [{ regex: /3([0-9A-F])/, len: 1, rpn: "STO sr", params: "reg" }] }, //+
+    {
+      key: "4",
+      value: [
+        { regex: /40/, len: 1, rpn: "+" }, //+
+        { regex: /41/, len: 1, rpn: "-" }, //+
+        { regex: /42/, len: 1, rpn: "×" }, //+
+        { regex: /43/, len: 1, rpn: "÷" }, //+
+        { regex: /44/, len: 1, rpn: "X<Y?" }, //+
+        { regex: /45/, len: 1, rpn: "X>Y?" },
+        { regex: /46/, len: 1, rpn: "X≤Y?" }, //+
+        { regex: /47/, len: 1, rpn: "Σ+" },
+        { regex: /48/, len: 1, rpn: "Σ-" },
+        { regex: /49/, len: 1, rpn: "HMS+" },
+        { regex: /4A/, len: 1, rpn: "HMS-" },
+        { regex: /4B/, len: 1, rpn: "MOD" },
+        { regex: /4C/, len: 1, rpn: "%" },
+        { regex: /4D/, len: 1, rpn: "%CH" },
+        { regex: /4E/, len: 1, rpn: "→REC" },
+        { regex: /4F/, len: 1, rpn: "→POL" }
       ]
     },
 
     {
-      key: '5',
+      key: "5",
       value: [
-        { regex: /50/, len: 1, rpn: 'LN' },
-        { regex: /51/, len: 1, rpn: 'X↑2' },
-        { regex: /52/, len: 1, rpn: 'SQRT' },
-        { regex: /53/, len: 1, rpn: 'Y↑X' },
-        { regex: /54/, len: 1, rpn: '+/-' },
-        { regex: /55/, len: 1, rpn: 'E↑X' },
-        { regex: /56/, len: 1, rpn: 'LOG' },
-        { regex: /57/, len: 1, rpn: '10↑X' },
-        { regex: /58/, len: 1, rpn: 'E↑X-1' },
-        { regex: /59/, len: 1, rpn: 'SIN' },
-        { regex: /5A/, len: 1, rpn: 'COS' },
-        { regex: /5B/, len: 1, rpn: 'TAN' },
-        { regex: /5C/, len: 1, rpn: 'ASIN' },
-        { regex: /5D/, len: 1, rpn: 'ACOS' },
-        { regex: /5E/, len: 1, rpn: 'ATAN' },
-        { regex: /5F/, len: 1, rpn: '→DEC' }
+        { regex: /50/, len: 1, rpn: "LN" },
+        { regex: /51/, len: 1, rpn: "X↑2" },
+        { regex: /52/, len: 1, rpn: "SQRT" },
+        { regex: /53/, len: 1, rpn: "Y↑X" },
+        { regex: /54/, len: 1, rpn: "+/-" },
+        { regex: /55/, len: 1, rpn: "E↑X" },
+        { regex: /56/, len: 1, rpn: "LOG" },
+        { regex: /57/, len: 1, rpn: "10↑X" },
+        { regex: /58/, len: 1, rpn: "E↑X-1" },
+        { regex: /59/, len: 1, rpn: "SIN" },
+        { regex: /5A/, len: 1, rpn: "COS" },
+        { regex: /5B/, len: 1, rpn: "TAN" },
+        { regex: /5C/, len: 1, rpn: "ASIN" },
+        { regex: /5D/, len: 1, rpn: "ACOS" },
+        { regex: /5E/, len: 1, rpn: "ATAN" },
+        { regex: /5F/, len: 1, rpn: "→DEC" }
       ]
     },
     {
-      key: '6',
+      key: "6",
       value: [
-        { regex: /60/, len: 1, rpn: '1/X' },
-        { regex: /61/, len: 1, rpn: 'ABS' },//+
-        { regex: /62/, len: 1, rpn: 'N!' },
-        { regex: /63/, len: 1, rpn: 'X≠0?' },
-        { regex: /64/, len: 1, rpn: 'X>0?' },
-        { regex: /65/, len: 1, rpn: 'LN1+X' },
-        { regex: /66/, len: 1, rpn: 'X<0?' },
-        { regex: /67/, len: 1, rpn: 'X=0?' },//+
-        { regex: /68/, len: 1, rpn: 'IP' },//+
-        { regex: /69/, len: 1, rpn: 'FP' },
-        { regex: /6A/, len: 1, rpn: '→RAD' },
-        { regex: /6B/, len: 1, rpn: '→DEG' },
-        { regex: /6C/, len: 1, rpn: '→HMS' },
-        { regex: /6D/, len: 1, rpn: '→HR' },
-        { regex: /6E/, len: 1, rpn: 'RND' },
-        { regex: /6F/, len: 1, rpn: '→OCT' }
-      ]
-    },
-
-    {
-      key: '7',
-      value: [
-        { regex: /70/, len: 1, rpn: 'CLΣ' },
-        { regex: /71/, len: 1, rpn: 'X≶Y' },//+
-        { regex: /72/, len: 1, rpn: 'PI' },
-        { regex: /73/, len: 1, rpn: 'CLST' },//+
-        { regex: /74/, len: 1, rpn: 'R↑' },
-        { regex: /75/, len: 1, rpn: 'R↓' },
-        { regex: /76/, len: 1, rpn: 'LASTX' },
-        { regex: /77/, len: 1, rpn: 'CLX' },
-        { regex: /78/, len: 1, rpn: 'X=Y?' },//+
-        { regex: /79/, len: 1, rpn: 'X≠Y?' },//+
-        { regex: /7A/, len: 1, rpn: 'SIGN' },
-        { regex: /7B/, len: 1, rpn: 'X≤0?' },
-        { regex: /7C/, len: 1, rpn: 'MEAN' },
-        { regex: /7D/, len: 1, rpn: 'SDEV' },
-        { regex: /7E/, len: 1, rpn: 'AVIEW' },//+
-        { regex: /7F/, len: 1, rpn: 'CLD' }
+        { regex: /60/, len: 1, rpn: "1/X" },
+        { regex: /61/, len: 1, rpn: "ABS" }, //+
+        { regex: /62/, len: 1, rpn: "N!" },
+        { regex: /63/, len: 1, rpn: "X≠0?" },
+        { regex: /64/, len: 1, rpn: "X>0?" },
+        { regex: /65/, len: 1, rpn: "LN1+X" },
+        { regex: /66/, len: 1, rpn: "X<0?" },
+        { regex: /67/, len: 1, rpn: "X=0?" }, //+
+        { regex: /68/, len: 1, rpn: "IP" }, //+
+        { regex: /69/, len: 1, rpn: "FP" },
+        { regex: /6A/, len: 1, rpn: "→RAD" },
+        { regex: /6B/, len: 1, rpn: "→DEG" },
+        { regex: /6C/, len: 1, rpn: "→HMS" },
+        { regex: /6D/, len: 1, rpn: "→HR" },
+        { regex: /6E/, len: 1, rpn: "RND" },
+        { regex: /6F/, len: 1, rpn: "→OCT" }
       ]
     },
 
     {
-      key: '8',
+      key: "7",
       value: [
-        { regex: /80/, len: 1, rpn: 'DEG' },
-        { regex: /81/, len: 1, rpn: 'RAD' },
-        { regex: /82/, len: 1, rpn: 'GRAD' },
-        { regex: /83/, len: 1, rpn: 'ENTER' },//+
-        { regex: /84/, len: 1, rpn: 'STOP' },//+
-        { regex: /85/, len: 1, rpn: 'RTN' },//+
-        { regex: /86/, len: 1, rpn: 'BEEP' },//+
-        { regex: /87/, len: 1, rpn: 'CLA' },
-        { regex: /88/, len: 1, rpn: 'ASHF' },
-        { regex: /89/, len: 1, rpn: 'PSE' },//+
-        { regex: /8A/, len: 1, rpn: 'CLRG' },
-        { regex: /8B/, len: 1, rpn: 'AOFF' },
-        { regex: /8C/, len: 1, rpn: 'AON' },
-        { regex: /8D/, len: 1, rpn: 'OFF' },
-        { regex: /8E/, len: 1, rpn: 'PROMPT' },
-        { regex: /8F/, len: 1, rpn: 'ADV' }
+        { regex: /70/, len: 1, rpn: "CLΣ" },
+        { regex: /71/, len: 1, rpn: "X≶Y" }, //+
+        { regex: /72/, len: 1, rpn: "PI" },
+        { regex: /73/, len: 1, rpn: "CLST" }, //+
+        { regex: /74/, len: 1, rpn: "R↑" },
+        { regex: /75/, len: 1, rpn: "R↓" },
+        { regex: /76/, len: 1, rpn: "LASTX" },
+        { regex: /77/, len: 1, rpn: "CLX" },
+        { regex: /78/, len: 1, rpn: "X=Y?" }, //+
+        { regex: /79/, len: 1, rpn: "X≠Y?" }, //+
+        { regex: /7A/, len: 1, rpn: "SIGN" },
+        { regex: /7B/, len: 1, rpn: "X≤0?" },
+        { regex: /7C/, len: 1, rpn: "MEAN" },
+        { regex: /7D/, len: 1, rpn: "SDEV" },
+        { regex: /7E/, len: 1, rpn: "AVIEW" }, //+
+        { regex: /7F/, len: 1, rpn: "CLD" }
       ]
     },
 
     {
-      key: '9',
+      key: "8",
       value: [
-        { regex: /90 7([0-4])/, len: 2, rpn: 'RCL ST `stk`', params: 'stk' },
-        { regex: /90 ([89A-E][0-9A-F])/, len: 2, rpn: 'RCL IND rr', params: 'reg' },//+ r dec:0-99 + 128
-        { regex: /90 F([0-4])/, len: 2, rpn: 'RCL IND ST `stk`', params: 'stk' },
-        { regex: /90 ([0-7][0-9A-F])/, len: 2, rpn: 'RCL rr', params: 'reg' },
+        { regex: /80/, len: 1, rpn: "DEG" },
+        { regex: /81/, len: 1, rpn: "RAD" },
+        { regex: /82/, len: 1, rpn: "GRAD" },
+        { regex: /83/, len: 1, rpn: "ENTER" }, //+
+        { regex: /84/, len: 1, rpn: "STOP" }, //+
+        { regex: /85/, len: 1, rpn: "RTN" }, //+
+        { regex: /86/, len: 1, rpn: "BEEP" }, //+
+        { regex: /87/, len: 1, rpn: "CLA" },
+        { regex: /88/, len: 1, rpn: "ASHF" },
+        { regex: /89/, len: 1, rpn: "PSE" }, //+
+        { regex: /8A/, len: 1, rpn: "CLRG" },
+        { regex: /8B/, len: 1, rpn: "AOFF" },
+        { regex: /8C/, len: 1, rpn: "AON" },
+        { regex: /8D/, len: 1, rpn: "OFF" },
+        { regex: /8E/, len: 1, rpn: "PROMPT" },
+        { regex: /8F/, len: 1, rpn: "ADV" }
+      ]
+    },
+
+    {
+      key: "9",
+      value: [
+        { regex: /90 7([0-4])/, len: 2, rpn: "RCL ST `stk`", params: "stk" },
+        { regex: /90 ([89A-E][0-9A-F])/, len: 2, rpn: "RCL IND rr", params: "reg" }, //+ r dec:0-99 + 128
+        { regex: /90 F([0-4])/, len: 2, rpn: "RCL IND ST `stk`", params: "stk" },
+        { regex: /90 ([0-7][0-9A-F])/, len: 2, rpn: "RCL rr", params: "reg" },
         // RCL 16  9010  dec:16-99; hex:10-63
         // RCL 99  9063
-        { regex: /91 7([0-4])/, len: 2, rpn: 'STO ST `stk`', params: 'stk' },//+
-        { regex: /91 ([89A-E][0-9A-F])/, len: 2, rpn: 'STO IND rr', params: 'reg' },//+
-        { regex: /91 F([0-4])/, len: 2, rpn: 'STO IND ST `stk`', params: 'stk' },
-        { regex: /91 ([0-7][0-9A-F])/, len: 2, rpn: 'STO rr', params: 'reg' },
-        { regex: /92 7([0-4])/, len: 2, rpn: 'STO+ ST `stk`', params: 'stk' },
-        { regex: /92 ([89A-E][0-9A-F])/, len: 2, rpn: 'STO+ IND rr', params: 'reg' },
-        { regex: /92 F([0-4])/, len: 2, rpn: 'STO+ IND ST `stk`', params: 'stk' },
-        { regex: /92 ([0-7][0-9A-F])/, len: 2, rpn: 'STO+ rr', params: 'reg' },
-        { regex: /93 7([0-4])/, len: 2, rpn: 'STO- ST `stk`', params: 'stk' },
-        { regex: /93 ([89A-E][0-9A-F])/, len: 2, rpn: 'STO- IND rr', params: 'reg' },
-        { regex: /93 F([0-4])/, len: 2, rpn: 'STO- IND ST `stk`', params: 'stk' },
-        { regex: /93 ([0-7][0-9A-F])/, len: 2, rpn: 'STO- rr', params: 'reg' },//+
-        { regex: /94 7([0-4])/, len: 2, rpn: 'STO× ST `stk`', params: 'stk' },
-        { regex: /94 ([89A-E][0-9A-F])/, len: 2, rpn: 'STO× IND rr', params: 'reg' },
-        { regex: /94 F([0-4])/, len: 2, rpn: 'STO× IND ST `stk`', params: 'stk' },
-        { regex: /94 ([0-7][0-9A-F])/, len: 2, rpn: 'STO× rr', params: 'reg' },
-        { regex: /95 7([0-4])/, len: 2, rpn: 'STO÷ ST `stk`', params: 'stk' },
-        { regex: /95 ([89A-E][0-9A-F])/, len: 2, rpn: 'STO÷ IND rr', params: 'reg' },
-        { regex: /95 F([0-4])/, len: 2, rpn: 'STO÷ IND ST `stk`', params: 'stk' },
-        { regex: /95 ([0-7][0-9A-F])/, len: 2, rpn: 'STO÷ rr', params: 'reg' },
-        { regex: /96 7([0-4])/, len: 2, rpn: 'ISG ST `stk`', params: 'stk' },//+
-        { regex: /96 ([89A-E][0-9A-F])/, len: 2, rpn: 'ISG IND rr', params: 'reg' },//+
-        { regex: /96 F([0-4])/, len: 2, rpn: 'ISG IND ST `stk`', params: 'stk' },
-        { regex: /96 ([0-7][0-9A-F])/, len: 2, rpn: 'ISG rr', params: 'reg' },//+
-        { regex: /97 7([0-4])/, len: 2, rpn: 'DSE ST `stk`', params: 'stk' },
-        { regex: /97 ([89A-E][0-9A-F])/, len: 2, rpn: 'DSE IND rr', params: 'reg' },
-        { regex: /97 F([0-4])/, len: 2, rpn: 'DSE IND ST `stk`', params: 'stk' },
-        { regex: /97 ([0-7][0-9A-F])/, len: 2, rpn: 'DSE rr', params: 'reg' },//+
-        { regex: /98 7([0-4])/, len: 2, rpn: 'VIEW ST `stk`', params: 'stk' },
-        { regex: /98 ([89A-E][0-9A-F])/, len: 2, rpn: 'VIEW IND rr', params: 'reg' },
-        { regex: /98 F([0-4])/, len: 2, rpn: 'VIEW IND ST `stk`', params: 'stk' },
-        { regex: /98 ([0-7][0-9A-F])/, len: 2, rpn: 'VIEW rr', params: 'reg' },
-        { regex: /99 ([89A-E][0-9A-F])/, len: 2, rpn: 'ΣREG IND rr', params: 'reg' },
-        { regex: /99 F([0-4])/, len: 2, rpn: 'ΣREG IND ST `stk`', params: 'stk' },
-        { regex: /99 ([0-7][0-9A-F])/, len: 2, rpn: 'ΣREG rr', params: 'reg' },
-        { regex: /9A 7([0-4])/, len: 2, rpn: 'ASTO ST `stk`', params: 'stk' },
-        { regex: /9A ([89A-E][0-9A-F])/, len: 2, rpn: 'ASTO IND rr', params: 'reg' },
-        { regex: /9A F([0-4])/, len: 2, rpn: 'ASTO IND ST `stk`', params: 'stk' },
-        { regex: /9A ([0-7][0-9A-F])/, len: 2, rpn: 'ASTO rr', params: 'reg' },
-        { regex: /9B 7([0-4])/, len: 2, rpn: 'ARCL ST `stk`', params: 'stk' },
-        { regex: /9B ([89A-E][0-9A-F])/, len: 2, rpn: 'ARCL IND rr', params: 'reg' },
-        { regex: /9B F([0-4])/, len: 2, rpn: 'ARCL IND ST `stk`', params: 'stk' },
-        { regex: /9B ([0-7][0-9A-F])/, len: 2, rpn: 'ARCL rr', params: 'reg' },//+
-        { regex: /9C ([89A-E][0-9A-F])/, len: 2, rpn: 'FIX IND rr', params: 'reg' },
-        { regex: /9C F([0-4])/, len: 2, rpn: 'FIX IND ST `stk`', params: 'stk' },
-        { regex: /9C (0[1-9])/, len: 2, rpn: 'FIX sd', params: 'digits' },
-        { regex: /9D ([89A-E][0-9A-F])/, len: 2, rpn: 'SCI IND rr', params: 'reg' },
-        { regex: /9D F([0-4])/, len: 2, rpn: 'SCI IND ST `stk`', params: 'stk' },
-        { regex: /9D (0[1-9])/, len: 2, rpn: 'SCI sd', params: 'digits' },
-        { regex: /9E ([89A-E][0-9A-F])/, len: 2, rpn: 'ENG IND rr', params: 'reg' },
-        { regex: /9E F([0-4])/, len: 2, rpn: 'ENG IND ST `stk`', params: 'stk' },
-        { regex: /9E (0[1-9])/, len: 2, rpn: 'ENG sd', params: 'digits' },
-        { regex: /9F ([89A-E][0-9A-F])/, len: 2, rpn: 'TONE IND rr', params: 'reg' },
-        { regex: /9F F([0-4])/, len: 2, rpn: 'TONE IND ST `stk`', params: 'stk' },
-        { regex: /9F (0[0-9])/, len: 2, rpn: 'TONE tn', params: 'tone' }//+
+        { regex: /91 7([0-4])/, len: 2, rpn: "STO ST `stk`", params: "stk" }, //+
+        { regex: /91 ([89A-E][0-9A-F])/, len: 2, rpn: "STO IND rr", params: "reg" }, //+
+        { regex: /91 F([0-4])/, len: 2, rpn: "STO IND ST `stk`", params: "stk" },
+        { regex: /91 ([0-7][0-9A-F])/, len: 2, rpn: "STO rr", params: "reg" },
+        { regex: /92 7([0-4])/, len: 2, rpn: "STO+ ST `stk`", params: "stk" },
+        { regex: /92 ([89A-E][0-9A-F])/, len: 2, rpn: "STO+ IND rr", params: "reg" },
+        { regex: /92 F([0-4])/, len: 2, rpn: "STO+ IND ST `stk`", params: "stk" },
+        { regex: /92 ([0-7][0-9A-F])/, len: 2, rpn: "STO+ rr", params: "reg" },
+        { regex: /93 7([0-4])/, len: 2, rpn: "STO- ST `stk`", params: "stk" },
+        { regex: /93 ([89A-E][0-9A-F])/, len: 2, rpn: "STO- IND rr", params: "reg" },
+        { regex: /93 F([0-4])/, len: 2, rpn: "STO- IND ST `stk`", params: "stk" },
+        { regex: /93 ([0-7][0-9A-F])/, len: 2, rpn: "STO- rr", params: "reg" }, //+
+        { regex: /94 7([0-4])/, len: 2, rpn: "STO× ST `stk`", params: "stk" },
+        { regex: /94 ([89A-E][0-9A-F])/, len: 2, rpn: "STO× IND rr", params: "reg" },
+        { regex: /94 F([0-4])/, len: 2, rpn: "STO× IND ST `stk`", params: "stk" },
+        { regex: /94 ([0-7][0-9A-F])/, len: 2, rpn: "STO× rr", params: "reg" },
+        { regex: /95 7([0-4])/, len: 2, rpn: "STO÷ ST `stk`", params: "stk" },
+        { regex: /95 ([89A-E][0-9A-F])/, len: 2, rpn: "STO÷ IND rr", params: "reg" },
+        { regex: /95 F([0-4])/, len: 2, rpn: "STO÷ IND ST `stk`", params: "stk" },
+        { regex: /95 ([0-7][0-9A-F])/, len: 2, rpn: "STO÷ rr", params: "reg" },
+        { regex: /96 7([0-4])/, len: 2, rpn: "ISG ST `stk`", params: "stk" }, //+
+        { regex: /96 ([89A-E][0-9A-F])/, len: 2, rpn: "ISG IND rr", params: "reg" }, //+
+        { regex: /96 F([0-4])/, len: 2, rpn: "ISG IND ST `stk`", params: "stk" },
+        { regex: /96 ([0-7][0-9A-F])/, len: 2, rpn: "ISG rr", params: "reg" }, //+
+        { regex: /97 7([0-4])/, len: 2, rpn: "DSE ST `stk`", params: "stk" },
+        { regex: /97 ([89A-E][0-9A-F])/, len: 2, rpn: "DSE IND rr", params: "reg" },
+        { regex: /97 F([0-4])/, len: 2, rpn: "DSE IND ST `stk`", params: "stk" },
+        { regex: /97 ([0-7][0-9A-F])/, len: 2, rpn: "DSE rr", params: "reg" }, //+
+        { regex: /98 7([0-4])/, len: 2, rpn: "VIEW ST `stk`", params: "stk" },
+        { regex: /98 ([89A-E][0-9A-F])/, len: 2, rpn: "VIEW IND rr", params: "reg" },
+        { regex: /98 F([0-4])/, len: 2, rpn: "VIEW IND ST `stk`", params: "stk" },
+        { regex: /98 ([0-7][0-9A-F])/, len: 2, rpn: "VIEW rr", params: "reg" },
+        { regex: /99 ([89A-E][0-9A-F])/, len: 2, rpn: "ΣREG IND rr", params: "reg" },
+        { regex: /99 F([0-4])/, len: 2, rpn: "ΣREG IND ST `stk`", params: "stk" },
+        { regex: /99 ([0-7][0-9A-F])/, len: 2, rpn: "ΣREG rr", params: "reg" },
+        { regex: /9A 7([0-4])/, len: 2, rpn: "ASTO ST `stk`", params: "stk" },
+        { regex: /9A ([89A-E][0-9A-F])/, len: 2, rpn: "ASTO IND rr", params: "reg" },
+        { regex: /9A F([0-4])/, len: 2, rpn: "ASTO IND ST `stk`", params: "stk" },
+        { regex: /9A ([0-7][0-9A-F])/, len: 2, rpn: "ASTO rr", params: "reg" },
+        { regex: /9B 7([0-4])/, len: 2, rpn: "ARCL ST `stk`", params: "stk" },
+        { regex: /9B ([89A-E][0-9A-F])/, len: 2, rpn: "ARCL IND rr", params: "reg" },
+        { regex: /9B F([0-4])/, len: 2, rpn: "ARCL IND ST `stk`", params: "stk" },
+        { regex: /9B ([0-7][0-9A-F])/, len: 2, rpn: "ARCL rr", params: "reg" }, //+
+        { regex: /9C ([89A-E][0-9A-F])/, len: 2, rpn: "FIX IND rr", params: "reg" },
+        { regex: /9C F([0-4])/, len: 2, rpn: "FIX IND ST `stk`", params: "stk" },
+        { regex: /9C (0[1-9])/, len: 2, rpn: "FIX sd", params: "digits" },
+        { regex: /9D ([89A-E][0-9A-F])/, len: 2, rpn: "SCI IND rr", params: "reg" },
+        { regex: /9D F([0-4])/, len: 2, rpn: "SCI IND ST `stk`", params: "stk" },
+        { regex: /9D (0[1-9])/, len: 2, rpn: "SCI sd", params: "digits" },
+        { regex: /9E ([89A-E][0-9A-F])/, len: 2, rpn: "ENG IND rr", params: "reg" },
+        { regex: /9E F([0-4])/, len: 2, rpn: "ENG IND ST `stk`", params: "stk" },
+        { regex: /9E (0[1-9])/, len: 2, rpn: "ENG sd", params: "digits" },
+        { regex: /9F ([89A-E][0-9A-F])/, len: 2, rpn: "TONE IND rr", params: "reg" },
+        { regex: /9F F([0-4])/, len: 2, rpn: "TONE IND ST `stk`", params: "stk" },
+        { regex: /9F (0[0-9])/, len: 2, rpn: "TONE tn", params: "tone" } //+
       ]
     },
     {
-      key: 'A',
+      key: "A",
       value: [
-        { regex: /A0 61/, len: 2, rpn: 'SINH' },
-        { regex: /A0 62/, len: 2, rpn: 'COSH' },
-        { regex: /A0 63/, len: 2, rpn: 'TANH' },
-        { regex: /A0 64/, len: 2, rpn: 'ASINH' },
-        { regex: /A0 65/, len: 2, rpn: 'ATANH' },
-        { regex: /A0 66/, len: 2, rpn: 'ACOSH' },
-        { regex: /A0 6F/, len: 2, rpn: 'COMB' },
-        { regex: /A0 70/, len: 2, rpn: 'PERM' },
-        { regex: /A0 71/, len: 2, rpn: 'RAN' },
-        { regex: /A0 72/, len: 2, rpn: 'COMPLEX' },//+
-        { regex: /A0 73/, len: 2, rpn: 'SEED' },
-        { regex: /A0 74/, len: 2, rpn: 'GAMMA' },
-        { regex: /A0 9F/, len: 2, rpn: 'BEST' },
-        { regex: /A0 A0/, len: 2, rpn: 'EXPF' },
-        { regex: /A0 A1/, len: 2, rpn: 'LINF' },
-        { regex: /A0 A2/, len: 2, rpn: 'LOGF' },
-        { regex: /A0 A3/, len: 2, rpn: 'PWRF' },
-        { regex: /A0 A4/, len: 2, rpn: 'SLOPE' },
-        { regex: /A0 A5/, len: 2, rpn: 'SUM' },
-        { regex: /A0 A6/, len: 2, rpn: 'YINT' },
-        { regex: /A0 A7/, len: 2, rpn: 'COrr', params: 'reg' },
-        { regex: /A0 A8/, len: 2, rpn: 'FCSTX' },
-        { regex: /A0 A9/, len: 2, rpn: 'FCSTY' },
-        { regex: /A0 AA/, len: 2, rpn: 'INSR' },//+
-        { regex: /A0 AB/, len: 2, rpn: 'DELR' },
-        { regex: /A0 AC/, len: 2, rpn: 'WMEAN' },
-        { regex: /A0 AD/, len: 2, rpn: 'LINΣ' },
-        { regex: /A0 AE/, len: 2, rpn: 'ALLΣ' },
-        { regex: /A0 E2/, len: 2, rpn: 'HEXM' },
-        { regex: /A0 E3/, len: 2, rpn: 'DECM' },
-        { regex: /A0 E4/, len: 2, rpn: 'OCTM' },
-        { regex: /A0 E5/, len: 2, rpn: 'BINM' },
-        { regex: /A0 E6/, len: 2, rpn: 'BASE+' },
-        { regex: /A0 E7/, len: 2, rpn: 'BASE-' },//+
-        { regex: /A0 E8/, len: 2, rpn: 'BASE×' },
-        { regex: /A0 E9/, len: 2, rpn: 'BASE÷' },
-        { regex: /A0 EA/, len: 2, rpn: 'BASE±' },
-        { regex: /A2 59/, len: 2, rpn: 'POLAR' },
-        { regex: /A2 5A/, len: 2, rpn: 'RECT' },//+
-        { regex: /A2 5B/, len: 2, rpn: 'RDX.' },
-        { regex: /A2 5C/, len: 2, rpn: 'RDX,' },
-        { regex: /A2 5D/, len: 2, rpn: 'ALL' },//+
-        { regex: /A2 5E/, len: 2, rpn: 'MENU' },//+
-        { regex: /A2 5F/, len: 2, rpn: 'X≥0?' },
-        { regex: /A2 60/, len: 2, rpn: 'X≥Y?' },//+
-        { regex: /A2 62/, len: 2, rpn: 'CLKEYS' },
-        { regex: /A2 63/, len: 2, rpn: 'KEYASN' },
-        { regex: /A2 64/, len: 2, rpn: 'LCLBL' },
-        { regex: /A2 65/, len: 2, rpn: 'REAL?' },
-        { regex: /A2 66/, len: 2, rpn: 'MAT?' },
-        { regex: /A2 67/, len: 2, rpn: 'CPX?' },
-        { regex: /A2 68/, len: 2, rpn: 'STR?' },
-        { regex: /A2 6A/, len: 2, rpn: 'CPXRES' },
-        { regex: /A2 6B/, len: 2, rpn: 'REALRES' },
-        { regex: /A2 6C/, len: 2, rpn: 'EXITALL' },//+
-        { regex: /A2 6D/, len: 2, rpn: 'CLMENU' },//+
-        { regex: /A2 6E/, len: 2, rpn: 'GETKEY' },
-        { regex: /A2 6F/, len: 2, rpn: 'CUSTOM' },
-        { regex: /A2 70/, len: 2, rpn: 'ON' },
-        { regex: /A5 87/, len: 2, rpn: 'NOT' },
-        { regex: /A5 88/, len: 2, rpn: 'AND' },
-        { regex: /A5 89/, len: 2, rpn: 'OR' },
-        { regex: /A5 8A/, len: 2, rpn: 'XOR' },
-        { regex: /A5 8B/, len: 2, rpn: 'ROTXY' },
-        { regex: /A5 8C/, len: 2, rpn: 'BIT?' },
-        { regex: /A6 31/, len: 2, rpn: 'AIP' },//+
-        { regex: /A6 41/, len: 2, rpn: 'ALENG' },
-        { regex: /A6 46/, len: 2, rpn: 'AROT' },
-        { regex: /A6 47/, len: 2, rpn: 'ATOX' },
-        { regex: /A6 5C/, len: 2, rpn: 'POSA' },
-        { regex: /A6 6F/, len: 2, rpn: 'XTOA' },
-        { regex: /A6 78/, len: 2, rpn: 'ΣREG?' },
-        { regex: /A6 81/, len: 2, rpn: 'ADATE' },
-        { regex: /A6 84/, len: 2, rpn: 'ATIME' },
-        { regex: /A6 85/, len: 2, rpn: 'ATIME24' },
-        { regex: /A6 86/, len: 2, rpn: 'CLK12' },
-        { regex: /A6 87/, len: 2, rpn: 'CLK24' },
-        { regex: /A6 8C/, len: 2, rpn: 'DATE' },
-        { regex: /A6 8D/, len: 2, rpn: 'DATE+' },
-        { regex: /A6 8E/, len: 2, rpn: 'DDAYS' },
-        { regex: /A6 8F/, len: 2, rpn: 'DMY' },
-        { regex: /A6 90/, len: 2, rpn: 'DOW' },
-        { regex: /A6 91/, len: 2, rpn: 'MDY' },
-        { regex: /A6 9C/, len: 2, rpn: 'TIME' },
-        { regex: /A6 C9/, len: 2, rpn: 'TRANS' },
-        { regex: /A6 CA/, len: 2, rpn: 'CROSS' },
-        { regex: /A6 CB/, len: 2, rpn: 'DOT' },
-        { regex: /A6 CC/, len: 2, rpn: 'DET' },
-        { regex: /A6 CD/, len: 2, rpn: 'UVEC' },
-        { regex: /A6 CE/, len: 2, rpn: 'INVRT' },
-        { regex: /A6 CF/, len: 2, rpn: 'FNRM' },
-        { regex: /A6 D0/, len: 2, rpn: 'RSUM' },
-        { regex: /A6 D1/, len: 2, rpn: 'R<>R' },
-        { regex: /A6 D2/, len: 2, rpn: 'I+' },
-        { regex: /A6 D3/, len: 2, rpn: 'I-' },
-        { regex: /A6 D4/, len: 2, rpn: 'J+' },//+
-        { regex: /A6 D5/, len: 2, rpn: 'J-' },
-        { regex: /A6 D6/, len: 2, rpn: 'STOEL' },
-        { regex: /A6 D7/, len: 2, rpn: 'RCLEL' },//+
-        { regex: /A6 D8/, len: 2, rpn: 'STOIJ' },
-        { regex: /A6 D9/, len: 2, rpn: 'RCLIJ' },
-        { regex: /A6 DA/, len: 2, rpn: 'NEWMAT' },//+
-        { regex: /A6 DB/, len: 2, rpn: 'OLD' },
-        { regex: /A6 DC/, len: 2, rpn: '←' },
-        { regex: /A6 DD/, len: 2, rpn: '→' },//+
-        { regex: /A6 DE/, len: 2, rpn: '↑' },
-        { regex: /A6 DF/, len: 2, rpn: '↓' },
-        { regex: /A6 E1/, len: 2, rpn: 'EDIT' },
-        { regex: /A6 E2/, len: 2, rpn: 'WRAP' },//+
-        { regex: /A6 E3/, len: 2, rpn: 'GROW' },//+
-        { regex: /A6 E7/, len: 2, rpn: 'DIM?' },
-        { regex: /A6 E8/, len: 2, rpn: 'GETM' },
-        { regex: /A6 E9/, len: 2, rpn: 'PUTM' },
-        { regex: /A6 EA/, len: 2, rpn: '[MIN]' },
-        { regex: /A6 EB/, len: 2, rpn: '[MAX]' },
-        { regex: /A6 EC/, len: 2, rpn: '[FIND]' },
-        { regex: /A6 ED/, len: 2, rpn: 'RNRM' },
-        { regex: /A7 48/, len: 2, rpn: 'PRA' },
-        { regex: /A7 52/, len: 2, rpn: 'PRΣ' },
-        { regex: /A7 53/, len: 2, rpn: 'PRSTK' },
-        { regex: /A7 54/, len: 2, rpn: 'PRX' },
-        { regex: /A7 5B/, len: 2, rpn: 'MAN' },
-        { regex: /A7 5C/, len: 2, rpn: 'NORM' },
-        { regex: /A7 5D/, len: 2, rpn: 'TRACE' },
-        { regex: /A7 5E/, len: 2, rpn: 'PRON' },
-        { regex: /A7 5F/, len: 2, rpn: 'PROFF' },
-        { regex: /A7 60/, len: 2, rpn: 'DELAY' },
-        { regex: /A7 61/, len: 2, rpn: 'PRUSR' },
-        { regex: /A7 62/, len: 2, rpn: 'PRLCD' },
-        { regex: /A7 63/, len: 2, rpn: 'CLLCD' },
-        { regex: /A7 64/, len: 2, rpn: 'AGRAPH' },
-        { regex: /A7 65/, len: 2, rpn: 'PIXEL' },
-        { regex: /A7 CF/, len: 2, rpn: 'ACCEL' },
-        { regex: /A7 D0/, len: 2, rpn: 'LOCAT' },
-        { regex: /A7 D1/, len: 2, rpn: 'HEADING' },
-        { regex: /A8 ([89A-E][0-9A-F])/, len: 2, rpn: 'SF IND rr', params: 'reg' },
-        { regex: /A8 F([0-4])/, len: 2, rpn: 'SF IND ST `stk`', params: 'stk' },
-        { regex: /A8 ([0-7][0-9A-F])/, len: 2, rpn: 'SF rr', params: 'reg' },//+ flags dec:00-99 hex:00-63
-        { regex: /A9 ([89A-E][0-9A-F])/, len: 2, rpn: 'CF IND rr', params: 'reg' },
-        { regex: /A9 F([0-4])/, len: 2, rpn: 'CF IND ST `stk`', params: 'stk' },
-        { regex: /A9 ([0-7][0-9A-F])/, len: 2, rpn: 'CF rr', params: 'reg' },
-        { regex: /AA ([89A-E][0-9A-F])/, len: 2, rpn: 'FS?C IND rr', params: 'reg' },
-        { regex: /AA F([0-4])/, len: 2, rpn: 'FS?C IND ST `stk`', params: 'stk' },
-        { regex: /AA ([0-7][0-9A-F])/, len: 2, rpn: 'FS?C rr', params: 'reg' },//+
-        { regex: /AB ([89A-E][0-9A-F])/, len: 2, rpn: 'FC?C IND rr', params: 'reg' },
-        { regex: /AB F([0-4])/, len: 2, rpn: 'FC?C IND ST `stk`', params: 'stk' },
-        { regex: /AB ([0-7][0-9A-F])/, len: 2, rpn: 'FC?C rr', params: 'reg' },
-        { regex: /AC ([89A-E][0-9A-F])/, len: 2, rpn: 'FS? IND rr', params: 'reg' },
-        { regex: /AC F([0-4])/, len: 2, rpn: 'FS? IND ST `stk`', params: 'stk' },
-        { regex: /AC ([0-7][0-9A-F])/, len: 2, rpn: 'FS? rr', params: 'reg' },//+
-        { regex: /AD ([89A-E][0-9A-F])/, len: 2, rpn: 'FC? IND rr', params: 'reg' },
-        { regex: /AD F([0-4])/, len: 2, rpn: 'FC? IND ST `stk`', params: 'stk' },
-        { regex: /AD ([0-7][0-9A-F])/, len: 2, rpn: 'FC? rr', params: 'reg' },//+
-        { regex: /AE 7([0-4])/, len: 2, rpn: 'GTO IND ST `stk`', params: 'stk' },
-        { regex: /AE ([89A-E][0-9A-F])/, len: 2, rpn: 'XEQ IND rr', params: 'reg' },
-        { regex: /AE F([0-4])/, len: 2, rpn: 'XEQ IND ST `stk`', params: 'stk' },
-        { regex: /AE ([0-7][0-9A-F])/, len: 2, rpn: 'GTO IND rr', params: 'reg' }
+        { regex: /A0 61/, len: 2, rpn: "SINH" },
+        { regex: /A0 62/, len: 2, rpn: "COSH" },
+        { regex: /A0 63/, len: 2, rpn: "TANH" },
+        { regex: /A0 64/, len: 2, rpn: "ASINH" },
+        { regex: /A0 65/, len: 2, rpn: "ATANH" },
+        { regex: /A0 66/, len: 2, rpn: "ACOSH" },
+        { regex: /A0 6F/, len: 2, rpn: "COMB" },
+        { regex: /A0 70/, len: 2, rpn: "PERM" },
+        { regex: /A0 71/, len: 2, rpn: "RAN" },
+        { regex: /A0 72/, len: 2, rpn: "COMPLEX" }, //+
+        { regex: /A0 73/, len: 2, rpn: "SEED" },
+        { regex: /A0 74/, len: 2, rpn: "GAMMA" },
+        { regex: /A0 9F/, len: 2, rpn: "BEST" },
+        { regex: /A0 A0/, len: 2, rpn: "EXPF" },
+        { regex: /A0 A1/, len: 2, rpn: "LINF" },
+        { regex: /A0 A2/, len: 2, rpn: "LOGF" },
+        { regex: /A0 A3/, len: 2, rpn: "PWRF" },
+        { regex: /A0 A4/, len: 2, rpn: "SLOPE" },
+        { regex: /A0 A5/, len: 2, rpn: "SUM" },
+        { regex: /A0 A6/, len: 2, rpn: "YINT" },
+        { regex: /A0 A7/, len: 2, rpn: "COrr", params: "reg" },
+        { regex: /A0 A8/, len: 2, rpn: "FCSTX" },
+        { regex: /A0 A9/, len: 2, rpn: "FCSTY" },
+        { regex: /A0 AA/, len: 2, rpn: "INSR" }, //+
+        { regex: /A0 AB/, len: 2, rpn: "DELR" },
+        { regex: /A0 AC/, len: 2, rpn: "WMEAN" },
+        { regex: /A0 AD/, len: 2, rpn: "LINΣ" },
+        { regex: /A0 AE/, len: 2, rpn: "ALLΣ" },
+        { regex: /A0 E2/, len: 2, rpn: "HEXM" },
+        { regex: /A0 E3/, len: 2, rpn: "DECM" },
+        { regex: /A0 E4/, len: 2, rpn: "OCTM" },
+        { regex: /A0 E5/, len: 2, rpn: "BINM" },
+        { regex: /A0 E6/, len: 2, rpn: "BASE+" },
+        { regex: /A0 E7/, len: 2, rpn: "BASE-" }, //+
+        { regex: /A0 E8/, len: 2, rpn: "BASE×" },
+        { regex: /A0 E9/, len: 2, rpn: "BASE÷" },
+        { regex: /A0 EA/, len: 2, rpn: "BASE±" },
+        { regex: /A2 59/, len: 2, rpn: "POLAR" },
+        { regex: /A2 5A/, len: 2, rpn: "RECT" }, //+
+        { regex: /A2 5B/, len: 2, rpn: "RDX." },
+        { regex: /A2 5C/, len: 2, rpn: "RDX," },
+        { regex: /A2 5D/, len: 2, rpn: "ALL" }, //+
+        { regex: /A2 5E/, len: 2, rpn: "MENU" }, //+
+        { regex: /A2 5F/, len: 2, rpn: "X≥0?" },
+        { regex: /A2 60/, len: 2, rpn: "X≥Y?" }, //+
+        { regex: /A2 62/, len: 2, rpn: "CLKEYS" },
+        { regex: /A2 63/, len: 2, rpn: "KEYASN" },
+        { regex: /A2 64/, len: 2, rpn: "LCLBL" },
+        { regex: /A2 65/, len: 2, rpn: "REAL?" },
+        { regex: /A2 66/, len: 2, rpn: "MAT?" },
+        { regex: /A2 67/, len: 2, rpn: "CPX?" },
+        { regex: /A2 68/, len: 2, rpn: "STR?" },
+        { regex: /A2 6A/, len: 2, rpn: "CPXRES" },
+        { regex: /A2 6B/, len: 2, rpn: "REALRES" },
+        { regex: /A2 6C/, len: 2, rpn: "EXITALL" }, //+
+        { regex: /A2 6D/, len: 2, rpn: "CLMENU" }, //+
+        { regex: /A2 6E/, len: 2, rpn: "GETKEY" },
+        { regex: /A2 6F/, len: 2, rpn: "CUSTOM" },
+        { regex: /A2 70/, len: 2, rpn: "ON" },
+        { regex: /A5 87/, len: 2, rpn: "NOT" },
+        { regex: /A5 88/, len: 2, rpn: "AND" },
+        { regex: /A5 89/, len: 2, rpn: "OR" },
+        { regex: /A5 8A/, len: 2, rpn: "XOR" },
+        { regex: /A5 8B/, len: 2, rpn: "ROTXY" },
+        { regex: /A5 8C/, len: 2, rpn: "BIT?" },
+        { regex: /A6 31/, len: 2, rpn: "AIP" }, //+
+        { regex: /A6 41/, len: 2, rpn: "ALENG" },
+        { regex: /A6 46/, len: 2, rpn: "AROT" },
+        { regex: /A6 47/, len: 2, rpn: "ATOX" },
+        { regex: /A6 5C/, len: 2, rpn: "POSA" },
+        { regex: /A6 6F/, len: 2, rpn: "XTOA" },
+        { regex: /A6 78/, len: 2, rpn: "ΣREG?" },
+        { regex: /A6 81/, len: 2, rpn: "ADATE" },
+        { regex: /A6 84/, len: 2, rpn: "ATIME" },
+        { regex: /A6 85/, len: 2, rpn: "ATIME24" },
+        { regex: /A6 86/, len: 2, rpn: "CLK12" },
+        { regex: /A6 87/, len: 2, rpn: "CLK24" },
+        { regex: /A6 8C/, len: 2, rpn: "DATE" },
+        { regex: /A6 8D/, len: 2, rpn: "DATE+" },
+        { regex: /A6 8E/, len: 2, rpn: "DDAYS" },
+        { regex: /A6 8F/, len: 2, rpn: "DMY" },
+        { regex: /A6 90/, len: 2, rpn: "DOW" },
+        { regex: /A6 91/, len: 2, rpn: "MDY" },
+        { regex: /A6 9C/, len: 2, rpn: "TIME" },
+        { regex: /A6 C9/, len: 2, rpn: "TRANS" },
+        { regex: /A6 CA/, len: 2, rpn: "CROSS" },
+        { regex: /A6 CB/, len: 2, rpn: "DOT" },
+        { regex: /A6 CC/, len: 2, rpn: "DET" },
+        { regex: /A6 CD/, len: 2, rpn: "UVEC" },
+        { regex: /A6 CE/, len: 2, rpn: "INVRT" },
+        { regex: /A6 CF/, len: 2, rpn: "FNRM" },
+        { regex: /A6 D0/, len: 2, rpn: "RSUM" },
+        { regex: /A6 D1/, len: 2, rpn: "R<>R" },
+        { regex: /A6 D2/, len: 2, rpn: "I+" },
+        { regex: /A6 D3/, len: 2, rpn: "I-" },
+        { regex: /A6 D4/, len: 2, rpn: "J+" }, //+
+        { regex: /A6 D5/, len: 2, rpn: "J-" },
+        { regex: /A6 D6/, len: 2, rpn: "STOEL" },
+        { regex: /A6 D7/, len: 2, rpn: "RCLEL" }, //+
+        { regex: /A6 D8/, len: 2, rpn: "STOIJ" },
+        { regex: /A6 D9/, len: 2, rpn: "RCLIJ" },
+        { regex: /A6 DA/, len: 2, rpn: "NEWMAT" }, //+
+        { regex: /A6 DB/, len: 2, rpn: "OLD" },
+        { regex: /A6 DC/, len: 2, rpn: "←" },
+        { regex: /A6 DD/, len: 2, rpn: "→" }, //+
+        { regex: /A6 DE/, len: 2, rpn: "↑" },
+        { regex: /A6 DF/, len: 2, rpn: "↓" },
+        { regex: /A6 E1/, len: 2, rpn: "EDIT" },
+        { regex: /A6 E2/, len: 2, rpn: "WRAP" }, //+
+        { regex: /A6 E3/, len: 2, rpn: "GROW" }, //+
+        { regex: /A6 E7/, len: 2, rpn: "DIM?" },
+        { regex: /A6 E8/, len: 2, rpn: "GETM" },
+        { regex: /A6 E9/, len: 2, rpn: "PUTM" },
+        { regex: /A6 EA/, len: 2, rpn: "[MIN]" },
+        { regex: /A6 EB/, len: 2, rpn: "[MAX]" },
+        { regex: /A6 EC/, len: 2, rpn: "[FIND]" },
+        { regex: /A6 ED/, len: 2, rpn: "RNRM" },
+        { regex: /A7 48/, len: 2, rpn: "PRA" },
+        { regex: /A7 52/, len: 2, rpn: "PRΣ" },
+        { regex: /A7 53/, len: 2, rpn: "PRSTK" },
+        { regex: /A7 54/, len: 2, rpn: "PRX" },
+        { regex: /A7 5B/, len: 2, rpn: "MAN" },
+        { regex: /A7 5C/, len: 2, rpn: "NORM" },
+        { regex: /A7 5D/, len: 2, rpn: "TRACE" },
+        { regex: /A7 5E/, len: 2, rpn: "PRON" },
+        { regex: /A7 5F/, len: 2, rpn: "PROFF" },
+        { regex: /A7 60/, len: 2, rpn: "DELAY" },
+        { regex: /A7 61/, len: 2, rpn: "PRUSR" },
+        { regex: /A7 62/, len: 2, rpn: "PRLCD" },
+        { regex: /A7 63/, len: 2, rpn: "CLLCD" },
+        { regex: /A7 64/, len: 2, rpn: "AGRAPH" },
+        { regex: /A7 65/, len: 2, rpn: "PIXEL" },
+        { regex: /A7 CF/, len: 2, rpn: "ACCEL" },
+        { regex: /A7 D0/, len: 2, rpn: "LOCAT" },
+        { regex: /A7 D1/, len: 2, rpn: "HEADING" },
+        { regex: /A8 ([89A-E][0-9A-F])/, len: 2, rpn: "SF IND rr", params: "reg" },
+        { regex: /A8 F([0-4])/, len: 2, rpn: "SF IND ST `stk`", params: "stk" },
+        { regex: /A8 ([0-7][0-9A-F])/, len: 2, rpn: "SF rr", params: "reg" }, //+ flags dec:00-99 hex:00-63
+        { regex: /A9 ([89A-E][0-9A-F])/, len: 2, rpn: "CF IND rr", params: "reg" },
+        { regex: /A9 F([0-4])/, len: 2, rpn: "CF IND ST `stk`", params: "stk" },
+        { regex: /A9 ([0-7][0-9A-F])/, len: 2, rpn: "CF rr", params: "reg" },
+        { regex: /AA ([89A-E][0-9A-F])/, len: 2, rpn: "FS?C IND rr", params: "reg" },
+        { regex: /AA F([0-4])/, len: 2, rpn: "FS?C IND ST `stk`", params: "stk" },
+        { regex: /AA ([0-7][0-9A-F])/, len: 2, rpn: "FS?C rr", params: "reg" }, //+
+        { regex: /AB ([89A-E][0-9A-F])/, len: 2, rpn: "FC?C IND rr", params: "reg" },
+        { regex: /AB F([0-4])/, len: 2, rpn: "FC?C IND ST `stk`", params: "stk" },
+        { regex: /AB ([0-7][0-9A-F])/, len: 2, rpn: "FC?C rr", params: "reg" },
+        { regex: /AC ([89A-E][0-9A-F])/, len: 2, rpn: "FS? IND rr", params: "reg" },
+        { regex: /AC F([0-4])/, len: 2, rpn: "FS? IND ST `stk`", params: "stk" },
+        { regex: /AC ([0-7][0-9A-F])/, len: 2, rpn: "FS? rr", params: "reg" }, //+
+        { regex: /AD ([89A-E][0-9A-F])/, len: 2, rpn: "FC? IND rr", params: "reg" },
+        { regex: /AD F([0-4])/, len: 2, rpn: "FC? IND ST `stk`", params: "stk" },
+        { regex: /AD ([0-7][0-9A-F])/, len: 2, rpn: "FC? rr", params: "reg" }, //+
+        { regex: /AE 7([0-4])/, len: 2, rpn: "GTO IND ST `stk`", params: "stk" },
+        { regex: /AE ([89A-E][0-9A-F])/, len: 2, rpn: "XEQ IND rr", params: "reg" },
+        { regex: /AE F([0-4])/, len: 2, rpn: "XEQ IND ST `stk`", params: "stk" },
+        { regex: /AE ([0-7][0-9A-F])/, len: 2, rpn: "GTO IND rr", params: "reg" }
       ]
     },
     {
-      key: 'B',
+      key: "B",
       value: [
-        { regex: /B([1-9A-F]) 00/, len: 2, rpn: 'GTO sl', params: 'lblno-1' }//+ dec: 01-14, l+1: 2-F
+        { regex: /B([1-9A-F]) 00/, len: 2, rpn: "GTO sl", params: "lblno-1" } //+ dec: 01-14, l+1: 2-F
         // GTO 14  BF00
-  
       ]
     },
     {
-      key: 'C',
+      key: "C",
       value: [
-        { regex: /C0 00 0D/, len: 3, rpn: 'END' },
-        { regex: /C0 00 F([1-9A-F]) 00/, len: 4, rpn: 'LBL `lbl`', params: 'strl-1' },//+
-        { regex: /CE 7([0-4])/, len: 2, rpn: 'X<> ST `stk`', params: 'stk' },
-        { regex: /CE ([89A-E][0-9A-F])/, len: 2, rpn: 'X<> IND rr', params: 'reg' },
-        { regex: /CE F([0-4])/, len: 2, rpn: 'X<> IND ST `stk`', params: 'stk' },
-        { regex: /CE ([0-7][0-9A-F])/, len: 2, rpn: 'X<> rr', params: 'reg' },
-        { regex: /CF ([1-7][0-9A-F])/, len: 2, rpn: 'LBL ll', params: 'lblno' }//+ dec:16-99; hex:10-63
+        { regex: /C0 00 0D/, len: 3, rpn: "END" },
+        { regex: /C0 00 F([1-9A-F]) 00/, len: 4, rpn: "LBL `lbl`", params: "strl-1" }, //+
+        { regex: /CE 7([0-4])/, len: 2, rpn: "X<> ST `stk`", params: "stk" },
+        { regex: /CE ([89A-E][0-9A-F])/, len: 2, rpn: "X<> IND rr", params: "reg" },
+        { regex: /CE F([0-4])/, len: 2, rpn: "X<> IND ST `stk`", params: "stk" },
+        { regex: /CE ([0-7][0-9A-F])/, len: 2, rpn: "X<> rr", params: "reg" },
+        { regex: /CF ([1-7][0-9A-F])/, len: 2, rpn: "LBL ll", params: "lblno" } //+
         // LBL 99  CF63 dec:16-99; hex:10-63
-        // LBL A   CF66 
+        // LBL A   CF66
         // LBL J   CF6F
         // LBL a   CF7B
         // LBL e   CF7F
       ]
     },
     {
-      key: 'D',
+      key: "D",
       value: [
-        { regex: /D0 00 ([0-7][0-9A-F])/, len: 3, rpn: 'GTO ll', params: 'lblno' }//+ 
+        { regex: /D0 00 ([0-7][0-9A-F])/, len: 3, rpn: "GTO ll", params: "lblno" } //+
         // GTO 99  D00063 dec:15-99 hex:0F-63
         // GTO A   D00066
         // GTO J   D0006F
@@ -1097,152 +1085,152 @@ export class DecoderFOCAL {
     },
 
     {
-      key: 'E',
+      key: "E",
       value: [
-        { regex: /E0 00 ([0-7][0-9A-F])/, len: 3, rpn: 'XEQ ll', params: 'lblno' }//+
+        { regex: /E0 00 ([0-7][0-9A-F])/, len: 3, rpn: "XEQ ll", params: "lblno" } //+
         // XEQ 14  E0000E dec:15-99 hex:0F-63
         // XEQ 99  E00063
         // XEQ A   E00066
         // XEQ J   E0006F
         // XEQ a   E0007B
-        // XEQ e   E0007F 
+        // XEQ e   E0007F
       ]
     },
 
     {
-      key: 'F',
+      key: "F",
       value: [
-        { regex: /F1 D5/, len: 2, rpn: 'FIX 10' },
-        { regex: /F1 D6/, len: 2, rpn: 'SCI 10' },
-        { regex: /F1 D7/, len: 2, rpn: 'ENG 10' },
-        { regex: /F1 E5/, len: 2, rpn: 'FIX 11' },
-        { regex: /F1 E6/, len: 2, rpn: 'SCI 11' },
-        { regex: /F1 E7/, len: 2, rpn: 'ENG 11' },
-        { regex: /F2 D0 7([0-4])/, len: 3, rpn: 'INPUT ST `stk`', params: 'stk' },
-        { regex: /F2 D0 ([0-7][0-9A-F])/, len: 3, rpn: 'INPUT rr', params: 'reg' },
-        { regex: /F2 D1 7([0-4])/, len: 3, rpn: 'RCL+ ST `stk`', params: 'stk' },
-        { regex: /F2 D1 ([89A-E][0-9A-F])/, len: 3, rpn: 'RCL+ IND rr', params: 'reg' },
-        { regex: /F2 D1 F([0-4])/, len: 3, rpn: 'RCL+ IND ST `stk`', params: 'stk' },//+
-        { regex: /F2 D1 ([0-7][0-9A-F])/, len: 3, rpn: 'RCL+ rr', params: 'reg' },
-        { regex: /F2 D2 7([0-4])/, len: 3, rpn: 'RCL- ST `stk`', params: 'stk' },
-        { regex: /F2 D2 ([89A-E][0-9A-F])/, len: 3, rpn: 'RCL- IND rr', params: 'reg' },
-        { regex: /F2 D2 F([0-4])/, len: 3, rpn: 'RCL- IND ST `stk`', params: 'stk' },
-        { regex: /F2 D2 ([0-7][0-9A-F])/, len: 3, rpn: 'RCL- rr', params: 'reg' },
-        { regex: /F2 D3 7([0-4])/, len: 3, rpn: 'RCL× ST `stk`', params: 'stk' },
-        { regex: /F2 D3 ([89A-E][0-9A-F])/, len: 3, rpn: 'RCL× IND rr', params: 'reg' },
-        { regex: /F2 D3 F([0-4])/, len: 3, rpn: 'RCL× IND ST `stk`', params: 'stk' },
-        { regex: /F2 D3 ([0-7][0-9A-F])/, len: 3, rpn: 'RCL× rr', params: 'reg' },
-        { regex: /F2 D4 7([0-4])/, len: 3, rpn: 'RCL÷ ST `stk`', params: 'stk' },
-        { regex: /F2 D4 ([89A-E][0-9A-F])/, len: 3, rpn: 'RCL÷ IND rr', params: 'reg' },
-        { regex: /F2 D4 F([0-4])/, len: 3, rpn: 'RCL÷ IND ST `stk`', params: 'stk' },
-        { regex: /F2 D4 ([0-7][0-9A-F])/, len: 3, rpn: 'RCL÷ rr', params: 'reg' },
-        { regex: /F2 D8 ([89A-E][0-9A-F])/, len: 3, rpn: 'CLV IND rr', params: 'reg' },
-        { regex: /F2 D8 F([0-4])/, len: 3, rpn: 'CLV IND ST `stk`', params: 'stk' },
-        { regex: /F2 D9 ([89A-E][0-9A-F])/, len: 3, rpn: 'PRV IND rr', params: 'reg' },
-        { regex: /F2 D9 F([0-4])/, len: 3, rpn: 'PRV IND ST `stk`', params: 'stk' },
-        { regex: /F2 DA ([89A-E][0-9A-F])/, len: 3, rpn: 'INDEX IND rr', params: 'reg' },
-        { regex: /F2 DA F([0-4])/, len: 3, rpn: 'INDEX IND ST `stk`', params: 'stk' },
-        { regex: /F2 E8 ([89A-E][0-9A-F])/, len: 3, rpn: 'PGMINT IND rr', params: 'reg' },
-        { regex: /F2 E8 F([0-4])/, len: 3, rpn: 'PGMINT IND ST `stk`', params: 'stk' },
-        { regex: /F2 E9 ([89A-E][0-9A-F])/, len: 3, rpn: 'PGMSLV IND rr', params: 'reg' },
-        { regex: /F2 E9 F([0-4])/, len: 3, rpn: 'PGMSLV IND ST `stk`', params: 'stk' },
-        { regex: /F2 EA ([89A-E][0-9A-F])/, len: 3, rpn: 'INTEG IND rr', params: 'reg' },
-        { regex: /F2 EA F([0-4])/, len: 3, rpn: 'INTEG IND ST `stk`', params: 'stk' },
-        { regex: /F2 EB ([89A-E][0-9A-F])/, len: 3, rpn: 'SOLVE IND rr', params: 'reg' },
-        { regex: /F2 EB F([0-4])/, len: 3, rpn: 'SOLVE IND ST `stk`', params: 'stk' },
-        { regex: /F2 EC ([89A-E][0-9A-F])/, len: 3, rpn: 'DIM IND rr', params: 'reg' },
-        { regex: /F2 EC F([0-4])/, len: 3, rpn: 'DIM IND ST `stk`', params: 'stk' },
-        { regex: /F2 EE ([89A-E][0-9A-F])/, len: 3, rpn: 'INPUT IND rr', params: 'reg' },
-        { regex: /F2 EE F([0-4])/, len: 3, rpn: 'INPUT IND ST `stk`', params: 'stk' },
-        { regex: /F2 EF ([89A-E][0-9A-F])/, len: 3, rpn: 'EDITN IND rr', params: 'reg' },
-        { regex: /F2 EF F([0-4])/, len: 3, rpn: 'EDITN IND ST `stk`', params: 'stk' },
-        { regex: /F2 F8 ([89A-E][0-9A-F])/, len: 3, rpn: 'VARMENU IND rr', params: 'reg' },
-        { regex: /F2 F8 F([0-4])/, len: 3, rpn: 'VARMENU IND ST `stk`', params: 'stk' },
-        { regex: /F3 E2 (0[1-9]) ([89A-E][0-9A-F])/, len: 4, rpn: 'KEY `key` XEQ IND rr', params: 'key,reg' },
-        { regex: /F3 E2 (0[1-9]) F([0-4])/, len: 4, rpn: 'KEY `key` XEQ IND ST `stk`', params: 'key,stk' },
-        { regex: /F3 E2 (0[1-9]) ([0-7][0-9A-F])/, len: 4, rpn: 'KEY `key` XEQ ll', params: 'key,reg' },
-        { regex: /F3 E2 (0[1-9]) ([0-7][0-9A-F])/, len: 4, rpn: 'KEY `key` XEQ sl', params: 'key,reg' },
-        { regex: /F3 E3 (0[1-9]) ([89A-E][0-9A-F])/, len: 4, rpn: 'KEY `key` GTO IND rr', params: 'key,reg' },
-        { regex: /F3 E3 (0[1-9]) F([0-4])/, len: 4, rpn: 'KEY `key` GTO IND ST `stk`', params: 'key,stk' },
-        { regex: /F3 E3 (0[1-9]) ([0-7][0-9A-F])/, len: 4, rpn: 'KEY `key` GTO ll', params: 'key,lblno' },
-        { regex: /F3 E3 (0[1-9]) ([0-7][0-9A-F])/, len: 4, rpn: 'KEY `key` GTO sl', params: 'key,lblno' },
-        { regex: /F3 F7 ([0-9A-F][0-9A-F] [0-9A-F][0-9A-F])/, len: 4, rpn: 'SIZE rr', params: 'size' },
-        { regex: /F([1-9A-F]) 7F/, len: 2, rpn: '⊢`str`', params: 'strl-1' },//+
-        { regex: /F([1-9A-F]) 80/, len: 2, rpn: 'VIEW `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) 81/, len: 2, rpn: 'STO `nam`', params: 'strl-1' },//+
-        { regex: /F([1-9A-F]) 82/, len: 2, rpn: 'STO+ `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) 83/, len: 2, rpn: 'STO- `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) 84/, len: 2, rpn: 'STO× `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) 85/, len: 2, rpn: 'STO÷ `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) 86/, len: 2, rpn: 'X<> `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) 87/, len: 2, rpn: 'INDEX `nam`', params: 'strl-1' },//+
-        { regex: /F([1-9A-F]) 88/, len: 2, rpn: 'VIEW IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) 89/, len: 2, rpn: 'STO IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) 8A/, len: 2, rpn: 'STO+ IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) 8B/, len: 2, rpn: 'STO- IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) 8C/, len: 2, rpn: 'STO× IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) 8D/, len: 2, rpn: 'STO÷ IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) 8E/, len: 2, rpn: 'X<> IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) 8F/, len: 2, rpn: 'INDEX IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) 90/, len: 2, rpn: 'MVAR `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) 91/, len: 2, rpn: 'RCL `nam`', params: 'strl-1' },//+
-        { regex: /F([1-9A-F]) 92/, len: 2, rpn: 'RCL+ `nam`', params: 'strl-1' },//+
-        { regex: /F([1-9A-F]) 93/, len: 2, rpn: 'RCL- `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) 94/, len: 2, rpn: 'RCL× `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) 95/, len: 2, rpn: 'RCL÷ `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) 96/, len: 2, rpn: 'ISG `nam`', params: 'strl-1' },//+
-        { regex: /F([1-9A-F]) 97/, len: 2, rpn: 'DSE `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) 99/, len: 2, rpn: 'RCL IND `nam`', params: 'strl-1' },//+
-        { regex: /F([1-9A-F]) 9A/, len: 2, rpn: 'RCL+ IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) 9B/, len: 2, rpn: 'RCL- IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) 9C/, len: 2, rpn: 'RCL× IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) 9D/, len: 2, rpn: 'RCL÷ IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) 9E/, len: 2, rpn: 'ISG IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) 9F/, len: 2, rpn: 'DSE IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) A8/, len: 2, rpn: 'SF IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) A9/, len: 2, rpn: 'CF IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) AA/, len: 2, rpn: 'FS?C IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) AB/, len: 2, rpn: 'FC?C IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) AC/, len: 2, rpn: 'FS? IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) AD/, len: 2, rpn: 'FC? IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) AE/, len: 2, rpn: 'GTO IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) AF/, len: 2, rpn: 'XEQ IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) B0/, len: 2, rpn: 'CLV `nam`', params: 'strl-1' },//+
-        { regex: /F([1-9A-F]) B1/, len: 2, rpn: 'PRV `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) B2/, len: 2, rpn: 'ASTO `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) B3/, len: 2, rpn: 'ARCL `nam`', params: 'strl-1' },//+
-        { regex: /F([1-9A-F]) B4/, len: 2, rpn: 'PGMINT `lbl`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) B5/, len: 2, rpn: 'PGMSLV `lbl`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) B6/, len: 2, rpn: 'INTEG `lbl`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) B7/, len: 2, rpn: 'SOLVE `lbl`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) B8/, len: 2, rpn: 'CLV IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) B9/, len: 2, rpn: 'PRV IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) BA/, len: 2, rpn: 'ASTO IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) BB/, len: 2, rpn: 'ARCL IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) BC/, len: 2, rpn: 'PGMINT IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) BD/, len: 2, rpn: 'PGMSLV IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) BE/, len: 2, rpn: 'INTEG IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) BF/, len: 2, rpn: 'SOLVE IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) C0 (0[1-9])/, len: 3, rpn: 'ASSIGN `nam` TO `csk`' },
-        { regex: /F([1-9A-F]) C1/, len: 2, rpn: 'VARMENU `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) C2 (0[1-9])/, len: 3, rpn: 'KEY `key` XEQ `lbl`', params: 'strl-2,key' },//+
-        { regex: /F([1-9A-F]) C3 (0[1-9])/, len: 3, rpn: 'KEY `key` GTO `lbl`', params: 'strl-2,key' },
-        { regex: /F([1-9A-F]) C4/, len: 2, rpn: 'DIM `nam`', params: 'strl-1' },//+
-        { regex: /F([1-9A-F]) C5/, len: 2, rpn: 'INPUT `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) C6/, len: 2, rpn: 'EDITN `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) C9/, len: 2, rpn: 'VARMENU IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) CA (0[1-9])/, len: 3, rpn: 'KEY `key` XEQ IND `nam`', params: 'strl-2,key' },
-        { regex: /F([1-9A-F]) CB (0[1-9])/, len: 3, rpn: 'KEY `key` GTO IND `nam`', params: 'strl-2,key' },
-        { regex: /F([1-9A-F]) CC/, len: 2, rpn: 'DIM IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) CD/, len: 2, rpn: 'INPUT IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) CE/, len: 2, rpn: 'EDITN IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) DB/, len: 2, rpn: 'ΣREG IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) DC/, len: 2, rpn: 'FIX IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) DD/, len: 2, rpn: 'SCI IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) DE/, len: 2, rpn: 'ENG IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) DF/, len: 2, rpn: 'TONE IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) F0/, len: 2, rpn: 'CLP `lbl`', params: 'strl-1' },
-        { regex: /F([1-9A-F])/, len: 1, rpn: '`str`', params: 'strl' }//+ max. length 15
+        { regex: /F1 D5/, len: 2, rpn: "FIX 10" },
+        { regex: /F1 D6/, len: 2, rpn: "SCI 10" },
+        { regex: /F1 D7/, len: 2, rpn: "ENG 10" },
+        { regex: /F1 E5/, len: 2, rpn: "FIX 11" },
+        { regex: /F1 E6/, len: 2, rpn: "SCI 11" },
+        { regex: /F1 E7/, len: 2, rpn: "ENG 11" },
+        { regex: /F2 D0 7([0-4])/, len: 3, rpn: "INPUT ST `stk`", params: "stk" },
+        { regex: /F2 D0 ([0-7][0-9A-F])/, len: 3, rpn: "INPUT rr", params: "reg" },
+        { regex: /F2 D1 7([0-4])/, len: 3, rpn: "RCL+ ST `stk`", params: "stk" },
+        { regex: /F2 D1 ([89A-E][0-9A-F])/, len: 3, rpn: "RCL+ IND rr", params: "reg" },
+        { regex: /F2 D1 F([0-4])/, len: 3, rpn: "RCL+ IND ST `stk`", params: "stk" }, //+
+        { regex: /F2 D1 ([0-7][0-9A-F])/, len: 3, rpn: "RCL+ rr", params: "reg" },
+        { regex: /F2 D2 7([0-4])/, len: 3, rpn: "RCL- ST `stk`", params: "stk" },
+        { regex: /F2 D2 ([89A-E][0-9A-F])/, len: 3, rpn: "RCL- IND rr", params: "reg" },
+        { regex: /F2 D2 F([0-4])/, len: 3, rpn: "RCL- IND ST `stk`", params: "stk" },
+        { regex: /F2 D2 ([0-7][0-9A-F])/, len: 3, rpn: "RCL- rr", params: "reg" },
+        { regex: /F2 D3 7([0-4])/, len: 3, rpn: "RCL× ST `stk`", params: "stk" },
+        { regex: /F2 D3 ([89A-E][0-9A-F])/, len: 3, rpn: "RCL× IND rr", params: "reg" },
+        { regex: /F2 D3 F([0-4])/, len: 3, rpn: "RCL× IND ST `stk`", params: "stk" },
+        { regex: /F2 D3 ([0-7][0-9A-F])/, len: 3, rpn: "RCL× rr", params: "reg" },
+        { regex: /F2 D4 7([0-4])/, len: 3, rpn: "RCL÷ ST `stk`", params: "stk" },
+        { regex: /F2 D4 ([89A-E][0-9A-F])/, len: 3, rpn: "RCL÷ IND rr", params: "reg" },
+        { regex: /F2 D4 F([0-4])/, len: 3, rpn: "RCL÷ IND ST `stk`", params: "stk" },
+        { regex: /F2 D4 ([0-7][0-9A-F])/, len: 3, rpn: "RCL÷ rr", params: "reg" },
+        { regex: /F2 D8 ([89A-E][0-9A-F])/, len: 3, rpn: "CLV IND rr", params: "reg" },
+        { regex: /F2 D8 F([0-4])/, len: 3, rpn: "CLV IND ST `stk`", params: "stk" },
+        { regex: /F2 D9 ([89A-E][0-9A-F])/, len: 3, rpn: "PRV IND rr", params: "reg" },
+        { regex: /F2 D9 F([0-4])/, len: 3, rpn: "PRV IND ST `stk`", params: "stk" },
+        { regex: /F2 DA ([89A-E][0-9A-F])/, len: 3, rpn: "INDEX IND rr", params: "reg" },
+        { regex: /F2 DA F([0-4])/, len: 3, rpn: "INDEX IND ST `stk`", params: "stk" },
+        { regex: /F2 E8 ([89A-E][0-9A-F])/, len: 3, rpn: "PGMINT IND rr", params: "reg" },
+        { regex: /F2 E8 F([0-4])/, len: 3, rpn: "PGMINT IND ST `stk`", params: "stk" },
+        { regex: /F2 E9 ([89A-E][0-9A-F])/, len: 3, rpn: "PGMSLV IND rr", params: "reg" },
+        { regex: /F2 E9 F([0-4])/, len: 3, rpn: "PGMSLV IND ST `stk`", params: "stk" },
+        { regex: /F2 EA ([89A-E][0-9A-F])/, len: 3, rpn: "INTEG IND rr", params: "reg" },
+        { regex: /F2 EA F([0-4])/, len: 3, rpn: "INTEG IND ST `stk`", params: "stk" },
+        { regex: /F2 EB ([89A-E][0-9A-F])/, len: 3, rpn: "SOLVE IND rr", params: "reg" },
+        { regex: /F2 EB F([0-4])/, len: 3, rpn: "SOLVE IND ST `stk`", params: "stk" },
+        { regex: /F2 EC ([89A-E][0-9A-F])/, len: 3, rpn: "DIM IND rr", params: "reg" },
+        { regex: /F2 EC F([0-4])/, len: 3, rpn: "DIM IND ST `stk`", params: "stk" },
+        { regex: /F2 EE ([89A-E][0-9A-F])/, len: 3, rpn: "INPUT IND rr", params: "reg" },
+        { regex: /F2 EE F([0-4])/, len: 3, rpn: "INPUT IND ST `stk`", params: "stk" },
+        { regex: /F2 EF ([89A-E][0-9A-F])/, len: 3, rpn: "EDITN IND rr", params: "reg" },
+        { regex: /F2 EF F([0-4])/, len: 3, rpn: "EDITN IND ST `stk`", params: "stk" },
+        { regex: /F2 F8 ([89A-E][0-9A-F])/, len: 3, rpn: "VARMENU IND rr", params: "reg" },
+        { regex: /F2 F8 F([0-4])/, len: 3, rpn: "VARMENU IND ST `stk`", params: "stk" },
+        { regex: /F3 E2 (0[1-9]) ([89A-E][0-9A-F])/, len: 4, rpn: "KEY `key` XEQ IND rr", params: "key,reg" },
+        { regex: /F3 E2 (0[1-9]) F([0-4])/, len: 4, rpn: "KEY `key` XEQ IND ST `stk`", params: "key,stk" },
+        { regex: /F3 E2 (0[1-9]) ([0-7][0-9A-F])/, len: 4, rpn: "KEY `key` XEQ ll", params: "key,reg" },
+        { regex: /F3 E2 (0[1-9]) ([0-7][0-9A-F])/, len: 4, rpn: "KEY `key` XEQ sl", params: "key,reg" },
+        { regex: /F3 E3 (0[1-9]) ([89A-E][0-9A-F])/, len: 4, rpn: "KEY `key` GTO IND rr", params: "key,reg" },
+        { regex: /F3 E3 (0[1-9]) F([0-4])/, len: 4, rpn: "KEY `key` GTO IND ST `stk`", params: "key,stk" },
+        { regex: /F3 E3 (0[1-9]) ([0-7][0-9A-F])/, len: 4, rpn: "KEY `key` GTO ll", params: "key,lblno" },
+        { regex: /F3 E3 (0[1-9]) ([0-7][0-9A-F])/, len: 4, rpn: "KEY `key` GTO sl", params: "key,lblno" },
+        { regex: /F3 F7 ([0-9A-F][0-9A-F] [0-9A-F][0-9A-F])/, len: 4, rpn: "SIZE rr", params: "size" },
+        { regex: /F([1-9A-F]) 7F/, len: 2, rpn: "⊢`str`", params: "strl-1" }, //+
+        { regex: /F([1-9A-F]) 80/, len: 2, rpn: "VIEW `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) 81/, len: 2, rpn: "STO `nam`", params: "strl-1" }, //+
+        { regex: /F([1-9A-F]) 82/, len: 2, rpn: "STO+ `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) 83/, len: 2, rpn: "STO- `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) 84/, len: 2, rpn: "STO× `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) 85/, len: 2, rpn: "STO÷ `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) 86/, len: 2, rpn: "X<> `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) 87/, len: 2, rpn: "INDEX `nam`", params: "strl-1" }, //+
+        { regex: /F([1-9A-F]) 88/, len: 2, rpn: "VIEW IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) 89/, len: 2, rpn: "STO IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) 8A/, len: 2, rpn: "STO+ IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) 8B/, len: 2, rpn: "STO- IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) 8C/, len: 2, rpn: "STO× IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) 8D/, len: 2, rpn: "STO÷ IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) 8E/, len: 2, rpn: "X<> IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) 8F/, len: 2, rpn: "INDEX IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) 90/, len: 2, rpn: "MVAR `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) 91/, len: 2, rpn: "RCL `nam`", params: "strl-1" }, //+
+        { regex: /F([1-9A-F]) 92/, len: 2, rpn: "RCL+ `nam`", params: "strl-1" }, //+
+        { regex: /F([1-9A-F]) 93/, len: 2, rpn: "RCL- `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) 94/, len: 2, rpn: "RCL× `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) 95/, len: 2, rpn: "RCL÷ `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) 96/, len: 2, rpn: "ISG `nam`", params: "strl-1" }, //+
+        { regex: /F([1-9A-F]) 97/, len: 2, rpn: "DSE `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) 99/, len: 2, rpn: "RCL IND `nam`", params: "strl-1" }, //+
+        { regex: /F([1-9A-F]) 9A/, len: 2, rpn: "RCL+ IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) 9B/, len: 2, rpn: "RCL- IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) 9C/, len: 2, rpn: "RCL× IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) 9D/, len: 2, rpn: "RCL÷ IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) 9E/, len: 2, rpn: "ISG IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) 9F/, len: 2, rpn: "DSE IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) A8/, len: 2, rpn: "SF IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) A9/, len: 2, rpn: "CF IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) AA/, len: 2, rpn: "FS?C IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) AB/, len: 2, rpn: "FC?C IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) AC/, len: 2, rpn: "FS? IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) AD/, len: 2, rpn: "FC? IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) AE/, len: 2, rpn: "GTO IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) AF/, len: 2, rpn: "XEQ IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) B0/, len: 2, rpn: "CLV `nam`", params: "strl-1" }, //+
+        { regex: /F([1-9A-F]) B1/, len: 2, rpn: "PRV `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) B2/, len: 2, rpn: "ASTO `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) B3/, len: 2, rpn: "ARCL `nam`", params: "strl-1" }, //+
+        { regex: /F([1-9A-F]) B4/, len: 2, rpn: "PGMINT `lbl`", params: "strl-1" },
+        { regex: /F([1-9A-F]) B5/, len: 2, rpn: "PGMSLV `lbl`", params: "strl-1" },
+        { regex: /F([1-9A-F]) B6/, len: 2, rpn: "INTEG `lbl`", params: "strl-1" },
+        { regex: /F([1-9A-F]) B7/, len: 2, rpn: "SOLVE `lbl`", params: "strl-1" },
+        { regex: /F([1-9A-F]) B8/, len: 2, rpn: "CLV IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) B9/, len: 2, rpn: "PRV IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) BA/, len: 2, rpn: "ASTO IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) BB/, len: 2, rpn: "ARCL IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) BC/, len: 2, rpn: "PGMINT IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) BD/, len: 2, rpn: "PGMSLV IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) BE/, len: 2, rpn: "INTEG IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) BF/, len: 2, rpn: "SOLVE IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) C0 (0[1-9])/, len: 3, rpn: "ASSIGN `nam` TO `csk`" },
+        { regex: /F([1-9A-F]) C1/, len: 2, rpn: "VARMENU `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) C2 (0[1-9])/, len: 3, rpn: "KEY `key` XEQ `lbl`", params: "strl-2,key" }, //+
+        { regex: /F([1-9A-F]) C3 (0[1-9])/, len: 3, rpn: "KEY `key` GTO `lbl`", params: "strl-2,key" },
+        { regex: /F([1-9A-F]) C4/, len: 2, rpn: "DIM `nam`", params: "strl-1" }, //+
+        { regex: /F([1-9A-F]) C5/, len: 2, rpn: "INPUT `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) C6/, len: 2, rpn: "EDITN `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) C9/, len: 2, rpn: "VARMENU IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) CA (0[1-9])/, len: 3, rpn: "KEY `key` XEQ IND `nam`", params: "strl-2,key" },
+        { regex: /F([1-9A-F]) CB (0[1-9])/, len: 3, rpn: "KEY `key` GTO IND `nam`", params: "strl-2,key" },
+        { regex: /F([1-9A-F]) CC/, len: 2, rpn: "DIM IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) CD/, len: 2, rpn: "INPUT IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) CE/, len: 2, rpn: "EDITN IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) DB/, len: 2, rpn: "ΣREG IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) DC/, len: 2, rpn: "FIX IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) DD/, len: 2, rpn: "SCI IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) DE/, len: 2, rpn: "ENG IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) DF/, len: 2, rpn: "TONE IND `nam`", params: "strl-1" },
+        { regex: /F([1-9A-F]) F0/, len: 2, rpn: "CLP `lbl`", params: "strl-1" },
+        { regex: /F([1-9A-F])/, len: 1, rpn: "`str`", params: "strl" } //+ max. length 15
       ]
     }
   ];

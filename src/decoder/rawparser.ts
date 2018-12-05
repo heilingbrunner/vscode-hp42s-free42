@@ -85,9 +85,9 @@ export class RawParser {
     let lblno = 0;
 
     // test first nibble
-    if (DecoderFOCAL.opCode.has(n0)) {
+    if (DecoderFOCAL.rawMap.has(n0)) {
       //get patterns from first nibble
-      pattern = DecoderFOCAL.opCode.get(n0);
+      pattern = DecoderFOCAL.rawMap.get(n0);
 
       if (pattern) {
         length = 0;
@@ -165,7 +165,11 @@ export class RawParser {
 
   private pushRpnLine(hex: string, rpn: string, error?: CodeError) {
     this.codeLineNo++;
-    let rpnLine = new RpnLine(this.codeLineNo, hex, rpn, error);
+    let rpnLine = new RpnLine();
+    rpnLine.codeLineNo = this.codeLineNo;
+    rpnLine.raw = hex;
+    rpnLine.rpn = rpn;
+    rpnLine.error = error;
 
     //this.printRpn(rpnLine);
     this.rpnLines.push(rpnLine);
