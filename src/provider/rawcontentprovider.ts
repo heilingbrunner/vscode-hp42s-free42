@@ -1,26 +1,26 @@
 import * as vscode from 'vscode';
 import { getFileSize, getBuffer } from '../helper/filesystem';
 
-export default class RawHexContentProvider implements vscode.TextDocumentContentProvider {
-  private static s_instance: RawHexContentProvider | null = null;
+export default class RawContentProvider implements vscode.TextDocumentContentProvider {
+  private static s_instance: RawContentProvider | null = null;
   private _onDidChange = new vscode.EventEmitter<vscode.Uri>();
 
   constructor() {
-    if (RawHexContentProvider.s_instance) {
-      RawHexContentProvider.s_instance.dispose();
+    if (RawContentProvider.s_instance) {
+      RawContentProvider.s_instance.dispose();
     }
-    RawHexContentProvider.s_instance = this;
+    RawContentProvider.s_instance = this;
   }
 
   static get instance() {
-    return RawHexContentProvider.s_instance;
+    return RawContentProvider.s_instance;
   }
 
   public dispose() {
     this._onDidChange.dispose();
-    if (RawHexContentProvider.s_instance) {
-      RawHexContentProvider.s_instance.dispose();
-      RawHexContentProvider.s_instance = null;
+    if (RawContentProvider.s_instance) {
+      RawContentProvider.s_instance.dispose();
+      RawContentProvider.s_instance = null;
     }
   }
 

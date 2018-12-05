@@ -203,7 +203,7 @@ export class DecoderFOCAL {
     { key: '00', value: 'NULL' },
     { key: '0l', value: 'LBL sl' },
     { key: '1D Fn', value: 'GTO `lbl`' },
-    { key: '1E Fn', value: '[0-6][0-9A-F] `lbl`' },
+    { key: '1E Fn', value: '[0-7][0-9A-F] `lbl`' },
     { key: '2r', value: 'RCL sr' },
     { key: '3r', value: 'STO sr' },
     { key: '40', value: '+' },
@@ -662,11 +662,38 @@ export class DecoderFOCAL {
   // 7t: 7([0-4]); stack 0-4
   // 8r: ([89A-E][0-9A-F]); r: dec:1..99; 128 + r => hex:81..E3
   // Ft: F([0-4]); ... IND ST [XYZLT]
-  // [23]r: (2[0-9A-E]); register dec:1-14, hex: 21-2E
-  // rr: ([0-6][0-9A-F]); register dec:16-99, hex:10-63
+  // [23]r: (2[0-9A-F]); register dec:1-15, hex: 21-2F
+  // rr: ([0-7][0-9A-F]); register dec:16-99, hex:10-63
   // nn: (?<digits>0[1-9]); digits; dec:1-9; 01-09
   // nn: digits; dec:10,11
   // tone: (?<tone>0[0-9]); dec:1-9; hex:01-09
+  
+  
+  // LBL 14  0F
+  // LBL 99  CF63
+  // LBL A   CF66
+  // LBL J   CF6F
+  // LBL a   CF7B
+  // LBL e   CF7F
+
+  // GTO 14  BF00
+  // GTO 99  D00063
+  // GTO A   D00066
+  // GTO J   D0006F
+  // GTO a   D0007B
+  // GTO e   D0007F
+
+  // RCL 01  21
+  // RCL 15  2F
+  // RCL 16  9010
+  // RCL 99  9063
+
+  // XEQ 14  E0000E
+  // XEQ 99  E00063
+  // XEQ A   E00066
+  // XEQ J   E0006F
+  // XEQ a   E0007B
+  // XEQ e   E0007F
 
   //#region Arrays
 
@@ -686,8 +713,12 @@ export class DecoderFOCAL {
         //no numbers here: { regex: /(1[0-9A-C] )+00/, len: 1, rpn: '<number>', params: 'number' }
       ]
     },
-    { key: '2', value: [{ regex: /2([0-9A-E])/, len: 1, rpn: 'RCL sr', params: 'reg' }] },//+
-    { key: '3', value: [{ regex: /3([0-9A-E])/, len: 1, rpn: 'STO sr', params: 'reg' }] },//+
+    { key: '2', value: [{ regex: /2([0-9A-F])/, len: 1, rpn: 'RCL sr', params: 'reg' }
+      // RCL 01  21
+      // RCL 15  2F
+      ] 
+    },//+
+    { key: '3', value: [{ regex: /3([0-9A-F])/, len: 1, rpn: 'STO sr', params: 'reg' }] },//+
     {
       key: '4',
       value: [
@@ -803,50 +834,52 @@ export class DecoderFOCAL {
         { regex: /90 7([0-4])/, len: 2, rpn: 'RCL ST `stk`', params: 'stk' },
         { regex: /90 ([89A-E][0-9A-F])/, len: 2, rpn: 'RCL IND rr', params: 'reg' },//+ r dec:0-99 + 128
         { regex: /90 F([0-4])/, len: 2, rpn: 'RCL IND ST `stk`', params: 'stk' },
-        { regex: /90 ([0-6][0-9A-F])/, len: 2, rpn: 'RCL rr', params: 'reg' }, // rr dec:16-99; hex:10-63
+        { regex: /90 ([0-7][0-9A-F])/, len: 2, rpn: 'RCL rr', params: 'reg' },
+        // RCL 16  9010  dec:16-99; hex:10-63
+        // RCL 99  9063
         { regex: /91 7([0-4])/, len: 2, rpn: 'STO ST `stk`', params: 'stk' },//+
         { regex: /91 ([89A-E][0-9A-F])/, len: 2, rpn: 'STO IND rr', params: 'reg' },//+
         { regex: /91 F([0-4])/, len: 2, rpn: 'STO IND ST `stk`', params: 'stk' },
-        { regex: /91 ([0-6][0-9A-F])/, len: 2, rpn: 'STO rr', params: 'reg' },
+        { regex: /91 ([0-7][0-9A-F])/, len: 2, rpn: 'STO rr', params: 'reg' },
         { regex: /92 7([0-4])/, len: 2, rpn: 'STO+ ST `stk`', params: 'stk' },
         { regex: /92 ([89A-E][0-9A-F])/, len: 2, rpn: 'STO+ IND rr', params: 'reg' },
         { regex: /92 F([0-4])/, len: 2, rpn: 'STO+ IND ST `stk`', params: 'stk' },
-        { regex: /92 ([0-6][0-9A-F])/, len: 2, rpn: 'STO+ rr', params: 'reg' },
+        { regex: /92 ([0-7][0-9A-F])/, len: 2, rpn: 'STO+ rr', params: 'reg' },
         { regex: /93 7([0-4])/, len: 2, rpn: 'STO- ST `stk`', params: 'stk' },
         { regex: /93 ([89A-E][0-9A-F])/, len: 2, rpn: 'STO- IND rr', params: 'reg' },
         { regex: /93 F([0-4])/, len: 2, rpn: 'STO- IND ST `stk`', params: 'stk' },
-        { regex: /93 ([0-6][0-9A-F])/, len: 2, rpn: 'STO- rr', params: 'reg' },//+
+        { regex: /93 ([0-7][0-9A-F])/, len: 2, rpn: 'STO- rr', params: 'reg' },//+
         { regex: /94 7([0-4])/, len: 2, rpn: 'STO× ST `stk`', params: 'stk' },
         { regex: /94 ([89A-E][0-9A-F])/, len: 2, rpn: 'STO× IND rr', params: 'reg' },
         { regex: /94 F([0-4])/, len: 2, rpn: 'STO× IND ST `stk`', params: 'stk' },
-        { regex: /94 ([0-6][0-9A-F])/, len: 2, rpn: 'STO× rr', params: 'reg' },
+        { regex: /94 ([0-7][0-9A-F])/, len: 2, rpn: 'STO× rr', params: 'reg' },
         { regex: /95 7([0-4])/, len: 2, rpn: 'STO÷ ST `stk`', params: 'stk' },
         { regex: /95 ([89A-E][0-9A-F])/, len: 2, rpn: 'STO÷ IND rr', params: 'reg' },
         { regex: /95 F([0-4])/, len: 2, rpn: 'STO÷ IND ST `stk`', params: 'stk' },
-        { regex: /95 ([0-6][0-9A-F])/, len: 2, rpn: 'STO÷ rr', params: 'reg' },
+        { regex: /95 ([0-7][0-9A-F])/, len: 2, rpn: 'STO÷ rr', params: 'reg' },
         { regex: /96 7([0-4])/, len: 2, rpn: 'ISG ST `stk`', params: 'stk' },//+
         { regex: /96 ([89A-E][0-9A-F])/, len: 2, rpn: 'ISG IND rr', params: 'reg' },//+
         { regex: /96 F([0-4])/, len: 2, rpn: 'ISG IND ST `stk`', params: 'stk' },
-        { regex: /96 ([0-6][0-9A-F])/, len: 2, rpn: 'ISG rr', params: 'reg' },//+
+        { regex: /96 ([0-7][0-9A-F])/, len: 2, rpn: 'ISG rr', params: 'reg' },//+
         { regex: /97 7([0-4])/, len: 2, rpn: 'DSE ST `stk`', params: 'stk' },
         { regex: /97 ([89A-E][0-9A-F])/, len: 2, rpn: 'DSE IND rr', params: 'reg' },
         { regex: /97 F([0-4])/, len: 2, rpn: 'DSE IND ST `stk`', params: 'stk' },
-        { regex: /97 ([0-6][0-9A-F])/, len: 2, rpn: 'DSE rr', params: 'reg' },//+
+        { regex: /97 ([0-7][0-9A-F])/, len: 2, rpn: 'DSE rr', params: 'reg' },//+
         { regex: /98 7([0-4])/, len: 2, rpn: 'VIEW ST `stk`', params: 'stk' },
         { regex: /98 ([89A-E][0-9A-F])/, len: 2, rpn: 'VIEW IND rr', params: 'reg' },
         { regex: /98 F([0-4])/, len: 2, rpn: 'VIEW IND ST `stk`', params: 'stk' },
-        { regex: /98 ([0-6][0-9A-F])/, len: 2, rpn: 'VIEW rr', params: 'reg' },
+        { regex: /98 ([0-7][0-9A-F])/, len: 2, rpn: 'VIEW rr', params: 'reg' },
         { regex: /99 ([89A-E][0-9A-F])/, len: 2, rpn: 'ΣREG IND rr', params: 'reg' },
         { regex: /99 F([0-4])/, len: 2, rpn: 'ΣREG IND ST `stk`', params: 'stk' },
-        { regex: /99 ([0-6][0-9A-F])/, len: 2, rpn: 'ΣREG rr', params: 'reg' },
+        { regex: /99 ([0-7][0-9A-F])/, len: 2, rpn: 'ΣREG rr', params: 'reg' },
         { regex: /9A 7([0-4])/, len: 2, rpn: 'ASTO ST `stk`', params: 'stk' },
         { regex: /9A ([89A-E][0-9A-F])/, len: 2, rpn: 'ASTO IND rr', params: 'reg' },
         { regex: /9A F([0-4])/, len: 2, rpn: 'ASTO IND ST `stk`', params: 'stk' },
-        { regex: /9A ([0-6][0-9A-F])/, len: 2, rpn: 'ASTO rr', params: 'reg' },
+        { regex: /9A ([0-7][0-9A-F])/, len: 2, rpn: 'ASTO rr', params: 'reg' },
         { regex: /9B 7([0-4])/, len: 2, rpn: 'ARCL ST `stk`', params: 'stk' },
         { regex: /9B ([89A-E][0-9A-F])/, len: 2, rpn: 'ARCL IND rr', params: 'reg' },
         { regex: /9B F([0-4])/, len: 2, rpn: 'ARCL IND ST `stk`', params: 'stk' },
-        { regex: /9B ([0-6][0-9A-F])/, len: 2, rpn: 'ARCL rr', params: 'reg' },//+
+        { regex: /9B ([0-7][0-9A-F])/, len: 2, rpn: 'ARCL rr', params: 'reg' },//+
         { regex: /9C ([89A-E][0-9A-F])/, len: 2, rpn: 'FIX IND rr', params: 'reg' },
         { regex: /9C F([0-4])/, len: 2, rpn: 'FIX IND ST `stk`', params: 'stk' },
         { regex: /9C (0[1-9])/, len: 2, rpn: 'FIX sd', params: 'digits' },
@@ -1001,32 +1034,34 @@ export class DecoderFOCAL {
         { regex: /A7 D1/, len: 2, rpn: 'HEADING' },
         { regex: /A8 ([89A-E][0-9A-F])/, len: 2, rpn: 'SF IND rr', params: 'reg' },
         { regex: /A8 F([0-4])/, len: 2, rpn: 'SF IND ST `stk`', params: 'stk' },
-        { regex: /A8 ([0-6][0-9A-F])/, len: 2, rpn: 'SF rr', params: 'reg' },//+ flags dec:00-99 hex:00-63
+        { regex: /A8 ([0-7][0-9A-F])/, len: 2, rpn: 'SF rr', params: 'reg' },//+ flags dec:00-99 hex:00-63
         { regex: /A9 ([89A-E][0-9A-F])/, len: 2, rpn: 'CF IND rr', params: 'reg' },
         { regex: /A9 F([0-4])/, len: 2, rpn: 'CF IND ST `stk`', params: 'stk' },
-        { regex: /A9 ([0-6][0-9A-F])/, len: 2, rpn: 'CF rr', params: 'reg' },
+        { regex: /A9 ([0-7][0-9A-F])/, len: 2, rpn: 'CF rr', params: 'reg' },
         { regex: /AA ([89A-E][0-9A-F])/, len: 2, rpn: 'FS?C IND rr', params: 'reg' },
         { regex: /AA F([0-4])/, len: 2, rpn: 'FS?C IND ST `stk`', params: 'stk' },
-        { regex: /AA ([0-6][0-9A-F])/, len: 2, rpn: 'FS?C rr', params: 'reg' },//+
+        { regex: /AA ([0-7][0-9A-F])/, len: 2, rpn: 'FS?C rr', params: 'reg' },//+
         { regex: /AB ([89A-E][0-9A-F])/, len: 2, rpn: 'FC?C IND rr', params: 'reg' },
         { regex: /AB F([0-4])/, len: 2, rpn: 'FC?C IND ST `stk`', params: 'stk' },
-        { regex: /AB ([0-6][0-9A-F])/, len: 2, rpn: 'FC?C rr', params: 'reg' },
+        { regex: /AB ([0-7][0-9A-F])/, len: 2, rpn: 'FC?C rr', params: 'reg' },
         { regex: /AC ([89A-E][0-9A-F])/, len: 2, rpn: 'FS? IND rr', params: 'reg' },
         { regex: /AC F([0-4])/, len: 2, rpn: 'FS? IND ST `stk`', params: 'stk' },
-        { regex: /AC ([0-6][0-9A-F])/, len: 2, rpn: 'FS? rr', params: 'reg' },//+
+        { regex: /AC ([0-7][0-9A-F])/, len: 2, rpn: 'FS? rr', params: 'reg' },//+
         { regex: /AD ([89A-E][0-9A-F])/, len: 2, rpn: 'FC? IND rr', params: 'reg' },
         { regex: /AD F([0-4])/, len: 2, rpn: 'FC? IND ST `stk`', params: 'stk' },
-        { regex: /AD ([0-6][0-9A-F])/, len: 2, rpn: 'FC? rr', params: 'reg' },//+
+        { regex: /AD ([0-7][0-9A-F])/, len: 2, rpn: 'FC? rr', params: 'reg' },//+
         { regex: /AE 7([0-4])/, len: 2, rpn: 'GTO IND ST `stk`', params: 'stk' },
         { regex: /AE ([89A-E][0-9A-F])/, len: 2, rpn: 'XEQ IND rr', params: 'reg' },
         { regex: /AE F([0-4])/, len: 2, rpn: 'XEQ IND ST `stk`', params: 'stk' },
-        { regex: /AE ([0-6][0-9A-F])/, len: 2, rpn: 'GTO IND rr', params: 'reg' }
+        { regex: /AE ([0-7][0-9A-F])/, len: 2, rpn: 'GTO IND rr', params: 'reg' }
       ]
     },
     {
       key: 'B',
       value: [
         { regex: /B([1-9A-F]) 00/, len: 2, rpn: 'GTO sl', params: 'lblno-1' }//+ dec: 01-14, l+1: 2-F
+        // GTO 14  BF00
+  
       ]
     },
     {
@@ -1037,21 +1072,37 @@ export class DecoderFOCAL {
         { regex: /CE 7([0-4])/, len: 2, rpn: 'X<> ST `stk`', params: 'stk' },
         { regex: /CE ([89A-E][0-9A-F])/, len: 2, rpn: 'X<> IND rr', params: 'reg' },
         { regex: /CE F([0-4])/, len: 2, rpn: 'X<> IND ST `stk`', params: 'stk' },
-        { regex: /CE ([0-6][0-9A-F])/, len: 2, rpn: 'X<> rr', params: 'reg' },
-        { regex: /CF ([1-6][0-9A-F])/, len: 2, rpn: 'LBL ll', params: 'lblno' }//+ dec:16-99; hex:10-63
+        { regex: /CE ([0-7][0-9A-F])/, len: 2, rpn: 'X<> rr', params: 'reg' },
+        { regex: /CF ([1-7][0-9A-F])/, len: 2, rpn: 'LBL ll', params: 'lblno' }//+ dec:16-99; hex:10-63
+        // LBL 99  CF63 dec:16-99; hex:10-63
+        // LBL A   CF66 
+        // LBL J   CF6F
+        // LBL a   CF7B
+        // LBL e   CF7F
       ]
     },
     {
       key: 'D',
       value: [
-        { regex: /D0 00 ([0-6][0-9A-F])/, len: 3, rpn: 'GTO ll', params: 'lblno' }//+ dec:15-99 hex:0F-63
+        { regex: /D0 00 ([0-7][0-9A-F])/, len: 3, rpn: 'GTO ll', params: 'lblno' }//+ 
+        // GTO 99  D00063 dec:15-99 hex:0F-63
+        // GTO A   D00066
+        // GTO J   D0006F
+        // GTO a   D0007B
+        // GTO e   D0007F
       ]
     },
 
     {
       key: 'E',
       value: [
-        { regex: /E0 00 ([0-6][0-9A-F])/, len: 3, rpn: 'XEQ ll', params: 'lblno' }//+ dec:15-99 hex:0F-63
+        { regex: /E0 00 ([0-7][0-9A-F])/, len: 3, rpn: 'XEQ ll', params: 'lblno' }//+
+        // XEQ 14  E0000E dec:15-99 hex:0F-63
+        // XEQ 99  E00063
+        // XEQ A   E00066
+        // XEQ J   E0006F
+        // XEQ a   E0007B
+        // XEQ e   E0007F 
       ]
     },
 
@@ -1065,23 +1116,23 @@ export class DecoderFOCAL {
         { regex: /F1 E6/, len: 2, rpn: 'SCI 11' },
         { regex: /F1 E7/, len: 2, rpn: 'ENG 11' },
         { regex: /F2 D0 7([0-4])/, len: 3, rpn: 'INPUT ST `stk`', params: 'stk' },
-        { regex: /F2 D0 ([0-6][0-9A-F])/, len: 3, rpn: 'INPUT rr', params: 'reg' },
+        { regex: /F2 D0 ([0-7][0-9A-F])/, len: 3, rpn: 'INPUT rr', params: 'reg' },
         { regex: /F2 D1 7([0-4])/, len: 3, rpn: 'RCL+ ST `stk`', params: 'stk' },
         { regex: /F2 D1 ([89A-E][0-9A-F])/, len: 3, rpn: 'RCL+ IND rr', params: 'reg' },
         { regex: /F2 D1 F([0-4])/, len: 3, rpn: 'RCL+ IND ST `stk`', params: 'stk' },//+
-        { regex: /F2 D1 ([0-6][0-9A-F])/, len: 3, rpn: 'RCL+ rr', params: 'reg' },
+        { regex: /F2 D1 ([0-7][0-9A-F])/, len: 3, rpn: 'RCL+ rr', params: 'reg' },
         { regex: /F2 D2 7([0-4])/, len: 3, rpn: 'RCL- ST `stk`', params: 'stk' },
         { regex: /F2 D2 ([89A-E][0-9A-F])/, len: 3, rpn: 'RCL- IND rr', params: 'reg' },
         { regex: /F2 D2 F([0-4])/, len: 3, rpn: 'RCL- IND ST `stk`', params: 'stk' },
-        { regex: /F2 D2 ([0-6][0-9A-F])/, len: 3, rpn: 'RCL- rr', params: 'reg' },
+        { regex: /F2 D2 ([0-7][0-9A-F])/, len: 3, rpn: 'RCL- rr', params: 'reg' },
         { regex: /F2 D3 7([0-4])/, len: 3, rpn: 'RCL× ST `stk`', params: 'stk' },
         { regex: /F2 D3 ([89A-E][0-9A-F])/, len: 3, rpn: 'RCL× IND rr', params: 'reg' },
         { regex: /F2 D3 F([0-4])/, len: 3, rpn: 'RCL× IND ST `stk`', params: 'stk' },
-        { regex: /F2 D3 ([0-6][0-9A-F])/, len: 3, rpn: 'RCL× rr', params: 'reg' },
+        { regex: /F2 D3 ([0-7][0-9A-F])/, len: 3, rpn: 'RCL× rr', params: 'reg' },
         { regex: /F2 D4 7([0-4])/, len: 3, rpn: 'RCL÷ ST `stk`', params: 'stk' },
         { regex: /F2 D4 ([89A-E][0-9A-F])/, len: 3, rpn: 'RCL÷ IND rr', params: 'reg' },
         { regex: /F2 D4 F([0-4])/, len: 3, rpn: 'RCL÷ IND ST `stk`', params: 'stk' },
-        { regex: /F2 D4 ([0-6][0-9A-F])/, len: 3, rpn: 'RCL÷ rr', params: 'reg' },
+        { regex: /F2 D4 ([0-7][0-9A-F])/, len: 3, rpn: 'RCL÷ rr', params: 'reg' },
         { regex: /F2 D8 ([89A-E][0-9A-F])/, len: 3, rpn: 'CLV IND rr', params: 'reg' },
         { regex: /F2 D8 F([0-4])/, len: 3, rpn: 'CLV IND ST `stk`', params: 'stk' },
         { regex: /F2 D9 ([89A-E][0-9A-F])/, len: 3, rpn: 'PRV IND rr', params: 'reg' },
@@ -1106,12 +1157,12 @@ export class DecoderFOCAL {
         { regex: /F2 F8 F([0-4])/, len: 3, rpn: 'VARMENU IND ST `stk`', params: 'stk' },
         { regex: /F3 E2 (0[1-9]) ([89A-E][0-9A-F])/, len: 4, rpn: 'KEY `key` XEQ IND rr', params: 'key,reg' },
         { regex: /F3 E2 (0[1-9]) F([0-4])/, len: 4, rpn: 'KEY `key` XEQ IND ST `stk`', params: 'key,stk' },
-        { regex: /F3 E2 (0[1-9]) ([0-6][0-9A-F])/, len: 4, rpn: 'KEY `key` XEQ ll', params: 'key,reg' },
-        { regex: /F3 E2 (0[1-9]) ([0-6][0-9A-F])/, len: 4, rpn: 'KEY `key` XEQ sl', params: 'key,reg' },
+        { regex: /F3 E2 (0[1-9]) ([0-7][0-9A-F])/, len: 4, rpn: 'KEY `key` XEQ ll', params: 'key,reg' },
+        { regex: /F3 E2 (0[1-9]) ([0-7][0-9A-F])/, len: 4, rpn: 'KEY `key` XEQ sl', params: 'key,reg' },
         { regex: /F3 E3 (0[1-9]) ([89A-E][0-9A-F])/, len: 4, rpn: 'KEY `key` GTO IND rr', params: 'key,reg' },
         { regex: /F3 E3 (0[1-9]) F([0-4])/, len: 4, rpn: 'KEY `key` GTO IND ST `stk`', params: 'key,stk' },
-        { regex: /F3 E3 (0[1-9]) ([0-6][0-9A-F])/, len: 4, rpn: 'KEY `key` GTO ll', params: 'key,lblno' },
-        { regex: /F3 E3 (0[1-9]) ([0-6][0-9A-F])/, len: 4, rpn: 'KEY `key` GTO sl', params: 'key,lblno' },
+        { regex: /F3 E3 (0[1-9]) ([0-7][0-9A-F])/, len: 4, rpn: 'KEY `key` GTO ll', params: 'key,lblno' },
+        { regex: /F3 E3 (0[1-9]) ([0-7][0-9A-F])/, len: 4, rpn: 'KEY `key` GTO sl', params: 'key,lblno' },
         { regex: /F3 F7 ([0-9A-F][0-9A-F] [0-9A-F][0-9A-F])/, len: 4, rpn: 'SIZE rr', params: 'size' },
         { regex: /F([1-9A-F]) 7F/, len: 2, rpn: '⊢`str`', params: 'strl-1' },//+
         { regex: /F([1-9A-F]) 80/, len: 2, rpn: 'VIEW `nam`', params: 'strl-1' },
@@ -1157,10 +1208,10 @@ export class DecoderFOCAL {
         { regex: /F([1-9A-F]) B1/, len: 2, rpn: 'PRV `nam`', params: 'strl-1' },
         { regex: /F([1-9A-F]) B2/, len: 2, rpn: 'ASTO `nam`', params: 'strl-1' },
         { regex: /F([1-9A-F]) B3/, len: 2, rpn: 'ARCL `nam`', params: 'strl-1' },//+
-        { regex: /F([1-9A-F]) B4/, len: 2, rpn: 'PGMINT `lbl`' },
-        { regex: /F([1-9A-F]) B5/, len: 2, rpn: 'PGMSLV `lbl`' },
-        { regex: /F([1-9A-F]) B6/, len: 2, rpn: 'INTEG `lbl`' },
-        { regex: /F([1-9A-F]) B7/, len: 2, rpn: 'SOLVE `lbl`' },
+        { regex: /F([1-9A-F]) B4/, len: 2, rpn: 'PGMINT `lbl`', params: 'strl-1' },
+        { regex: /F([1-9A-F]) B5/, len: 2, rpn: 'PGMSLV `lbl`', params: 'strl-1' },
+        { regex: /F([1-9A-F]) B6/, len: 2, rpn: 'INTEG `lbl`', params: 'strl-1' },
+        { regex: /F([1-9A-F]) B7/, len: 2, rpn: 'SOLVE `lbl`', params: 'strl-1' },
         { regex: /F([1-9A-F]) B8/, len: 2, rpn: 'CLV IND `nam`', params: 'strl-1' },
         { regex: /F([1-9A-F]) B9/, len: 2, rpn: 'PRV IND `nam`', params: 'strl-1' },
         { regex: /F([1-9A-F]) BA/, len: 2, rpn: 'ASTO IND `nam`', params: 'strl-1' },
@@ -1169,7 +1220,7 @@ export class DecoderFOCAL {
         { regex: /F([1-9A-F]) BD/, len: 2, rpn: 'PGMSLV IND `nam`', params: 'strl-1' },
         { regex: /F([1-9A-F]) BE/, len: 2, rpn: 'INTEG IND `nam`', params: 'strl-1' },
         { regex: /F([1-9A-F]) BF/, len: 2, rpn: 'SOLVE IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) C0 aa/, len: 3, rpn: 'ASSIGN `nam` TO `csk`' },
+        { regex: /F([1-9A-F]) C0 (0[1-9])/, len: 3, rpn: 'ASSIGN `nam` TO `csk`' },
         { regex: /F([1-9A-F]) C1/, len: 2, rpn: 'VARMENU `nam`', params: 'strl-1' },
         { regex: /F([1-9A-F]) C2 (0[1-9])/, len: 3, rpn: 'KEY `key` XEQ `lbl`', params: 'strl-2,key' },//+
         { regex: /F([1-9A-F]) C3 (0[1-9])/, len: 3, rpn: 'KEY `key` GTO `lbl`', params: 'strl-2,key' },
@@ -1177,8 +1228,8 @@ export class DecoderFOCAL {
         { regex: /F([1-9A-F]) C5/, len: 2, rpn: 'INPUT `nam`', params: 'strl-1' },
         { regex: /F([1-9A-F]) C6/, len: 2, rpn: 'EDITN `nam`', params: 'strl-1' },
         { regex: /F([1-9A-F]) C9/, len: 2, rpn: 'VARMENU IND `nam`', params: 'strl-1' },
-        { regex: /F([1-9A-F]) CA (0[1-9])/, len: 3, rpn: 'KEY `key` XEQ IND `nam`', params: 'strl,key' },
-        { regex: /F([1-9A-F]) CB (0[1-9])/, len: 3, rpn: 'KEY `key` GTO IND `nam`', params: 'strl,key' },
+        { regex: /F([1-9A-F]) CA (0[1-9])/, len: 3, rpn: 'KEY `key` XEQ IND `nam`', params: 'strl-2,key' },
+        { regex: /F([1-9A-F]) CB (0[1-9])/, len: 3, rpn: 'KEY `key` GTO IND `nam`', params: 'strl-2,key' },
         { regex: /F([1-9A-F]) CC/, len: 2, rpn: 'DIM IND `nam`', params: 'strl-1' },
         { regex: /F([1-9A-F]) CD/, len: 2, rpn: 'INPUT IND `nam`', params: 'strl-1' },
         { regex: /F([1-9A-F]) CE/, len: 2, rpn: 'EDITN IND `nam`', params: 'strl-1' },

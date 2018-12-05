@@ -4,7 +4,6 @@ import { Configuration } from './helper/configuration';
 import { writeBytes, writeText, deleteFile, getPhysicalPath, existsSync } from './helper/filesystem';
 import { EncoderResult } from './encoder/encoderesult';
 import { Encoder } from './encoder/encoder';
-import { RpnFormatter } from './encoder/rpnformatter';
 import { Decoder } from './decoder/decoder';
 import { configBit } from './typedefs';
 
@@ -12,12 +11,12 @@ export class Tool {
   // The team players ...
   private encoder: Encoder;
   private decoder: Decoder;
-  private formatter: RpnFormatter;
+  //private formatter: RpnFormatProvider;
 
   constructor() {
     this.encoder = new Encoder();
     this.decoder = new Decoder();
-    this.formatter = new RpnFormatter();
+    //this.formatter = new RpnFormatProvider();
   }
 
   encode(editor: vscode.TextEditor) {
@@ -130,14 +129,6 @@ export class Tool {
     }
   }
 
-  provideDocumentFormattingEdits(
-    document: vscode.TextDocument
-  ): vscode.ProviderResult<vscode.TextEdit[]> {
-    if (document.languageId.match(/(hp42s|free42)/i)) {
-      return this.formatter.provideDocumentFormattingEdits(document);
-    }
-  }
-
   showRaw(fileUri: vscode.Uri | undefined){
     if (typeof fileUri === 'undefined' || !(fileUri instanceof vscode.Uri)) {
       if (vscode.window.activeTextEditor === undefined) {
@@ -239,6 +230,5 @@ export class Tool {
   dispose() {
     this.encoder.dispose();
     this.decoder.dispose();
-    this.formatter.dispose();
   }
 }

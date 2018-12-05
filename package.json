@@ -65,6 +65,16 @@
           "hex"
         ],
         "configuration": "./hex.language-configuration.json"
+      },
+      {
+        "id": "rawhex",
+        "aliases": [
+          "rawhex"
+        ],
+        "extensions": [
+          "rawhex"
+        ],
+        "configuration": "./rawhex.language-configuration.json"
       }
     ],
     "grammars": [
@@ -82,6 +92,11 @@
         "language": "hex",
         "scopeName": "source.hex",
         "path": "./syntaxes/hex.tmLanguage.json"
+      },
+      {
+        "language": "rawhex",
+        "scopeName": "source.rawhex",
+        "path": "./syntaxes/rawhex.tmLanguage.json"
       }
     ],
     "snippets": [
@@ -97,17 +112,40 @@
     "commands": [
       {
         "command": "extension.Encode",
-        "title": "hp42s/free42: Encode Code"
+        "title": "hp42s/free42: Encode Code",
+        "when": "editorLangId == (hp42s||free42)"
       },
       {
         "command": "extension.Decode",
-        "title": "hp42s/free42: Decode Raw"
+        "title": "hp42s/free42: Decode Raw",
+        "when": "editorLangId == rawhex"
       },
       {
         "command": "extension.ShowRaw",
         "title": "hp42s/free42: Show Raw"
       }
     ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "extension.ShowRaw"
+        }
+      ],
+      "editor/context": [
+        {
+          "when": "editorLangId == hp42s",
+          "command": "extension.Encode"
+        },
+        {
+          "when": "editorLangId == free42",
+          "command": "extension.Encode"
+        },
+        {
+          "when": "editorLangId == rawhex",
+          "command": "extension.Decode"
+        }
+      ]
+    },
     "configuration": {
       "type": "object",
       "title": "HP42S/free42 Configuration",
@@ -138,13 +176,6 @@
           "markdownDescription": "Formatter trims start and end of line."
         }
       }
-    },
-    "menus": {
-      "explorer/context": [
-        {
-          "command": "extension.ShowRaw"
-        }
-      ]
     }
   },
   "main": "./out/extension",
