@@ -1,5 +1,8 @@
+import * as vscode from 'vscode';
+
 import { CodeError } from "../common/codeerror";
 import { RpnLine } from "./rpnline";
+
 
 export class RpnProgram {
   rpnLines: RpnLine[] = [];
@@ -29,10 +32,11 @@ export class RpnProgram {
     return errors;
   }
 
-  getRpn(): string {
+  getRpn(eol: string): string {
     let rpnAll = '';
+
     this.rpnLines.forEach(rpnLine => {
-      rpnAll += rpnLine.rpn + '\r\n';
+      rpnAll += '' + rpnLine.rpn + eol;
     });
     return rpnAll.trim();
   }

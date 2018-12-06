@@ -30,6 +30,7 @@ export class Decoder {
     // return result
     let result = new DecoderResult();
     result.programs = parser.programs;
+    result.languageId = parser.languageId;
     return result;
   }
 

@@ -1,3 +1,5 @@
+import * as vscode from 'vscode';
+
 import { CodeError } from '../common/codeerror';
 import { RawProgram } from './rawprogram';
 
@@ -29,10 +31,10 @@ export class EncoderResult {
     return undefined;
   }
 
-  getHex(): string {
+  getHex(eol: string): string {
     let hex = '';
     this.programs.forEach(rawprogram => {
-      hex += rawprogram.getHex().replace(/ /g, '');
+      hex += rawprogram.getHex(eol).replace(/ /g, '');
     });
     return hex.trim();
   }

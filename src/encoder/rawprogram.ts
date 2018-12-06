@@ -1,3 +1,5 @@
+import * as vscode from 'vscode';
+
 import { toBytes } from '../helper/bytes';
 import { RawLine } from './rawline';
 import { CodeError } from '../common/codeerror';
@@ -20,12 +22,12 @@ export class RawProgram {
     return rawAll.trim();
   }
 
-  getHex(): string {
+  getHex(eol: string): string {
     let hexAll = '';
     this.rawLines.forEach(rawLine => {
-      hexAll += rawLine.raw + '\r\n';
+      hexAll += '' + rawLine.raw + eol;
     });
-    return hexAll; //no trin() !
+    return hexAll; //no trim() !
   }
 
   succeeded(): boolean {

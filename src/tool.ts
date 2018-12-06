@@ -19,57 +19,60 @@ export class Tool {
   encode(editor: vscode.TextEditor) {
     if (editor) {
       let config = new Configuration(true);
-
       let document = editor.document;
-      let languageId = document.languageId.toLowerCase();
 
-      if (document && languageId.match(/(hp42s|free42)/)) {
-        // start encoding ...
-        let result = this.encoder.encode(languageId, editor);
-        if (result) {
-          // no encoding errors ...
-          if (result.succeeded()) {
-            // save result and show messages
-            if (result.programs !== undefined) {
-              let raw = result.getRaw();
-              let hex = result.getHex();
-              let size = result.getSize();
+      if (document) {
+        let languageId = document.languageId.toLowerCase();
+        let eol = ['','\n','\r\n'][document.eol];
 
-              // Save *.raw output ...
-              writeBytes(document.fileName + '.raw', raw);
-
-              // Save *.hex output ...
-              if (config.generateHexFile) {
-                writeText(document.fileName + '.hex', hex);
+        if (languageId.match(/(hp42s|free42)/)) {
+          // start encoding ...
+          let result = this.encoder.encode(languageId, editor);
+          if (result) {
+            // no encoding errors ...
+            if (result.succeeded()) {
+              // save result and show messages
+              if (result.programs !== undefined) {
+                let raw = result.getRaw();
+                let hex = result.getHex(eol);
+                let size = result.getSize();
+  
+                // Save *.raw output ...
+                writeBytes(document.fileName + '.raw', raw);
+  
+                // Save *.hex output ...
+                if (config.generateHexFile) {
+                  writeText(document.fileName + '.hex', hex);
+                }
+  
+                // Show Info ...
+                vscode.window.showInformationMessage('hp42s/free42: { ' + size + '-Byte Prgm }');
+              } else {
+                // nothing happend ...
+                vscode.window.showInformationMessage('hp42s/free42: No code found.');
               }
-
-              // Show Info ...
-              vscode.window.showInformationMessage('hp42s/free42: { ' + size + '-Byte Prgm }');
+  
+              // Delete log file
+              deleteFile(document.fileName + '.log');
             } else {
-              // nothing happend ...
-              vscode.window.showInformationMessage('hp42s/free42: No code found.');
+              // handle ecoding errors ...
+              let firstError = result.getFirstError();
+              let firstErrorText = firstError !== undefined ? firstError.toString() : '';
+  
+              // Show error ...
+              vscode.window.showErrorMessage('hp42s/free42: Encoding failed.' + eol + firstErrorText);
+  
+              // Create log file
+              this.writeErrorsToLog(document.fileName + '.log', result, eol);
             }
-
-            // Delete log file
-            deleteFile(document.fileName + '.log');
-          } else {
-            // handle ecoding errors ...
-            let firstError = result.getFirstError();
-            let firstErrorText = firstError !== undefined ? firstError.toString() : '';
-
-            // Show error ...
-            vscode.window.showErrorMessage('hp42s/free42: Encoding failed. \r\n' + firstErrorText);
-
-            // Create log file
-            this.writeErrorsToLog(document.fileName + '.log', result);
+  
+            // Update all {...} line
+            this.updateHeadLines(editor, result, config.useLineNumbers);
           }
-
-          // Update all {...} line
-          this.updateHeadLines(editor, result, config.useLineNumbers);
+        } else {
+          // wrong file
+          vscode.window.showWarningMessage('hp42s/free42: Document is not a *.hp42s/*.free42 file type.');
         }
-      } else {
-        // wrong file
-        vscode.window.showWarningMessage('hp42s/free42: Document is not a *.hp42s/*.free42 file type.');
       }
     }
   }
@@ -77,35 +80,41 @@ export class Tool {
   decode(editor: vscode.TextEditor) {
     if (editor) {
       let document = editor.document;
-      let languageId = document.languageId.toLowerCase();
-      let scheme = document.uri.scheme.toLowerCase();
 
-      if (document && languageId.match(/hex/) && scheme.match(/rawhex/)) {
-        // start decoding ...
-        let result = this.decoder.decode(editor);
-        if (result) {
-          // no decoding errors ...
-          if (result.succeeded) {
-            // save result and show messages
-            if (result.programs !== undefined) {
-              // Save result
-              let rpn = result.getRpn();
-              let filename = '' + result.languageId;
-              //writeText(filename, rpn);
+      if (document) {
+        let eol = ['','\n','\r\n'][document.eol];
+        let languageId = document.languageId.toLowerCase();
+        let scheme = document.uri.scheme.toLowerCase();
+        
+        if (languageId.match(/hex/) && scheme.match(/rawhex/)) {
+          // start decoding ...
+          let result = this.decoder.decode(editor);
+          if (result) {
+            // no decoding errors ...
+            if (result.succeeded) {
+              // save result and show messages
+              if (result.programs !== undefined) {
+                // Save result
+  
+                let rpn = result.getRpn(eol);
+                let filename = document.fileName.replace('rawhex',result.languageId);
+
+                writeText(filename, rpn);
+              } else {
+                // nothing happend ...
+                vscode.window.showInformationMessage('hp42s/free42: No raw format found.');
+              }
             } else {
-              // nothing happend ...
-              vscode.window.showInformationMessage('hp42s/free42: No raw format found.');
+              let firstError = result.getFirstError();
+              let firstErrorText = firstError !== undefined ? firstError.toString() : '';
+  
+              // Show error ...
+              vscode.window.showErrorMessage('hp42s/free42: Decoding failed.' + eol + firstErrorText);
             }
-          } else {
-            let firstError = result.getFirstError();
-            let firstErrorText = firstError !== undefined ? firstError.toString() : '';
-
-            // Show error ...
-            vscode.window.showErrorMessage('hp42s/free42: Decoding failed. \r\n' + firstErrorText);
           }
+        } else {
+          vscode.window.showErrorMessage('hp42s/free42: Decoding failed.' + eol + 'Wrong file type.');
         }
-      } else {
-        vscode.window.showErrorMessage('hp42s/free42: Decoding failed. \r\nWrong file type.');
       }
     }
   }
@@ -136,14 +145,14 @@ export class Tool {
   }
 
   /** Create log file */
-  private writeErrorsToLog(filename: string, result: EncoderResult) {
+  private writeErrorsToLog(filename: string, result: EncoderResult, eol: string) {
     let allErrors = '';
     if (result.programs) {
       result.programs.forEach(program => {
         let errors = program.getErrors();
         if (errors) {
           errors.forEach(error => {
-            allErrors += error ? error.toString() + '\r\n' : '';
+            allErrors += error ? error.toString() + eol : '';
           });
         }
       });

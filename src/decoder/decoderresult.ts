@@ -1,3 +1,5 @@
+import * as vscode from 'vscode';
+
 import { CodeError } from "../common/codeerror";
 import { RpnProgram } from "./rpnprogram";
 
@@ -29,10 +31,11 @@ export class DecoderResult{
     return undefined;
   }
 
-  getRpn(): string {
+  getRpn(eol: string): string {
     let rpn = '';
+
     this.programs.forEach(rpnprogram => {
-      rpn += rpnprogram.getRpn();
+      rpn += rpnprogram.getRpn(eol);
     });
     return rpn.trim();
   }

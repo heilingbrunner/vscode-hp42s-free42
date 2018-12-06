@@ -30,6 +30,7 @@ export default class RawContentProvider implements vscode.TextDocumentContentPro
 
     return new Promise(async resolve => {
       let tail = '(Reached the maximum size to display. You can change "rawhex.sizeDisplay" in your settings.)';
+      let eol = ['','\n','\r\n'][vscode.EndOfLine.CRLF];
 
       let proceed =
         getFileSize(uri) < sizeWarning
@@ -42,7 +43,7 @@ export default class RawContentProvider implements vscode.TextDocumentContentPro
         // 00000010: 65 65 6E 73 20 76 31 2E 30 F7 7F 20 52 65 61 64
 
         //Offset
-        let content = '  Offset: 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F\r\n00000000: ';
+        let content = '  Offset: 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F' + eol + '00000000: ';
         let buf = getBuffer(uri);
         if (buf) {
           let length = buf.length > sizeDisplay ? sizeDisplay : buf.length;
@@ -53,7 +54,7 @@ export default class RawContentProvider implements vscode.TextDocumentContentPro
             // next line ?  not first line      &&     last line                       00000000: leading address
             const nl =
               (index + 1) % 16 === 0 && index < length - 1
-                ? ' \r\n' + ('0000000' + ((index + 1) & 0xffffffff).toString(16)).slice(-8).toUpperCase() + ': '
+                ? ' ' + eol + ('0000000' + ((index + 1) & 0xffffffff).toString(16)).slice(-8).toUpperCase() + ': '
                 : ' ';
 
             // add to string

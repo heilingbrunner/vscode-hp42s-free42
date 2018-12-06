@@ -6,6 +6,8 @@ import { RpnProgram } from './rpnprogram';
 
 export class RawParser {
   programs: RpnProgram[] = [];
+  languageId = 'hp42s';
+
   private raw: string[];
   private codeLineNo: number = 0;
   private number: string = '';
@@ -103,6 +105,32 @@ export class RawParser {
           }
 
           hex = hex.trim();
+
+          //hp42s/free42 ?
+          if (cp.len === 2) {
+            // free42 commands: ACCEL|LOCAT|HEADING|ADATE|ATIME|ATIME24|CLK12|CLK24|DATE|DATE+|DDAYS|DMY|DOW|MDY|TIME
+            let free42All = 'A7 CF' + ' ' + // ACCEL
+              'A7 D0' + ' ' + // LOCAT'
+              'A7 D1' + ' ' + // HEADING'
+              'A6 81' + ' ' + // ADATE
+              'A6 84' + ' ' + // ATIME
+              'A6 85' + ' ' + // ATIME24
+              'A6 86' + ' ' + // CLK12
+              'A6 87' + ' ' + // CLK24
+              'A6 8C' + ' ' + // DATE
+              'A6 8D' + ' ' + // DATE+
+              'A6 8E' + ' ' + // DDAYS
+              'A6 8F' + ' ' + // DMY
+              'A6 90' + ' ' + // DOW
+              'A6 91' + ' ' + // MDY
+              'A6 9C' + ' '; // TIME
+            let isFree42 = free42All.match(hex);
+            if (isFree42) {
+              this.languageId = 'free42';
+            }
+          }
+
+
 
           //match ?
           let match = hex.match(cp.regex);
