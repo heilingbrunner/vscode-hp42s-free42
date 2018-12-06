@@ -7,7 +7,6 @@ export class RawProgram {
   rawLines: RawLine[] = [];
   private size: number = 0;
   startdocLineIndex: number = -1;
-  name: string = '';
 
   constructor(startdocLineIndex: number) {
     this.startdocLineIndex = startdocLineIndex;
@@ -29,34 +28,29 @@ export class RawProgram {
     return hexAll; //no trin() !
   }
 
-  succeeded(): boolean{
+  succeeded(): boolean {
     return !(this.getFirstError() !== undefined);
   }
 
-  getFirstError(): CodeError | undefined{
-    let errors =this.getErrors();
-    if(errors){
+  getFirstError(): CodeError | undefined {
+    let errors = this.getErrors();
+    if (errors) {
       return errors[0];
     }
     return undefined;
   }
 
   getErrors(): CodeError[] | undefined {
-    let rpnErrors: CodeError[] | undefined;
+    let errors: CodeError[] = [];
     this.rawLines.forEach(rawLine => {
       // when error ...
       if (rawLine.error) {
-        // check array ...
-        if (!rpnErrors) {
-          //create array
-          rpnErrors = [];
-        }
         // push error ...
-        rpnErrors.push(rawLine.error);
+        errors.push(rawLine.error);
       }
     });
 
-    return rpnErrors;
+    return errors;
   }
 
   getSize() {
@@ -74,7 +68,6 @@ export class RawProgram {
   }
 
   addLine(rawLine: RawLine) {
-    rawLine.program = this.name;
     this.rawLines.push(rawLine);
   }
 }

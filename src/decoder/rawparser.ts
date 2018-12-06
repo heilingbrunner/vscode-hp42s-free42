@@ -1,19 +1,20 @@
-import { RpnLine } from "./rpnline";
-import { DecoderFOCAL } from "./decoderfocal";
-import { unstring } from "../typedefs";
-import { RpnPattern } from "./rpnpattern";
-import { CodeError } from "../common/codeerror";
+import { RpnLine } from './rpnline';
+import { DecoderFOCAL } from './decoderfocal';
+import { RpnPattern } from './rpnpattern';
+import { CodeError } from '../common/codeerror';
+import { RpnProgram } from './rpnprogram';
 
 export class RawParser {
-  public rpnLines: RpnLine[] = [];
+  programs: RpnProgram[] = [];
   private raw: string[];
   private codeLineNo: number = 0;
   private number: string = '';
-  private numberLength: number = 0;
   private readingNumber = false;
 
   constructor(raw: string[]) {
     this.raw = raw;
+    let program = new RpnProgram();
+    this.programs.push(program);
   }
 
   parse() {
@@ -49,12 +50,10 @@ export class RawParser {
     if (!this.readingNumber) {
       this.readingNumber = true;
       this.number = '';
-      this.numberLength = 0;
     }
 
     //put it together
     this.number += b0 + ' ';
-    this.numberLength += 1;
 
     //end of number ?
     if (/00/.test(b0)) {
@@ -100,7 +99,7 @@ export class RawParser {
           //get n-bytes from raw
           hex = '';
           for (let j = 0; j < cp.len; j++) {
-            hex += this.raw[index + j] + " ";
+            hex += this.raw[index + j] + ' ';
           }
 
           hex = hex.trim();
@@ -112,7 +111,7 @@ export class RawParser {
 
             //read parameters
             if (cp.params) {
-              params = cp.params.split(",");
+              params = cp.params.split(',');
               for (let p = 0; p < params.length; p++) {
                 const param = params[p];
                 switch (true) {
@@ -144,9 +143,9 @@ export class RawParser {
             }
 
             length = cp.len + strl;
-            hex += " ";
+            hex += ' ';
             for (let j = cp.len; j < length; j++) {
-              hex += this.raw[index + j] + " ";
+              hex += this.raw[index + j] + ' ';
             }
 
             hex = hex.trim();
@@ -172,7 +171,7 @@ export class RawParser {
     rpnLine.error = error;
 
     //this.printRpn(rpnLine);
-    this.rpnLines.push(rpnLine);
+    this.programs[0].addLine(rpnLine);
   }
 
   private printRpn(rpnline: RpnLine) {

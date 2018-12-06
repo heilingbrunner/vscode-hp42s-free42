@@ -21,11 +21,16 @@ export class Decoder {
     let parser = new RawParser(raw);
     parser.parse();
 
-    parser.rpnLines.forEach(rpnline => {
-      DecoderFOCAL.toRpn(0, rpnline);
+    parser.programs.forEach(program => {
+      program.rpnLines.forEach(rpnLine =>{
+        DecoderFOCAL.toRpn(0, rpnLine);
+      });
     });
 
-    return new DecoderResult(programs);
+    // return result
+    let result = new DecoderResult();
+    result.programs = parser.programs;
+    return result;
   }
 
   readDocumentBytes(document: vscode.TextDocument): string[] {

@@ -3,11 +3,9 @@ import { RawProgram } from './rawprogram';
 
 /** Encoding result of the complete code content */
 export class EncoderResult {
-  programs: RawProgram[];
+  programs: RawProgram[] = [];
 
-  constructor(programs: RawProgram[]) {
-    this.programs = programs;
-  }
+  constructor() {}
 
   succeeded(): boolean {
     let succeeded = true;
@@ -23,11 +21,11 @@ export class EncoderResult {
     for (let index = 0; index < this.programs.length; index++) {
       const program = this.programs[index];
       error = program.getFirstError();
-      if(error){
+      if (error) {
         return error;
       }
     }
-    
+
     return undefined;
   }
 

@@ -29,7 +29,10 @@ export class Encoder {
       });
     });
     
-    return new EncoderResult(parser.programs);
+    // return result
+    let result = new EncoderResult();
+    result.programs = parser.programs;
+    return result;
   }
 
   dispose() {}

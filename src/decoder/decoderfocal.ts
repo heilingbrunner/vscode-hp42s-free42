@@ -1,4 +1,3 @@
-import { unstring } from "../typedefs";
 import { CodeError } from "../common/codeerror";
 import { RpnPattern } from "./rpnpattern";
 import { RpnLine } from "./rpnline";
@@ -25,7 +24,7 @@ export class DecoderFOCAL {
     }
   }
 
-  static toRpn(docLineIndex: number, rpnLine: RpnLine): [string, unstring, CodeError] {
+  static toRpn(docLineIndex: number, rpnLine: RpnLine): [string, string | undefined, CodeError] {
     let error: CodeError = new CodeError(docLineIndex, 0, "", "Not implemented yet!");
     let languageId: string = "free42";
 
@@ -42,8 +41,8 @@ export class DecoderFOCAL {
   /** Changing strings into corresponding opcodes (also adjusting the
    * instruction length in "Fn" byte).
    */
-  static extractStringfromRaw(raw: unstring): unstring {
-    let str: unstring;
+  static extractStringfromRaw(raw: string | undefined): string | undefined {
+    let str: string | undefined;
 
     //if (raw !== undefined) {
     //  if (str !== undefined) {
@@ -85,8 +84,8 @@ export class DecoderFOCAL {
   }
 
   /** Insert a number into raw */
-  static extractNumberfromRaw(raw: unstring): unstring {
-    let num: unstring;
+  static extractNumberfromRaw(raw: string | undefined): string | undefined {
+    let num: string | undefined;
 
     //if (raw !== undefined && num !== undefined) {
     //  let int = parseInt(num);
@@ -166,8 +165,8 @@ export class DecoderFOCAL {
   /** Changing numbers into corresponding opcodes.
    * "1.234E-455" -> 11 1A 12 13 14 1B 1C 14 15 15 00
    */
-  static convertRawToNumber(raw: unstring): unstring {
-    let number: unstring;
+  static convertRawToNumber(raw: string | undefined): string | undefined {
+    let number: string | undefined;
     //if (num !== undefined) {
     //  // "1.234E-455" -> 11 1A 12 13 14 1B 1C 14 15 15 00
     //  num =

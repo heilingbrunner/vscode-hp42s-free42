@@ -5,18 +5,15 @@ import { writeBytes, writeText, deleteFile, getPhysicalPath, existsSync } from '
 import { EncoderResult } from './encoder/encoderesult';
 import { Encoder } from './encoder/encoder';
 import { Decoder } from './decoder/decoder';
-import { configBit } from './typedefs';
 
 export class Tool {
   // The team players ...
   private encoder: Encoder;
   private decoder: Decoder;
-  //private formatter: RpnFormatProvider;
 
   constructor() {
     this.encoder = new Encoder();
     this.decoder = new Decoder();
-    //this.formatter = new RpnFormatProvider();
   }
 
   encode(editor: vscode.TextEditor) {
@@ -47,14 +44,10 @@ export class Tool {
               }
 
               // Show Info ...
-              vscode.window.showInformationMessage(
-                'hp42s/free42: { ' + size + '-Byte Prgm }'
-              );
+              vscode.window.showInformationMessage('hp42s/free42: { ' + size + '-Byte Prgm }');
             } else {
               // nothing happend ...
-              vscode.window.showInformationMessage(
-                'hp42s/free42: No code found.'
-              );
+              vscode.window.showInformationMessage('hp42s/free42: No code found.');
             }
 
             // Delete log file
@@ -62,13 +55,10 @@ export class Tool {
           } else {
             // handle ecoding errors ...
             let firstError = result.getFirstError();
-            let firstErrorText =
-              firstError !== undefined ? firstError.toString() : '';
+            let firstErrorText = firstError !== undefined ? firstError.toString() : '';
 
             // Show error ...
-            vscode.window.showErrorMessage(
-              'hp42s/free42: Encoding failed. \r\n' + firstErrorText
-            );
+            vscode.window.showErrorMessage('hp42s/free42: Encoding failed. \r\n' + firstErrorText);
 
             // Create log file
             this.writeErrorsToLog(document.fileName + '.log', result);
@@ -79,9 +69,7 @@ export class Tool {
         }
       } else {
         // wrong file
-        vscode.window.showWarningMessage(
-          'hp42s/free42: Document is not a *.hp42s/*.free42 file type.'
-        );
+        vscode.window.showWarningMessage('hp42s/free42: Document is not a *.hp42s/*.free42 file type.');
       }
     }
   }
@@ -106,52 +94,44 @@ export class Tool {
               //writeText(filename, rpn);
             } else {
               // nothing happend ...
-              vscode.window.showInformationMessage(
-                'hp42s/free42: No raw format found.'
-              );
+              vscode.window.showInformationMessage('hp42s/free42: No raw format found.');
             }
           } else {
             let firstError = result.getFirstError();
-            let firstErrorText =
-            firstError !== undefined ? firstError.toString() : '';
+            let firstErrorText = firstError !== undefined ? firstError.toString() : '';
 
             // Show error ...
-            vscode.window.showErrorMessage(
-              'hp42s/free42: Decoding failed. \r\n' + firstErrorText
-            );
+            vscode.window.showErrorMessage('hp42s/free42: Decoding failed. \r\n' + firstErrorText);
           }
         }
       } else {
-        vscode.window.showErrorMessage(
-          'hp42s/free42: Decoding failed. \r\nWrong file type.'
-        );
+        vscode.window.showErrorMessage('hp42s/free42: Decoding failed. \r\nWrong file type.');
       }
     }
   }
 
-  showRaw(fileUri: vscode.Uri | undefined){
+  showRaw(fileUri: vscode.Uri | undefined) {
     if (typeof fileUri === 'undefined' || !(fileUri instanceof vscode.Uri)) {
       if (vscode.window.activeTextEditor === undefined) {
-          vscode.commands.executeCommand('hexdump.hexdumpPath');
-          return;
+        vscode.commands.executeCommand('hexdump.hexdumpPath');
+        return;
       }
       fileUri = vscode.window.activeTextEditor.document.uri;
     }
 
     if (fileUri.scheme === 'hexdump') {
-        //toggle with actual file
-        var filePath = getPhysicalPath(fileUri);
-        for (const editor of vscode.window.visibleTextEditors) {
-            if (editor.document.uri.fsPath === filePath) {
-                vscode.window.showTextDocument(editor.document, editor.viewColumn);
-                return;
-            }
+      //toggle with actual file
+      var filePath = getPhysicalPath(fileUri);
+      for (const editor of vscode.window.visibleTextEditors) {
+        if (editor.document.uri.fsPath === filePath) {
+          vscode.window.showTextDocument(editor.document, editor.viewColumn);
+          return;
         }
+      }
 
-        vscode.commands.executeCommand("vscode.open", vscode.Uri.file(filePath));
-
+      vscode.commands.executeCommand('vscode.open', vscode.Uri.file(filePath));
     } else {
-        this.hexdumpFile(fileUri.fsPath);
+      this.vscodeOpenRawHex(fileUri.fsPath);
     }
   }
 
@@ -173,11 +153,7 @@ export class Tool {
   }
 
   /** {} Head lines */
-  private updateHeadLines(
-    editor: vscode.TextEditor,
-    result: EncoderResult,
-    useLineNumbers: configBit
-  ) {
+  private updateHeadLines(editor: vscode.TextEditor, result: EncoderResult, useLineNumbers: {} | undefined) {
     editor
       .edit(e => {
         // Walk through reverse (!!) all programs and insert/update head line.
@@ -187,7 +163,7 @@ export class Tool {
           const size = program.getSize();
           const firstError = program.getFirstError();
           const firstErrorText = firstError ? firstError.toString() : '';
-          
+
           const headLine = editor.document.lineAt(startdocLineIndex);
           let line = '';
 
@@ -197,12 +173,9 @@ export class Tool {
             line = (useLineNumbers ? '00 ' : '') + '{ ' + firstErrorText + ' }';
           }
 
-          if(headLine){
+          if (headLine) {
             if (/\{.*\}/.test(headLine.text)) {
-              e.replace(
-                new vscode.Range(headLine.range.start, headLine.range.end),
-                line
-              );
+              e.replace(new vscode.Range(headLine.range.start, headLine.range.end), line);
             }
           }
         });
@@ -212,12 +185,12 @@ export class Tool {
       });
   }
 
-  private hexdumpFile(filePath: string) {
+  private vscodeOpenRawHex(filePath: string) {
     if (typeof filePath === 'undefined') {
-        return;
+      return;
     }
     if (!existsSync(filePath)) {
-        return;
+      return;
     }
 
     let fileUri = vscode.Uri.file(filePath.concat('.rawhex'));
@@ -225,7 +198,7 @@ export class Tool {
     let hexUri = fileUri.with({ scheme: 'rawhex' });
 
     vscode.commands.executeCommand('vscode.open', hexUri);
-}
+  }
 
   dispose() {
     this.encoder.dispose();

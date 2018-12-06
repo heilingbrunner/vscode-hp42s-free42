@@ -1,14 +1,11 @@
-import { unstring } from "../typedefs";
 import { CodeError } from "../common/codeerror";
 import { RpnProgram } from "./rpnprogram";
 
 export class DecoderResult{
-  programs: RpnProgram[];
+  programs: RpnProgram[] = [];
   languageId: string = '';
 
-  constructor(programs: RpnProgram[]) {
-    this.programs = programs;
-  }
+  constructor() {}
 
   succeeded(): boolean {
     let succeeded = true;
@@ -34,8 +31,8 @@ export class DecoderResult{
 
   getRpn(): string {
     let rpn = '';
-    this.programs.forEach(rawprogram => {
-      rpn += rawprogram.getRpn().replace(/ /g, '');
+    this.programs.forEach(rpnprogram => {
+      rpn += rpnprogram.getRpn();
     });
     return rpn.trim();
   }

@@ -1,13 +1,12 @@
 import * as vscode from 'vscode';
-import { configBit } from '../typedefs';
 
 export class Configuration {
-    generateHexFile: configBit;
+    generateHexFile: {} | undefined;
     
-    useLineNumbers: configBit;
-    replaceAbbreviations: configBit;
-    removeTooLongSpaces: configBit;
-    trimLine: configBit;
+    useLineNumbers: {} | undefined;
+    replaceAbbreviations: {} | undefined;
+    removeTooLongSpaces: {} | undefined;
+    trimLine: {} | undefined;
 
     constructor(useWorkspaceConfiguration: boolean){
         if(useWorkspaceConfiguration){

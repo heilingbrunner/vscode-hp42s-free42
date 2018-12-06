@@ -1,5 +1,3 @@
-import { unstring } from '../typedefs';
-import { RpnParser } from './rpnparser';
 import { CodeError } from '../common/codeerror';
 import { RawLine } from './rawline';
 
@@ -39,7 +37,7 @@ export class EncoderFOCAL {
   }
 
   static toRaw(rawLine: RawLine, languageId: string) {
-    let progErrorText: unstring = undefined;
+    let progErrorText: string | undefined;
     let languageIdFromCode: string = '';
 
     if (rawLine.normCode !== undefined) {
@@ -102,7 +100,7 @@ export class EncoderFOCAL {
           }
 
           
-          if (progErrorText !== '') {
+          if (progErrorText !== undefined) {
             rawLine.error = new CodeError(
               0,
               rawLine.codeLineNo,
@@ -263,7 +261,7 @@ export class EncoderFOCAL {
           }
 
           
-          if (progErrorText !== '') {
+          if (progErrorText !== undefined) {
             rawLine.error = new CodeError(
               0,
               rawLine.codeLineNo,
@@ -301,7 +299,7 @@ export class EncoderFOCAL {
   /** Changing strings into corresponding opcodes (also adjusting the
    * instruction length in "Fn" byte).
    */
-  private static insertStringInRaw(raw: unstring, str: unstring): unstring {
+  private static insertStringInRaw(raw: string | undefined, str: string | undefined): string | undefined {
     if (raw !== undefined) {
       if (str !== undefined) {
         let len_str = str.length;
@@ -315,7 +313,7 @@ export class EncoderFOCAL {
         }
 
         // loop each character in str and append hex to opcode
-        str.split('').forEach(character => {
+        str.split('').forEach((character: string) => {
           let hexcode = character.charCodeAt(0);
           if (EncoderFOCAL.charMap.has(character)) {
             let v = EncoderFOCAL.charMap.get(character);
@@ -347,7 +345,7 @@ export class EncoderFOCAL {
   }
 
   /** Insert a number into raw */
-  private static insertNumberInRaw(raw: unstring, num: unstring): unstring {
+  private static insertNumberInRaw(raw: string | undefined, num: string | undefined): string | undefined {
     if (raw !== undefined && num !== undefined) {
       let int = parseInt(num);
       let match: RegExpMatchArray | null = null;
@@ -424,7 +422,7 @@ export class EncoderFOCAL {
   /** Changing numbers into corresponding opcodes.
    * "1.234E-455" -> 11 1A 12 13 14 1B 1C 14 15 15 00
    */
-  private static convertNumberToRaw(num: unstring): unstring {
+  private static convertNumberToRaw(num: string | undefined): string | undefined {
     if (num !== undefined) {
       // "1.234E-455" -> 11 1A 12 13 14 1B 1C 14 15 15 00
       num =
