@@ -15,16 +15,17 @@ export class RawParser {
 
   constructor(raw: string[]) {
     this.raw = raw;
+    // only one program used
     let program = new RpnProgram();
     this.programs.push(program);
   }
 
   parse() {
-    let codeLineNo = 0;
+    //index walking through byte array
     let index = 0;
-    let length = 0;
 
     while (index < this.raw.length) {
+      let length = 0;
       let b0 = this.raw[index];
       let n0 = b0[0];
 
@@ -42,6 +43,16 @@ export class RawParser {
 
       index = index + length;
     }
+    
+    let size = this.raw.length;
+    if (size >= 3){
+      const end = this.raw[size-3] + ' ' + this.raw[size-2] + ' ' + this.raw[size-1];
+      if(end === 'C0 00 0D'){
+        size -= 3;
+      }
+    }
+    
+    this.programs[0].size = size;
   }
 
   private parseNumber(index: number): number {

@@ -31,6 +31,20 @@ export class DecoderResult{
     return undefined;
   }
 
+  getHex(eol: string, useWhitespaceBetweenHex?: boolean): string {
+    let hexAll = '';
+
+    this.programs.forEach(rpnprogram => {
+      hexAll += rpnprogram.getHex(eol);
+    });
+
+    if(!useWhitespaceBetweenHex){
+      hexAll = hexAll.replace(/ /g, '');
+    }
+
+    return hexAll.trim();
+  }
+
   getRpn(eol: string): string {
     let rpn = '';
 
@@ -38,5 +52,14 @@ export class DecoderResult{
       rpn += rpnprogram.getRpn(eol);
     });
     return rpn.trim();
+  }
+
+  getSize(): number {
+    let size = 0;
+    this.programs.forEach(rpnprogram => {
+      size += rpnprogram.getSize();
+    });
+
+    return size;
   }
 }

@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import { EncoderFOCAL } from './encoderfocal';
 import { EncoderResult } from './encoderesult';
 import { RpnParser } from './rpnparser';
-import { Configuration } from '../helper/configuration';
+import { Configuration } from '../common/configuration';
 
 export class Encoder {
   constructor() {

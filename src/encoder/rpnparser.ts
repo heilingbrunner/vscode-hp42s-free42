@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 import { CodeError } from '../common/codeerror';
-import { Configuration } from '../helper/configuration';
+import { Configuration } from '../common/configuration';
 import { EncoderFOCAL } from './encoderfocal';
 import { RawProgram } from './rawprogram';
 import { RawLine } from './rawline';

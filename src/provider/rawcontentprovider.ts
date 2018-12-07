@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { getFileSize, getBuffer } from '../helper/filesystem';
+import { getFileSize, getBuffer } from '../common/filesystem';
 
 export default class RawContentProvider implements vscode.TextDocumentContentProvider {
   private static s_instance: RawContentProvider | null = null;

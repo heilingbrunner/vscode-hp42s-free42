@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { toBytes } from '../helper/bytes';
+import { toBytes } from '../common/bytes';
 import { RawLine } from './rawline';
 import { CodeError } from '../common/codeerror';
 

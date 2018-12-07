@@ -31,12 +31,17 @@ export class EncoderResult {
     return undefined;
   }
 
-  getHex(eol: string): string {
-    let hex = '';
+  getHex(eol: string, useWhitespaceBetweenHex?: boolean): string {
+    let hexAll = '';
     this.programs.forEach(rawprogram => {
-      hex += rawprogram.getHex(eol).replace(/ /g, '');
+      hexAll += rawprogram.getHex(eol);
     });
-    return hex.trim();
+
+    if(!useWhitespaceBetweenHex){
+      hexAll = hexAll.replace(/ /g, '');
+    }
+
+    return hexAll.trim();
   }
 
   getRaw(): string {

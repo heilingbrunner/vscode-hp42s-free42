@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
-import { Configuration } from './helper/configuration';
-import { writeBytes, writeText, deleteFile, getPhysicalPath, existsSync } from './helper/filesystem';
+import { Configuration } from './common/configuration';
+import { writeBytes, writeText, deleteFile, getPhysicalPath, existsSync } from './common/filesystem';
 import { EncoderResult } from './encoder/encoderesult';
 import { Encoder } from './encoder/encoder';
 import { Decoder } from './decoder/decoder';
@@ -23,7 +23,7 @@ export class Tool {
 
       if (document) {
         let languageId = document.languageId.toLowerCase();
-        let eol = ['','\n','\r\n'][document.eol];
+        let eol = ['', '\n', '\r\n'][document.eol];
 
         if (languageId.match(/(hp42s|free42)/)) {
           // start encoding ...
@@ -33,39 +33,39 @@ export class Tool {
             if (result.succeeded()) {
               // save result and show messages
               if (result.programs !== undefined) {
-                let raw = result.getRaw();
-                let hex = result.getHex(eol);
-                let size = result.getSize();
-  
-                // Save *.raw output ...
-                writeBytes(document.fileName + '.raw', raw);
-  
                 // Save *.hex output ...
                 if (config.generateHexFile) {
+                  let useWhitespaceBetweenHex = config.useWhitespaceBetweenHex;
+                  let hex = result.getHex(eol, useWhitespaceBetweenHex);
                   writeText(document.fileName + '.hex', hex);
                 }
-  
+
+                // Save *.raw output ...
+                let raw = result.getRaw();
+                let size = result.getSize();
+                writeBytes(document.fileName + '.raw', raw);
+
                 // Show Info ...
                 vscode.window.showInformationMessage('hp42s/free42: { ' + size + '-Byte Prgm }');
               } else {
                 // nothing happend ...
                 vscode.window.showInformationMessage('hp42s/free42: No code found.');
               }
-  
+
               // Delete log file
               deleteFile(document.fileName + '.log');
             } else {
               // handle ecoding errors ...
               let firstError = result.getFirstError();
               let firstErrorText = firstError !== undefined ? firstError.toString() : '';
-  
+
               // Show error ...
               vscode.window.showErrorMessage('hp42s/free42: Encoding failed.' + eol + firstErrorText);
-  
+
               // Create log file
               this.writeErrorsToLog(document.fileName + '.log', result, eol);
             }
-  
+
             // Update all {...} line
             this.updateHeadLines(editor, result, config.useLineNumbers);
           }
@@ -79,13 +79,14 @@ export class Tool {
 
   decode(editor: vscode.TextEditor) {
     if (editor) {
+      let config = new Configuration(true);
       let document = editor.document;
 
       if (document) {
-        let eol = ['','\n','\r\n'][document.eol];
+        let eol = ['', '\n', '\r\n'][document.eol];
         let languageId = document.languageId.toLowerCase();
         let scheme = document.uri.scheme.toLowerCase();
-        
+
         if (languageId.match(/hex/) && scheme.match(/rawhex/)) {
           // start decoding ...
           let result = this.decoder.decode(editor);
@@ -94,12 +95,22 @@ export class Tool {
             if (result.succeeded) {
               // save result and show messages
               if (result.programs !== undefined) {
-                // Save result
-  
-                let rpn = result.getRpn(eol);
-                let filename = document.fileName.replace('rawhex',result.languageId);
+                // Save hex
+                if (config.generateHexFile) {
+                  let useWhitespaceBetweenHex = config.useWhitespaceBetweenHex;
+                  let hex = result.getHex(eol, useWhitespaceBetweenHex);
+                  let hexFileName = document.fileName.replace('rawhex', 'hex');
+                  writeText(hexFileName, hex);
+                }
 
-                writeText(filename, rpn);
+                // Save rpn
+                let rpn = result.getRpn(eol);
+                let size = result.getSize();
+                let rpnFileName = document.fileName.replace('rawhex', result.languageId);
+                writeText(rpnFileName, rpn);
+
+                // Show Info ...
+                vscode.window.showInformationMessage('hp42s/free42: { ' + size + '-Byte Prgm }');
               } else {
                 // nothing happend ...
                 vscode.window.showInformationMessage('hp42s/free42: No raw format found.');
@@ -107,7 +118,7 @@ export class Tool {
             } else {
               let firstError = result.getFirstError();
               let firstErrorText = firstError !== undefined ? firstError.toString() : '';
-  
+
               // Show error ...
               vscode.window.showErrorMessage('hp42s/free42: Decoding failed.' + eol + firstErrorText);
             }

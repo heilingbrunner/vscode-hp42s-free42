@@ -6,6 +6,7 @@ import { RpnLine } from "./rpnline";
 
 export class RpnProgram {
   rpnLines: RpnLine[] = [];
+  size: number = 0;
 
   succeeded(): boolean {
     return !(this.getFirstError() !== undefined);
@@ -32,6 +33,15 @@ export class RpnProgram {
     return errors;
   }
 
+  getHex(eol: string): string {
+    let rawAll = '';
+
+    this.rpnLines.forEach(rpnLine => {
+      rawAll += '' + rpnLine.raw + eol;
+    });
+    return rawAll.trim();
+  }
+
   getRpn(eol: string): string {
     let rpnAll = '';
 
@@ -39,6 +49,10 @@ export class RpnProgram {
       rpnAll += '' + rpnLine.rpn + eol;
     });
     return rpnAll.trim();
+  }
+
+  getSize() {
+    return this.size;
   }
 
   addLine(rpnLine: RpnLine) {

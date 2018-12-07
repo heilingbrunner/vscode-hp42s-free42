@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { Configuration } from '../helper/configuration';
+import { Configuration } from '../common/configuration';
 
 /** Formatter for the code */
 export class RpnFormatProvider {

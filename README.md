@@ -138,6 +138,7 @@ Document Formatter Settings:
 - `HP42S/free42.formatterReplaceAbreviations`: see above __Document Formatter__
 - `HP42S/free42.formatterRemoveTooLongSpaces`: see above __Document Formatter__
 - `HP42S/free42.formatterTrimLines`: see above __Document Formatter__
+- `HP42S/free42.formatterUseWhitespaceBetweenHex`: see generated hex files
 
 ## Recommendations
 
