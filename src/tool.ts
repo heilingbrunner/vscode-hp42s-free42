@@ -79,17 +79,17 @@ export class Tool {
 
   decode(editor: vscode.TextEditor) {
     if (editor) {
-      let config = new Configuration(true);
-      let document = editor.document;
+      const config = new Configuration(true);
+      const document = editor.document;
 
       if (document) {
-        let eol = ['', '\n', '\r\n'][document.eol];
-        let languageId = document.languageId.toLowerCase();
-        let scheme = document.uri.scheme.toLowerCase();
+        const eol = ['', '\n', '\r\n'][document.eol];
+        const languageId = document.languageId.toLowerCase();
+        const scheme = document.uri.scheme.toLowerCase();
 
         if (languageId.match(/hex/) && scheme.match(/rawhex/)) {
           // start decoding ...
-          let result = this.decoder.decode(editor);
+          const result = this.decoder.decode(editor);
           if (result) {
             // no decoding errors ...
             if (result.succeeded) {
@@ -97,16 +97,16 @@ export class Tool {
               if (result.programs !== undefined) {
                 // Save hex
                 if (config.generateHexFile) {
-                  let useWhitespaceBetweenHex = config.useWhitespaceBetweenHex;
-                  let hex = result.getHex(eol, useWhitespaceBetweenHex);
-                  let hexFileName = document.fileName.replace('rawhex', 'hex');
+                  const useWhitespaceBetweenHex = config.useWhitespaceBetweenHex;
+                  const hex = result.getHex(eol, useWhitespaceBetweenHex);
+                  const hexFileName = document.fileName.replace('rawhex', 'hex');
                   writeText(hexFileName, hex);
                 }
 
                 // Save rpn
-                let rpn = result.getRpn(eol);
-                let size = result.getSize();
-                let rpnFileName = document.fileName.replace('rawhex', result.languageId);
+                const rpn = result.getRpn(eol);
+                const size = result.getSize();
+                const rpnFileName = document.fileName.replace('rawhex', result.languageId);
                 writeText(rpnFileName, rpn);
 
                 // Show Info ...
@@ -116,8 +116,8 @@ export class Tool {
                 vscode.window.showInformationMessage('hp42s/free42: No raw format found.');
               }
             } else {
-              let firstError = result.getFirstError();
-              let firstErrorText = firstError !== undefined ? firstError.toString() : '';
+              const firstError = result.getFirstError();
+              const firstErrorText = firstError !== undefined ? firstError.toString() : '';
 
               // Show error ...
               vscode.window.showErrorMessage('hp42s/free42: Decoding failed.' + eol + firstErrorText);
@@ -141,7 +141,7 @@ export class Tool {
 
     if (fileUri.scheme === 'hexdump') {
       //toggle with actual file
-      var filePath = getPhysicalPath(fileUri);
+      const filePath = getPhysicalPath(fileUri);
       for (const editor of vscode.window.visibleTextEditors) {
         if (editor.document.uri.fsPath === filePath) {
           vscode.window.showTextDocument(editor.document, editor.viewColumn);

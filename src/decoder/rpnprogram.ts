@@ -13,7 +13,7 @@ export class RpnProgram {
   }
 
   getFirstError(): CodeError | undefined {
-    let errors = this.getErrors();
+    const errors = this.getErrors();
     if (errors) {
       return errors[0];
     }
@@ -21,7 +21,7 @@ export class RpnProgram {
   }
 
   getErrors(): CodeError[] | undefined {
-    let errors: CodeError[] = [];
+    const errors: CodeError[] = [];
     this.rpnLines.forEach(rpnLine => {
       // when error ...
       if (rpnLine.error) {
@@ -46,7 +46,7 @@ export class RpnProgram {
     let rpnAll = '';
 
     this.rpnLines.forEach(rpnLine => {
-      rpnAll += '' + rpnLine.rpn + eol;
+      rpnAll += '' + rpnLine.normCode + eol;
     });
     return rpnAll.trim();
   }

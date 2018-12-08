@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { getFileSize, getBuffer } from '../common/filesystem';
+import { Configuration } from '../common/configuration';
 
 export default class RawContentProvider implements vscode.TextDocumentContentProvider {
   private static s_instance: RawContentProvider | null = null;
@@ -29,10 +30,11 @@ export default class RawContentProvider implements vscode.TextDocumentContentPro
     const sizeDisplay = 5242880;
 
     return new Promise(async resolve => {
-      let tail = '(Reached the maximum size to display. You can change "rawhex.sizeDisplay" in your settings.)';
-      let eol = ['','\n','\r\n'][vscode.EndOfLine.CRLF];
+      const config = new Configuration(true);
+      const tail = '(Reached the maximum size to display. You can change "rawhex.sizeDisplay" in your settings.)';
+      const eol = config.eol;
 
-      let proceed =
+      const proceed =
         getFileSize(uri) < sizeWarning
           ? 'Open'
           : await vscode.window.showWarningMessage('File might be too big, are you sure you want to continue?', 'Open');

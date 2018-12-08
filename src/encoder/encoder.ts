@@ -17,11 +17,11 @@ export class Encoder {
   ): EncoderResult {
     const debug = 1; // debug level 0=nothing, 1=minimal, 2=verbose
 
-    let parser = new RpnParser();
+    const parser = new RpnParser();
     parser.document = editor.document;
     parser.config = new Configuration(true);
     
-    parser.read();
+    parser.parse();
 
     parser.programs.forEach(program => {
       program.rawLines.forEach(rawLine => {
@@ -30,8 +30,9 @@ export class Encoder {
     });
     
     // return result
-    let result = new EncoderResult();
+    const result = new EncoderResult();
     result.programs = parser.programs;
+
     return result;
   }
 

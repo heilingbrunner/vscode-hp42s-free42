@@ -1,34 +1,61 @@
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 
 export class Configuration {
-    generateHexFile?: boolean;
-    
-    useLineNumbers?: boolean;
-    replaceAbbreviations?: boolean;
-    removeTooLongSpaces?: boolean;
-    trimLine?: boolean;
-    useWhitespaceBetweenHex?: boolean;
 
-    constructor(useWorkspaceConfiguration: boolean){
-        if(useWorkspaceConfiguration){
-          let config = vscode.workspace.getConfiguration('HP42S/free42');
+  platform: string;
+  generateHexFile?: boolean;
 
-          this.generateHexFile = config.get<boolean>('encoderGenerateHexFile');
+  useLineNumbers?: boolean;
+  replaceAbbreviations?: boolean;
+  removeTooLongSpaces?: boolean;
+  trimLine?: boolean;
+  useWhitespaceBetweenHex?: boolean;
+  eol?: string;
 
-          this.useLineNumbers = config.get<boolean>('formatterUseLineNumbers');
-          this.replaceAbbreviations = config.get<boolean>('formatterReplaceAbbreviations');
-          this.removeTooLongSpaces = config.get<boolean>('formatterRemoveTooLongSpaces');
-          this.trimLine = config.get<boolean>('formatterTrimLine');
-          this.useWhitespaceBetweenHex = config.get<boolean>('formatterUseWhitespaceBetweenHex'); 
-        } else {
-          this.generateHexFile = true;
+  constructor(useWorkspaceConfiguration: boolean) {
+    this.platform = process.platform;
 
-          this.useLineNumbers = true;
-          this.replaceAbbreviations = true;
-          this.removeTooLongSpaces = true;
-          this.trimLine = true;
-          this.useWhitespaceBetweenHex = true;
-        }
+    if (useWorkspaceConfiguration) {
+      let config = vscode.workspace.getConfiguration("HP42S/free42");
+
+      this.generateHexFile = config.get<boolean>("encoderGenerateHexFile");
+
+      this.useLineNumbers = config.get<boolean>("formatterUseLineNumbers");
+      this.replaceAbbreviations = config.get<boolean>("formatterReplaceAbbreviations");
+      this.removeTooLongSpaces = config.get<boolean>("formatterRemoveTooLongSpaces");
+      this.trimLine = config.get<boolean>("formatterTrimLine");
+      this.useWhitespaceBetweenHex = config.get<boolean>("formatterUseWhitespaceBetweenHex");
+      
+      // get eol ...
+      config = vscode.workspace.getConfiguration("files");
+      const fileseol = String(config.get<string>("eol"));
+
+      switch (true) {
+        case /auto/.test(fileseol):
+          this.eol = (this.platform === 'win32' ? '\r\n' : '\n');
+          break;
+        case /\r\n/.test(fileseol):
+          this.eol = '\r\n';
+          break;
+        case /\n/.test(fileseol):
+          this.eol = '\n';
+          break;
+        default:
+          this.eol = '\r\n';
+          break;
+      }
+        
+
+      
+    } else {
+      this.generateHexFile = true;
+
+      this.useLineNumbers = true;
+      this.replaceAbbreviations = true;
+      this.removeTooLongSpaces = true;
+      this.trimLine = true;
+      this.useWhitespaceBetweenHex = true;
+      this.eol = '\r\n';
     }
-    
+  }
 }

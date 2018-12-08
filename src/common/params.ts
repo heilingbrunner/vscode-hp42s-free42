@@ -10,6 +10,10 @@ export class Params {
   stk?: string;
   ton?: string;
   csk?: string;
+  stkno?: string;
+  cskno?: number;
+  strl?: number;
+  lblno?: number;
 
   constructor() {}
 }

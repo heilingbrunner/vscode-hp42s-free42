@@ -4,7 +4,7 @@ import { Params } from '../common/params';
 export class RpnLine {
   codeLineNo: number = 0;
   raw: string = '';
-  rpn?: string;
+  normCode?: string;
   error?: CodeError;
   params = new Params();
 
@@ -15,6 +15,6 @@ export class RpnLine {
   }
 
   toString(): string {
-    return this.codeLineNo + ': ' + this.raw + ', ' + this.rpn + (this.error ? ', ' + this.error : '');
+    return this.codeLineNo + ': ' + this.raw + ', ' + this.normCode + (this.error ? ', ' + this.error : '');
   }
 }

@@ -4,7 +4,7 @@ import { toBytes } from './bytes';
 
 /** Write bytes to file */
 export function writeBytes(fileName: string, content: string) {
-  let data = new Buffer(toBytes(content));
+  const data = new Buffer(toBytes(content));
 
   fs.writeFile(fileName, data, err => {
     if (err) {
@@ -41,15 +41,15 @@ export function deleteFile(filename: string) {
 }
 
 export function getFileSize(uri: vscode.Uri): Number {
-  let filepath = getPhysicalPath(uri);
-  let fstat = fs.statSync(filepath);
+  const filepath = getPhysicalPath(uri);
+  const fstat = fs.statSync(filepath);
   return fstat ? fstat['size'] : -1;
 }
 
 export function getPhysicalPath(uri: vscode.Uri): string {
   if (uri.scheme === 'rawhex') {
     // remove the 'hexdump' extension
-    let filepath = uri.with({ scheme: 'file' }).fsPath.slice(0, -7);
+    const filepath = uri.with({ scheme: 'file' }).fsPath.slice(0, -7);
     return filepath;
   }
 

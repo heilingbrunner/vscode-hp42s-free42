@@ -14,11 +14,10 @@ export class Decoder {
   decode(editor: vscode.TextEditor): DecoderResult {
     const debug = 1; // debug level 0=nothing, 1=minimal, 2=verbose
 
-    let programs: RpnProgram[] = [];
-    let document = editor.document;
-    let raw = this.readDocumentBytes(document);
+    const document = editor.document;
+    const raw = this.readDocumentBytes(document);
 
-    let parser = new RawParser(raw);
+    const parser = new RawParser(raw);
     parser.parse();
 
     parser.programs.forEach(program => {
@@ -28,7 +27,7 @@ export class Decoder {
     });
 
     // return result
-    let result = new DecoderResult();
+    const result = new DecoderResult();
     result.programs = parser.programs;
     result.languageId = parser.languageId;
     
@@ -36,9 +35,8 @@ export class Decoder {
   }
 
   readDocumentBytes(document: vscode.TextDocument): string[] {
-    let docLineCount = document.lineCount;
-    let languageId = document.languageId;
-    let bytes: string[] = [];
+    const docLineCount = document.lineCount;
+    let bytes: string[];
     let content: string = '';
 
     for (let docLineIndex = 0; docLineIndex < docLineCount; docLineIndex++) {

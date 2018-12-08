@@ -3,6 +3,8 @@ import { DecoderFOCAL } from './decoderfocal';
 import { RpnPattern } from './rpnpattern';
 import { CodeError } from '../common/codeerror';
 import { RpnProgram } from './rpnprogram';
+import { Params } from '../common/params';
+import { EncoderFOCAL } from '../encoder/encoderfocal';
 
 export class RawParser {
   programs: RpnProgram[] = [];
@@ -72,8 +74,13 @@ export class RawParser {
     if (/00/.test(b0)) {
       this.readingNumber = false;
 
+      const rpnLine = new RpnLine();
+      rpnLine.raw = this.number;
+      rpnLine.normCode = '`num`';
+      rpnLine.params.num = this.number;
+
       // collect rawLines
-      this.pushRpnLine(this.number, this.number, undefined);
+      this.pushRpnLine(rpnLine);
     }
 
     return 1;
@@ -84,41 +91,33 @@ export class RawParser {
     let b0 = this.raw[index];
     let n0 = b0[0];
     let hex = '';
-    let pattern: RpnPattern[] | undefined;
-
-    //params
-    let params: string[];
     let length = 0;
-    let strl = 0;
-    let reg = 0;
-    let ton = 0;
-    let stk = 0;
-    let csk = 0;
-    let lblno = 0;
+    let patterns: RpnPattern[] | undefined;
 
     // test first nibble
     if (DecoderFOCAL.rawMap.has(n0)) {
       //get patterns from first nibble
-      pattern = DecoderFOCAL.rawMap.get(n0);
+      patterns = DecoderFOCAL.rawMap.get(n0);
 
-      if (pattern) {
+      if (patterns) {
+        //params
+        let cpparams: string[];
         length = 0;
-        strl = 0;
-        // walk through all patterns
-        for (let i = 0; i < pattern.length; i++) {
-          // get
-          const cp = pattern[i];
 
-          //get n-bytes from raw
+        // walk through all patterns
+        for (let i = 0; i < patterns.length; i++) {
+          // get
+          const pattern = patterns[i];
+
+          //get first n-bytes from raw
           hex = '';
-          for (let j = 0; j < cp.len; j++) {
+          for (let j = 0; j < pattern.len; j++) {
             hex += this.raw[index + j] + ' ';
           }
-
           hex = hex.trim();
 
           //hp42s/free42 ?
-          if (cp.len === 2) {
+          if (pattern.len === 2) {
             // free42 commands: ACCEL|LOCAT|HEADING|ADATE|ATIME|ATIME24|CLK12|CLK24|DATE|DATE+|DDAYS|DMY|DOW|MDY|TIME
             let free42All = 'A7 CF' + ' ' + // ACCEL
               'A7 D0' + ' ' + // LOCAT'
@@ -141,39 +140,44 @@ export class RawParser {
             }
           }
 
-
-
           //match ?
-          let match = hex.match(cp.regex);
+          let match = hex.match(pattern.regex);
           if (match) {
-            length = cp.len;
+            length = pattern.len;
+            let rpnLine = new RpnLine();
 
             //read parameters
-            if (cp.params) {
-              params = cp.params.split(',');
-              for (let p = 0; p < params.length; p++) {
-                const param = params[p];
+            if (pattern.params) {
+              cpparams = pattern.params.split(',');
+
+              for (let p = 0; p < cpparams.length; p++) {
+                const param = cpparams[p];
                 switch (true) {
                   case /strl-2/.test(param):
-                    strl = parseInt(match[p + 1], 16) - 2;
+                  rpnLine.params.strl = parseInt(match[p + 1], 16) - 2;
                     break;
                   case /strl-1/.test(param):
-                    strl = parseInt(match[p + 1], 16) - 1;
+                  rpnLine.params.strl = parseInt(match[p + 1], 16) - 1;
                     break;
                   case /strl/.test(param):
-                    strl = parseInt(match[p + 1], 16);
+                  rpnLine.params.strl = parseInt(match[p + 1], 16);
                     break;
                   case /stk/.test(param):
-                    stk = parseInt(match[p + 1]);
+                  rpnLine.params.stkno = match[p + 1];
+                    let stk = parseInt(match[p + 1]);
+                    if (DecoderFOCAL.stackMap.has(stk)) {
+                      rpnLine.params.stk = DecoderFOCAL.stackMap.get(stk);
+                    }
                     break;
                   case /csk/.test(param):
-                    csk = parseInt(match[p]);
+                  rpnLine.params.csk = match[p];
+                  rpnLine.params.cskno = parseInt(match[p]);
                     break;
                   case /lblno-1/.test(param):
-                    lblno = parseInt(match[p + 1], 16) - 1;
+                  rpnLine.params.lblno = parseInt(match[p + 1], 16) - 1;
                     break;
                   case /lblno/.test(param):
-                    lblno = parseInt(match[p + 1], 16);
+                  rpnLine.params.lblno = parseInt(match[p + 1], 16);
                     break;
                   default:
                     break;
@@ -181,16 +185,20 @@ export class RawParser {
               }
             }
 
-            length = cp.len + strl;
+            // get all raw bytes of this code
+            length = pattern.len + (rpnLine.params.strl ? rpnLine.params.strl: 0);
             hex += ' ';
-            for (let j = cp.len; j < length; j++) {
+            for (let j = pattern.len; j < length; j++) {
               hex += this.raw[index + j] + ' ';
             }
-
             hex = hex.trim();
 
+            // fill RpnLine
+            rpnLine.raw = hex;
+            rpnLine.normCode = pattern.rpn;
+
             // collect rawLines
-            this.pushRpnLine(hex, cp.rpn, undefined);
+            this.pushRpnLine(rpnLine);
 
             break;
           }
@@ -201,13 +209,9 @@ export class RawParser {
     return length;
   }
 
-  private pushRpnLine(hex: string, rpn: string, error?: CodeError) {
+  private pushRpnLine(rpnLine: RpnLine) {
     this.codeLineNo++;
-    let rpnLine = new RpnLine();
     rpnLine.codeLineNo = this.codeLineNo;
-    rpnLine.raw = hex;
-    rpnLine.rpn = rpn;
-    rpnLine.error = error;
 
     //this.printRpn(rpnLine);
     this.programs[0].addLine(rpnLine);

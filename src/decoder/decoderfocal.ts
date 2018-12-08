@@ -6,6 +6,7 @@ export class DecoderFOCAL {
   //#region Members
 
   static rawMap: Map<string, RpnPattern[]> = new Map<string, RpnPattern[]>();
+  static stackMap: Map<number, string> = new Map<number, string>();
 
   static initializedForDecode: boolean = false;
 
@@ -18,6 +19,10 @@ export class DecoderFOCAL {
       // transform arr_rawMap -> rawMap
       DecoderFOCAL.arr_rawMap.forEach((e: { key: string; value: RpnPattern[] }) => {
         DecoderFOCAL.rawMap.set(e.key, e.value);
+      });
+
+      DecoderFOCAL.arr_stackMap.forEach((e: { key: number; value: string }) => {
+        DecoderFOCAL.stackMap.set(e.key, e.value);
       });
 
       DecoderFOCAL.initializedForDecode = true;
@@ -644,8 +649,6 @@ export class DecoderFOCAL {
   */
   // #endregion
 
-  private static arr_stack = [{ key: "T", value: 0 }, { key: "Z", value: 1 }, { key: "Y", value: 2 }, { key: "X", value: 3 }, { key: "L", value: 4 }];
-
   // 0(?<lblno>[2-9A-F]): LBL 01-15
   // Fn: F([1-9A-F]) Label: max. length 14
   // 7t: 7([0-4]); stack 0-4
@@ -684,6 +687,14 @@ export class DecoderFOCAL {
   // XEQ e   E0007F
 
   //#region Arrays
+
+  private static arr_stackMap = [
+    { key: 0, value: 'T' },
+    { key: 1, value: 'Z' },
+    { key: 2, value: 'Y' },
+    { key: 3, value: 'X' },
+    { key: 4, value: 'L' }
+  ];
 
   private static arr_rawMap = [
     {
