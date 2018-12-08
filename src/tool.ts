@@ -35,14 +35,16 @@ export class Tool {
               if (result.programs !== undefined) {
                 // Save *.hex output ...
                 if (config.generateHexFile) {
-                  let useWhitespaceBetweenHex = config.useWhitespaceBetweenHex;
-                  let hex = result.getHex(eol, useWhitespaceBetweenHex);
+                  const useWhitespaceBetweenHex = config.useWhitespaceBetweenHex;
+                  const hex = result.getHex(eol, useWhitespaceBetweenHex);
+
                   writeText(document.fileName + '.hex', hex);
                 }
 
                 // Save *.raw output ...
                 const raw = result.getRaw();
                 const size = result.getSize();
+                
                 writeBytes(document.fileName + '.raw', raw);
 
                 // Show Info ...
