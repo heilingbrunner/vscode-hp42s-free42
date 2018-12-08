@@ -4,35 +4,35 @@ import RawContentProvider from './provider/rawcontentprovider';
 import { RpnFormatProvider } from './provider/rpnformatprovider';
 
 export function activate(context: vscode.ExtensionContext) {
-  let tool = new Tool();
+  const tool = new Tool();
 
   // 👍 formatter implemented using API
   // see https://code.visualstudio.com/blogs/2016/11/15/formatters-best-practices
 
-  let formatProvider = new RpnFormatProvider(); // implements provideDocumentFormattingEdits() method
-  let disposableFormatProvider = vscode.languages.registerDocumentFormattingEditProvider(
+  const formatProvider = new RpnFormatProvider(); // implements provideDocumentFormattingEdits() method
+  const disposableFormatProvider = vscode.languages.registerDocumentFormattingEditProvider(
     [{ scheme: 'file', language: 'hp42s' }, { scheme: 'file', language: 'free42' }],
     formatProvider
   );
 
-  let contentProvider = new RawContentProvider(); // implements provideTextDocumentContent() method
-  let disposableContentProvider = vscode.workspace.registerTextDocumentContentProvider('rawhex', contentProvider);
+  const contentProvider = new RawContentProvider(); // implements provideTextDocumentContent() method
+  const disposableContentProvider = vscode.workspace.registerTextDocumentContentProvider('rawhex', contentProvider);
 
-  let disposableCommandEncode = vscode.commands.registerCommand('extension.Encode', () => {
-    let editor = vscode.window.activeTextEditor;
+  const disposableCommandEncode = vscode.commands.registerCommand('extension.Encode', () => {
+    const editor = vscode.window.activeTextEditor;
     if (editor) {
       tool.encode(editor);
     }
   });
 
-  let disposableCommandDecode = vscode.commands.registerCommand('extension.Decode', () => {
-    let editor = vscode.window.activeTextEditor;
+  const disposableCommandDecode = vscode.commands.registerCommand('extension.Decode', () => {
+    const editor = vscode.window.activeTextEditor;
     if (editor) {
       tool.decode(editor);
     }
   });
 
-  let disposableCommandShow = vscode.commands.registerCommand(
+  const disposableCommandShow = vscode.commands.registerCommand(
     'extension.ShowRaw',
     (fileUri: vscode.Uri | undefined) => {
       tool.showRaw(fileUri);

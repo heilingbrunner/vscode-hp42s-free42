@@ -18,12 +18,12 @@ export class Tool {
 
   encode(editor: vscode.TextEditor) {
     if (editor) {
-      let config = new Configuration(true);
-      let document = editor.document;
+      const config = new Configuration(true);
+      const document = editor.document;
 
       if (document) {
-        let languageId = document.languageId.toLowerCase();
-        let eol = ['', '\n', '\r\n'][document.eol];
+        const languageId = document.languageId.toLowerCase();
+        const eol = ['', '\n', '\r\n'][document.eol];
 
         if (languageId.match(/(hp42s|free42)/)) {
           // start encoding ...
@@ -41,8 +41,8 @@ export class Tool {
                 }
 
                 // Save *.raw output ...
-                let raw = result.getRaw();
-                let size = result.getSize();
+                const raw = result.getRaw();
+                const size = result.getSize();
                 writeBytes(document.fileName + '.raw', raw);
 
                 // Show Info ...
@@ -56,8 +56,8 @@ export class Tool {
               deleteFile(document.fileName + '.log');
             } else {
               // handle ecoding errors ...
-              let firstError = result.getFirstError();
-              let firstErrorText = firstError !== undefined ? firstError.toString() : '';
+              const firstError = result.getFirstError();
+              const firstErrorText = firstError !== undefined ? firstError.toString() : '';
 
               // Show error ...
               vscode.window.showErrorMessage('hp42s/free42: Encoding failed.' + eol + firstErrorText);
@@ -213,9 +213,9 @@ export class Tool {
       return;
     }
 
-    let fileUri = vscode.Uri.file(filePath.concat('.rawhex'));
+    const fileUri = vscode.Uri.file(filePath.concat('.rawhex'));
     // add 'rawhex' extension to assign an editorLangId
-    let hexUri = fileUri.with({ scheme: 'rawhex' });
+    const hexUri = fileUri.with({ scheme: 'rawhex' });
 
     vscode.commands.executeCommand('vscode.open', hexUri);
   }
