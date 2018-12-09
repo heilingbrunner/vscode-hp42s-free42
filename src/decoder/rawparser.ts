@@ -163,32 +163,45 @@ export class RawParser {
 
               for (let p = 0; p < cpparams.length; p++) {
                 const param = cpparams[p];
+                let k = p + 1;
                 switch (true) {
                   case /strl-2/.test(param):
-                    rpnLine.params.strl = parseInt(match[p + 1], 16) - 2;
+                    rpnLine.params.strl = parseInt(match[k], 16) - 2;
                     break;
                   case /strl-1/.test(param):
-                    rpnLine.params.strl = parseInt(match[p + 1], 16) - 1;
+                    rpnLine.params.strl = parseInt(match[k], 16) - 1;
                     break;
                   case /strl/.test(param):
-                    rpnLine.params.strl = parseInt(match[p + 1], 16);
+                    rpnLine.params.strl = parseInt(match[k], 16);
                     break;
                   case /stk/.test(param):
-                    rpnLine.params.stkno = match[p + 1];
-                    let stk = parseInt(match[p + 1]);
+                    rpnLine.params.stkno = match[k];
+                    let stk = parseInt(match[k]);
                     if (DecoderFOCAL.stackMap.has(stk)) {
                       rpnLine.params.stk = DecoderFOCAL.stackMap.get(stk);
                     }
                     break;
                   case /csk/.test(param):
-                    rpnLine.params.csk = match[p];
-                    rpnLine.params.cskno = parseInt(match[p]);
+                    rpnLine.params.csk = match[k];
+                    rpnLine.params.cskno = parseInt(match[k]);
+                    break;
+                  case /reg/.test(param):
+                    rpnLine.params.reg = match[k];
+                    rpnLine.params.regno = parseInt(match[k]);
+                    break;
+                  case /flg/.test(param):
+                    rpnLine.params.flg = match[k];
+                    rpnLine.params.flgno = parseInt(match[k]);
+                    break;
+                  case /key/.test(param):
+                    rpnLine.params.key = match[k];
+                    rpnLine.params.keyno = parseInt(match[k]);
                     break;
                   case /lblno-1/.test(param):
-                    rpnLine.params.lblno = parseInt(match[p + 1], 16) - 1;
+                    rpnLine.params.lblno = parseInt(match[k], 16) - 1;
                     break;
                   case /lblno/.test(param):
-                    rpnLine.params.lblno = parseInt(match[p + 1], 16);
+                    rpnLine.params.lblno = parseInt(match[k], 16);
                     break;
                   default:
                     break;

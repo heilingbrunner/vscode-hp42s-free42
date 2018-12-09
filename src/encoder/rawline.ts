@@ -8,11 +8,12 @@ export class RawLine {
   code = '';
 
   params = new Params();
+
   ignored = false;
   raw?: string;
   error?: CodeError;
 
-  _normCode = '';
+  private _normCode = '';
   set normCode(nC: string) {
     this._normCode = nC;
     this.tokens = this._normCode.split(' ');
@@ -22,7 +23,7 @@ export class RawLine {
   }
 
   // get/set
-  _tokens: string[] = [];
+  private _tokens: string[] = [];
   set tokens(t: string[]) {
     this._tokens = t;
     this._tokenLength = this._tokens.length;
@@ -35,13 +36,13 @@ export class RawLine {
   }
 
   // get only
-  _token = '';
+  private _token = '';
   get token(): string {
     return this._token;
   }
 
   // get only
-  _tokenLength: number = 0;
+  private _tokenLength: number = 0;
   get tokenLength(): number {
     return this._tokenLength;
   }

@@ -1,19 +1,25 @@
 export class Params {
   // parameters
-  str?: string;
-  num?: string;
+  clb?: string;
+  csk?: string;
   flg?: string;
   key?: string;
   lbl?: string;
-  clb?: string;
   nam?: string;
-  stk?: string;
+  num?: string;
+  reg?: string;
+  str?: string;
   ton?: string;
-  csk?: string;
+
+  stk?: string;
   stkno?: string;
+
   cskno?: number;
-  strl?: number;
+  flgno?: number;
+  keyno?: number;
   lblno?: number;
+  regno?: number;
+  strl?: number;
 
   constructor() {}
 }
