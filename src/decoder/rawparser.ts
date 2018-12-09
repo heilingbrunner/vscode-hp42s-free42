@@ -185,6 +185,14 @@ export class RawParser {
               }
             }
 
+            // if str found ...
+            if (rpnLine.params.strl){
+              let offset = index + pattern.len;
+              for (let j = pattern.len; j < rpnLine.params.strl; j++) {
+                rpnLine.params.str += this.raw[offset + j] + ' ';
+              }
+            }
+
             // get all raw bytes of this code
             length = pattern.len + (rpnLine.params.strl ? rpnLine.params.strl: 0);
             hex += ' ';
