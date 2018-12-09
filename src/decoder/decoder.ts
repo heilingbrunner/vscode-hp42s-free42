@@ -20,7 +20,7 @@ export class Decoder {
 
     parser.programs.forEach(program => {
       program.rpnLines.forEach(rpnLine =>{
-        DecoderFOCAL.toRpn(0, rpnLine);
+        DecoderFOCAL.toRpn(rpnLine);
       });
     });
 

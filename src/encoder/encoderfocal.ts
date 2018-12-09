@@ -315,6 +315,7 @@ export class EncoderFOCAL {
         // loop each character in str and append hex to opcode
         str.split('').forEach((character: string) => {
           let hexcode = character.charCodeAt(0);
+          //special char ?
           if (EncoderFOCAL.charMap.has(character)) {
             let v = EncoderFOCAL.charMap.get(character);
             hexcode = v ? v : 0;

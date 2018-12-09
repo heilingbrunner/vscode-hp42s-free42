@@ -72,7 +72,7 @@ export class RawParser {
       const rpnLine = new RpnLine();
       rpnLine.raw = this.number;
       rpnLine.normCode = "`num`";
-      rpnLine.params.num = this.number;
+      rpnLine.params.num = this.number.trim();
 
       // collect rawLines
       this.pushRpnLine(rpnLine);

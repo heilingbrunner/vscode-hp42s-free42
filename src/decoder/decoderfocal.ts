@@ -7,6 +7,7 @@ export class DecoderFOCAL {
 
   static rawMap: Map<string, RpnPattern[]> = new Map<string, RpnPattern[]>();
   static stackMap: Map<number, string> = new Map<number, string>();
+  static charMap: Map<number, string> = new Map<number, string>();
 
   static initializedForDecode: boolean = false;
 
@@ -25,18 +26,36 @@ export class DecoderFOCAL {
         DecoderFOCAL.stackMap.set(e.key, e.value);
       });
 
+      // transform arr_charMap -> charMap
+      DecoderFOCAL.arr_charMap.forEach((e: { key: number; value: string }) => {
+        DecoderFOCAL.charMap.set(e.key, e.value);
+      });
+
       DecoderFOCAL.initializedForDecode = true;
     }
   }
 
-  static toRpn(docLineIndex: number, rpnLine: RpnLine): [string, string | undefined, CodeError] {
-    let error: CodeError = new CodeError(docLineIndex, 0, "", "Not implemented yet!");
-    let languageId: string = "free42";
+  static toRpn(rpnLine: RpnLine){
 
     //log
     console.log(rpnLine.toString());
 
-    return [languageId, undefined, error];
+    if (rpnLine.normCode) {
+      
+      if (/`str`/.test(rpnLine.normCode)) {
+        this.replaceString('`str`', rpnLine);
+      }
+      if (/`lbl`/.test(rpnLine.normCode)) {
+        this.replaceString('`lbl`', rpnLine);
+      }
+      if (/`nam`/.test(rpnLine.normCode)) {
+        this.replaceString('`nam`', rpnLine);
+      }
+      if (/`num`/.test(rpnLine.normCode)) {
+        this.replaceNumber('`num`', rpnLine);
+      }
+    }
+
   }
 
   //#endregion
@@ -46,46 +65,24 @@ export class DecoderFOCAL {
   /** Changing strings into corresponding opcodes (also adjusting the
    * instruction length in "Fn" byte).
    */
-  static extractStringfromRaw(raw: string | undefined): string | undefined {
+  static replaceString(replace: string, rpnLine: RpnLine) {
     let str: string | undefined;
 
-    //if (raw !== undefined) {
-    //  if (str !== undefined) {
-    //    let len_str = str.length;
-    //    let pos_Fn = raw.indexOf("Fn");
-    //
-    //    len_str = str.length;
-    //
-    //    // str too long ? len > 14: max concat string length; 15: opcodes with Fn; 7: else
-    //    if (len_str > (raw.match("Fn 7F") ? 14 : raw.match("Fn") ? 15 : 7)) {
-    //      //TODO: error !!
-    //    }
-    //
-    //    // loop each character in str and append hex to opcode
-    //    str.split("").forEach(character => {
-    //      raw += " " + DecoderFOCAL.convertByteAsHex(character.charCodeAt(0));
-    //    });
-    //
-    //    // ASSIGN opcode search, replace aa
-    //    raw = raw.replace(/ aa(.*)/, "$1 nn");
-    //
-    //    const length_hex_after_Fn = (raw.length - (pos_Fn + 2)) / 3;
-    //
-    //    //console.log(
-    //    //  HP42SEncoder.convertNumberToHexString(240 + length_hex_after_Fn)
-    //    //);
-    //
-    //    // concat three parts ...
-    //    raw =
-    //      raw.substr(0, pos_Fn) + // 1. part
-    //      DecoderFOCAL.convertByteAsHex(240 + length_hex_after_Fn) + // 2. part
-    //      raw.substr(pos_Fn + 2); // 3. part
-    //  } else {
-    //    raw = undefined;
-    //  }
-    //}
+    if (rpnLine.normCode) {
+      let str = this.convertRawToString(rpnLine.params.str);
+      rpnLine.normCode = rpnLine.normCode.replace(replace, '"'+ str + '"');
+    }
 
     return str;
+  }
+
+  static replaceNumber(replace: string, rpnLine: RpnLine) {
+    let str: string | undefined;
+
+    if (rpnLine.normCode) {
+      let number = this.convertRawToNumber(rpnLine.params.num);
+      rpnLine.normCode = rpnLine.normCode.replace(replace, number);
+    }
   }
 
   /** Insert a number into raw */
@@ -168,30 +165,46 @@ export class DecoderFOCAL {
   }
 
   /** Changing numbers into corresponding opcodes.
-   * "1.234E-455" -> 11 1A 12 13 14 1B 1C 14 15 15 00
+   *  11 1A 12 13 14 1B 1C 14 15 15 00 -> "1.234E-455"
    */
-  static convertRawToNumber(raw: string | undefined): string | undefined {
-    let number: string | undefined;
-    //if (num !== undefined) {
-    //  // "1.234E-455" -> 11 1A 12 13 14 1B 1C 14 15 15 00
-    //  num =
-    //    num
-    //      .replace(/(\d)/g, " 1$1") // replace 1234E-455                 -> 11 .  12 13 14 E  -  14 15 15
-    //      .replace(/\./, " 1A") // replace .                             -> 11 1A 12 13 14 E  -  14 15 15
-    //      .replace(/(ᴇ|e|E)/, " 1B") // replace (ᴇ|e|E)                  -> 11 1A 12 13 14 1B -  14 15 15
-    //      .replace(/-/g, " 1C") // replace - -> 1C                       -> 11 1A 12 13 14 1B 1C 14 15 15
-    //      .replace(" ", "") + " 00"; // remove first space + append 00   ->11 1A 12 13 14 1B 1C 14 15 15 00
-    //}
+  static convertRawToNumber(raw?: string): string {
+    let number = '';
+    if (raw) {
+      raw = raw.replace(/00$/, '');
+      raw = raw.replace(/1A/, '.');
+      raw = raw.replace(/1B/, 'ᴇ');
+      raw = raw.replace(/1C/g, '-');
+      raw = raw.replace(/1([0-9])/g, '$1');
+      raw = raw.replace(/ /g, '');
+      number = raw;
+    }
 
     return number;
+  }
+
+  static convertRawToString(raw?: string): string {
+    let str = '';
+    if (raw) {
+      let chars = raw.split(' ');
+      chars.forEach(char => {
+        let byte = this.convertHexAsByte(char);
+        if (DecoderFOCAL.charMap.has(byte)) {
+          str += DecoderFOCAL.charMap.get(byte);
+        } else {
+          str += String.fromCharCode(byte);
+        }
+      });
+    }
+
+    return str;
   }
 
   /** Changing integers (size one byte, 0-255) into hex string .
    * 123 -> 7B, 255 -> FF
    */
-  static convertByteAsHex(byte: number): string {
-    let hex = ("0" + (byte & 0xff).toString(16)).slice(-2).toUpperCase();
-    return hex;
+  static convertHexAsByte(hex: string): number {
+    let byte = parseInt(hex, 16);
+    return byte;
   }
 
   //#endregion
@@ -1243,6 +1256,144 @@ export class DecoderFOCAL {
         { regex: /F([1-9A-F])/, len: 1, rpn: "`str`", params: "strl" } //+ max. length 15
       ]
     }
+  ];
+
+  private static arr_charMap = [
+    { key: 0 ,value: '÷' },
+    { key: 1 ,value: '×' },
+    { key: 2 ,value: '√' },
+    { key: 3 ,value: '∫' },
+    { key: 4 ,value: '░' },
+    { key: 5 ,value: 'Σ' },
+    { key: 6 ,value: '▶' },
+    { key: 7 ,value: 'π' },
+    { key: 8 ,value: '¿' },
+    { key: 9 ,value: '≤' },
+    { key: 10, value: '\\[LF\\]' }, // for [LF] line feed
+    { key: 10, value: '␊' }, // ␊ see: https://www.compart.com/de/unicode/U+240A
+    { key: 11, value: '≥' },
+    { key: 12, value: '≠' },
+    { key: 13, value: '↵' },
+    { key: 14, value: '↓' },
+    { key: 15, value: '→' },
+    { key: 16, value: '←' },
+    { key: 17, value: 'µ' }, // different bytes B5
+    { key: 17, value: 'μ' }, // different bytes N<
+    { key: 18, value: '£' },
+    { key: 18, value: '₤' },
+    { key: 19, value: '°' },
+    { key: 20, value: 'Å' },
+    { key: 21, value: 'Ñ' },
+    { key: 22, value: 'Ä' },
+    { key: 23, value: '∡' },
+    { key: 24, value: 'ᴇ' },
+    { key: 25, value: 'Æ' },
+    { key: 26, value: '…' },
+    { key: 27, value: '␛' }, // ␛ see: https://www.compart.com/de/unicode/U+241B
+    { key: 28, value: 'Ö' },
+    { key: 29, value: 'Ü' },
+    { key: 30, value: '▒' },
+    { key: 31, value: '■' },
+    { key: 31, value: '•' },
+    // { key: 32, value: 'SP' },
+    // { key: 33, value: '!' },
+    // { key: 34, value: ''' },
+    // { key: 35, value: '#' },
+    // { key: 36, value: '$' },
+    // { key: 37, value: '%' },
+    // { key: 38, value: '&' },
+    // { key: 39, value: "'" }, // double quotes !!
+    // { key: 40, value: '(' },
+    // { key: 41, value: ')' },
+    // { key: 42, value: '*' },
+    // { key: 43, value: '+' },
+    // { key: 44, value: ',' },
+    // { key: 45, value: '-' },
+    // { key: 46, value: '.' },
+    // { key: 47, value: '/' },
+    // { key: 48, value: '0' },
+    // { key: 49, value: '1' },
+    // { key: 50, value: '2' },
+    // { key: 51, value: '3' },
+    // { key: 52, value: '4' },
+    // { key: 53, value: '5' },
+    // { key: 54, value: '6' },
+    // { key: 55, value: '7' },
+    // { key: 56, value: '8' },
+    // { key: 57, value: '9' },
+    // { key: 58, value: ':' },
+    // { key: 59, value: ';' },
+    // { key: 60, value: '<' },
+    // { key: 61, value: '=' },
+    // { key: 62, value: '>' },
+    // { key: 63, value: '?' },
+    // { key: 64, value: '@' },
+    // { key: 65, value: 'A' },
+    // { key: 66, value: 'B' },
+    // { key: 67, value: 'C' },
+    // { key: 68, value: 'D' },
+    // { key: 69, value: 'E' },
+    // { key: 70, value: 'F' },
+    // { key: 71, value: 'G' },
+    // { key: 72, value: 'H' },
+    // { key: 73, value: 'I' },
+    // { key: 74, value: 'J' },
+    // { key: 75, value: 'K' },
+    // { key: 76, value: 'L' },
+    // { key: 77, value: 'M' },
+    // { key: 78, value: 'N' },
+    // { key: 79, value: 'O' },
+    // { key: 80, value: 'P' },
+    // { key: 81, value: 'Q' },
+    // { key: 82, value: 'R' },
+    // { key: 83, value: 'S' },
+    // { key: 84, value: 'T' },
+    // { key: 85, value: 'U' },
+    // { key: 86, value: 'V' },
+    // { key: 87, value: 'W' },
+    // { key: 88, value: 'X' },
+    // { key: 89, value: 'Y' },
+    // { key: 90, value: 'Z' },
+    // { key: 91, value: '[' },
+    { key: 92, value: '\\\\' }, // for \
+    // { key: 93, value: ']' },
+    { key: 94, value: '↑' },
+    // { key: 95, value: '_' },
+    // { key: 96, value: '`' },
+    // { key: ??, value: '´' },
+    // { key: 97, value: 'a' },
+    // { key: 98, value: 'b' },
+    // { key: 99, value: 'c' },
+    // { key: 100, value: 'd' },
+    // { key: 101, value: 'e' },
+    // { key: 102, value: 'f' },
+    // { key: 103, value: 'g' },
+    // { key: 104, value: 'h' },
+    // { key: 105, value: 'i' },
+    // { key: 106, value: 'j' },
+    // { key: 107, value: 'k' },
+    // { key: 108, value: 'l' },
+    // { key: 109, value: 'm' },
+    // { key: 110, value: 'n' },
+    // { key: 111, value: 'o' },
+    // { key: 112, value: 'p' },
+    // { key: 113, value: 'q' },
+    // { key: 114, value: 'r' },
+    // { key: 115, value: 's' },
+    // { key: 116, value: 't' },
+    // { key: 117, value: 'u' },
+    // { key: 118, value: 'v' },
+    // { key: 119, value: 'w' },
+    // { key: 120, value: 'x' },
+    // { key: 121, value: 'y' },
+    // { key: 122, value: 'z' },
+    // { key: 123, value: '{' },
+    // { key: 124, value: '|' },
+    // { key: 125, value: '}' },
+    // { key: 126, value: '~' }
+    // { key: 127, value: '⊦' }
+
+    // { key: ???, value: '´' }
   ];
 
   // #endregion
