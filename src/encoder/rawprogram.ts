@@ -1,4 +1,3 @@
-import * as vscode from 'vscode';
 
 import { toBytes } from '../common/bytes';
 import { RawLine } from './rawline';

@@ -1,4 +1,3 @@
-import * as vscode from 'vscode';
 
 import { CodeError } from "../common/codeerror";
 import { RpnProgram } from "./rpnprogram";

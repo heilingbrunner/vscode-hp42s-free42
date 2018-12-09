@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 
 import { DecoderFOCAL } from './decoderfocal';
 import { DecoderResult } from './decoderresult';
-import { RpnProgram } from './rpnprogram';
 import { RawParser } from './rawparser';
 
 export class Decoder {
@@ -12,7 +11,6 @@ export class Decoder {
 
   /** Decode raw input to readable code string */
   decode(editor: vscode.TextEditor): DecoderResult {
-    const debug = 1; // debug level 0=nothing, 1=minimal, 2=verbose
 
     const document = editor.document;
     const raw = this.readDocumentBytes(document);

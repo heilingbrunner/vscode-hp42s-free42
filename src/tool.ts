@@ -33,7 +33,7 @@ export class Tool {
             if (result.succeeded()) {
               // save result and show messages
               if (result.programs !== undefined) {
-                // Save *.hex output ...
+                // Save *.hex42 output ...
                 if (config.generateHexFile) {
                   const useWhitespaceBetweenHex = config.useWhitespaceBetweenHex;
                   const hex = result.getHex(eol, useWhitespaceBetweenHex);
@@ -97,7 +97,7 @@ export class Tool {
             if (result.succeeded) {
               // save result and show messages
               if (result.programs !== undefined) {
-                // Save hex
+                // Save *.hex42 output
                 if (config.generateHexFile) {
                   const useWhitespaceBetweenHex = config.useWhitespaceBetweenHex;
                   const hex = result.getHex(eol, useWhitespaceBetweenHex);
@@ -105,7 +105,7 @@ export class Tool {
                   writeText(hexFileName, hex);
                 }
 
-                // Save rpn
+                // Save *.hp42s/*.free42
                 const rpn = result.getRpn(eol);
                 const size = result.getSize();
                 const rpnFileName = document.fileName.replace('raw42', result.languageId);

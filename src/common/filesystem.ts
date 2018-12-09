@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
+
 import { toBytes } from './bytes';
 
 /** Write bytes to file */

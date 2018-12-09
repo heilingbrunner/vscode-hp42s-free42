@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+
 import { getFileSize, getBuffer } from '../common/filesystem';
 import { Configuration } from '../common/configuration';
 
