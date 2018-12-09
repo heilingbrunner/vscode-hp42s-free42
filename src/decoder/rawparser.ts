@@ -174,58 +174,118 @@ export class RawParser {
                   case /strl/.test(param):
                     rpnLine.params.strl = parseInt(match[k], 16);
                     break;
-                  case /stk/.test(param):
-                    rpnLine.params.stkno = match[k];
-                    let stk = parseInt(match[k]);
-                    if (DecoderFOCAL.stackMap.has(stk)) {
-                      rpnLine.params.stk = DecoderFOCAL.stackMap.get(stk);
-                    }
-                    break;
-                  case /csk/.test(param):
-                    rpnLine.params.csk = match[k];
-                    rpnLine.params.cskno = parseInt(match[k]);
-                    break;
-                  case /reg/.test(param):
-                    rpnLine.params.reg = match[k];
-                    rpnLine.params.regno = parseInt(match[k]);
-                    break;
-                  case /flg/.test(param):
-                    rpnLine.params.flg = match[k];
-                    rpnLine.params.flgno = parseInt(match[k]);
-                    break;
-                  case /key/.test(param):
-                    rpnLine.params.key = match[k];
-                    rpnLine.params.keyno = parseInt(match[k]);
-                    break;
+                  
                   case /lblno-1/.test(param):
                     rpnLine.params.lblno = parseInt(match[k], 16) - 1;
                     break;
                   case /lblno/.test(param):
                     rpnLine.params.lblno = parseInt(match[k], 16);
                     break;
+                  
+                  case /lbll-2/.test(param):
+                    rpnLine.params.lbll = parseInt(match[k], 16) - 2;
+                    break;
+                  case /lbll-1/.test(param):
+                    rpnLine.params.lbll = parseInt(match[k], 16) - 1;
+                    break;
+                  case /lbll/.test(param):
+                    rpnLine.params.lbll = parseInt(match[k], 16);
+                    break;
+                  
+                  case /naml-1/.test(param):
+                    rpnLine.params.naml = parseInt(match[k], 16) - 1;
+                    break;
+                  case /naml/.test(param):
+                    rpnLine.params.naml = parseInt(match[k], 16);
+                    break;
+                  
+                  
+                  case /reg-128/.test(param):
+                    rpnLine.params.reg = match[k];
+                    rpnLine.params.regno = parseInt(match[k], 16) - 128;
+                    break;
+                  case /reg/.test(param):
+                    rpnLine.params.reg = match[k];
+                    rpnLine.params.regno = parseInt(match[k], 16);
+                    break;
+                  
+                  case /stk/.test(param):
+                    rpnLine.params.stkno = match[k];
+                    let stk = parseInt(match[k], 16);
+                    if (DecoderFOCAL.stackMap.has(stk)) {
+                      rpnLine.params.stk = DecoderFOCAL.stackMap.get(stk);
+                    }
+                    break;
+                  
+                  case /csk/.test(param):
+                    rpnLine.params.csk = match[k];
+                    rpnLine.params.cskno = parseInt(match[k], 16);
+                    break;
+                  
+                  case /flg/.test(param):
+                    rpnLine.params.flg = match[k];
+                    rpnLine.params.flgno = parseInt(match[k], 16);
+                    break;
+                  
+                  case /key/.test(param):
+                    rpnLine.params.key = match[k];
+                    rpnLine.params.keyno = parseInt(match[k], 16);
+                    break;
+                  
+                  case /size/.test(param):
+                    rpnLine.params.siz = match[k];
+                    rpnLine.params.sizno = parseInt(match[k], 16);
+                    break;
+                  
                   default:
                     break;
                 }
               }
             }
 
-            // if str found ...
+            length = pattern.len;
+
+            // if str/lbl/nam found ...
             if (rpnLine.params.strl) {
-              rpnLine.params.str = "";
+              rpnLine.params.str = '';
               // where the string starts ...
               let offset = index + pattern.len;
               for (let j = 0; j < rpnLine.params.strl; j++) {
-                rpnLine.params.str += this.raw[offset + j] + " ";
+                rpnLine.params.str += this.raw[offset + j] + ' ';
               }
 
               rpnLine.params.str = rpnLine.params.str.trim();
+              length = pattern.len + (rpnLine.params.strl ? rpnLine.params.strl : 0);
+            }
+
+            if (rpnLine.params.lbll) {
+              rpnLine.params.lbl = '';
+              // where the string starts ...
+              let offset = index + pattern.len;
+              for (let j = 0; j < rpnLine.params.lbll; j++) {
+                rpnLine.params.lbl += this.raw[offset + j] + ' ';
+              }
+
+              rpnLine.params.lbl = rpnLine.params.lbl.trim();
+              length = pattern.len + (rpnLine.params.lbll ? rpnLine.params.lbll : 0);
+            }
+
+            if (rpnLine.params.naml) {
+              rpnLine.params.nam = '';
+              // where the string starts ...
+              let offset = index + pattern.len;
+              for (let j = 0; j < rpnLine.params.naml; j++) {
+                rpnLine.params.nam += this.raw[offset + j] + ' ';
+              }
+
+              rpnLine.params.nam = rpnLine.params.nam.trim();
+              length = pattern.len + (rpnLine.params.naml ? rpnLine.params.naml : 0);
             }
 
             // get all raw bytes of this code
-            length = pattern.len + (rpnLine.params.strl ? rpnLine.params.strl : 0);
-            hex += " ";
+            hex += ' ';
             for (let j = pattern.len; j < length; j++) {
-              hex += this.raw[index + j] + " ";
+              hex += this.raw[index + j] + ' ';
             }
             hex = hex.trim();
 

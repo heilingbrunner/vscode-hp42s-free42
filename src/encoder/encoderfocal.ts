@@ -956,7 +956,7 @@ export class EncoderFOCAL {
     { key: 'Ü', value: 29 },
     { key: '▒', value: 30 },
     { key: '■', value: 31 },
-    { key: '•', value: 31 },
+    { key: '•', value: 31 }, // • -> ■
     // { key: 'SP', value: 32 },
     // { key: '!', value: 33 },
     // { key: ''', value: 34 },

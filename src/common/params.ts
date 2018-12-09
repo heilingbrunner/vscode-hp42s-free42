@@ -8,6 +8,7 @@ export class Params {
   nam?: string;
   num?: string;
   reg?: string;
+  siz?: string;
   str?: string;
   ton?: string;
 
@@ -18,7 +19,10 @@ export class Params {
   flgno?: number;
   keyno?: number;
   lblno?: number;
+  lbll?: number;
+  naml?: number;
   regno?: number;
+  sizno?: number;
   strl?: number;
 
   constructor() {}
