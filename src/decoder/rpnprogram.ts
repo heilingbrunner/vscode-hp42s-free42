@@ -41,11 +41,11 @@ export class RpnProgram {
     return rawAll.trim();
   }
 
-  getRpn(eol: string): string {
+  getRpn(eol: string, useLineNumbers?: Boolean): string {
     let rpnAll = '';
 
     this.rpnLines.forEach(rpnLine => {
-      rpnAll += '' + rpnLine.normCode + eol;
+      rpnAll += (useLineNumbers ? (rpnLine.codeLineNo < 10 ? '0' + rpnLine.codeLineNo : rpnLine.codeLineNo) + ' ' : '') + rpnLine.normCode + eol;
     });
     return rpnAll.trim();
   }

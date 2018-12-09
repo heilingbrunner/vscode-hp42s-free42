@@ -44,11 +44,11 @@ export class DecoderResult{
     return hexAll.trim();
   }
 
-  getRpn(eol: string): string {
+  getRpn(eol: string, useLineNumbers?: boolean): string {
     let rpn = '';
 
     this.programs.forEach(rpnprogram => {
-      rpn += rpnprogram.getRpn(eol);
+      rpn += rpnprogram.getRpn(eol, useLineNumbers);
     });
     return rpn.trim();
   }
