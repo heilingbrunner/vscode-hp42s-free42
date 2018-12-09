@@ -94,8 +94,8 @@ Encoding with no errors: The raw program size is reported in the first line.
 
 The command generates two output files:
 
-- a file in `raw` format
-- a file in `hex` format, when setting `HP42S/free42.encoderGenerateHexFile` is checked
+- a file in `raw42` format
+- a file in `hex42` format, when setting `HP42S/free42.encoderGenerateHexFile` is checked
 
 #### Encoding Errors
 

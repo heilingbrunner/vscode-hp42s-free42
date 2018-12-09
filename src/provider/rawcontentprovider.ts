@@ -31,7 +31,7 @@ export default class RawContentProvider implements vscode.TextDocumentContentPro
 
     return new Promise(async resolve => {
       const config = new Configuration(true);
-      const tail = '(Reached the maximum size to display. You can change "rawhex.sizeDisplay" in your settings.)';
+      const tail = ''; //'(Reached the maximum size to display. You can change "raw42.sizeDisplay" in your settings.)';
       const eol = config.eol;
 
       const proceed =

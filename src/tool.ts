@@ -38,7 +38,7 @@ export class Tool {
                   const useWhitespaceBetweenHex = config.useWhitespaceBetweenHex;
                   const hex = result.getHex(eol, useWhitespaceBetweenHex);
 
-                  writeText(document.fileName + '.hex', hex);
+                  writeText(document.fileName + '.hex42', hex);
                 }
 
                 // Save *.raw output ...
@@ -89,7 +89,7 @@ export class Tool {
         const languageId = document.languageId.toLowerCase();
         const scheme = document.uri.scheme.toLowerCase();
 
-        if (languageId.match(/hex/) && scheme.match(/rawhex/)) {
+        if (languageId.match(/raw42/) && scheme.match(/raw42/)) {
           // start decoding ...
           const result = this.decoder.decode(editor);
           if (result) {
@@ -101,14 +101,14 @@ export class Tool {
                 if (config.generateHexFile) {
                   const useWhitespaceBetweenHex = config.useWhitespaceBetweenHex;
                   const hex = result.getHex(eol, useWhitespaceBetweenHex);
-                  const hexFileName = document.fileName.replace('rawhex', 'hex');
+                  const hexFileName = document.fileName.replace('raw42', 'hex42');
                   writeText(hexFileName, hex);
                 }
 
                 // Save rpn
                 const rpn = result.getRpn(eol);
                 const size = result.getSize();
-                const rpnFileName = document.fileName.replace('rawhex', result.languageId);
+                const rpnFileName = document.fileName.replace('raw42', result.languageId);
                 writeText(rpnFileName, rpn);
 
                 // Show Info ...
@@ -153,7 +153,7 @@ export class Tool {
 
       vscode.commands.executeCommand('vscode.open', vscode.Uri.file(filePath));
     } else {
-      this.vscodeOpenRawHex(fileUri.fsPath);
+      this.vscodeOpenRaw42(fileUri.fsPath);
     }
   }
 
@@ -207,7 +207,7 @@ export class Tool {
       });
   }
 
-  private vscodeOpenRawHex(filePath: string) {
+  private vscodeOpenRaw42(filePath: string) {
     if (typeof filePath === 'undefined') {
       return;
     }
@@ -215,9 +215,9 @@ export class Tool {
       return;
     }
 
-    const fileUri = vscode.Uri.file(filePath.concat('.rawhex'));
-    // add 'rawhex' extension to assign an editorLangId
-    const hexUri = fileUri.with({ scheme: 'rawhex' });
+    const fileUri = vscode.Uri.file(filePath.concat('.raw42'));
+    // add 'raw42' extension to assign an editorLangId
+    const hexUri = fileUri.with({ scheme: 'raw42' });
 
     vscode.commands.executeCommand('vscode.open', hexUri);
   }

@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-  "name": "rawhex",
-  "fileTypes": ["rawhex"],
+  "name": "hex42",
+  "fileTypes": ["hex42"],
   "patterns": [
     {
       "include": "#constants"
@@ -14,15 +14,15 @@
     "constants": {
       "patterns": [
         {
-          "include": "#constant-number-hex"
+          "include": "#constant-number-hex42"
         }
       ]
     },
-    "constant-number-hex": {
+    "constant-number-hex42": {
       "patterns": [
         {
           "match": "[0-9a-fA-F]+",
-          "name": "constant.numeric.rawhex"
+          "name": "constant.numeric.hex42"
         }
       ]
     },
@@ -30,5 +30,5 @@
       "patterns": []
     }
   },
-  "scopeName": "source.rawhex"
+  "scopeName": "source.hex42"
 }

@@ -57,24 +57,24 @@
         "configuration": "./free42.language-configuration.json"
       },
       {
-        "id": "hex",
+        "id": "hex42",
         "aliases": [
-          "hex"
+          "hex42"
         ],
         "extensions": [
-          "hex"
+          "hex42"
         ],
-        "configuration": "./hex.language-configuration.json"
+        "configuration": "./hex42.language-configuration.json"
       },
       {
-        "id": "rawhex",
+        "id": "raw42",
         "aliases": [
-          "rawhex"
+          "raw42"
         ],
         "extensions": [
-          "rawhex"
+          "raw42"
         ],
-        "configuration": "./rawhex.language-configuration.json"
+        "configuration": "./raw42.language-configuration.json"
       }
     ],
     "grammars": [
@@ -89,14 +89,14 @@
         "path": "./syntaxes/free42.tmLanguage.json"
       },
       {
-        "language": "hex",
-        "scopeName": "source.hex",
-        "path": "./syntaxes/hex.tmLanguage.json"
+        "language": "hex42",
+        "scopeName": "source.hex42",
+        "path": "./syntaxes/hex42.tmLanguage.json"
       },
       {
-        "language": "rawhex",
-        "scopeName": "source.rawhex",
-        "path": "./syntaxes/rawhex.tmLanguage.json"
+        "language": "raw42",
+        "scopeName": "source.raw42",
+        "path": "./syntaxes/raw42.tmLanguage.json"
       }
     ],
     "snippets": [
@@ -118,7 +118,7 @@
       {
         "command": "extension.Decode",
         "title": "hp42s/free42: Decode Raw",
-        "when": "editorLangId == rawhex"
+        "when": "editorLangId == raw42"
       },
       {
         "command": "extension.ShowRaw",
@@ -141,7 +141,7 @@
           "command": "extension.Encode"
         },
         {
-          "when": "editorLangId == rawhex",
+          "when": "editorLangId == raw42",
           "command": "extension.Decode"
         }
       ]

@@ -16,7 +16,7 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   const contentProvider = new RawContentProvider(); // implements provideTextDocumentContent() method
-  const disposableContentProvider = vscode.workspace.registerTextDocumentContentProvider('rawhex', contentProvider);
+  const disposableContentProvider = vscode.workspace.registerTextDocumentContentProvider('raw42', contentProvider);
 
   const disposableCommandEncode = vscode.commands.registerCommand('extension.Encode', () => {
     const editor = vscode.window.activeTextEditor;

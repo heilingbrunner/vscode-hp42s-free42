@@ -47,9 +47,9 @@ export function getFileSize(uri: vscode.Uri): Number {
 }
 
 export function getPhysicalPath(uri: vscode.Uri): string {
-  if (uri.scheme === 'rawhex') {
-    // remove the 'hexdump' extension
-    const filepath = uri.with({ scheme: 'file' }).fsPath.slice(0, -7);
+  if (uri.scheme === 'raw42') {
+    // remove the '.raw42' extension
+    const filepath = uri.with({ scheme: 'file' }).fsPath.slice(0, -('.raw42'.length));
     return filepath;
   }
 
@@ -62,7 +62,7 @@ export function getBuffer(uri: vscode.Uri): Buffer | undefined {
 
 export function getEntry(uri: vscode.Uri): Buffer | undefined {
   // ignore text files with hexdump syntax
-  if (uri.scheme !== 'rawhex') {
+  if (uri.scheme !== 'raw42') {
     return;
   }
   const filepath = getPhysicalPath(uri);
