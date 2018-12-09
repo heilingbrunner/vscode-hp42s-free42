@@ -107,8 +107,10 @@ export class Tool {
 
                 // Save *.hp42s/*.free42
                 const useLineNumbers = config.useLineNumbers;
-                const rpn = result.getRpn(eol, useLineNumbers);
                 const size = result.getSize();
+                const headLine = (useLineNumbers ? '00 ' : '') + '{ ' + size + '-Byte Prgm }';
+                let rpn = headLine + eol;
+                rpn += result.getRpn(eol, useLineNumbers);
                 const rpnFileName = document.fileName.replace('raw42', result.languageId);
                 writeText(rpnFileName, rpn);
 
