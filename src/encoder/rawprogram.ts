@@ -21,10 +21,10 @@ export class RawProgram {
     return rawAll.trim();
   }
 
-  getHex(eol: string): string {
+  getHex(eol: string, useLineNumbers?: boolean): string {
     let hexAll = '';
     this.rawLines.forEach(rawLine => {
-      hexAll += '' + rawLine.raw + eol;
+      hexAll += (useLineNumbers ? (rawLine.codeLineNo < 10 ? '0' + rawLine.codeLineNo : rawLine.codeLineNo) + ': ' : '') + rawLine.raw + eol;
     });
     return hexAll; //no trim() !
   }

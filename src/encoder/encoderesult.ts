@@ -30,10 +30,10 @@ export class EncoderResult {
     return undefined;
   }
 
-  getHex(eol: string, useWhitespaceBetweenHex?: boolean): string {
+  getHex(eol: string, useWhitespaceBetweenHex?: boolean, useLineNumbers?: boolean): string {
     let hexAll = '';
     this.programs.forEach(rawprogram => {
-      hexAll += rawprogram.getHex(eol);
+      hexAll += rawprogram.getHex(eol, useLineNumbers);
     });
 
     if(!useWhitespaceBetweenHex){

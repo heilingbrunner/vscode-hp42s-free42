@@ -37,7 +37,8 @@ export class Tool {
                 // Save *.hex42 output ...
                 if (config.generateHexFile) {
                   const useWhitespaceBetweenHex = config.useWhitespaceBetweenHex;
-                  const hex = result.getHex(eol, useWhitespaceBetweenHex);
+                  const useLineNumbers = config.useLineNumbers;
+                  const hex = result.getHex(eol, useWhitespaceBetweenHex, useLineNumbers);
 
                   writeText(document.fileName + '.hex42', hex);
                 }
@@ -98,16 +99,18 @@ export class Tool {
             if (result.succeeded) {
               // save result and show messages
               if (result.programs !== undefined) {
+                const useLineNumbers = config.useLineNumbers;
+
                 // Save *.hex42 output
                 if (config.generateHexFile) {
                   const useWhitespaceBetweenHex = config.useWhitespaceBetweenHex;
-                  const hex = result.getHex(eol, useWhitespaceBetweenHex);
+                  const hex = result.getHex(eol, useWhitespaceBetweenHex, useLineNumbers);
                   const hexFileName = document.fileName.replace('raw42', 'hex42');
                   writeText(hexFileName, hex);
                 }
 
                 // Save *.hp42s/*.free42
-                const useLineNumbers = config.useLineNumbers;
+                
                 const size = result.getSize();
                 let headLine = '';
 

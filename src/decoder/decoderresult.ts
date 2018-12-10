@@ -30,11 +30,11 @@ export class DecoderResult{
     return undefined;
   }
 
-  getHex(eol: string, useWhitespaceBetweenHex?: boolean): string {
+  getHex(eol: string, useWhitespaceBetweenHex?: boolean, useLineNumbers?: boolean): string {
     let hexAll = '';
 
     this.programs.forEach(rpnprogram => {
-      hexAll += rpnprogram.getHex(eol);
+      hexAll += rpnprogram.getHex(eol, useLineNumbers);
     });
 
     if(!useWhitespaceBetweenHex){
