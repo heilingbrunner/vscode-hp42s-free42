@@ -7,7 +7,7 @@ import { Configuration } from '../common/configuration';
 
 export class Encoder {
   constructor() {
-    EncoderFOCAL.initializeForEncode();
+    EncoderFOCAL.initialize();
   }
 
   /** Encode RPN to raw */

@@ -9,14 +9,14 @@ export class EncoderFOCAL {
   static stackMap: Map<string, number> = new Map<string, number>();
   static charMap: Map<string, number> = new Map<string, number>();
 
-  static initializedForEncode: boolean = false;
+  static initialized: boolean = false;
 
   //#endregion
 
   //#region public
 
-  static initializeForEncode() {
-    if (!EncoderFOCAL.initializedForEncode) {
+  static initialize() {
+    if (!EncoderFOCAL.initialized) {
       // transform arr_rpnMap -> rpnMap
       EncoderFOCAL.arr_rpnMap.forEach((e: { key: string; value: string }) => {
         EncoderFOCAL.rpnMap.set(e.key, e.value);
@@ -32,7 +32,7 @@ export class EncoderFOCAL {
         EncoderFOCAL.charMap.set(e.key, e.value);
       });
 
-      EncoderFOCAL.initializedForEncode = true;
+      EncoderFOCAL.initialized = true;
     }
   }
 

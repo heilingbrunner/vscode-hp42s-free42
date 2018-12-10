@@ -6,7 +6,7 @@ import { RawParser } from './rawparser';
 
 export class Decoder {
   constructor() {
-    DecoderFOCAL.initializeForDecode();
+    DecoderFOCAL.initialize();
   }
 
   /** Decode raw input to readable code string */

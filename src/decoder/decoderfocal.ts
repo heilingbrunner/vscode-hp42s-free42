@@ -9,14 +9,14 @@ export class DecoderFOCAL {
   static stackMap: Map<number, string> = new Map<number, string>();
   static charMap: Map<number, string> = new Map<number, string>();
 
-  static initializedForDecode: boolean = false;
+  static initialized: boolean = false;
 
   //#endregion
 
   //#region public
 
-  static initializeForDecode() {
-    if (!DecoderFOCAL.initializedForDecode) {
+  static initialize() {
+    if (!DecoderFOCAL.initialized) {
       // transform arr_rawMap -> rawMap
       DecoderFOCAL.arr_rawMap.forEach((e: { key: string; value: RpnPattern[] }) => {
         DecoderFOCAL.rawMap.set(e.key, e.value);
@@ -31,7 +31,7 @@ export class DecoderFOCAL {
         DecoderFOCAL.charMap.set(e.key, e.value);
       });
 
-      DecoderFOCAL.initializedForDecode = true;
+      DecoderFOCAL.initialized = true;
     }
   }
 

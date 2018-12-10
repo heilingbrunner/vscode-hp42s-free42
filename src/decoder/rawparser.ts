@@ -55,7 +55,7 @@ export class RawParser {
     this.programs[0].size = size;
   }
 
-  private parseNumber(index: number): number {
+  public parseNumber(index: number): number {
     let b0 = this.raw[index];
 
     // number detected
@@ -94,7 +94,7 @@ export class RawParser {
     return 1;
   }
 
-  private parseCommand(index: number): number {
+  public parseCommand(index: number): number {
     // new temp maps
     let b0 = this.raw[index];
     let rawlength = this.raw.length;
