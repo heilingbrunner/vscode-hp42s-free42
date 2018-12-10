@@ -65,7 +65,7 @@ export class RawParser {
     }
 
     //put it together
-    if (/(1[0-9]|00)/.test(b0)) {
+    if (/(1[0-9A-C]|00)/.test(b0)) {
       this.number += b0 + ' ';
 
       //end of number ?
