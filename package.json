@@ -30,6 +30,8 @@
   "activationEvents": [
     "onLanguage:hp42s",
     "onLanguage:free42",
+    "onLanguage:hex42",
+    "onLanguage:raw42",
     "onCommand:extension.Encode",
     "onCommand:extension.Decode",
     "onCommand:extension.ShowRaw"

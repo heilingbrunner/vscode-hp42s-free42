@@ -29,6 +29,8 @@ export function activate(context: vscode.ExtensionContext) {
     const editor = vscode.window.activeTextEditor;
     if (editor) {
       tool.decode(editor);
+    } else {
+      
     }
   });
 

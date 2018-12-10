@@ -10,6 +10,7 @@ export class Tool {
   // The team players ...
   private encoder: Encoder;
   private decoder: Decoder;
+  private static EXTPREFIX = 'hp42s/free42';
 
   constructor() {
     this.encoder = new Encoder();
@@ -48,10 +49,10 @@ export class Tool {
                 writeBytes(document.fileName + '.raw', raw);
 
                 // Show Info ...
-                vscode.window.showInformationMessage('hp42s/free42: { ' + size + '-Byte Prgm }');
+                vscode.window.showInformationMessage(Tool.EXTPREFIX + ': { ' + size + '-Byte Prgm }');
               } else {
                 // nothing happend ...
-                vscode.window.showInformationMessage('hp42s/free42: No code found.');
+                vscode.window.showInformationMessage(Tool.EXTPREFIX + ': No code found.');
               }
 
               // Delete log file
@@ -62,7 +63,7 @@ export class Tool {
               const firstErrorText = firstError !== undefined ? firstError.toString() : '';
 
               // Show error ...
-              vscode.window.showErrorMessage('hp42s/free42: Encoding failed.' + eol + firstErrorText);
+              vscode.window.showErrorMessage(Tool.EXTPREFIX + ': Encoding failed.' + eol + firstErrorText);
 
               // Create log file
               this.writeErrorsToLog(document.fileName + '.log', result, eol);
@@ -73,7 +74,7 @@ export class Tool {
           }
         } else {
           // wrong file
-          vscode.window.showWarningMessage('hp42s/free42: Document is not a *.hp42s/*.free42 file type.');
+          vscode.window.showWarningMessage(Tool.EXTPREFIX + ': Document is not a *.hp42s/*.free42 file type.');
         }
       }
     }
@@ -108,28 +109,36 @@ export class Tool {
                 // Save *.hp42s/*.free42
                 const useLineNumbers = config.useLineNumbers;
                 const size = result.getSize();
-                const headLine = (useLineNumbers ? '00 ' : '') + '{ ' + size + '-Byte Prgm }';
+                let headLine = '';
+
+                if (result.succeeded()) {
+                  headLine = (useLineNumbers ? '00 ' : '') + '{ ' + size + '-Byte Prgm }';
+                  vscode.window.showInformationMessage(Tool.EXTPREFIX + ': { ' + size + '-Byte Prgm }');
+                } else {
+                  const firstError = result.getFirstError();
+                  const firstErrorText = firstError ? firstError.toString() : '';
+                  headLine = (useLineNumbers ? '00 ' : '') + '{ ' + firstErrorText + ' }';
+                  vscode.window.showErrorMessage(Tool.EXTPREFIX + ': { ' + firstErrorText + ' }');
+                }
+
                 let rpn = headLine + eol;
                 rpn += result.getRpn(eol, useLineNumbers);
                 const rpnFileName = document.fileName.replace('raw42', result.languageId);
                 writeText(rpnFileName, rpn);
-
-                // Show Info ...
-                vscode.window.showInformationMessage('hp42s/free42: { ' + size + '-Byte Prgm }');
               } else {
                 // nothing happend ...
-                vscode.window.showInformationMessage('hp42s/free42: No raw format found.');
+                vscode.window.showInformationMessage(Tool.EXTPREFIX + ': No raw format found.');
               }
             } else {
               const firstError = result.getFirstError();
               const firstErrorText = firstError !== undefined ? firstError.toString() : '';
 
               // Show error ...
-              vscode.window.showErrorMessage('hp42s/free42: Decoding failed.' + eol + firstErrorText);
+              vscode.window.showErrorMessage(Tool.EXTPREFIX + ': Decoding failed.' + eol + firstErrorText);
             }
           }
         } else {
-          vscode.window.showErrorMessage('hp42s/free42: Decoding failed.' + eol + 'Wrong file type.');
+          vscode.window.showErrorMessage(Tool.EXTPREFIX + ': Decoding failed.' + eol + 'Wrong file type.');
         }
       }
     }

@@ -259,7 +259,6 @@ export class EncoderFOCAL {
           if (rawLine.raw === undefined && progErrorText === undefined) {
             progErrorText = "'" + rawLine.code + "' is unvalid";
           }
-
           
           if (progErrorText !== undefined) {
             rawLine.error = new CodeError(
