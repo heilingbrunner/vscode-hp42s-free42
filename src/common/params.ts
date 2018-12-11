@@ -2,6 +2,7 @@ export class Params {
   // parameters
   clb?: string;
   csk?: string;
+  dig?: string;
   flg?: string;
   key?: string;
   lbl?: string;
@@ -16,6 +17,7 @@ export class Params {
   stkno?: string;
 
   cskno?: number;
+  digno?: number;
   flgno?: number;
   keyno?: number;
   lblno?: number;
@@ -24,6 +26,7 @@ export class Params {
   regno?: number;
   sizno?: number;
   strl?: number;
+  tonno?: number;
 
   constructor() {}
 }

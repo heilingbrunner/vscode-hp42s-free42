@@ -116,7 +116,7 @@ export class RpnFormatProvider {
             text = text.replace(/(^\s*)\/$/, '$1÷');
 
             text = text.replace(/(^\s*)\|-/, '$1⊢');
-            text = text.replace(/(^\s*)├/, '$1⊢');
+            text = text.replace(/(^\s*)├/, '$1⊢'); //├
 
             text = text.replace(/(\d+)\s*(e|E)(.*)/, '$1ᴇ$3');
           }

@@ -130,7 +130,8 @@
     "menus": {
       "explorer/context": [
         {
-          "command": "extension.ShowRaw"
+          "command": "extension.ShowRaw",
+          "when": "resourceExtname == .raw"
         }
       ],
       "editor/context": [

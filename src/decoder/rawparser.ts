@@ -73,7 +73,7 @@ export class RawParser {
         this.readingNumber = false;
 
         const rpnLine = new RpnLine();
-        rpnLine.raw = this.number;
+        rpnLine.raw = this.number.trim();
         rpnLine.normCode = '`num`';
         rpnLine.params.num = this.number.trim();
 
@@ -248,9 +248,13 @@ export class RawParser {
             rpnLine.params.stk = DecoderFOCAL.stackMap.get(stk);
           }
           break;
-        case /csk/.test(param):
+        case /dig/.test(param):
+          rpnLine.params.dig = match[k];
+          rpnLine.params.digno = parseInt(match[k], 16);
+          break;
+        case /csk+1/.test(param):
           rpnLine.params.csk = match[k];
-          rpnLine.params.cskno = parseInt(match[k], 16);
+          rpnLine.params.cskno = parseInt(match[k], 16) + 1;
           break;
         case /flg/.test(param):
           rpnLine.params.flg = match[k];
@@ -263,6 +267,9 @@ export class RawParser {
         case /size/.test(param):
           rpnLine.params.siz = match[k];
           rpnLine.params.sizno = parseInt(match[k], 16);
+        case /ton/.test(param):
+          rpnLine.params.ton = match[k];
+          rpnLine.params.tonno = parseInt(match[k], 16);
           break;
         default:
           break;
