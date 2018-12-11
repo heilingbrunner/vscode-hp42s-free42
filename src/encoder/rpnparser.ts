@@ -310,12 +310,12 @@ export class RpnParser {
 
   /** Replace CUSTOM key */
   private replaceCustomKey(rawLine: RawLine) {
-    // others use 1-18 -> csk
+    // others use 01-18 -> csk hex:00-11
     let csk: string | undefined;
     let match = rawLine.normCode.match(/\bTO\s+(\d+)/);
     if (match) {
-      let int = parseInt(match[1]);
-      csk = String(int - 1);
+      let int = parseInt(match[1]) - 1;
+      csk = String(int);
       rawLine.normCode = rawLine.normCode.replace(/\bTO\s+(\d+)/, "TO `csk`");
     }
 
@@ -576,7 +576,7 @@ export class RpnParser {
   private checkCustomKey(csk: string | undefined): string | undefined {
     if (csk !== undefined) {
       let int = parseInt(csk);
-      return this.inRange(int, 0, 18) ? undefined : "custom key out of range";
+      return this.inRange(int, 0, 17) ? undefined : "custom key out of range";
     }
     return undefined;
   }

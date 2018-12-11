@@ -126,7 +126,9 @@ export class DecoderFOCAL {
 
   static replaceCustomKey(replace: string, rpnLine: RpnLine) {
     if (rpnLine.normCode) {
-      rpnLine.normCode = rpnLine.normCode.replace(replace, '' + rpnLine.params.cskno);
+      rpnLine.normCode = rpnLine.normCode.replace(replace, '' + (rpnLine.params.cskno !== undefined ?
+        (rpnLine.params.cskno > 9 ? '' + rpnLine.params.cskno : '0' + rpnLine.params.cskno)
+      : '??'));
     }
   }
 
@@ -859,7 +861,7 @@ export class DecoderFOCAL {
         { regex: /F([1-9A-F]) BD/, len: 2, rpn: 'PGMSLV IND `nam`', params: 'naml-1' },
         { regex: /F([1-9A-F]) BE/, len: 2, rpn: 'INTEG IND `nam`', params: 'naml-1' },
         { regex: /F([1-9A-F]) BF/, len: 2, rpn: 'SOLVE IND `nam`', params: 'naml-1' },
-        { regex: /F([1-9A-F]) C0 (0[1-9])/, len: 2, rpn: 'ASSIGN `nam` TO `csk`', params: 'naml-2,csk' }, // 
+        { regex: /F([1-9A-F]) C0/, len: 2, rpn: 'ASSIGN `nam` TO csk', params: 'naml-2,csk+1' }, // 
         { regex: /F([1-9A-F]) C1/, len: 2, rpn: 'VARMENU `nam`', params: 'naml-1' },
         { regex: /F([1-9A-F]) C2 (0[1-9])/, len: 3, rpn: 'KEY `key` XEQ `lbl`', params: 'lbll-2,key' }, //+
         { regex: /F([1-9A-F]) C3 (0[1-9])/, len: 3, rpn: 'KEY `key` GTO `lbl`', params: 'lbll-2,key' },

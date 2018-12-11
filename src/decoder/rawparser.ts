@@ -111,10 +111,7 @@ export class RawParser {
 
       if (patterns) {
         //params
-        let cpparams: string[];
         let matched = false;
-
-        length = 0;
 
         // walk through all patterns
         for (let i = 0; i < patterns.length; i++) {
@@ -126,6 +123,7 @@ export class RawParser {
           for (let j = 0; j < pattern.len; j++) {
             hex += this.raw[index + j] + ' ';
           }
+
           hex = hex.trim();
 
           //hp42s/free42 ?
@@ -135,31 +133,28 @@ export class RawParser {
           let match = hex.match(pattern.regex);
           if (match) {
             length = pattern.len;
+            // offset
+            const offset = index + pattern.len;
 
-            //read parameters
-            if (pattern.params) {
-              cpparams = pattern.params.split(',');
-
-              // check all matches to given params
-              this.checkParams(cpparams, rpnLine, match);
-            }
-
-            length = pattern.len;
+            // read parameters
+            this.checkParamsInMatch(pattern, rpnLine, match, offset);
 
             // strings too long ?
-            if (rpnLine.params.strl && index + pattern.len + rpnLine.params.strl >= rawlength) {
+            if (rpnLine.params.strl && (offset + rpnLine.params.strl >= rawlength)) {
               break;
             }
-            if (rpnLine.params.lbll && index + pattern.len + rpnLine.params.lbll >= rawlength) {
+            if (rpnLine.params.lbll && (offset + rpnLine.params.lbll >= rawlength)) {
               break;
             }
-            if (rpnLine.params.naml && index + pattern.len + rpnLine.params.naml >= rawlength) {
+            if (rpnLine.params.naml && (offset + rpnLine.params.naml >= rawlength)) {
               break;
             }
 
             // check if str/lbl/nam found and adjust length ...
-            length = this.readStringParams(rpnLine, index, pattern, length);
-
+            length += this.readStringParams(rpnLine, offset);
+            if (rpnLine.params.cskno) {
+              length += 1;
+            }
             // get all raw bytes of this code
             hex += ' ';
             for (let j = pattern.len; j < length; j++) {
@@ -198,119 +193,122 @@ export class RawParser {
   }
 
   /** Check all given matches to named params */
-  private checkParams(cpparams: string[], rpnLine: RpnLine, match: RegExpMatchArray) {
-    for (let p = 0; p < cpparams.length; p++) {
-      const param = cpparams[p];
-      let k = p + 1;
-      switch (true) {
-        case /strl-2/.test(param):
-          rpnLine.params.strl = parseInt(match[k], 16) - 2;
-          break;
-        case /strl-1/.test(param):
-          rpnLine.params.strl = parseInt(match[k], 16) - 1;
-          break;
-        case /strl/.test(param):
-          rpnLine.params.strl = parseInt(match[k], 16);
-          break;
-        case /lblno-1/.test(param):
-          rpnLine.params.lblno = parseInt(match[k], 16) - 1;
-          break;
-        case /lblno/.test(param):
-          rpnLine.params.lblno = parseInt(match[k], 16);
-          break;
-        case /lbll-2/.test(param):
-          rpnLine.params.lbll = parseInt(match[k], 16) - 2;
-          break;
-        case /lbll-1/.test(param):
-          rpnLine.params.lbll = parseInt(match[k], 16) - 1;
-          break;
-        case /lbll/.test(param):
-          rpnLine.params.lbll = parseInt(match[k], 16);
-          break;
-        case /naml-1/.test(param):
-          rpnLine.params.naml = parseInt(match[k], 16) - 1;
-          break;
-        case /naml/.test(param):
-          rpnLine.params.naml = parseInt(match[k], 16);
-          break;
-        case /reg-128/.test(param):
-          rpnLine.params.reg = match[k];
-          rpnLine.params.regno = parseInt(match[k], 16) - 128;
-          break;
-        case /reg/.test(param):
-          rpnLine.params.reg = match[k];
-          rpnLine.params.regno = parseInt(match[k], 16);
-          break;
-        case /stk/.test(param):
-          rpnLine.params.stkno = match[k];
-          let stk = parseInt(match[k], 16);
-          if (DecoderFOCAL.stackMap.has(stk)) {
-            rpnLine.params.stk = DecoderFOCAL.stackMap.get(stk);
-          }
-          break;
-        case /dig/.test(param):
-          rpnLine.params.dig = match[k];
-          rpnLine.params.digno = parseInt(match[k], 16);
-          break;
-        case /csk+1/.test(param):
-          rpnLine.params.csk = match[k];
-          rpnLine.params.cskno = parseInt(match[k], 16) + 1;
-          break;
-        case /flg/.test(param):
-          rpnLine.params.flg = match[k];
-          rpnLine.params.flgno = parseInt(match[k], 16);
-          break;
-        case /key/.test(param):
-          rpnLine.params.key = match[k];
-          rpnLine.params.keyno = parseInt(match[k], 16);
-          break;
-        case /size/.test(param):
-          rpnLine.params.siz = match[k];
-          rpnLine.params.sizno = parseInt(match[k], 16);
-        case /ton/.test(param):
-          rpnLine.params.ton = match[k];
-          rpnLine.params.tonno = parseInt(match[k], 16);
-          break;
-        default:
-          break;
+  private checkParamsInMatch(pattern: RpnPattern, rpnLine: RpnLine, match: RegExpMatchArray, index: number) {
+    if (pattern.params) {
+      const params = pattern.params.split(',');
+      for (let p = 0; p < params.length; p++) {
+        const param = params[p];
+        let k = p + 1;
+        switch (true) {
+          case /strl-2/.test(param):
+            rpnLine.params.strl = parseInt(match[k], 16) - 2;
+            break;
+          case /strl-1/.test(param):
+            rpnLine.params.strl = parseInt(match[k], 16) - 1;
+            break;
+          case /strl/.test(param):
+            rpnLine.params.strl = parseInt(match[k], 16);
+            break;
+          case /lblno-1/.test(param):
+            rpnLine.params.lblno = parseInt(match[k], 16) - 1;
+            break;
+          case /lblno/.test(param):
+            rpnLine.params.lblno = parseInt(match[k], 16);
+            break;
+          case /lbll-2/.test(param):
+            rpnLine.params.lbll = parseInt(match[k], 16) - 2;
+            break;
+          case /lbll-1/.test(param):
+            rpnLine.params.lbll = parseInt(match[k], 16) - 1;
+            break;
+          case /lbll/.test(param):
+            rpnLine.params.lbll = parseInt(match[k], 16);
+            break;
+          case /naml-2/.test(param):
+            rpnLine.params.naml = parseInt(match[k], 16) - 2;
+            break;
+          case /naml-1/.test(param):
+            rpnLine.params.naml = parseInt(match[k], 16) - 1;
+            break;
+          case /naml/.test(param):
+            rpnLine.params.naml = parseInt(match[k], 16);
+            break;
+          case /reg-128/.test(param):
+            rpnLine.params.reg = match[k];
+            rpnLine.params.regno = parseInt(match[k], 16) - 128;
+            break;
+          case /reg/.test(param):
+            rpnLine.params.reg = match[k];
+            rpnLine.params.regno = parseInt(match[k], 16);
+            break;
+          case /stk/.test(param):
+            rpnLine.params.stkno = match[k];
+            let stk = parseInt(match[k], 16);
+            if (DecoderFOCAL.stackMap.has(stk)) {
+              rpnLine.params.stk = DecoderFOCAL.stackMap.get(stk);
+            }
+            break;
+          case /dig/.test(param):
+            rpnLine.params.dig = match[k];
+            rpnLine.params.digno = parseInt(match[k], 16);
+            break;
+          case /csk\+1/.test(param):
+            rpnLine.params.csk = rpnLine.params.naml ? this.raw[index + rpnLine.params.naml] : undefined;
+            rpnLine.params.cskno = rpnLine.params.naml ? parseInt(this.raw[index + rpnLine.params.naml]) + 1 : undefined;
+            break;
+          case /flg/.test(param):
+            rpnLine.params.flg = match[k];
+            rpnLine.params.flgno = parseInt(match[k], 16);
+            break;
+          case /key/.test(param):
+            rpnLine.params.key = match[k];
+            rpnLine.params.keyno = parseInt(match[k], 16);
+            break;
+          case /size/.test(param):
+            rpnLine.params.siz = match[k];
+            rpnLine.params.sizno = parseInt(match[k], 16);
+          case /ton/.test(param):
+            rpnLine.params.ton = match[k];
+            rpnLine.params.tonno = parseInt(match[k], 16);
+            break;
+          default:
+            break;
+        }
       }
     }
   }
 
   /** Check if str/lbl/nam found and adjust length */
-  private readStringParams(rpnLine: RpnLine, index: number, pattern: RpnPattern, length: number) {
+  private readStringParams(rpnLine: RpnLine, offset: number) {
     if (rpnLine.params.strl) {
       rpnLine.params.str = '';
       // where the string starts ...
-      let offset = index + pattern.len;
       for (let j = 0; j < rpnLine.params.strl; j++) {
         rpnLine.params.str += this.raw[offset + j] + ' ';
       }
       rpnLine.params.str = rpnLine.params.str.trim();
-      return (length = pattern.len + rpnLine.params.strl);
+      return rpnLine.params.strl;
     }
     if (rpnLine.params.lbll) {
       rpnLine.params.lbl = '';
       // where the string starts ...
-      let offset = index + pattern.len;
       for (let j = 0; j < rpnLine.params.lbll; j++) {
         rpnLine.params.lbl += this.raw[offset + j] + ' ';
       }
       rpnLine.params.lbl = rpnLine.params.lbl.trim();
-      return (length = pattern.len + rpnLine.params.lbll);
+      return rpnLine.params.lbll;
     }
     if (rpnLine.params.naml) {
       rpnLine.params.nam = '';
       // where the string starts ...
-      let offset = index + pattern.len;
       for (let j = 0; j < rpnLine.params.naml; j++) {
         rpnLine.params.nam += this.raw[offset + j] + ' ';
       }
       rpnLine.params.nam = rpnLine.params.nam.trim();
-      return (length = pattern.len + rpnLine.params.naml);
+      return rpnLine.params.naml;
     }
 
-    return length;
+    return 0;
   }
 
   private checkLanguageId(pattern: RpnPattern, hex: string) {
