@@ -1,10 +1,12 @@
 import { CodeError } from '../common/codeerror';
 import { RawLine } from './rawline';
+import { RawPattern } from './rawpattern';
 
 /** FOCAL (Forty-one calculator language) see https://en.wikipedia.org/wiki/FOCAL_(Hewlett-Packard) */
 export class EncoderFOCAL {
   //#region Members
 
+  static rawMap2: Map<string, RawPattern[]> = new Map<string, RawPattern[]>();
   static rpnMap: Map<string, string> = new Map<string, string>();
   static stackMap: Map<string, number> = new Map<string, number>();
   static charMap: Map<string, number> = new Map<string, number>();
@@ -1057,6 +1059,19 @@ export class EncoderFOCAL {
     // { key: '´', value: ??? }
   ];
 
+
+  // TODO ...
+  private static arr_test = [
+    { key: 'ENG', value: [
+        { regex: 'ENG 10', raw: 'F1 D7' },
+        { regex: 'ENG 11', raw: 'F1 E7' },
+        { regex: 'ENG IND ST `stk`', raw: '9E Ft' },
+        { regex: 'ENG IND `nam`', raw: 'Fn DE' },
+        { regex: 'ENG IND rr', raw: '9E 8r' },
+        { regex: 'ENG sd', raw: '9E nn' },
+      ]
+    }
+  ];
   // #endregion
 
 }
