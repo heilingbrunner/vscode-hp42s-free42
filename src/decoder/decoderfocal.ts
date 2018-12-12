@@ -708,7 +708,7 @@ export class DecoderFOCAL {
         { regex: /CE 7([0-4])/, len: 2, rpn: 'X<> ST `stk`', params: 'stk' },
         { regex: /CE ([89A-E][0-9A-F])/, len: 2, rpn: 'X<> IND rr', params: 'reg-128' },
         { regex: /CE F([0-4])/, len: 2, rpn: 'X<> IND ST `stk`', params: 'stk' },
-        { regex: /CE ([0-7][0-9A-F])/, len: 2, rpn: 'X<> rr', params: 'reg' },
+        { regex: /CE ([0-6][0-9A-F])/, len: 2, rpn: 'X<> rr', params: 'reg' },
         { regex: /CF ([0-7][0-9A-F])/, len: 2, rpn: 'LBL ll', params: 'lblno' } //+
         // LBL 99  CF 63 dec:16-99; hex:10-63
         // LBL A   CF 66
@@ -835,7 +835,7 @@ export class DecoderFOCAL {
         { regex: /F([1-9A-F]) 9B/, len: 2, rpn: 'RCL- IND `nam`', params: 'naml-1' },
         { regex: /F([1-9A-F]) 9C/, len: 2, rpn: 'RCL× IND `nam`', params: 'naml-1' },
         { regex: /F([1-9A-F]) 9D/, len: 2, rpn: 'RCL÷ IND `nam`', params: 'naml-1' },
-        { regex: /F([1-9A-F]) 9E/, len: 2, rpn: 'ISG IND `nam`', params: 'strl-1' },
+        { regex: /F([1-9A-F]) 9E/, len: 2, rpn: 'ISG IND `nam`', params: 'naml-1' },
         { regex: /F([1-9A-F]) 9F/, len: 2, rpn: 'DSE IND `nam`', params: 'naml-1' },
         { regex: /F([1-9A-F]) A8/, len: 2, rpn: 'SF IND `nam`', params: 'naml-1' },
         { regex: /F([1-9A-F]) A9/, len: 2, rpn: 'CF IND `nam`', params: 'naml-1' },

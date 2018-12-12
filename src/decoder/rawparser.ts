@@ -100,7 +100,7 @@ export class RawParser {
   public parseCommand(index: number): number {
     // new temp maps
     const b0 = this.raw[index];
-    const rawlength = this.raw.length;
+    
     const n0 = b0[0];
 
     // create new line
@@ -124,6 +124,7 @@ export class RawParser {
           const pattern = patterns[i];
 
           //get first n-bytes from raw
+          hex = '';
           for (let j = 0; j < pattern.len; j++) {
             hex += this.raw[index + j] + ' ';
           }
@@ -138,24 +139,18 @@ export class RawParser {
           if (match) {
             length = pattern.len;
             // offset
-            const offset = index + pattern.len;
+            const next = index + pattern.len;
 
             // read parameters
-            this.checkParamsInMatch(pattern, rpnLine, match, offset);
+            this.checkParamsInMatch(rpnLine, next, pattern, match);
 
             // check if strings are too long ?
-            if (rpnLine.params.strl && offset + rpnLine.params.strl >= rawlength) {
-              break;
-            }
-            if (rpnLine.params.lbll && offset + rpnLine.params.lbll >= rawlength) {
-              break;
-            }
-            if (rpnLine.params.naml && offset + rpnLine.params.naml >= rawlength) {
+            if(this.checkParseLength(rpnLine, next)){
               break;
             }
 
             // check if str/lbl/nam found and adjust length ...
-            length += this.readStringParams(rpnLine, offset);
+            length += this.readStringParams(rpnLine, next);
 
             // increase length for csk from 'ASSIGN `nam` TO csk'
             if (rpnLine.params.cskno) {
@@ -163,9 +158,9 @@ export class RawParser {
             }
 
             // get all raw bytes of this code line
-            hex += " ";
+            hex += ' ';
             for (let j = pattern.len; j < length; j++) {
-              hex += this.raw[index + j] + " ";
+              hex += this.raw[index + j] + ' ';
             }
             hex = hex.trim();
 
@@ -201,7 +196,7 @@ export class RawParser {
   }
 
   /** Check all given matches to named params */
-  private checkParamsInMatch(pattern: RpnPattern, rpnLine: RpnLine, match: RegExpMatchArray, index: number) {
+  private checkParamsInMatch(rpnLine: RpnLine, next: number, pattern: RpnPattern, match: RegExpMatchArray ) {
     if (pattern.params) {
       const params = pattern.params.split(",");
       // assign params like regex named groups
@@ -262,8 +257,9 @@ export class RawParser {
             rpnLine.params.digno = parseInt(match[k], 16);
             break;
           case /csk\+1/.test(param):
-            rpnLine.params.csk = rpnLine.params.naml ? this.raw[index + rpnLine.params.naml] : undefined;
-            rpnLine.params.cskno = rpnLine.params.naml ? parseInt(this.raw[index + rpnLine.params.naml]) + 1 : undefined;
+            // fetch csk-byte after name
+            rpnLine.params.csk = rpnLine.params.naml ? this.raw[next + rpnLine.params.naml] : undefined;
+            rpnLine.params.cskno = rpnLine.params.naml ? parseInt(this.raw[next + rpnLine.params.naml], 16) + 1 : undefined;
             break;
           case /flg/.test(param):
             rpnLine.params.flg = match[k];
@@ -275,7 +271,7 @@ export class RawParser {
             break;
           case /size/.test(param):
             rpnLine.params.siz = match[k];
-            rpnLine.params.sizno = parseInt(match[k], 16);
+            rpnLine.params.sizno = parseInt(match[k].replace(' ',''), 16);
           case /ton/.test(param):
             rpnLine.params.ton = match[k];
             rpnLine.params.tonno = parseInt(match[k], 16);
@@ -287,13 +283,27 @@ export class RawParser {
     }
   }
 
+  private checkParseLength(rpnLine: RpnLine, next: number): boolean {
+    const rawlength = this.raw.length;
+    if (rpnLine.params.strl && next + rpnLine.params.strl >= rawlength) {
+      return true;
+    }
+    if (rpnLine.params.lbll && next + rpnLine.params.lbll >= rawlength) {
+      return true;
+    }
+    if (rpnLine.params.naml && next + rpnLine.params.naml >= rawlength) {
+      return true;
+    }
+
+    return false;
+  }
   /** Check if str/lbl/nam found and adjust length */
-  private readStringParams(rpnLine: RpnLine, offset: number) {
+  private readStringParams(rpnLine: RpnLine, next: number) {
     if (rpnLine.params.strl) {
       rpnLine.params.str = "";
       // where the string starts ...
       for (let j = 0; j < rpnLine.params.strl; j++) {
-        rpnLine.params.str += this.raw[offset + j] + " ";
+        rpnLine.params.str += this.raw[next + j] + " ";
       }
       rpnLine.params.str = rpnLine.params.str.trim();
       return rpnLine.params.strl;
@@ -302,7 +312,7 @@ export class RawParser {
       rpnLine.params.lbl = "";
       // where the string starts ...
       for (let j = 0; j < rpnLine.params.lbll; j++) {
-        rpnLine.params.lbl += this.raw[offset + j] + " ";
+        rpnLine.params.lbl += this.raw[next + j] + " ";
       }
       rpnLine.params.lbl = rpnLine.params.lbl.trim();
       return rpnLine.params.lbll;
@@ -311,7 +321,7 @@ export class RawParser {
       rpnLine.params.nam = "";
       // where the string starts ...
       for (let j = 0; j < rpnLine.params.naml; j++) {
-        rpnLine.params.nam += this.raw[offset + j] + " ";
+        rpnLine.params.nam += this.raw[next + j] + " ";
       }
       rpnLine.params.nam = rpnLine.params.nam.trim();
       return rpnLine.params.naml;
