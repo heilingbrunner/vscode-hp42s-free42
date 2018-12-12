@@ -16,7 +16,7 @@ export class CodeError {
       'Error [' +
       (this.docLineIndex > -1 ? (this.docLineIndex + 1) +  ', ' : '') +
       (this.codeLineNo > -1 ? (this.codeLineNo < 10 ? '0' + this.codeLineNo : this.codeLineNo): '') +
-      "]: Code: '" +
+      "]! Code: '" +
       this.code +
       "'; Message: \'" +
       this.message +

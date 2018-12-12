@@ -104,7 +104,7 @@ export class EncoderFOCAL {
           
           if (progErrorText !== undefined) {
             rawLine.error = new CodeError(
-              0,
+              rawLine.docLineIndex,
               rawLine.codeLineNo,
               rawLine.code,
               String(progErrorText)
@@ -264,7 +264,7 @@ export class EncoderFOCAL {
           
           if (progErrorText !== undefined) {
             rawLine.error = new CodeError(
-              0,
+              rawLine.docLineIndex,
               rawLine.codeLineNo,
               rawLine.code,
               String(progErrorText)
@@ -273,6 +273,14 @@ export class EncoderFOCAL {
 
           //#endregion
         }
+      } else {
+        // wrong extension, free42 commands in hp42s file
+        rawLine.error = new CodeError(
+          rawLine.docLineIndex,
+          rawLine.codeLineNo,
+          rawLine.code,
+          String(progErrorText)
+        );
       }
     }    
   }

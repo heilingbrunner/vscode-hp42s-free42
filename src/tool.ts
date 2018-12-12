@@ -30,14 +30,15 @@ export class Tool {
           // start encoding ...
           let result = this.encoder.encode(languageId, editor);
           if (result) {
+            const useWhitespaceBetweenHex = config.useWhitespaceBetweenHex;
+            const useLineNumbers = config.useLineNumbers;
             // no encoding errors ...
             if (result.succeeded()) {
               // save result and show messages
               if (result.programs !== undefined) {
                 // Save *.hex42 output ...
                 if (config.generateHexFile) {
-                  const useWhitespaceBetweenHex = config.useWhitespaceBetweenHex;
-                  const useLineNumbers = config.useLineNumbers;
+                  
                   const hex = result.getHex(eol, useWhitespaceBetweenHex, useLineNumbers);
 
                   writeText(document.fileName + '.hex42', hex);
@@ -46,7 +47,7 @@ export class Tool {
                 // Save *.raw output ...
                 const raw = result.getRaw();
                 const size = result.getSize();
-                
+
                 writeBytes(document.fileName + '.raw', raw);
 
                 // Show Info ...
@@ -61,13 +62,15 @@ export class Tool {
             } else {
               // handle ecoding errors ...
               const firstError = result.getFirstError();
-              const firstErrorText = firstError !== undefined ? firstError.toString() : '';
-
+              let firstErrorText = firstError !== undefined ? firstError.toString() : '';
+              if (!useLineNumbers) {
+                firstErrorText = firstErrorText.replace(/ \[.*\]/, '');
+              }
               // Show error ...
               vscode.window.showErrorMessage(Tool.EXTPREFIX + ': Encoding failed.' + eol + firstErrorText);
 
               // Create log file
-              this.writeErrorsToLog(document.fileName + '.log', result, eol);
+              this.writeErrorsToLog(document.fileName + '.log', result, eol, config.useLineNumbers);
             }
 
             // Update all {...} line
@@ -110,7 +113,7 @@ export class Tool {
                 }
 
                 // Save *.hp42s/*.free42
-                
+
                 const size = result.getSize();
                 let headLine = '';
 
@@ -119,7 +122,10 @@ export class Tool {
                   vscode.window.showInformationMessage(Tool.EXTPREFIX + ': { ' + size + '-Byte Prgm }');
                 } else {
                   const firstError = result.getFirstError();
-                  const firstErrorText = firstError ? firstError.toString() : '';
+                  let firstErrorText = firstError ? firstError.toString() : '';
+                  if (!useLineNumbers) {
+                    firstErrorText = firstErrorText.replace(/ \[.*\]/, '');
+                  }
                   headLine = (useLineNumbers ? '00 ' : '') + '{ ' + firstErrorText + ' }';
                   vscode.window.showErrorMessage(Tool.EXTPREFIX + ': { ' + firstErrorText + ' }');
                 }
@@ -173,7 +179,7 @@ export class Tool {
   }
 
   /** Create log file */
-  private writeErrorsToLog(filename: string, result: EncoderResult, eol: string) {
+  private writeErrorsToLog(filename: string, result: EncoderResult, eol: string, useLineNumbers?: boolean) {
     let allErrors = '';
     if (result.programs) {
       result.programs.forEach(program => {
@@ -185,12 +191,16 @@ export class Tool {
         }
       });
 
+      if (!useLineNumbers) {
+        allErrors = allErrors.replace(/ \[.*\]/g, '');
+      }
+
       writeText(filename, allErrors);
     }
   }
 
   /** {} Head lines */
-  private updateHeadLines(editor: vscode.TextEditor, result: EncoderResult, useLineNumbers: {} | undefined) {
+  private updateHeadLines(editor: vscode.TextEditor, result: EncoderResult, useLineNumbers?: boolean) {
     editor
       .edit(e => {
         // Walk through reverse (!!) all programs and insert/update head line.
@@ -199,7 +209,10 @@ export class Tool {
           const startdocLineIndex = program.startdocLineIndex;
           const size = program.getSize();
           const firstError = program.getFirstError();
-          const firstErrorText = firstError ? firstError.toString() : '';
+          let firstErrorText = firstError ? firstError.toString() : '';
+          if (!useLineNumbers) {
+            firstErrorText = firstErrorText.replace(/ \[.*\]/, '');
+          }
 
           const headLine = editor.document.lineAt(startdocLineIndex);
           let line = '';
