@@ -37,7 +37,7 @@ export class Tool {
               // save result and show messages
               if (result.programs !== undefined) {
                 // Save *.hex42 output ...
-                if (config.generateHexFile) {
+                if (config.encoderGenerateHexFile) {
                   
                   const hex = result.getHex(eol, useWhitespaceBetweenHex, useLineNumbers);
 
@@ -105,7 +105,7 @@ export class Tool {
                 const useLineNumbers = config.useLineNumbers;
 
                 // Save *.hex42 output
-                if (config.generateHexFile) {
+                if (config.decoderGenerateHexFile) {
                   const useWhitespaceBetweenHex = config.useWhitespaceBetweenHex;
                   const hex = result.getHex(eol, useWhitespaceBetweenHex, useLineNumbers);
                   const hexFileName = document.fileName.replace('raw42', 'hex42');
@@ -231,7 +231,7 @@ export class Tool {
         });
       })
       .then(success => {
-        console.log('{}-Update: ' + success);
+        //done;
       });
   }
 

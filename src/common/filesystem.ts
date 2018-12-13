@@ -35,7 +35,6 @@ export function deleteFile(filename: string) {
         if (err) {
           vscode.window.showErrorMessage('hp42s/free42: delete file failed');
         }
-        console.log(filename + ' deleted');
       });
     }
   });

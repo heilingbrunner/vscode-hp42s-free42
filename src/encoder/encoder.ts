@@ -15,8 +15,6 @@ export class Encoder {
     languageId: string,
     editor: vscode.TextEditor
   ): EncoderResult {
-    const debug = 1; // debug level 0=nothing, 1=minimal, 2=verbose
-
     const parser = new RpnParser();
     parser.document = editor.document;
     parser.config = new Configuration(true);

@@ -52,6 +52,7 @@ export class RpnFormatProvider {
           text = text.replace(/“/, '"'); // ->“RSAST”
           text = text.replace(/”/, '"'); //   “RSAST”<-
           text = text.replace(/^\*/, '×'); //  * -> ×
+          text = text.replace(/^x/, '×'); //  x -> ×  
           text = text.replace(/–/g, '-'); //  – -> -
           text = text.replace(/\[LF\]/g, '␊'); //  [LF] -> ␊
 
@@ -94,6 +95,7 @@ export class RpnFormatProvider {
             text = text.replace(/(^\s*)(\\|)->POL/, '$1→POL');
 
             text = text.replace(/(^\s*)X!=0\?/, '$1X≠0?');
+            text = text.replace(/(^\s*)X\/=0\?/, '$1X≠0?');
             text = text.replace(/(^\s*)X#Y\?/, '$1X≠Y?');
             text = text.replace(/(^\s*)X#0\?/, '$1X≠0?');
             text = text.replace(/(^\s*)X<=0\?/, '$1X≤0?');

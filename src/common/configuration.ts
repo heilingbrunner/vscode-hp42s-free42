@@ -3,7 +3,8 @@ import * as vscode from "vscode";
 export class Configuration {
 
   platform: string;
-  generateHexFile?: boolean;
+  encoderGenerateHexFile?: boolean;
+  decoderGenerateHexFile?: boolean;
 
   useLineNumbers?: boolean;
   replaceAbbreviations?: boolean;
@@ -18,7 +19,8 @@ export class Configuration {
     if (useWorkspaceConfiguration) {
       let config = vscode.workspace.getConfiguration("HP42S/free42");
 
-      this.generateHexFile = config.get<boolean>("encoderGenerateHexFile");
+      this.encoderGenerateHexFile = config.get<boolean>("encoderGenerateHexFile");
+      this.decoderGenerateHexFile = config.get<boolean>("decoderGenerateHexFile");
 
       this.useLineNumbers = config.get<boolean>("formatterUseLineNumbers");
       this.replaceAbbreviations = config.get<boolean>("formatterReplaceAbbreviations");
@@ -48,7 +50,7 @@ export class Configuration {
 
       
     } else {
-      this.generateHexFile = true;
+      this.encoderGenerateHexFile = true;
 
       this.useLineNumbers = true;
       this.replaceAbbreviations = true;

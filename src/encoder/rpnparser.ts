@@ -39,10 +39,6 @@ export class RpnParser {
         let line = this.document.lineAt(docLineIndex);
         let lineText = line.text;
 
-        if (this.debug > 1) {
-          console.log("[" + docLineIndex + "]: " + line);
-        }
-
         //{ ... }-line detected -> Prgm Start
         let match = line.text.match(/\{.*\}/);
         if (match) {

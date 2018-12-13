@@ -5,6 +5,7 @@ import { RpnProgram } from "./rpnprogram";
 import { CodeError } from "../common/codeerror";
 
 export class RawParser {
+  debug = 1; // debug level 0=nothing, 1=minimal, 2=verbose
   programs: RpnProgram[] = [];
   languageId = "hp42s";
 
@@ -375,7 +376,10 @@ export class RawParser {
     this.codeLineNo++;
     rpnLine.codeLineNo = this.codeLineNo;
 
-    //this.printRpn(rpnLine);
+    if (this.debug > 1) {
+      console.log("-> " + rpnLine.normCode);
+    }
+
     this.programs[0].addLine(rpnLine);
   }
 }

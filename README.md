@@ -78,7 +78,7 @@ Press __Win/Linux__: `Ctrl+Shift+P`, __Mac-OSX__: `⇧⌘P`, then write `HP42S` 
 
 The `hp42s/free42: Encode Code` command generates a `*.hp42s.raw` or `*.free42.raw` file. These files can be loaded by `free42` or `DM42`.
 
-Depending on the setting `HP42S/free42.encoderGenerateHexFile` setting, the command will generate a readable hex file.
+Depending on the setting `HP42S/free42.encoderGenerateHexFile` setting, the command will generate a readable `hex42` file.
 
 Although the program size will be calculated and shown in the first line (`{ n-Byte Prgm }`). For some reason, the last ending `END` command is ignored. Real program size will be 3 bytes more.
 
@@ -107,6 +107,30 @@ Encoding with errors: All errors are logged to the *.log file.
 
 ![Encode Log](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/encode-log.gif)
 
+### `Decode Code` - Comand
+
+The decoder generates the following files
+
+- `*.hex42`: The sequence of the command bytes, when setting `HP42S/free42.decoderGenerateHexFile` is checked.
+- `*.hp42s`: The code file with only pure HP42S commands.
+- `*.free42`: The decode has detected free42 commands. The code will only run on free42 applications.
+
+To decode a raw file, please select `hp42s/free42: Show Raw` in the context menu of the file listed in the right explorer pane.
+
+![Encode Log](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/explorer-contextmenu-showraw.png)
+
+This will show the formatted bytes of the file.
+
+![Encode Log](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/showraw-1.png)
+
+In the editor open the context menu again an select `hp42s/free42: Decode Raw`.
+
+![Encode Log](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/showraw-2.png)
+
+The decoder will generate the output files.
+
+![Encode Log](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/explorer-decoded.png)
+
 ## Used References
 
 - [Thomas Okken - free42](http://thomasokken.com/free42/)
@@ -130,7 +154,11 @@ None.
 
 Encoding Settings:
 
-- `HP42S/free42.encoderGenerateHexFile`: This will although generate a *.hex file, to see the correct hex encoding.
+- `HP42S/free42.encodergenerateHexFile`: This will although generate a `*.hex42` file, to see the correct hex encoding.
+
+Decoding Settings:
+
+- `HP42S/free42.decodergenerateHexFile`: This will although generate a `*.hex42` file, to see the correct hex encoding.
   
 Document Formatter Settings:
 

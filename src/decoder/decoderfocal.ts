@@ -37,8 +37,6 @@ export class DecoderFOCAL {
   }
 
   static toRpn(rpnLine: RpnLine) {
-    //log
-    console.log(rpnLine.toString());
 
     if (rpnLine.normCode) {
       if (rpnLine.params.stk && /`stk`/.test(rpnLine.normCode)) {

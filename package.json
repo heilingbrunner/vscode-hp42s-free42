@@ -156,7 +156,12 @@
         "HP42S/free42.encoderGenerateHexFile": {
           "type": "boolean",
           "default": false,
-          "markdownDescription": "The `Encode Code` command will although generate a readable hex file."
+          "markdownDescription": "The `Encode Code` command will although generate a readable `hex42` file."
+        },
+        "HP42S/free42.decoderGenerateHexFile": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "The `Decode Raw` command will although generate a readable `hex42` file."
         },
         "HP42S/free42.formatterUseLineNumbers": {
           "type": "boolean",
