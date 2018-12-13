@@ -109,7 +109,7 @@ Encoding with errors: All errors are logged to the *.log file.
 
 ### `Decode Code` - Comand
 
-The decoder generates the following files
+From a `*.raw` file the decoder generates the following files 
 
 - `*.hex42`: The sequence of the command bytes, when setting `HP42S/free42.decoderGenerateHexFile` is checked.
 - `*.hp42s`: The code file with only pure HP42S commands.
@@ -117,19 +117,19 @@ The decoder generates the following files
 
 To decode a raw file, please select `hp42s/free42: Show Raw` in the context menu of the file listed in the right explorer pane.
 
-![Encode Log](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/explorer-contextmenu-showraw.png)
+![Explorer context menu](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/explorer-contextmenu-showraw.png)
 
 This will show the formatted bytes of the file.
 
-![Encode Log](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/showraw-1.png)
+![Raw view](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/showraw-1.png)
 
 In the editor open the context menu again an select `hp42s/free42: Decode Raw`.
 
-![Encode Log](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/showraw-contextmenu.png)
+![Raw view context menu](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/showraw-contextmenu.png)
 
 The decoder will generate the output files.
 
-![Encode Log](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/explorer-decoded.png)
+![Decoded files](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/explorer-decoded.png)
 
 ## Used References
 
