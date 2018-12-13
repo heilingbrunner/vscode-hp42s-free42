@@ -125,7 +125,7 @@ This will show the formatted bytes of the file.
 
 In the editor open the context menu again an select `hp42s/free42: Decode Raw`.
 
-![Encode Log](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/showraw-2.png)
+![Encode Log](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/showraw-contextmenu.png)
 
 The decoder will generate the output files.
 
