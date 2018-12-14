@@ -43,13 +43,11 @@ export class EncoderFOCAL {
     let languageIdFromCode: string = '';
 
     if (rawLine.normCode !== undefined) {
-
       // free42 commands: ACCEL|LOCAT|HEADING|ADATE|ATIME|ATIME24|CLK12|CLK24|DATE|DATE+|DDAYS|DMY|DOW|MDY|TIME
       languageIdFromCode = EncoderFOCAL.getLanguageIdFromCode(rawLine, languageId);
 
       if (languageId !== languageIdFromCode) {
-        progErrorText =
-          "free42 command '" + rawLine.token + "' in hp42s program";
+        progErrorText = "free42 command '" + rawLine.token + "' in hp42s program";
       }
 
       if (progErrorText === undefined) {
@@ -70,8 +68,7 @@ export class EncoderFOCAL {
               }
             }
             if (rawLine.raw === undefined) {
-              progErrorText =
-                "'" + rawLine.params.str + "' in '" + rawLine.code + "' is unvalid";
+              progErrorText = "'" + rawLine.params.str + "' in '" + rawLine.code + "' is unvalid";
             }
           }
 
@@ -101,7 +98,6 @@ export class EncoderFOCAL {
             progErrorText = "Unknown '" + rawLine.code + "'";
           }
 
-          
           if (progErrorText !== undefined) {
             rawLine.error = new CodeError(
               rawLine.docLineIndex,
@@ -110,7 +106,6 @@ export class EncoderFOCAL {
               String(progErrorText)
             );
           }
-          
 
           //#endregion
         } else {
@@ -261,7 +256,7 @@ export class EncoderFOCAL {
           if (rawLine.raw === undefined && progErrorText === undefined) {
             progErrorText = "'" + rawLine.code + "' is unvalid";
           }
-          
+
           if (progErrorText !== undefined) {
             rawLine.error = new CodeError(
               rawLine.docLineIndex,
@@ -275,35 +270,29 @@ export class EncoderFOCAL {
         }
       } else {
         // wrong extension, free42 commands in hp42s file
-        rawLine.error = new CodeError(
-          rawLine.docLineIndex,
-          rawLine.codeLineNo,
-          rawLine.code,
-          String(progErrorText)
-        );
+        rawLine.error = new CodeError(rawLine.docLineIndex, rawLine.codeLineNo, rawLine.code, String(progErrorText));
       }
-    }    
+    }
   }
 
   //#endregion
 
-  //#region Hex Operations
+  //#region Private
 
   /** Check if free42 command used */
   private static getLanguageIdFromCode(rawLine: RawLine, languageId: string): string {
     let languageIdFromCode: string;
     // free42 commands: ACCEL|LOCAT|HEADING|ADATE|ATIME|ATIME24|CLK12|CLK24|DATE|DATE+|DDAYS|DMY|DOW|MDY|TIME
-    if (rawLine.token &&
-      rawLine.token.match(/(ACCEL|LOCAT|HEADING|ADATE|ATIME|ATIME24|CLK12|CLK24|DATE|DATE\+|DDAYS|DMY|DOW|MDY|TIME)/)) {
+    if (
+      rawLine.token &&
+      rawLine.token.match(/(ACCEL|LOCAT|HEADING|ADATE|ATIME|ATIME24|CLK12|CLK24|DATE|DATE\+|DDAYS|DMY|DOW|MDY|TIME)/)
+    ) {
       languageIdFromCode = 'free42';
-    }
-    else {
+    } else {
       languageIdFromCode = languageId;
     }
     return languageIdFromCode;
   }
-
-  
 
   /** Changing strings into corresponding opcodes (also adjusting the
    * instruction length in "Fn" byte).
@@ -383,9 +372,7 @@ export class EncoderFOCAL {
           // SIZE
           raw = raw.replace(
             /ww ww/,
-            EncoderFOCAL.convertByteAsHex(int / 256) +
-              ' ' +
-              EncoderFOCAL.convertByteAsHex(int % 256)
+            EncoderFOCAL.convertByteAsHex(int / 256) + ' ' + EncoderFOCAL.convertByteAsHex(int % 256)
           );
           break;
 
@@ -393,10 +380,7 @@ export class EncoderFOCAL {
           // not working: hex = hex.replace(/([\dA-F])l/, this.convertNumberToHexString(parseInt('0x' + '$1' + '0') + 1 + int));
           match = raw.match(/([\dA-F])l/);
           if (match) {
-            raw = raw.replace(
-              /([\dA-F])l/,
-              EncoderFOCAL.convertByteAsHex(parseInt('0x' + match[1] + '0') + 1 + int)
-            );
+            raw = raw.replace(/([\dA-F])l/, EncoderFOCAL.convertByteAsHex(parseInt('0x' + match[1] + '0') + 1 + int));
           }
           break;
 
@@ -404,10 +388,7 @@ export class EncoderFOCAL {
           // not working: $1
           match = raw.match(/(\d)r/);
           if (match) {
-            raw = raw.replace(
-              /(\d)r/,
-              EncoderFOCAL.convertByteAsHex(parseInt(match[1]) * 16 + int)
-            );
+            raw = raw.replace(/(\d)r/, EncoderFOCAL.convertByteAsHex(parseInt(match[1]) * 16 + int));
           }
           break;
 
@@ -919,12 +900,7 @@ export class EncoderFOCAL {
     { key: 'L', value: 4 }
   ];
 
-  private static arr_errors: string[] = [
-    'No errors',
-    'Keyword not found',
-    'Bad parameters',
-    'String too long'
-  ];
+  private static arr_errors: string[] = ['No errors', 'Keyword not found', 'Bad parameters', 'String too long'];
 
   // FOCAL character set
   // https://en.wikipedia.org/wiki/FOCAL_character_set
@@ -1028,7 +1004,7 @@ export class EncoderFOCAL {
     // { key: '[', value: 91 },
     { key: '\\\\', value: 92 }, // for \
     // { key: ']', value: 93 },
-    { key: '↑', value: 94 },
+    { key: '↑', value: 94 }
     // { key: '_', value: 95 },
     // { key: '`', value: 96 },
     // { key: '´', value: ??? },
@@ -1067,19 +1043,676 @@ export class EncoderFOCAL {
     // { key: '´', value: ??? }
   ];
 
-
   // TODO ...
-  private static arr_test = [
-    { key: 'ENG', value: [
+
+  // 0(?<lblno>[2-9A-F]): LBL 01-15
+  // Fn: F([1-9A-F]) Label: max. length 14
+  // 7t: 7([0-4]); stack 0-4
+  // 8r: ([89A-E][0-9A-F]); r: dec:1..99; 128 + r => hex:81..E3
+  // Ft: F([0-4]); ... IND ST [XYZLT]
+  // [23]r: (2[0-9A-F]); register dec:1-15, hex: 21-2F
+  // rr: ([0-7][0-9A-F]); register dec:16-99, hex:10-63
+  // sd: (?<digits>0[1-9]); digits; dec:0-9; 00-09
+  // sd: digits; dec:10,11
+  // sl: 0-14
+  // ll: 15-99
+  // tone: (?<tone>0[0-9]); dec:1-9; hex:01-09
+
+  private static arr_rpnMap2 = [
+    { key: '%', value: [{ regex: '%', raw: '4C' }] },
+    { key: '%CH', value: [{ regex: '%CH', raw: '4D' }] },
+    { key: '+', value: [{ regex: '+', raw: '40' }] },
+    { key: '+/-', value: [{ regex: '+/-', raw: '54' }] },
+    { key: '-', value: [{ regex: '-', raw: '41' }] },
+    { key: '.END.', value: [{ regex: '.END.', raw: 'C0 00 0D' }] },
+    { key: '/', value: [{ regex: '/', raw: '43' }] },
+    { key: '1/X', value: [{ regex: '1/X', raw: '60' }] },
+    { key: '10^X', value: [{ regex: '10^X', raw: '57' }] },
+    { key: '10↑X', value: [{ regex: '10↑X', raw: '57' }] },
+    { key: 'ABS', value: [{ regex: 'ABS', raw: '61' }] },
+    { key: 'ACCEL', value: [{ regex: 'ACCEL', raw: 'A7 CF' }] },
+    { key: 'ACOS', value: [{ regex: 'ACOS', raw: '5D' }] },
+    { key: 'ACOSH', value: [{ regex: 'ACOSH', raw: 'A0 66' }] },
+    { key: 'ADATE', value: [{ regex: 'ADATE', raw: 'A6 81' }] },
+    { key: 'ADV', value: [{ regex: 'ADV', raw: '8F' }] },
+    { key: 'AGRAPH', value: [{ regex: 'AGRAPH', raw: 'A7 64' }] },
+    { key: 'AIP', value: [{ regex: 'AIP', raw: 'A6 31' }] },
+    { key: 'ALENG', value: [{ regex: 'ALENG', raw: 'A6 41' }] },
+    { key: 'ALL', value: [{ regex: 'ALL', raw: 'A2 5D' }] },
+    { key: 'ALLΣ', value: [{ regex: 'ALLΣ', raw: 'A0 AE' }] },
+    { key: 'AND', value: [{ regex: 'AND', raw: 'A5 88' }] },
+    { key: 'AOFF', value: [{ regex: 'AOFF', raw: '8B' }] },
+    { key: 'AON', value: [{ regex: 'AON', raw: '8C' }] },
+    {
+      key: 'ARCL',
+      value: [
+        { regex: 'ARCL IND ST `stk`', raw: '9B Ft', params: 'stk' },
+        { regex: 'ARCL IND `nam`', raw: 'Fn BB', params: 'nam' },
+        { regex: 'ARCL IND rr', raw: '9B 8r', params: 'reg' },
+        { regex: 'ARCL ST `stk`', raw: '9B 7t', params: 'stk' },
+        { regex: 'ARCL `nam`', raw: 'Fn B3', params: 'nam' },
+        { regex: 'ARCL rr', raw: '9B rr', params: 'reg' }
+      ]
+    },
+    { key: 'AROT', value: [{ regex: 'AROT', raw: 'A6 46' }] },
+    { key: 'ASHF', value: [{ regex: 'ASHF', raw: '88' }] },
+    { key: 'ASIN', value: [{ regex: 'ASIN', raw: '5C' }] },
+    { key: 'ASINH', value: [{ regex: 'ASINH', raw: 'A0 64' }] },
+    { key: 'ASSIGN', value: [{ regex: 'ASSIGN `nam` TO `csk`', raw: 'Fn C0 aa', params: 'nam,csk' }] },
+    {
+      key: 'ASTO',
+      value: [
+        { regex: 'ASTO IND ST `stk`', raw: '9A Ft', params: 'stk' },
+        { regex: 'ASTO IND `nam`', raw: 'Fn BA', params: 'nam' },
+        { regex: 'ASTO IND rr', raw: '9A 8r', params: 'reg' },
+        { regex: 'ASTO ST `stk`', raw: '9A 7t', params: 'stk' },
+        { regex: 'ASTO `nam`', raw: 'Fn B2', params: 'nam' },
+        { regex: 'ASTO rr', raw: '9A rr', params: 'reg' }
+      ]
+    },
+    { key: 'ATAN', value: [{ regex: 'ATAN', raw: '5E' }] },
+    { key: 'ATANH', value: [{ regex: 'ATANH', raw: 'A0 65' }] },
+    { key: 'ATIME', value: [{ regex: 'ATIME', raw: 'A6 84' }] },
+    { key: 'ATIME24', value: [{ regex: 'ATIME24', raw: 'A6 85' }] },
+    { key: 'ATOX', value: [{ regex: 'ATOX', raw: 'A6 47' }] },
+    { key: 'AVIEW', value: [{ regex: 'AVIEW', raw: '7E' }] },
+    { key: 'BASE+', value: [{ regex: 'BASE+', raw: 'A0 E6' }] },
+    { key: 'BASE-', value: [{ regex: 'BASE-', raw: 'A0 E7' }] },
+    { key: 'BASE±', value: [{ regex: 'BASE±', raw: 'A0 EA' }] },
+    { key: 'BASE×', value: [{ regex: 'BASE×', raw: 'A0 E8' }] },
+    { key: 'XXX', value: [{ regex: 'BASE÷', raw: 'A0 E9' }] },
+    { key: 'BASE÷', value: [{ regex: 'BEEP', raw: '86' }] },
+    { key: 'BEST', value: [{ regex: 'BEST', raw: 'A0 9F' }] },
+    { key: 'BINM', value: [{ regex: 'BINM', raw: 'A0 E5' }] },
+    { key: 'BIT?', value: [{ regex: 'BIT?', raw: 'A5 8C' }] },
+    {
+      key: 'CF',
+      value: [
+        { regex: 'CF IND ST `stk`', raw: 'A9 Ft', params: 'stk' },
+        { regex: 'CF IND `nam`', raw: 'Fn A9', params: 'nam' },
+        { regex: 'CF IND rr', raw: 'A9 8r', params: 'reg' },
+        { regex: 'CF rr', raw: 'A9 rr', params: 'flg' }
+      ]
+    },
+    { key: 'CLA', value: [{ regex: 'CLA', raw: '87' }] },
+    { key: 'CLD', value: [{ regex: 'CLD', raw: '7F' }] },
+    { key: 'CLK12', value: [{ regex: 'CLK12', raw: 'A6 86' }] },
+    { key: 'CLK24', value: [{ regex: 'CLK24', raw: 'A6 87' }] },
+    { key: 'CLLCD', value: [{ regex: 'CLLCD', raw: 'A7 63' }] },
+    { key: 'CLMENU', value: [{ regex: 'CLMENU', raw: 'A2 6D' }] },
+    { key: 'CLP', value: [{ regex: 'CLP `lbl`', raw: 'Fn F0', params: 'lbl' }] },
+    { key: 'CLRG', value: [{ regex: 'CLRG', raw: '8A' }] },
+    { key: 'CLST', value: [{ regex: 'CLST', raw: '73' }] },
+    {
+      key: 'CLV',
+      value: [
+        { regex: 'CLV IND ST `stk`', raw: 'F2 D8 Ft', params: 'stk' },
+        { regex: 'CLV IND `nam`', raw: 'Fn B8', params: 'nam' },
+        { regex: 'CLV IND rr', raw: 'F2 D8 8r', params: 'reg' },
+        { regex: 'CLV `nam`', raw: 'Fn B0', params: 'nam' }
+      ]
+    },
+    { key: 'CLX', value: [{ regex: 'CLX', raw: '77' }] },
+    { key: 'CLKEYS', value: [{ regex: 'CLKEYS', raw: 'A2 62' }] },
+    { key: 'CLΣ', value: [{ regex: 'CLΣ', raw: '70' }] },
+    { key: 'COMB', value: [{ regex: 'COMB', raw: 'A0 6F' }] },
+    { key: 'COMPLEX', value: [{ regex: 'COMPLEX', raw: 'A0 72' }] },
+    { key: 'CORR', value: [{ regex: 'CORR', raw: 'A0 A7' }] },
+    { key: 'COS', value: [{ regex: 'COS', raw: '5A' }] },
+    { key: 'COSH', value: [{ regex: 'COSH', raw: 'A0 62' }] },
+    { key: 'CPX?', value: [{ regex: 'CPX?', raw: 'A2 67' }] },
+    { key: 'CPXRES', value: [{ regex: 'CPXRES', raw: 'A2 6A' }] },
+    { key: 'CROSS', value: [{ regex: 'CROSS', raw: 'A6 CA' }] },
+    { key: 'CUSTOM', value: [{ regex: 'CUSTOM', raw: 'A2 6F' }] },
+    { key: 'DATE', value: [{ regex: 'DATE', raw: 'A6 8C' }] },
+    { key: 'DATE+', value: [{ regex: 'DATE+', raw: 'A6 8D' }] },
+    { key: 'DDAYS', value: [{ regex: 'DDAYS', raw: 'A6 8E' }] },
+    { key: 'DECM', value: [{ regex: 'DECM', raw: 'A0 E3' }] },
+    { key: 'DEG', value: [{ regex: 'DEG', raw: '80' }] },
+    { key: 'DELAY', value: [{ regex: 'DELAY', raw: 'A7 60' }] },
+    { key: 'DELR', value: [{ regex: 'DELR', raw: 'A0 AB' }] },
+    { key: 'DET', value: [{ regex: 'DET', raw: 'A6 CC' }] },
+    {
+      key: 'DIM',
+      value: [
+        { regex: 'DIM IND ST `stk`', raw: 'F2 EC Ft', params: 'stk' },
+        { regex: 'DIM IND `nam`', raw: 'Fn CC', params: 'nam' },
+        { regex: 'DIM IND rr', raw: 'F2 EC 8r', params: 'reg' },
+        { regex: 'DIM `nam`', raw: 'Fn C4', params: 'nam' }
+      ]
+    },
+    { key: 'DIM?', value: [{ regex: 'DIM?', raw: 'A6 E7' }] },
+    { key: 'DMY', value: [{ regex: 'DMY', raw: 'A6 8F' }] },
+    { key: 'DOT', value: [{ regex: 'DOT', raw: 'A6 CB' }] },
+    { key: 'DOW', value: [{ regex: 'DOW', raw: 'A6 90' }] },
+    {
+      key: 'DSE',
+      value: [
+        { regex: 'DSE IND ST `stk`', raw: '97 Ft', params: 'stk' },
+        { regex: 'DSE IND `nam`', raw: 'Fn 9F', params: 'nam' },
+        { regex: 'DSE IND rr', raw: '97 8r', params: 'reg' },
+        { regex: 'DSE ST `stk`', raw: '97 7t', params: 'stk' },
+        { regex: 'DSE `nam`', raw: 'Fn 97', params: 'nam' },
+        { regex: 'DSE rr', raw: '97 rr', params: 'reg' }
+      ]
+    },
+    { key: 'EDIT', value: [{ regex: 'EDIT', raw: 'A6 E1' }] },
+    {
+      key: 'EDITN',
+      value: [
+        { regex: 'EDITN IND ST `stk`', raw: 'F2 EF Ft', params: 'stk' },
+        { regex: 'EDITN IND `nam`', raw: 'Fn CE', params: 'nam' },
+        { regex: 'EDITN IND rr', raw: 'F2 EF 8r', params: 'reg' },
+        { regex: 'EDITN `nam`', raw: 'Fn C6', params: 'nam' }
+      ]
+    },
+    { key: 'END', value: [{ regex: 'END', raw: 'C0 00 0D' }] },
+    {
+      key: 'ENG',
+      value: [
         { regex: 'ENG 10', raw: 'F1 D7' },
         { regex: 'ENG 11', raw: 'F1 E7' },
-        { regex: 'ENG IND ST `stk`', raw: '9E Ft' },
-        { regex: 'ENG IND `nam`', raw: 'Fn DE' },
-        { regex: 'ENG IND rr', raw: '9E 8r' },
-        { regex: 'ENG sd', raw: '9E nn' },
+        { regex: 'ENG IND ST `stk`', raw: '9E Ft', params: 'stk' },
+        { regex: 'ENG IND `nam`', raw: 'Fn DE', params: 'nam' },
+        { regex: 'ENG IND rr', raw: '9E 8r', params: 'reg' },
+        { regex: 'ENG sd', raw: '9E nn', params: 'dig' }
       ]
-    }
+    },
+    { key: 'ENTER', value: [{ regex: 'ENTER', raw: '83' }] },
+    { key: 'EXITALL', value: [{ regex: 'EXITALL', raw: 'A2 6C' }] },
+    { key: 'XXX', value: [{ regex: 'EXPF', raw: 'A0 A0' }] },
+    { key: 'E↑X', value: [{ regex: 'E↑X', raw: '55' }] },
+    { key: 'E↑X-1', value: [{ regex: 'E↑X-1', raw: '58' }] },
+    {
+      key: 'FC?',
+      value: [
+        { regex: 'FC? IND ST `stk`', raw: 'AD Ft', params: 'stk' },
+        { regex: 'FC? IND `nam`', raw: 'Fn AD', params: 'nam' },
+        { regex: 'FC? IND rr', raw: 'AD 8r', params: 'reg' },
+        { regex: 'FC? rr', raw: 'AD rr', params: 'flg' }
+      ]
+    },
+    {
+      key: 'FC?C',
+      value: [
+        { regex: 'FC?C IND ST `stk`', raw: 'AB Ft', params: 'stk' },
+        { regex: 'FC?C IND `nam`', raw: 'Fn AB', params: 'nam' },
+        { regex: 'FC?C IND rr', raw: 'AB 8r', params: 'reg' },
+        { regex: 'FC?C rr', raw: 'AB rr', params: 'flg' }
+      ]
+    },
+    { key: 'FCSTX', value: [{ regex: 'FCSTX', raw: 'A0 A8' }] },
+    { key: 'FCSTY', value: [{ regex: 'FCSTY', raw: 'A0 A9' }] },
+    {
+      key: 'FIX',
+      value: [
+        { regex: 'FIX 10', raw: 'F1 D5' },
+        { regex: 'FIX 11', raw: 'F1 E5' },
+        { regex: 'FIX IND ST `stk`', raw: '9C Ft', params: 'stk' },
+        { regex: 'FIX IND `nam`', raw: 'Fn DC', params: 'nam' },
+        { regex: 'FIX IND rr', raw: '9C 8r', params: 'reg' },
+        { regex: 'FIX sd', raw: '9C nn', params: 'dig' }
+      ]
+    },
+    { key: 'FNRM', value: [{ regex: 'FNRM', raw: 'A6 CF' }] },
+    { key: 'FP', value: [{ regex: 'FP', raw: '69' }] },
+    {
+      key: 'FS?',
+      value: [
+        { regex: 'FS? IND ST `stk`', raw: 'AC Ft', params: 'stk' },
+        { regex: 'FS? IND `nam`', raw: 'Fn AC', params: 'nam' },
+        { regex: 'FS? IND rr', raw: 'AC 8r' },
+        { regex: 'FS? rr', raw: 'AC rr', params: 'flg' }
+      ]
+    },
+    {
+      key: 'FS?C',
+      value: [
+        { regex: 'FS?C IND ST `stk`', raw: 'AA Ft', params: 'stk' },
+        { regex: 'FS?C IND `nam`', raw: 'Fn AA', params: 'nam' },
+        { regex: 'FS?C IND rr', raw: 'AA 8r' },
+        { regex: 'FS?C rr', raw: 'AA rr', params: 'flg' }
+      ]
+    },
+    { key: 'GAMMA', value: [{ regex: 'GAMMA', raw: 'A0 74' }] },
+    { key: 'GETM', value: [{ regex: 'GETM', raw: 'A6 E8' }] },
+    { key: 'GETKEY', value: [{ regex: 'GETKEY', raw: 'A2 6E' }] },
+    { key: 'GRAD', value: [{ regex: 'GRAD', raw: '82' }] },
+    { key: 'GROW', value: [{ regex: 'GROW', raw: 'A6 E3' }] },
+    {
+      key: 'GTO',
+      value: [
+        { regex: 'GTO IND ST `stk`', raw: 'AE 7t', params: 'stk' },
+        { regex: 'GTO IND `nam`', raw: 'Fn AE', params: 'nam' },
+        { regex: 'GTO IND rr', raw: 'AE nn', params: 'reg' },
+        { regex: 'GTO `lbl`', raw: '1D Fn', params: 'lbl' },
+        { regex: 'GTO ll', raw: 'D0 00 nn' },
+        { regex: 'GTO sl', raw: 'Bl 00' }
+      ]
+    },
+    { key: 'HEADING', value: [{ regex: 'HEADING', raw: 'A7 D1' }] },
+    { key: 'HEXM', value: [{ regex: 'HEXM', raw: 'A0 E2' }] },
+    { key: 'HMS+', value: [{ regex: 'HMS+', raw: '49' }] },
+    { key: 'HMS-', value: [{ regex: 'HMS-', raw: '4A' }] },
+    { key: 'I+', value: [{ regex: 'I+', raw: 'A6 D2' }] },
+    { key: 'I-', value: [{ regex: 'I-', raw: 'A6 D3' }] },
+    {
+      key: 'INDEX',
+      value: [
+        { regex: 'INDEX IND ST `stk`', raw: 'F2 DA Ft', params: 'stk' },
+        { regex: 'INDEX IND `nam`', raw: 'Fn 8F', params: 'nam' },
+        { regex: 'INDEX IND rr', raw: 'F2 DA 8r', params: 'reg' },
+        { regex: 'INDEX `nam`', raw: 'Fn 87', params: 'nam' }
+      ]
+    },
+    {
+      key: 'INPUT',
+      value: [
+        { regex: 'INPUT IND ST `stk`', raw: 'F2 EE Ft', params: 'stk' },
+        { regex: 'INPUT IND `nam`', raw: 'Fn CD', params: 'nam' },
+        { regex: 'INPUT IND rr', raw: 'F2 EE 8r', params: 'reg' },
+        { regex: 'INPUT ST `stk`', raw: 'F2 D0 7t', params: 'stk' },
+        { regex: 'INPUT `nam`', raw: 'Fn C5', params: 'nam' },
+        { regex: 'INPUT rr', raw: 'F2 D0 rr', params: 'reg' }
+      ]
+    },
+    { key: 'INSR', value: [{ regex: 'INSR', raw: 'A0 AA' }] },
+    {
+      key: 'INTEG',
+      value: [
+        { regex: 'INTEG IND ST `stk`', raw: 'F2 EA Ft', params: 'stk' },
+        { regex: 'INTEG IND `nam`', raw: 'Fn BE', params: 'nam' },
+        { regex: 'INTEG IND rr', raw: 'F2 EA 8r', params: 'reg' },
+        { regex: 'INTEG `lbl`', raw: 'Fn B6', params: 'lbl' }
+      ]
+    },
+    { key: 'INVRT', value: [{ regex: 'INVRT', raw: 'A6 CE' }] },
+    { key: 'IP', value: [{ regex: 'IP', raw: '68' }] },
+    {
+      key: 'ISG',
+      value: [
+        { regex: 'ISG IND ST `stk`', raw: '96 Ft', params: 'stk' },
+        { regex: 'ISG IND `nam`', raw: 'Fn 9E', params: 'nam' },
+        { regex: 'ISG IND rr', raw: '96 8r', params: 'reg' },
+        { regex: 'ISG ST `stk`', raw: '96 7t', params: 'stk' },
+        { regex: 'ISG `nam`', raw: 'Fn 96', params: 'nam' },
+        { regex: 'ISG rr', raw: '96 rr', params: 'reg' }
+      ]
+    },
+    { key: 'J+', value: [{ regex: 'J+', raw: 'A6 D4' }] },
+    { key: 'J-', value: [{ regex: 'J-', raw: 'A6 D5' }] },
+    { key: 'LASTX', value: [{ regex: 'LASTX', raw: '76' }] },
+    {
+      key: 'LBL',
+      value: [
+        { regex: 'LBL `lbl`', raw: 'C0 00 Fn 00', params: 'lbl' },
+        { regex: 'LBL ll', raw: 'CF nn' }, // 15-99,A-J,a-e
+        { regex: 'LBL sl', raw: '0l' }
+      ]
+    },
+    { key: 'LCLBL', value: [{ regex: 'LCLBL', raw: 'A2 64' }] },
+    { key: 'LINF', value: [{ regex: 'LINF', raw: 'A0 A1' }] },
+    { key: 'LINΣ', value: [{ regex: 'LINΣ', raw: 'A0 AD' }] },
+    { key: 'LN', value: [{ regex: 'LN', raw: '50' }] },
+    { key: 'LN1+X', value: [{ regex: 'LN1+X', raw: '65' }] },
+    { key: 'LOCAT', value: [{ regex: 'LOCAT', raw: 'A7 D0' }] },
+    { key: 'LOG', value: [{ regex: 'LOG', raw: '56' }] },
+    { key: 'LOGF', value: [{ regex: 'LOGF', raw: 'A0 A2' }] },
+    { key: 'MAN', value: [{ regex: 'MAN', raw: 'A7 5B' }] },
+    { key: 'MAT?', value: [{ regex: 'MAT?', raw: 'A2 66' }] },
+    { key: 'MDY', value: [{ regex: 'MDY', raw: 'A6 91' }] },
+    { key: 'MEAN', value: [{ regex: 'MEAN', raw: '7C' }] },
+    { key: 'MENU', value: [{ regex: 'MENU', raw: 'A2 5E' }] },
+    { key: 'MOD', value: [{ regex: 'MOD', raw: '4B' }] },
+    { key: 'MVAR', value: [{ regex: 'MVAR `nam`', raw: 'Fn 90', params: 'nam' }] },
+    { key: 'N!', value: [{ regex: 'N!', raw: '62' }] },
+    { key: 'NEWMAT', value: [{ regex: 'NEWMAT', raw: 'A6 DA' }] },
+    { key: 'NORM', value: [{ regex: 'NORM', raw: 'A7 5C' }] },
+    { key: 'NOT', value: [{ regex: 'NOT', raw: 'A5 87' }] },
+    { key: 'NULL', value: [{ regex: 'NULL', raw: '00' }] },
+    { key: 'OCTM', value: [{ regex: 'OCTM', raw: 'A0 E4' }] },
+    { key: 'OFF', value: [{ regex: 'OFF', raw: '8D' }] },
+    { key: 'OLD', value: [{ regex: 'OLD', raw: 'A6 DB' }] },
+    { key: 'ON', value: [{ regex: 'ON', raw: 'A2 70' }] },
+    { key: 'OR', value: [{ regex: 'OR', raw: 'A5 89' }] },
+    { key: 'PERM', value: [{ regex: 'PERM', raw: 'A0 70' }] },
+    {
+      key: 'PGMINT',
+      value: [
+        { regex: 'PGMINT IND ST `stk`', raw: 'F2 E8 Ft', params: 'stk' },
+        { regex: 'PGMINT IND `nam`', raw: 'Fn BC', params: 'nam' },
+        { regex: 'PGMINT IND rr', raw: 'F2 E8 8r', params: 'reg' },
+        { regex: 'PGMINT `lbl`', raw: 'Fn B4', params: 'lbl' },
+        { regex: 'PGMSLV IND ST `stk`', raw: 'F2 E9 Ft', params: 'stk' },
+        { regex: 'PGMSLV IND `nam`', raw: 'Fn BD', params: 'nam' },
+        { regex: 'PGMSLV IND rr', raw: 'F2 E9 8r', params: 'reg' },
+        { regex: 'PGMSLV `lbl`', raw: 'Fn B5', params: 'lbl' }
+      ]
+    },
+    { key: 'PI', value: [{ regex: 'PI', raw: '72' }] },
+    { key: 'PIXEL', value: [{ regex: 'PIXEL', raw: 'A7 65' }] },
+    { key: 'POLAR', value: [{ regex: 'POLAR', raw: 'A2 59' }] },
+    { key: 'POSA', value: [{ regex: 'POSA', raw: 'A6 5C' }] },
+    { key: 'PRA', value: [{ regex: 'PRA', raw: 'A7 48' }] },
+    { key: 'PRLCD', value: [{ regex: 'PRLCD', raw: 'A7 62' }] },
+    { key: 'PROFF', value: [{ regex: 'PROFF', raw: 'A7 5F' }] },
+    { key: 'PROMPT', value: [{ regex: 'PROMPT', raw: '8E' }] },
+    { key: 'PRON', value: [{ regex: 'PRON', raw: 'A7 5E' }] },
+    { key: 'PRSTK', value: [{ regex: 'PRSTK', raw: 'A7 53' }] },
+    { key: 'PRUSR', value: [{ regex: 'PRUSR', raw: 'A7 61' }] },
+    {
+      key: 'PRV',
+      value: [
+        { regex: 'PRV IND ST `stk`', raw: 'F2 D9 Ft', params: 'stk' },
+        { regex: 'PRV IND `nam`', raw: 'Fn B9', params: 'nam' },
+        { regex: 'PRV IND rr', raw: 'F2 D9 8r', params: 'reg' },
+        { regex: 'PRV `nam`', raw: 'Fn B1', params: 'nam' }
+      ]
+    },
+    { key: 'PRX', value: [{ regex: 'PRX', raw: 'A7 54' }] },
+    { key: 'PRΣ', value: [{ regex: 'PRΣ', raw: 'A7 52' }] },
+    { key: 'PSE', value: [{ regex: 'PSE', raw: '89' }] },
+    { key: 'PUTM', value: [{ regex: 'PUTM', raw: 'A6 E9' }] },
+    { key: 'PWRF', value: [{ regex: 'PWRF', raw: 'A0 A3' }] },
+    { key: 'R<>R', value: [{ regex: 'R<>R', raw: 'A6 D1' }] },
+    { key: 'RAD', value: [{ regex: 'RAD', raw: '81' }] },
+    { key: 'RAN', value: [{ regex: 'RAN', raw: 'A0 71' }] },
+    {
+      key: 'RCL',
+      value: [
+        { regex: 'RCL IND ST `stk`', raw: '90 Ft', params: 'stk' },
+        { regex: 'RCL IND `nam`', raw: 'Fn 99', params: 'nam' },
+        { regex: 'RCL IND rr', raw: '90 8r', params: 'reg' },
+        { regex: 'RCL ST `stk`', raw: '90 7t', params: 'stk' },
+        { regex: 'RCL `nam`', raw: 'Fn 91', params: 'nam' },
+        { regex: 'RCL rr', raw: '90 rr', params: 'reg' },
+        { regex: 'RCL sr', raw: '2r' }
+      ]
+    },
+    {
+      key: 'RCL+',
+      value: [
+        { regex: 'RCL+ IND ST `stk`', raw: 'F2 D1 Ft', params: 'stk' },
+        { regex: 'RCL+ IND `nam`', raw: 'Fn 9A', params: 'nam' },
+        { regex: 'RCL+ IND rr', raw: 'F2 D1 8r', params: 'reg' },
+        { regex: 'RCL+ ST `stk`', raw: 'F2 D1 7t', params: 'stk' },
+        { regex: 'RCL+ `nam`', raw: 'Fn 92', params: 'nam' },
+        { regex: 'RCL+ rr', raw: 'F2 D1 rr', params: 'reg' }
+      ]
+    },
+    {
+      key: 'RCL-',
+      value: [
+        { regex: 'RCL- IND ST `stk`', raw: 'F2 D2 Ft', params: 'stk' },
+        { regex: 'RCL- IND `nam`', raw: 'Fn 9B', params: 'nam' },
+        { regex: 'RCL- IND rr', raw: 'F2 D2 8r', params: 'reg' },
+        { regex: 'RCL- ST `stk`', raw: 'F2 D2 7t', params: 'stk' },
+        { regex: 'RCL- `nam`', raw: 'Fn 93', params: 'nam' },
+        { regex: 'RCL- rr', raw: 'F2 D2 rr', params: 'reg' }
+      ]
+    },
+    { key: 'RCLEL', value: [{ regex: 'RCLEL', raw: 'A6 D7' }] },
+    { key: 'RCLIJ', value: [{ regex: 'RCLIJ', raw: 'A6 D9' }] },
+    {
+      key: 'RCL×',
+      value: [
+        { regex: 'RCL× IND ST `stk`', raw: 'F2 D3 Ft', params: 'stk' },
+        { regex: 'RCL× IND `nam`', raw: 'Fn 9C', params: 'nam' },
+        { regex: 'RCL× IND rr', raw: 'F2 D3 8r', params: 'reg' },
+        { regex: 'RCL× ST `stk`', raw: 'F2 D3 7t', params: 'stk' },
+        { regex: 'RCL× `nam`', raw: 'Fn 94', params: 'nam' },
+        { regex: 'RCL× rr', raw: 'F2 D3 rr', params: 'reg' }
+      ]
+    },
+    {
+      key: 'RCL÷',
+      value: [
+        { regex: 'RCL÷ IND ST `stk`', raw: 'F2 D4 Ft', params: 'stk' },
+        { regex: 'RCL÷ IND `nam`', raw: 'Fn 9D', params: 'nam' },
+        { regex: 'RCL÷ IND rr', raw: 'F2 D4 8r', params: 'reg' },
+        { regex: 'RCL÷ ST `stk`', raw: 'F2 D4 7t', params: 'stk' },
+        { regex: 'RCL÷ `nam`', raw: 'Fn 95', params: 'nam' },
+        { regex: 'RCL÷ rr', raw: 'F2 D4 rr', params: 'reg' }
+      ]
+    },
+    { key: 'RDX,', value: [{ regex: 'RDX,', raw: 'A2 5C' }] },
+    { key: 'RDX.', value: [{ regex: 'RDX.', raw: 'A2 5B' }] },
+    { key: 'REAL?', value: [{ regex: 'REAL?', raw: 'A2 65' }] },
+    { key: 'REALRES', value: [{ regex: 'REALRES', raw: 'A2 6B' }] },
+    { key: 'RECT', value: [{ regex: 'RECT', raw: 'A2 5A' }] },
+    { key: 'RND', value: [{ regex: 'RND', raw: '6E' }] },
+    { key: 'RNRM', value: [{ regex: 'RNRM', raw: 'A6 ED' }] },
+    { key: 'ROTXY', value: [{ regex: 'ROTXY', raw: 'A5 8B' }] },
+    { key: 'RSUM', value: [{ regex: 'RSUM', raw: 'A6 D0' }] },
+    { key: 'RTN', value: [{ regex: 'RTN', raw: '85' }] },
+    { key: 'R↑', value: [{ regex: 'R↑', raw: '74' }] },
+    { key: 'R↓', value: [{ regex: 'R↓', raw: '75' }] },
+    {
+      key: 'SCI',
+      value: [
+        { regex: 'SCI 10', raw: 'F1 D6' },
+        { regex: 'SCI 11', raw: 'F1 E6' },
+        { regex: 'SCI IND ST `stk`', raw: '9D Ft', params: 'stk' },
+        { regex: 'SCI IND `nam`', raw: 'Fn DD', params: 'nam' },
+        { regex: 'SCI IND rr', raw: '9D 8r', params: 'reg' },
+        { regex: 'SCI sd', raw: '9D nn', params: 'dig' }
+      ]
+    },
+    { key: 'SDEV', value: [{ regex: 'SDEV', raw: '7D' }] },
+    { key: 'SEED', value: [{ regex: 'SEED', raw: 'A0 73' }] },
+    {
+      key: 'SF',
+      value: [
+        { regex: 'SF IND ST `stk`', raw: 'A8 Ft', params: 'stk' },
+        { regex: 'SF IND `nam`', raw: 'Fn A8', params: 'nam' },
+        { regex: 'SF IND rr', raw: 'A8 8r', params: 'reg' },
+        { regex: 'SF rr', raw: 'A8 rr', params: 'flg' }
+      ]
+    },
+    { key: 'SIGN', value: [{ regex: 'SIGN', raw: '7A' }] },
+    { key: 'SIN', value: [{ regex: 'SIN', raw: '59' }] },
+    { key: 'SINH', value: [{ regex: 'SINH', raw: 'A0 61' }] },
+    { key: 'SIZE', value: [{ regex: 'SIZE rr', raw: 'F3 F7 ww ww', params: 'siz' }] },
+    { key: 'SLOPE', value: [{ regex: 'SLOPE', raw: 'A0 A4' }] },
+    {
+      key: 'SOLVE',
+      value: [
+        { regex: 'SOLVE IND ST `stk`', raw: 'F2 EB Ft', params: 'stk' },
+        { regex: 'SOLVE IND `nam`', raw: 'Fn BF', params: 'nam' },
+        { regex: 'SOLVE IND rr', raw: 'F2 EB 8r', params: 'reg' },
+        { regex: 'SOLVE `lbl`', raw: 'Fn B7', params: 'lbl' }
+      ]
+    },
+    { key: 'SQRT', value: [{ regex: 'SQRT', raw: '52' }] },
+    {
+      key: 'STO',
+      value: [
+        { regex: 'STO IND ST `stk`', raw: '91 Ft', params: 'stk' },
+        { regex: 'STO IND `nam`', raw: 'Fn 89', params: 'nam' },
+        { regex: 'STO IND rr', raw: '91 8r', params: 'reg' },
+        { regex: 'STO ST `stk`', raw: '91 7t', params: 'stk' },
+        { regex: 'STO `nam`', raw: 'Fn 81', params: 'nam' },
+        { regex: 'STO rr', raw: '91 rr', params: 'reg' },
+        { regex: 'STO sr', raw: '3r' }
+      ]
+    },
+    {
+      key: 'STO+',
+      value: [
+        { regex: 'STO+ IND ST `stk`', raw: '92 Ft', params: 'stk' },
+        { regex: 'STO+ IND `nam`', raw: 'Fn 8A', params: 'nam' },
+        { regex: 'STO+ IND rr', raw: '92 8r', params: 'reg' },
+        { regex: 'STO+ ST `stk`', raw: '92 7t', params: 'stk' },
+        { regex: 'STO+ `nam`', raw: 'Fn 82', params: 'nam' },
+        { regex: 'STO+ rr', raw: '92 rr', params: 'reg' }
+      ]
+    },
+    {
+      key: 'STO-',
+      value: [
+        { regex: 'STO- IND ST `stk`', raw: '93 Ft', params: 'stk' },
+        { regex: 'STO- IND `nam`', raw: 'Fn 8B', params: 'nam' },
+        { regex: 'STO- IND rr', raw: '93 8r', params: 'reg' },
+        { regex: 'STO- ST `stk`', raw: '93 7t', params: 'stk' },
+        { regex: 'STO- `nam`', raw: 'Fn 83', params: 'nam' },
+        { regex: 'STO- rr', raw: '93 rr', params: 'reg' }
+      ]
+    },
+    { key: 'STOEL', value: [{ regex: 'STOEL', raw: 'A6 D6' }] },
+    { key: 'STOIJ', value: [{ regex: 'STOIJ', raw: 'A6 D8' }] },
+    { key: 'STOP', value: [{ regex: 'STOP', raw: '84' }] },
+    {
+      key: 'STO×',
+      value: [
+        { regex: 'STO× IND ST `stk`', raw: '94 Ft', params: 'stk' },
+        { regex: 'STO× IND `nam`', raw: 'Fn 8C', params: 'nam' },
+        { regex: 'STO× IND rr', raw: '94 8r', params: 'reg' },
+        { regex: 'STO× ST `stk`', raw: '94 7t', params: 'stk' },
+        { regex: 'STO× `nam`', raw: 'Fn 84', params: 'nam' },
+        { regex: 'STO× rr', raw: '94 rr', params: 'reg' }
+      ]
+    },
+    {
+      key: 'STO÷',
+      value: [
+        { regex: 'STO÷ IND ST `stk`', raw: '95 Ft', params: 'stk' },
+        { regex: 'STO÷ IND `nam`', raw: 'Fn 8D', params: 'nam' },
+        { regex: 'STO÷ IND rr', raw: '95 8r', params: 'reg' },
+        { regex: 'STO÷ ST `stk`', raw: '95 7t', params: 'stk' },
+        { regex: 'STO÷ `nam`', raw: 'Fn 85', params: 'nam' },
+        { regex: 'STO÷ rr', raw: '95 rr', params: 'reg' }
+      ]
+    },
+    { key: 'STR?', value: [{ regex: 'STR?', raw: 'A2 68' }] },
+    { key: 'SUM', value: [{ regex: 'SUM', raw: 'A0 A5' }] },
+    { key: 'TAN', value: [{ regex: 'TAN', raw: '5B' }] },
+    { key: 'TANH', value: [{ regex: 'TANH', raw: 'A0 63' }] },
+    { key: 'TIME', value: [{ regex: 'TIME', raw: 'A6 9C' }] },
+    {
+      key: 'TONE',
+      value: [
+        { regex: 'TONE IND ST `stk`', raw: '9F Ft', params: 'stk' },
+        { regex: 'TONE IND `nam`', raw: 'Fn DF', params: 'nam' },
+        { regex: 'TONE IND rr', raw: '9F 8r', params: 'reg' },
+        { regex: 'TONE tn', raw: '9F rr', params: 'ton' }
+      ]
+    },
+    { key: 'TRACE', value: [{ regex: 'TRACE', raw: 'A7 5D' }] },
+    { key: 'TRANS', value: [{ regex: 'TRANS', raw: 'A6 C9' }] },
+    { key: 'UVEC', value: [{ regex: 'UVEC', raw: 'A6 CD' }] },
+    {
+      key: 'VARMENU',
+      value: [
+        { regex: 'VARMENU IND ST `stk`', raw: 'F2 F8 Ft', params: 'stk' },
+        { regex: 'VARMENU IND `nam`', raw: 'Fn C9', params: 'nam' },
+        { regex: 'VARMENU IND rr', raw: 'F2 F8 8r', params: 'reg' },
+        { regex: 'VARMENU `nam`', raw: 'Fn C1', params: 'nam' }
+      ]
+    },
+    {
+      key: 'VIEW',
+      value: [
+        { regex: 'VIEW IND ST `stk`', raw: '98 Ft', params: 'stk' },
+        { regex: 'VIEW IND `nam`', raw: 'Fn 88', params: 'nam' },
+        { regex: 'VIEW IND rr', raw: '98 8r', params: 'reg' },
+        { regex: 'VIEW ST `stk`', raw: '98 7t', params: 'stk' },
+        { regex: 'VIEW `nam`', raw: 'Fn 80', params: 'nam' },
+        { regex: 'VIEW rr', raw: '98 rr', params: 'reg' }
+      ]
+    },
+    { key: 'WMEAN', value: [{ regex: 'WMEAN', raw: 'A0 AC' }] },
+    { key: 'WRAP', value: [{ regex: 'WRAP', raw: 'A6 E2' }] },
+    { key: 'X<0?', value: [{ regex: 'X<0?', raw: '66' }] },
+    {
+      key: 'X<>',
+      value: [
+        { regex: 'X<> IND ST `stk`', raw: 'CE Ft', params: 'stk' },
+        { regex: 'X<> IND `nam`', raw: 'Fn 8E', params: 'nam' },
+        { regex: 'X<> IND rr', raw: 'CE 8r', params: 'reg' },
+        { regex: 'X<> ST `stk`', raw: 'CE 7t', params: 'stk' },
+        { regex: 'X<> `nam`', raw: 'Fn 86', params: 'nam' },
+        { regex: 'X<> rr', raw: 'CE rr', params: 'reg' }
+      ]
+    },
+    { key: 'X<>Y', value: [{ regex: 'X<>Y', raw: '71' }] },
+    { key: 'X<Y?', value: [{ regex: 'X<Y?', raw: '44' }] },
+    { key: 'X=0?', value: [{ regex: 'X=0?', raw: '67' }] },
+    { key: 'X=Y?', value: [{ regex: 'X=Y?', raw: '78' }] },
+    { key: 'X>0?', value: [{ regex: 'X>0?', raw: '64' }] },
+    { key: 'X>Y?', value: [{ regex: 'X>Y?', raw: '45' }] },
+    {
+      key: 'XEQ',
+      value: [
+        { regex: 'XEQ IND ST `stk`', raw: 'AE Ft', params: 'stk' },
+        { regex: 'XEQ IND `nam`', raw: 'Fn AF', params: 'nam' },
+        { regex: 'XEQ IND rr', raw: 'AE 8r', params: 'reg' },
+        { regex: 'XEQ `lbl`', raw: '1E Fn', params: 'lbl' },
+        { regex: 'XEQ ll', raw: 'E0 00 nn' },
+        { regex: 'XEQ sl', raw: 'E0 00 nn' }
+      ]
+    },
+    { key: 'XOR', value: [{ regex: 'XOR', raw: 'A5 8A' }] },
+    { key: 'XTOA', value: [{ regex: 'XTOA', raw: 'A6 6F' }] },
+    { key: 'X↑2', value: [{ regex: 'X↑2', raw: '51' }] },
+    { key: 'X≠0?', value: [{ regex: 'X≠0?', raw: '63' }] },
+    { key: 'X≠Y?', value: [{ regex: 'X≠Y?', raw: '79' }] },
+    { key: 'X≤0?', value: [{ regex: 'X≤0?', raw: '7B' }] },
+    { key: 'X≤Y?', value: [{ regex: 'X≤Y?', raw: '46' }] },
+    { key: 'X≥0?', value: [{ regex: 'X≥0?', raw: 'A2 5F' }] },
+    { key: 'X≥Y?', value: [{ regex: 'X≥Y?', raw: 'A2 60' }] },
+    { key: 'X≶Y', value: [{ regex: 'X≶Y', raw: '71' }] },
+    { key: 'YINT', value: [{ regex: 'YINT', raw: 'A0 A6' }] },
+    { key: 'Y↑X', value: [{ regex: 'Y↑X', raw: '53' }] },
+    { key: '[FIND]', value: [{ regex: '[FIND]', raw: 'A6 EC' }] },
+    { key: '[MAX]', value: [{ regex: '[MAX]', raw: 'A6 EB' }] },
+    { key: '[MIN]', value: [{ regex: '[MIN]', raw: 'A6 EA' }] },
+    { key: '`str`', value: [{ regex: '`str`', raw: 'Fn' }] },
+    {
+      key: 'KEY',
+      value: [
+        { regex: 'KEY `key` GTO IND ST `stk`', raw: 'F3 E3 kk Ft', params: 'stk' },
+        { regex: 'KEY `key` GTO IND `nam`', raw: 'Fn CB kk', params: 'nam' },
+        { regex: 'KEY `key` GTO IND rr', raw: 'F3 E3 kk 8r', params: 'reg' },
+        { regex: 'KEY `key` GTO `lbl`', raw: 'Fn C3 kk', params: 'lbl' },
+        { regex: 'KEY `key` GTO ll', raw: 'F3 E3 kk rr' },
+        { regex: 'KEY `key` GTO sl', raw: 'F3 E3 kk rr' },
+        { regex: 'KEY `key` XEQ IND ST `stk`', raw: 'F3 E2 kk Ft', params: 'stk' },
+        { regex: 'KEY `key` XEQ IND `nam`', raw: 'Fn CA kk', params: 'nam' },
+        { regex: 'KEY `key` XEQ IND rr', raw: 'F3 E2 kk 8r', params: 'reg' },
+        { regex: 'KEY `key` XEQ `lbl`', raw: 'Fn C2 kk', params: 'lbl' },
+        { regex: 'KEY `key` XEQ ll', raw: 'F3 E2 kk rr' },
+        { regex: 'KEY `key` XEQ sl', raw: 'F3 E2 kk rr' }
+      ]
+    },
+    { key: 'KEYASN', value: [{ regex: 'KEYASN', raw: 'A2 63' }] },
+    { key: '±', value: [{ regex: '±', raw: '54' }] },
+    { key: '×', value: [{ regex: '×', raw: '42' }] },
+    { key: '÷', value: [{ regex: '÷', raw: '43' }] },
+    { key: 'Σ+', value: [{ regex: 'Σ+', raw: '47' }] },
+    { key: 'Σ-', value: [{ regex: 'Σ-', raw: '48' }] },
+    {
+      key: 'ΣREG',
+      value: [
+        { regex: 'ΣREG IND ST `stk`', raw: '99 Ft', params: 'stk' },
+        { regex: 'ΣREG IND `nam`', raw: 'Fn DB', params: 'nam' },
+        { regex: 'ΣREG IND rr', raw: '99 8r', params: 'reg' },
+        { regex: 'ΣREG rr', raw: '99 rr', params: 'reg' }
+      ]
+    },
+    { key: 'ΣREG?', value: [{ regex: 'ΣREG?', raw: 'A6 78' }] },
+    { key: '←', value: [{ regex: '←', raw: 'A6 DC' }] },
+    { key: '↑', value: [{ regex: '↑', raw: 'A6 DE' }] },
+    { key: '→', value: [{ regex: '→', raw: 'A6 DD' }] },
+    { key: '→DEC', value: [{ regex: '→DEC', raw: '5F' }] },
+    { key: '→DEG', value: [{ regex: '→DEG', raw: '6B' }] },
+    { key: '→HMS', value: [{ regex: '→HMS', raw: '6C' }] },
+    { key: '→HR', value: [{ regex: '→HR', raw: '6D' }] },
+    { key: '→OCT', value: [{ regex: '→OCT', raw: '6F' }] },
+    { key: '→POL', value: [{ regex: '→POL', raw: '4F' }] },
+    { key: '→RAD', value: [{ regex: '→RAD', raw: '6A' }] },
+    { key: '→REC', value: [{ regex: '→REC', raw: '4E' }] },
+    { key: '↓', value: [{ regex: '↓', raw: 'A6 DF' }] },
+    { key: '⊢`str`', value: [{ regex: '⊢`str`', raw: 'Fn 7F' }] }
   ];
   // #endregion
-
 }
