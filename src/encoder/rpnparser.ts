@@ -47,7 +47,7 @@ export class RpnParser {
         }
 
         if (program) {
-          let rawLine = this.parseLine(docLineIndex, lineText);
+          let rawLine = this.parseLine_old(docLineIndex, lineText);
 
           // no parser error ...
           if (rawLine.error === undefined) {
