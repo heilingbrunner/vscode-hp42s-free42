@@ -108,6 +108,123 @@ export class RpnParser {
 
       rawLine.normCode = this.formatLine(rawLine.normCode);
 
+      if (EncoderFOCAL.rpnMap2.has(rawLine.token)) {
+        const patterns = EncoderFOCAL.rpnMap2.get(rawLine.token);
+
+        if (patterns) {
+          //
+          for (let i = 0; i < patterns.length; i++) {
+            const pattern = patterns[i];
+            
+            //match ?
+            let match = rawLine.code.match(pattern.regex);
+            if (match) {
+              
+              if (pattern.params) {
+                const params = pattern.params.split(",");
+                // assign params like regex named groups
+                for (let p = 0; p < params.length; p++) {
+                  const param = params[p];
+                  let k = p + 1;
+                  switch (true) {
+                  
+                  
+                  }
+                }
+              }
+
+            }
+
+          }
+        }
+        
+      }
+      
+      //#endregion
+
+      //#region Checks ...
+
+      if (this.config && this.config.useLineNumbers && this.prgmLineNo !== rawLine.codeLineNo) {
+        progErrorText = "line number not correct: " + this.prgmLineNo + "!==" + rawLine.codeLineNo;
+      }
+
+      if (rawLine.params.str && progErrorText === undefined) {
+        progErrorText = this.checkString(rawLine.params.str);
+      }
+      if (rawLine.params.nam && progErrorText === undefined) {
+        progErrorText = this.checkName(rawLine.params.nam);
+      }
+      if (rawLine.params.key && progErrorText === undefined) {
+        progErrorText = this.checkKey(rawLine.params.key);
+      }
+      if (rawLine.params.csk && progErrorText === undefined) {
+        progErrorText = this.checkCustomKey(rawLine.params.csk);
+      }
+      if (rawLine.params.ton && progErrorText === undefined) {
+        progErrorText = this.checkTone(rawLine.params.ton);
+      }
+      if (rawLine.params.flg && progErrorText === undefined) {
+        progErrorText = this.checkFlag(rawLine.params.flg);
+      }
+      if (rawLine.params.lbl && progErrorText === undefined) {
+        progErrorText = this.checkGlobalLabel(rawLine.params.lbl);
+      }
+      if (rawLine.params.clb && progErrorText === undefined) {
+        progErrorText = this.checkLocalCharLabel(rawLine.params.clb);
+      }
+
+      //#endregion
+    }
+
+    if (progErrorText) {
+      rawLine.error = new CodeError(docLineIndex, this.config && this.config.useLineNumbers ? this.prgmLineNo : -1, rawLine.code, String(progErrorText));
+    }
+
+    return rawLine;
+  }
+
+  
+  parseLine_old(docLineIndex: number, line: string): RawLine {
+    let progErrorText: string | undefined;
+    let rawLine = new RawLine();
+
+    this.reset();
+
+    //save original code
+    rawLine.code = line;
+    rawLine.normCode = line;
+
+    if (this.ignoredLine(line)) {
+      rawLine.ignored = true;
+
+      // reset line number when {} header line
+      if (this.config && this.config.useLineNumbers) {
+        switch (true) {
+          // code line is { n-Byte Prgm }
+          case /^00 {.*\}/.test(line):
+            this.prgmLineNo = 0;
+            break;
+
+          default:
+          //nothing
+        }
+      }
+    } else {
+      // increment
+      this.prgmLineNo++;
+
+      // read codeLineNo from code line
+      if (this.config && this.config.useLineNumbers) {
+        let match = line.match(/(^\d+)(▸|▶|>|\s+)/);
+        if (match) {
+          rawLine.codeLineNo = parseInt(match[1]);
+        }
+      }
+
+      //#region prepare line
+
+      rawLine.normCode = this.formatLine(rawLine.normCode);
+
       // alpha in `str`
       this.replaceString(rawLine);
 

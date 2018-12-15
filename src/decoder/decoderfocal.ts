@@ -1,14 +1,13 @@
-import { CodeError } from '../common/codeerror';
 import { RpnPattern } from './rpnpattern';
 import { RpnLine } from './rpnline';
 
 export class DecoderFOCAL {
   //#region Members
 
-  static rawMap: Map<string, RpnPattern[]> = new Map<string, RpnPattern[]>();
-  static stackMap: Map<number, string> = new Map<number, string>();
-  static charMap: Map<number, string> = new Map<number, string>();
-  static lblMap: Map<number, string> = new Map<number, string>();
+  static rawMap = new Map<string, RpnPattern[]>();
+  static stackMap = new Map<number, string>();
+  static charMap = new Map<number, string>();
+  static lblMap = new Map<number, string>();
 
   static initialized: boolean = false;
 
@@ -19,16 +18,16 @@ export class DecoderFOCAL {
   static initialize() {
     if (!DecoderFOCAL.initialized) {
       // transform arr_rawMap -> rawMap
-      DecoderFOCAL.arr_rawMap.forEach((e: { key: string; value: RpnPattern[] }) => {
+      DecoderFOCAL.arr_rawMap.forEach((e) => {
         DecoderFOCAL.rawMap.set(e.key, e.value);
       });
 
-      DecoderFOCAL.arr_stackMap.forEach((e: { key: number; value: string }) => {
+      DecoderFOCAL.arr_stackMap.forEach((e) => {
         DecoderFOCAL.stackMap.set(e.key, e.value);
       });
 
       // transform arr_charMap -> charMap
-      DecoderFOCAL.arr_charMap.forEach((e: { key: number; value: string }) => {
+      DecoderFOCAL.arr_charMap.forEach((e) => {
         DecoderFOCAL.charMap.set(e.key, e.value);
       });
 

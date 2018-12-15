@@ -6,10 +6,10 @@ import { RawPattern } from './rawpattern';
 export class EncoderFOCAL {
   //#region Members
 
-  static rawMap2: Map<string, RawPattern[]> = new Map<string, RawPattern[]>();
-  static rpnMap: Map<string, string> = new Map<string, string>();
-  static stackMap: Map<string, number> = new Map<string, number>();
-  static charMap: Map<string, number> = new Map<string, number>();
+  static rpnMap2 = new Map<string, RawPattern[]>();
+  static rpnMap = new Map<string, string>();
+  static stackMap = new Map<string, number>();
+  static charMap = new Map<string, number>();
 
   static initialized: boolean = false;
 
@@ -20,17 +20,21 @@ export class EncoderFOCAL {
   static initialize() {
     if (!EncoderFOCAL.initialized) {
       // transform arr_rpnMap -> rpnMap
-      EncoderFOCAL.arr_rpnMap.forEach((e: { key: string; value: string }) => {
+      EncoderFOCAL.arr_rpnMap.forEach((e) => {
         EncoderFOCAL.rpnMap.set(e.key, e.value);
       });
 
+      EncoderFOCAL.arr_rpnMap2.forEach((e) => {
+        EncoderFOCAL.rpnMap2.set(e.key, e.value);
+      });
+
       // transform arr_stackMap -> stackMap
-      EncoderFOCAL.arr_stackMap.forEach((e: { key: string; value: number }) => {
+      EncoderFOCAL.arr_stackMap.forEach((e) => {
         EncoderFOCAL.stackMap.set(e.key, e.value);
       });
 
       // transform arr_charMap -> charMap
-      EncoderFOCAL.arr_charMap.forEach((e: { key: string; value: number }) => {
+      EncoderFOCAL.arr_charMap.forEach((e) => {
         EncoderFOCAL.charMap.set(e.key, e.value);
       });
 
@@ -1057,6 +1061,7 @@ export class EncoderFOCAL {
   // LBL|GTO sl|ll: sl: 00-14, ll:15-99
   // RCL|STO sr|rr: sr 0-15, rr: 16-99 
   // tone: (?<tone>0[0-9]); dec:1-9; hex:01-09
+  // nam: name max length 14
 
   private static arr_rpnMap2 = [
     { key: '%', value: [{ regex: /%/, raw: '4C' }] },
@@ -1086,27 +1091,27 @@ export class EncoderFOCAL {
       key: 'ARCL',
       value: [
         { regex: /ARCL IND ST ([XYZLT])/, raw: '9B Ft', params: 'stk' },
-        { regex: /ARCL IND `nam`/, raw: 'Fn BB', params: 'nam' },
-        { regex: /ARCL IND rr/, raw: '9B 8r', params: 'reg' },
+        { regex: /ARCL IND (".{1,14}")/, raw: 'Fn BB', params: 'nam' },
+        { regex: /ARCL IND (\d{2})/, raw: '9B 8r', params: 'reg' },
         { regex: /ARCL ST ([XYZLT])/, raw: '9B 7t', params: 'stk' },
-        { regex: /ARCL `nam`/, raw: 'Fn B3', params: 'nam' },
-        { regex: /ARCL rr/, raw: '9B rr', params: 'reg' }
+        { regex: /ARCL (".{1,14}")/, raw: 'Fn B3', params: 'nam' },
+        { regex: /ARCL (\d{2})/, raw: '9B rr', params: 'reg' }
       ]
     },
     { key: 'AROT', value: [{ regex: /AROT/, raw: 'A6 46' }] },
     { key: 'ASHF', value: [{ regex: /ASHF/, raw: '88' }] },
     { key: 'ASIN', value: [{ regex: /ASIN/, raw: '5C' }] },
     { key: 'ASINH', value: [{ regex: /ASINH/, raw: 'A0 64' }] },
-    { key: 'ASSIGN', value: [{ regex: /ASSIGN `nam` TO `csk`/, raw: 'Fn C0 aa', params: 'nam,csk' }] },
+    { key: 'ASSIGN', value: [{ regex: /ASSIGN (".{1,14}") TO ((0[1-9]|1[0-8]))/, raw: 'Fn C0 aa', params: 'nam,csk' }] }, // csk: 01-18
     {
       key: 'ASTO',
       value: [
         { regex: /ASTO IND ST ([XYZLT])/, raw: '9A Ft', params: 'stk' },
-        { regex: /ASTO IND `nam`/, raw: 'Fn BA', params: 'nam' },
-        { regex: /ASTO IND rr/, raw: '9A 8r', params: 'reg' },
+        { regex: /ASTO IND (".{1,14}")/, raw: 'Fn BA', params: 'nam' },
+        { regex: /ASTO IND (\d{2})/, raw: '9A 8r', params: 'reg' },
         { regex: /ASTO ST ([XYZLT])/, raw: '9A 7t', params: 'stk' },
-        { regex: /ASTO `nam`/, raw: 'Fn B2', params: 'nam' },
-        { regex: /ASTO rr/, raw: '9A rr', params: 'reg' }
+        { regex: /ASTO (".{1,14}")/, raw: 'Fn B2', params: 'nam' },
+        { regex: /ASTO (\d{2})/, raw: '9A rr', params: 'reg' }
       ]
     },
     { key: 'ATAN', value: [{ regex: /ATAN/, raw: '5E' }] },
@@ -1115,7 +1120,7 @@ export class EncoderFOCAL {
     { key: 'ATIME24', value: [{ regex: /ATIME24/, raw: 'A6 85' }] },
     { key: 'ATOX', value: [{ regex: /ATOX/, raw: 'A6 47' }] },
     { key: 'AVIEW', value: [{ regex: /AVIEW/, raw: '7E' }] },
-    { key: 'BASE+', value: [{ regex: /BASE+/, raw: 'A0 E6' }] },
+    { key: 'BASE+', value: [{ regex: /BASE\+/, raw: 'A0 E6' }] },
     { key: 'BASE-', value: [{ regex: /BASE-/, raw: 'A0 E7' }] },
     { key: 'BASE±', value: [{ regex: /BASE±/, raw: 'A0 EA' }] },
     { key: 'BASE×', value: [{ regex: /BASE×/, raw: 'A0 E8' }] },
@@ -1128,9 +1133,9 @@ export class EncoderFOCAL {
       key: 'CF',
       value: [
         { regex: /CF IND ST ([XYZLT])/, raw: 'A9 Ft', params: 'stk' },
-        { regex: /CF IND `nam`/, raw: 'Fn A9', params: 'nam' },
-        { regex: /CF IND rr/, raw: 'A9 8r', params: 'reg' },
-        { regex: /CF rr/, raw: 'A9 rr', params: 'flg' }
+        { regex: /CF IND (".{1,14}")/, raw: 'Fn A9', params: 'nam' },
+        { regex: /CF IND (\d{2})/, raw: 'A9 8r', params: 'reg' },
+        { regex: /CF (\d{2})/, raw: 'A9 rr', params: 'flg' } //00-99
       ]
     },
     { key: 'CLA', value: [{ regex: /CLA/, raw: '87' }] },
@@ -1139,16 +1144,16 @@ export class EncoderFOCAL {
     { key: 'CLK24', value: [{ regex: /CLK24/, raw: 'A6 87' }] },
     { key: 'CLLCD', value: [{ regex: /CLLCD/, raw: 'A7 63' }] },
     { key: 'CLMENU', value: [{ regex: /CLMENU/, raw: 'A2 6D' }] },
-    { key: 'CLP', value: [{ regex: /CLP `lbl`/, raw: 'Fn F0', params: 'lbl' }] },
+    { key: 'CLP', value: [{ regex: /CLP (".{1,14}")/, raw: 'Fn F0', params: 'lbl' }] },
     { key: 'CLRG', value: [{ regex: /CLRG/, raw: '8A' }] },
     { key: 'CLST', value: [{ regex: /CLST/, raw: '73' }] },
     {
       key: 'CLV',
       value: [
         { regex: /CLV IND ST ([XYZLT])/, raw: 'F2 D8 Ft', params: 'stk' },
-        { regex: /CLV IND `nam`/, raw: 'Fn B8', params: 'nam' },
-        { regex: /CLV IND rr/, raw: 'F2 D8 8r', params: 'reg' },
-        { regex: /CLV `nam`/, raw: 'Fn B0', params: 'nam' }
+        { regex: /CLV IND (".{1,14}")/, raw: 'Fn B8', params: 'nam' },
+        { regex: /CLV IND (\d{2})/, raw: 'F2 D8 8r', params: 'reg' },
+        { regex: /CLV (".{1,14}")/, raw: 'Fn B0', params: 'nam' }
       ]
     },
     { key: 'CLX', value: [{ regex: /CLX/, raw: '77' }] },
@@ -1175,9 +1180,9 @@ export class EncoderFOCAL {
       key: 'DIM',
       value: [
         { regex: /DIM IND ST ([XYZLT])/, raw: 'F2 EC Ft', params: 'stk' },
-        { regex: /DIM IND `nam`/, raw: 'Fn CC', params: 'nam' },
-        { regex: /DIM IND rr/, raw: 'F2 EC 8r', params: 'reg' },
-        { regex: /DIM `nam`/, raw: 'Fn C4', params: 'nam' }
+        { regex: /DIM IND (".{1,14}")/, raw: 'Fn CC', params: 'nam' },
+        { regex: /DIM IND (\d{2})/, raw: 'F2 EC 8r', params: 'reg' },
+        { regex: /DIM (".{1,14}")/, raw: 'Fn C4', params: 'nam' }
       ]
     },
     { key: 'DIM?', value: [{ regex: /DIM\?/, raw: 'A6 E7' }] },
@@ -1188,11 +1193,11 @@ export class EncoderFOCAL {
       key: 'DSE',
       value: [
         { regex: /DSE IND ST ([XYZLT])/, raw: '97 Ft', params: 'stk' },
-        { regex: /DSE IND `nam`/, raw: 'Fn 9F', params: 'nam' },
-        { regex: /DSE IND rr/, raw: '97 8r', params: 'reg' },
+        { regex: /DSE IND (".{1,14}")/, raw: 'Fn 9F', params: 'nam' },
+        { regex: /DSE IND (\d{2})/, raw: '97 8r', params: 'reg' },
         { regex: /DSE ST ([XYZLT])/, raw: '97 7t', params: 'stk' },
-        { regex: /DSE `nam`/, raw: 'Fn 97', params: 'nam' },
-        { regex: /DSE rr/, raw: '97 rr', params: 'reg' }
+        { regex: /DSE (".{1,14}")/, raw: 'Fn 97', params: 'nam' },
+        { regex: /DSE (\d{2})/, raw: '97 rr', params: 'reg' }
       ]
     },
     { key: 'EDIT', value: [{ regex: /EDIT/, raw: 'A6 E1' }] },
@@ -1200,9 +1205,9 @@ export class EncoderFOCAL {
       key: 'EDITN',
       value: [
         { regex: /EDITN IND ST ([XYZLT])/, raw: 'F2 EF Ft', params: 'stk' },
-        { regex: /EDITN IND `nam`/, raw: 'Fn CE', params: 'nam' },
-        { regex: /EDITN IND rr/, raw: 'F2 EF 8r', params: 'reg' },
-        { regex: /EDITN `nam`/, raw: 'Fn C6', params: 'nam' }
+        { regex: /EDITN IND (".{1,14}")/, raw: 'Fn CE', params: 'nam' },
+        { regex: /EDITN IND (\d{2})/, raw: 'F2 EF 8r', params: 'reg' },
+        { regex: /EDITN (".{1,14}")/, raw: 'Fn C6', params: 'nam' }
       ]
     },
     { key: 'END', value: [{ regex: /END/, raw: 'C0 00 0D' }] },
@@ -1212,9 +1217,9 @@ export class EncoderFOCAL {
         { regex: /ENG 10/, raw: 'F1 D7' },
         { regex: /ENG 11/, raw: 'F1 E7' },
         { regex: /ENG IND ST ([XYZLT])/, raw: '9E Ft', params: 'stk' },
-        { regex: /ENG IND `nam`/, raw: 'Fn DE', params: 'nam' },
-        { regex: /ENG IND rr/, raw: '9E 8r', params: 'reg' },
-        { regex: /ENG sd/, raw: '9E nn', params: 'dig' }
+        { regex: /ENG IND (".{1,14}")/, raw: 'Fn DE', params: 'nam' },
+        { regex: /ENG IND (\d{2})/, raw: '9E 8r', params: 'reg' },
+        { regex: /ENG (0[0-9])/, raw: '9E nn', params: 'dig' } //00-09
       ]
     },
     { key: 'ENTER', value: [{ regex: /ENTER/, raw: '83' }] },
@@ -1226,18 +1231,18 @@ export class EncoderFOCAL {
       key: 'FC?',
       value: [
         { regex: /FC\? IND ST ([XYZLT])/, raw: 'AD Ft', params: 'stk' },
-        { regex: /FC\? IND `nam`/, raw: 'Fn AD', params: 'nam' },
-        { regex: /FC\? IND rr/, raw: 'AD 8r', params: 'reg' },
-        { regex: /FC\? fg/, raw: 'AD rr', params: 'flg' }
+        { regex: /FC\? IND (".{1,14}")/, raw: 'Fn AD', params: 'nam' },
+        { regex: /FC\? IND (\d{2})/, raw: 'AD 8r', params: 'reg' },
+        { regex: /FC\? (\d{2})/, raw: 'AD rr', params: 'flg' } //00-99
       ]
     },
     {
       key: 'FC?C',
       value: [
         { regex: /FC\?C IND ST ([XYZLT])/, raw: 'AB Ft', params: 'stk' },
-        { regex: /FC\?C IND `nam`/, raw: 'Fn AB', params: 'nam' },
-        { regex: /FC\?C IND rr/, raw: 'AB 8r', params: 'reg' },
-        { regex: /FC\?C fg/, raw: 'AB rr', params: 'flg' }
+        { regex: /FC\?C IND (".{1,14}")/, raw: 'Fn AB', params: 'nam' },
+        { regex: /FC\?C IND (\d{2})/, raw: 'AB 8r', params: 'reg' },
+        { regex: /FC\?C (\d{2})/, raw: 'AB rr', params: 'flg' } //00-99
       ]
     },
     { key: 'FCSTX', value: [{ regex: /FCSTX/, raw: 'A0 A8' }] },
@@ -1248,9 +1253,9 @@ export class EncoderFOCAL {
         { regex: /FIX 10/, raw: 'F1 D5' },
         { regex: /FIX 11/, raw: 'F1 E5' },
         { regex: /FIX IND ST ([XYZLT])/, raw: '9C Ft', params: 'stk' },
-        { regex: /FIX IND `nam`/, raw: 'Fn DC', params: 'nam' },
-        { regex: /FIX IND rr/, raw: '9C 8r', params: 'reg' },
-        { regex: /FIX sd/, raw: '9C nn', params: 'dig' }
+        { regex: /FIX IND (".{1,14}")/, raw: 'Fn DC', params: 'nam' },
+        { regex: /FIX IND (\d{2})/, raw: '9C 8r', params: 'reg' },
+        { regex: /FIX (0[0-9])/, raw: '9C nn', params: 'dig' } //00-09
       ]
     },
     { key: 'FNRM', value: [{ regex: /FNRM/, raw: 'A6 CF' }] },
@@ -1259,18 +1264,18 @@ export class EncoderFOCAL {
       key: 'FS?',
       value: [
         { regex: /FS\? IND ST ([XYZLT])/, raw: 'AC Ft', params: 'stk' },
-        { regex: /FS\? IND `nam`/, raw: 'Fn AC', params: 'nam' },
-        { regex: /FS\? IND rr/, raw: 'AC 8r' },
-        { regex: /FS\? fg/, raw: 'AC rr', params: 'flg' }
+        { regex: /FS\? IND (".{1,14}")/, raw: 'Fn AC', params: 'nam' },
+        { regex: /FS\? IND (\d{2})/, raw: 'AC 8r' },
+        { regex: /FS\? (\d{2})/, raw: 'AC rr', params: 'flg' } //00-99
       ]
     },
     {
       key: 'FS?C',
       value: [
         { regex: /FS\?C IND ST ([XYZLT])/, raw: 'AA Ft', params: 'stk' },
-        { regex: /FS\?C IND `nam`/, raw: 'Fn AA', params: 'nam' },
-        { regex: /FS\?C IND rr/, raw: 'AA 8r' },
-        { regex: /FS\?C fg/, raw: 'AA rr', params: 'flg' }
+        { regex: /FS\?C IND (".{1,14}")/, raw: 'Fn AA', params: 'nam' },
+        { regex: /FS\?C IND (\d{2})/, raw: 'AA 8r' },
+        { regex: /FS\?C (\d{2})/, raw: 'AA rr', params: 'flg' } //00-99
       ]
     },
     { key: 'GAMMA', value: [{ regex: /GAMMA/, raw: 'A0 74' }] },
@@ -1282,11 +1287,11 @@ export class EncoderFOCAL {
       key: 'GTO',
       value: [
         { regex: /GTO IND ST ([XYZLT])/, raw: 'AE 7t', params: 'stk' },
-        { regex: /GTO IND `nam`/, raw: 'Fn AE', params: 'nam' },
-        { regex: /GTO IND rr/, raw: 'AE nn', params: 'reg' },
-        { regex: /GTO `lbl`/, raw: '1D Fn', params: 'lbl' },
-        { regex: /GTO ll/, raw: 'D0 00 nn' },
-        { regex: /GTO sl/, raw: 'Bl 00' }
+        { regex: /GTO IND (".{1,14}")/, raw: 'Fn AE', params: 'nam' },
+        { regex: /GTO IND (\d{2})/, raw: 'AE nn', params: 'reg' },
+        { regex: /GTO (".{1,14}")/, raw: '1D Fn', params: 'lbl' },
+        { regex: /GTO ((1[5-9]|[2-9][0-9]|[a-eA-J]))/, raw: 'D0 00 nn', params: 'lblno' },// 15-99,A-J,a-e
+        { regex: /GTO ((0[0-9]|1[0-4]))/, raw: 'Bl 00', params: 'lblno' } //00-14
       ]
     },
     { key: 'HEADING', value: [{ regex: /HEADING/, raw: 'A7 D1' }] },
@@ -1299,20 +1304,20 @@ export class EncoderFOCAL {
       key: 'INDEX',
       value: [
         { regex: /INDEX IND ST ([XYZLT])/, raw: 'F2 DA Ft', params: 'stk' },
-        { regex: /INDEX IND `nam`/, raw: 'Fn 8F', params: 'nam' },
-        { regex: /INDEX IND rr/, raw: 'F2 DA 8r', params: 'reg' },
-        { regex: /INDEX `nam`/, raw: 'Fn 87', params: 'nam' }
+        { regex: /INDEX IND (".{1,14}")/, raw: 'Fn 8F', params: 'nam' },
+        { regex: /INDEX IND (\d{2})/, raw: 'F2 DA 8r', params: 'reg' },
+        { regex: /INDEX (".{1,14}")/, raw: 'Fn 87', params: 'nam' }
       ]
     },
     {
       key: 'INPUT',
       value: [
         { regex: /INPUT IND ST ([XYZLT])/, raw: 'F2 EE Ft', params: 'stk' },
-        { regex: /INPUT IND `nam`/, raw: 'Fn CD', params: 'nam' },
-        { regex: /INPUT IND rr/, raw: 'F2 EE 8r', params: 'reg' },
+        { regex: /INPUT IND (".{1,14}")/, raw: 'Fn CD', params: 'nam' },
+        { regex: /INPUT IND (\d{2})/, raw: 'F2 EE 8r', params: 'reg' },
         { regex: /INPUT ST ([XYZLT])/, raw: 'F2 D0 7t', params: 'stk' },
-        { regex: /INPUT `nam`/, raw: 'Fn C5', params: 'nam' },
-        { regex: /INPUT rr/, raw: 'F2 D0 rr', params: 'reg' }
+        { regex: /INPUT (".{1,14}")/, raw: 'Fn C5', params: 'nam' },
+        { regex: /INPUT (\d{2})/, raw: 'F2 D0 rr', params: 'reg' }
       ]
     },
     { key: 'INSR', value: [{ regex: /INSR/, raw: 'A0 AA' }] },
@@ -1320,9 +1325,9 @@ export class EncoderFOCAL {
       key: 'INTEG',
       value: [
         { regex: /INTEG IND ST ([XYZLT])/, raw: 'F2 EA Ft', params: 'stk' },
-        { regex: /INTEG IND `nam`/, raw: 'Fn BE', params: 'nam' },
-        { regex: /INTEG IND rr/, raw: 'F2 EA 8r', params: 'reg' },
-        { regex: /INTEG `lbl`/, raw: 'Fn B6', params: 'lbl' }
+        { regex: /INTEG IND (".{1,14}")/, raw: 'Fn BE', params: 'nam' },
+        { regex: /INTEG IND (\d{2})/, raw: 'F2 EA 8r', params: 'reg' },
+        { regex: /INTEG (".{1,14}")/, raw: 'Fn B6', params: 'lbl' }
       ]
     },
     { key: 'INVRT', value: [{ regex: /INVRT/, raw: 'A6 CE' }] },
@@ -1331,11 +1336,11 @@ export class EncoderFOCAL {
       key: 'ISG',
       value: [
         { regex: /ISG IND ST ([XYZLT])/, raw: '96 Ft', params: 'stk' },
-        { regex: /ISG IND `nam`/, raw: 'Fn 9E', params: 'nam' },
-        { regex: /ISG IND rr/, raw: '96 8r', params: 'reg' },
+        { regex: /ISG IND (".{1,14}")/, raw: 'Fn 9E', params: 'nam' },
+        { regex: /ISG IND (\d{2})/, raw: '96 8r', params: 'reg' },
         { regex: /ISG ST ([XYZLT])/, raw: '96 7t', params: 'stk' },
-        { regex: /ISG `nam`/, raw: 'Fn 96', params: 'nam' },
-        { regex: /ISG rr/, raw: '96 rr', params: 'reg' }
+        { regex: /ISG (".{1,14}")/, raw: 'Fn 96', params: 'nam' },
+        { regex: /ISG (\d{2})/, raw: '96 rr', params: 'reg' }
       ]
     },
     { key: 'J+', value: [{ regex: /J\+/, raw: 'A6 D4' }] },
@@ -1344,9 +1349,9 @@ export class EncoderFOCAL {
     {
       key: 'LBL',
       value: [
-        { regex: /LBL `lbl`/, raw: 'C0 00 Fn 00', params: 'lbl' },
-        { regex: /LBL ll/, raw: 'CF nn' }, // 15-99,A-J,a-e
-        { regex: /LBL sl/, raw: '0l' }
+        { regex: /LBL (".{1,14}")/, raw: 'C0 00 Fn 00', params: 'lbl' },
+        { regex: /LBL ((1[5-9]|[2-9][0-9]|[a-eA-J]))/, raw: 'CF nn', params: 'lblno' }, // 15-99,A-J,a-e
+        { regex: /LBL ((0[0-9]|1[0-4]))/, raw: '0l', params: 'lblno' } // 00-14
       ]
     },
     { key: 'LCLBL', value: [{ regex: /LCLBL/, raw: 'A2 64' }] },
@@ -1363,7 +1368,7 @@ export class EncoderFOCAL {
     { key: 'MEAN', value: [{ regex: /MEAN/, raw: '7C' }] },
     { key: 'MENU', value: [{ regex: /MENU/, raw: 'A2 5E' }] },
     { key: 'MOD', value: [{ regex: /MOD/, raw: '4B' }] },
-    { key: 'MVAR', value: [{ regex: /MVAR `nam`/, raw: 'Fn 90', params: 'nam' }] },
+    { key: 'MVAR', value: [{ regex: /MVAR (".{1,14}")/, raw: 'Fn 90', params: 'nam' }] },
     { key: 'N!', value: [{ regex: /N!/, raw: '62' }] },
     { key: 'NEWMAT', value: [{ regex: /NEWMAT/, raw: 'A6 DA' }] },
     { key: 'NORM', value: [{ regex: /NORM/, raw: 'A7 5C' }] },
@@ -1379,16 +1384,16 @@ export class EncoderFOCAL {
       key: 'PGMINT',
       value: [
         { regex: /PGMINT IND ST ([XYZLT])/, raw: 'F2 E8 Ft', params: 'stk' },
-        { regex: /PGMINT IND `nam`/, raw: 'Fn BC', params: 'nam' },
-        { regex: /PGMINT IND rr/, raw: 'F2 E8 8r', params: 'reg' },
-        { regex: /PGMINT `lbl`/, raw: 'Fn B4', params: 'lbl' }
+        { regex: /PGMINT IND (".{1,14}")/, raw: 'Fn BC', params: 'nam' },
+        { regex: /PGMINT IND (\d{2})/, raw: 'F2 E8 8r', params: 'reg' },
+        { regex: /PGMINT (".{1,14}")/, raw: 'Fn B4', params: 'lbl' }
       ]
     },
     { key: 'PGMSLV', value: [
         { regex: /PGMSLV IND ST ([XYZLT])/, raw: 'F2 E9 Ft', params: 'stk' },
-        { regex: /PGMSLV IND `nam`/, raw: 'Fn BD', params: 'nam' },
-        { regex: /PGMSLV IND rr/, raw: 'F2 E9 8r', params: 'reg' },
-        { regex: /PGMSLV `lbl`/, raw: 'Fn B5', params: 'lbl' }
+        { regex: /PGMSLV IND (".{1,14}")/, raw: 'Fn BD', params: 'nam' },
+        { regex: /PGMSLV IND (\d{2})/, raw: 'F2 E9 8r', params: 'reg' },
+        { regex: /PGMSLV (".{1,14}")/, raw: 'Fn B5', params: 'lbl' }
       ]
     },
     { key: 'PI', value: [{ regex: /PI/, raw: '72' }] },
@@ -1406,9 +1411,9 @@ export class EncoderFOCAL {
       key: 'PRV',
       value: [
         { regex: /PRV IND ST ([XYZLT])/, raw: 'F2 D9 Ft', params: 'stk' },
-        { regex: /PRV IND `nam`/, raw: 'Fn B9', params: 'nam' },
-        { regex: /PRV IND rr/, raw: 'F2 D9 8r', params: 'reg' },
-        { regex: /PRV `nam`/, raw: 'Fn B1', params: 'nam' }
+        { regex: /PRV IND (".{1,14}")/, raw: 'Fn B9', params: 'nam' },
+        { regex: /PRV IND (\d{2})/, raw: 'F2 D9 8r', params: 'reg' },
+        { regex: /PRV (".{1,14}")/, raw: 'Fn B1', params: 'nam' }
       ]
     },
     { key: 'PRX', value: [{ regex: /PRX/, raw: 'A7 54' }] },
@@ -1423,34 +1428,34 @@ export class EncoderFOCAL {
       key: 'RCL',
       value: [
         { regex: /RCL IND ST ([XYZLT])/, raw: '90 Ft', params: 'stk' },
-        { regex: /RCL IND `nam`/, raw: 'Fn 99', params: 'nam' },
-        { regex: /RCL IND rr/, raw: '90 8r', params: 'reg' },
+        { regex: /RCL IND (".{1,14}")/, raw: 'Fn 99', params: 'nam' },
+        { regex: /RCL IND (\d{2})/, raw: '90 8r', params: 'reg' },
         { regex: /RCL ST ([XYZLT])/, raw: '90 7t', params: 'stk' },
-        { regex: /RCL `nam`/, raw: 'Fn 91', params: 'nam' },
-        { regex: /RCL rr/, raw: '90 rr', params: 'reg' },
-        { regex: /RCL sr/, raw: '2r' }
+        { regex: /RCL (".{1,14}")/, raw: 'Fn 91', params: 'nam' },
+        { regex: /RCL ((1[6-9]|[2-9][0-9]))/, raw: '90 rr', params: 'reg' }, // 16-99
+        { regex: /RCL ((0[0-9]|1[0-5]))/, raw: '2r' } // 00-15
       ]
     },
     {
       key: 'RCL+',
       value: [
         { regex: /RCL\+ IND ST ([XYZLT])/, raw: 'F2 D1 Ft', params: 'stk' },
-        { regex: /RCL\+ IND `nam`/, raw: 'Fn 9A', params: 'nam' },
-        { regex: /RCL\+ IND rr/, raw: 'F2 D1 8r', params: 'reg' },
+        { regex: /RCL\+ IND (".{1,14}")/, raw: 'Fn 9A', params: 'nam' },
+        { regex: /RCL\+ IND (\d{2})/, raw: 'F2 D1 8r', params: 'reg' },
         { regex: /RCL\+ ST ([XYZLT])/, raw: 'F2 D1 7t', params: 'stk' },
-        { regex: /RCL\+ `nam`/, raw: 'Fn 92', params: 'nam' },
-        { regex: /RCL\+ rr/, raw: 'F2 D1 rr', params: 'reg' }
+        { regex: /RCL\+ (".{1,14}")/, raw: 'Fn 92', params: 'nam' },
+        { regex: /RCL\+ (\d{2})/, raw: 'F2 D1 rr', params: 'reg' }
       ]
     },
     {
       key: 'RCL-',
       value: [
         { regex: /RCL- IND ST ([XYZLT])/, raw: 'F2 D2 Ft', params: 'stk' },
-        { regex: /RCL- IND `nam`/, raw: 'Fn 9B', params: 'nam' },
-        { regex: /RCL- IND rr/, raw: 'F2 D2 8r', params: 'reg' },
+        { regex: /RCL- IND (".{1,14}")/, raw: 'Fn 9B', params: 'nam' },
+        { regex: /RCL- IND (\d{2})/, raw: 'F2 D2 8r', params: 'reg' },
         { regex: /RCL- ST ([XYZLT])/, raw: 'F2 D2 7t', params: 'stk' },
-        { regex: /RCL- `nam`/, raw: 'Fn 93', params: 'nam' },
-        { regex: /RCL- rr/, raw: 'F2 D2 rr', params: 'reg' }
+        { regex: /RCL- (".{1,14}")/, raw: 'Fn 93', params: 'nam' },
+        { regex: /RCL- (\d{2})/, raw: 'F2 D2 rr', params: 'reg' }
       ]
     },
     { key: 'RCLEL', value: [{ regex: /RCLEL/, raw: 'A6 D7' }] },
@@ -1459,22 +1464,22 @@ export class EncoderFOCAL {
       key: 'RCL×',
       value: [
         { regex: /RCL× IND ST ([XYZLT])/, raw: 'F2 D3 Ft', params: 'stk' },
-        { regex: /RCL× IND `nam`/, raw: 'Fn 9C', params: 'nam' },
-        { regex: /RCL× IND rr/, raw: 'F2 D3 8r', params: 'reg' },
+        { regex: /RCL× IND (".{1,14}")/, raw: 'Fn 9C', params: 'nam' },
+        { regex: /RCL× IND (\d{2})/, raw: 'F2 D3 8r', params: 'reg' },
         { regex: /RCL× ST ([XYZLT])/, raw: 'F2 D3 7t', params: 'stk' },
-        { regex: /RCL× `nam`/, raw: 'Fn 94', params: 'nam' },
-        { regex: /RCL× rr/, raw: 'F2 D3 rr', params: 'reg' }
+        { regex: /RCL× (".{1,14}")/, raw: 'Fn 94', params: 'nam' },
+        { regex: /RCL× (\d{2})/, raw: 'F2 D3 rr', params: 'reg' }
       ]
     },
     {
       key: 'RCL÷',
       value: [
         { regex: /RCL÷ IND ST ([XYZLT])/, raw: 'F2 D4 Ft', params: 'stk' },
-        { regex: /RCL÷ IND `nam`/, raw: 'Fn 9D', params: 'nam' },
-        { regex: /RCL÷ IND rr/, raw: 'F2 D4 8r', params: 'reg' },
+        { regex: /RCL÷ IND (".{1,14}")/, raw: 'Fn 9D', params: 'nam' },
+        { regex: /RCL÷ IND (\d{2})/, raw: 'F2 D4 8r', params: 'reg' },
         { regex: /RCL÷ ST ([XYZLT])/, raw: 'F2 D4 7t', params: 'stk' },
-        { regex: /RCL÷ `nam`/, raw: 'Fn 95', params: 'nam' },
-        { regex: /RCL÷ rr/, raw: 'F2 D4 rr', params: 'reg' }
+        { regex: /RCL÷ (".{1,14}")/, raw: 'Fn 95', params: 'nam' },
+        { regex: /RCL÷ (\d{2})/, raw: 'F2 D4 rr', params: 'reg' }
       ]
     },
     { key: 'RDX,', value: [{ regex: /RDX,/, raw: 'A2 5C' }] },
@@ -1495,9 +1500,9 @@ export class EncoderFOCAL {
         { regex: /SCI 10/, raw: 'F1 D6' },
         { regex: /SCI 11/, raw: 'F1 E6' },
         { regex: /SCI IND ST ([XYZLT])/, raw: '9D Ft', params: 'stk' },
-        { regex: /SCI IND `nam`/, raw: 'Fn DD', params: 'nam' },
-        { regex: /SCI IND rr/, raw: '9D 8r', params: 'reg' },
-        { regex: /SCI sd/, raw: '9D nn', params: 'dig' }
+        { regex: /SCI IND (".{1,14}")/, raw: 'Fn DD', params: 'nam' },
+        { regex: /SCI IND (\d{2})/, raw: '9D 8r', params: 'reg' },
+        { regex: /SCI (0[0-9])/, raw: '9D nn', params: 'dig' } //00-09
       ]
     },
     { key: 'SDEV', value: [{ regex: /SDEV/, raw: '7D' }] },
@@ -1506,23 +1511,23 @@ export class EncoderFOCAL {
       key: 'SF',
       value: [
         { regex: /SF IND ST ([XYZLT])/, raw: 'A8 Ft', params: 'stk' },
-        { regex: /SF IND `nam`/, raw: 'Fn A8', params: 'nam' },
-        { regex: /SF IND rr/, raw: 'A8 8r', params: 'reg' },
-        { regex: /SF fg/, raw: 'A8 rr', params: 'flg' }
+        { regex: /SF IND (".{1,14}")/, raw: 'Fn A8', params: 'nam' },
+        { regex: /SF IND (\d{2})/, raw: 'A8 8r', params: 'reg' },
+        { regex: /SF (\d{2})/, raw: 'A8 rr', params: 'flg' } //00-99
       ]
     },
     { key: 'SIGN', value: [{ regex: /SIGN/, raw: '7A' }] },
     { key: 'SIN', value: [{ regex: /SIN/, raw: '59' }] },
     { key: 'SINH', value: [{ regex: /SINH/, raw: 'A0 61' }] },
-    { key: 'SIZE', value: [{ regex: /SIZE rr/, raw: 'F3 F7 ww ww', params: 'siz' }] },
+    { key: 'SIZE', value: [{ regex: /SIZE (\d{4})/, raw: 'F3 F7 ww ww', params: 'siz' }] },
     { key: 'SLOPE', value: [{ regex: /SLOPE/, raw: 'A0 A4' }] },
     {
       key: 'SOLVE',
       value: [
         { regex: /SOLVE IND ST ([XYZLT])/, raw: 'F2 EB Ft', params: 'stk' },
-        { regex: /SOLVE IND `nam`/, raw: 'Fn BF', params: 'nam' },
-        { regex: /SOLVE IND rr/, raw: 'F2 EB 8r', params: 'reg' },
-        { regex: /SOLVE `lbl`/, raw: 'Fn B7', params: 'lbl' }
+        { regex: /SOLVE IND (".{1,14}")/, raw: 'Fn BF', params: 'nam' },
+        { regex: /SOLVE IND (\d{2})/, raw: 'F2 EB 8r', params: 'reg' },
+        { regex: /SOLVE (".{1,14}")/, raw: 'Fn B7', params: 'lbl' }
       ]
     },
     { key: 'SQRT', value: [{ regex: /SQRT/, raw: '52' }] },
@@ -1530,34 +1535,34 @@ export class EncoderFOCAL {
       key: 'STO',
       value: [
         { regex: /STO IND ST ([XYZLT])/, raw: '91 Ft', params: 'stk' },
-        { regex: /STO IND `nam`/, raw: 'Fn 89', params: 'nam' },
-        { regex: /STO IND rr/, raw: '91 8r', params: 'reg' },
+        { regex: /STO IND (".{1,14}")/, raw: 'Fn 89', params: 'nam' },
+        { regex: /STO IND (\d{2})/, raw: '91 8r', params: 'reg' },
         { regex: /STO ST ([XYZLT])/, raw: '91 7t', params: 'stk' },
-        { regex: /STO `nam`/, raw: 'Fn 81', params: 'nam' },
-        { regex: /STO rr/, raw: '91 rr', params: 'reg' },
-        { regex: /STO sr/, raw: '3r' }
+        { regex: /STO (".{1,14}")/, raw: 'Fn 81', params: 'nam' },
+        { regex: /STO ((1[6-9]|[2-9][0-9]))/, raw: '91 rr', params: 'reg' }, // 16-99
+        { regex: /STO ((0[0-9]|1[0-5]))/, raw: '3r' } // 00-15
       ]
     },
     {
       key: 'STO+',
       value: [
         { regex: /STO\+ IND ST ([XYZLT])/, raw: '92 Ft', params: 'stk' },
-        { regex: /STO\+ IND `nam`/, raw: 'Fn 8A', params: 'nam' },
-        { regex: /STO\+ IND rr/, raw: '92 8r', params: 'reg' },
+        { regex: /STO\+ IND (".{1,14}")/, raw: 'Fn 8A', params: 'nam' },
+        { regex: /STO\+ IND (\d{2})/, raw: '92 8r', params: 'reg' },
         { regex: /STO\+ ST ([XYZLT])/, raw: '92 7t', params: 'stk' },
-        { regex: /STO\+ `nam`/, raw: 'Fn 82', params: 'nam' },
-        { regex: /STO\+ rr/, raw: '92 rr', params: 'reg' }
+        { regex: /STO\+ (".{1,14}")/, raw: 'Fn 82', params: 'nam' },
+        { regex: /STO\+ (\d{2})/, raw: '92 rr', params: 'reg' }
       ]
     },
     {
       key: 'STO-',
       value: [
         { regex: /STO- IND ST ([XYZLT])/, raw: '93 Ft', params: 'stk' },
-        { regex: /STO- IND `nam`/, raw: 'Fn 8B', params: 'nam' },
-        { regex: /STO- IND rr/, raw: '93 8r', params: 'reg' },
+        { regex: /STO- IND (".{1,14}")/, raw: 'Fn 8B', params: 'nam' },
+        { regex: /STO- IND (\d{2})/, raw: '93 8r', params: 'reg' },
         { regex: /STO- ST ([XYZLT])/, raw: '93 7t', params: 'stk' },
-        { regex: /STO- `nam`/, raw: 'Fn 83', params: 'nam' },
-        { regex: /STO- rr/, raw: '93 rr', params: 'reg' }
+        { regex: /STO- (".{1,14}")/, raw: 'Fn 83', params: 'nam' },
+        { regex: /STO- (\d{2})/, raw: '93 rr', params: 'reg' }
       ]
     },
     { key: 'STOEL', value: [{ regex: /STOEL/, raw: 'A6 D6' }] },
@@ -1567,22 +1572,22 @@ export class EncoderFOCAL {
       key: 'STO×',
       value: [
         { regex: /STO× IND ST ([XYZLT])/, raw: '94 Ft', params: 'stk' },
-        { regex: /STO× IND `nam`/, raw: 'Fn 8C', params: 'nam' },
-        { regex: /STO× IND rr/, raw: '94 8r', params: 'reg' },
+        { regex: /STO× IND (".{1,14}")/, raw: 'Fn 8C', params: 'nam' },
+        { regex: /STO× IND (\d{2})/, raw: '94 8r', params: 'reg' },
         { regex: /STO× ST ([XYZLT])/, raw: '94 7t', params: 'stk' },
-        { regex: /STO× `nam`/, raw: 'Fn 84', params: 'nam' },
-        { regex: /STO× rr/, raw: '94 rr', params: 'reg' }
+        { regex: /STO× (".{1,14}")/, raw: 'Fn 84', params: 'nam' },
+        { regex: /STO× (\d{2})/, raw: '94 rr', params: 'reg' }
       ]
     },
     {
       key: 'STO÷',
       value: [
         { regex: /STO÷ IND ST ([XYZLT])/, raw: '95 Ft', params: 'stk' },
-        { regex: /STO÷ IND `nam`/, raw: 'Fn 8D', params: 'nam' },
-        { regex: /STO÷ IND rr/, raw: '95 8r', params: 'reg' },
+        { regex: /STO÷ IND (".{1,14}")/, raw: 'Fn 8D', params: 'nam' },
+        { regex: /STO÷ IND (\d{2})/, raw: '95 8r', params: 'reg' },
         { regex: /STO÷ ST ([XYZLT])/, raw: '95 7t', params: 'stk' },
-        { regex: /STO÷ `nam`/, raw: 'Fn 85', params: 'nam' },
-        { regex: /STO÷ rr/, raw: '95 rr', params: 'reg' }
+        { regex: /STO÷ (".{1,14}")/, raw: 'Fn 85', params: 'nam' },
+        { regex: /STO÷ (\d{2})/, raw: '95 rr', params: 'reg' }
       ]
     },
     { key: 'STR?', value: [{ regex: /STR\?/, raw: 'A2 68' }] },
@@ -1594,8 +1599,8 @@ export class EncoderFOCAL {
       key: 'TONE',
       value: [
         { regex: /TONE IND ST ([XYZLT])/, raw: '9F Ft', params: 'stk' },
-        { regex: /TONE IND `nam`/, raw: 'Fn DF', params: 'nam' },
-        { regex: /TONE IND rr/, raw: '9F 8r', params: 'reg' },
+        { regex: /TONE IND (".{1,14}")/, raw: 'Fn DF', params: 'nam' },
+        { regex: /TONE IND (\d{2})/, raw: '9F 8r', params: 'reg' },
         { regex: /TONE tn/, raw: '9F rr', params: 'ton' }
       ]
     },
@@ -1606,20 +1611,20 @@ export class EncoderFOCAL {
       key: 'VARMENU',
       value: [
         { regex: /VARMENU IND ST ([XYZLT])/, raw: 'F2 F8 Ft', params: 'stk' },
-        { regex: /VARMENU IND `nam`/, raw: 'Fn C9', params: 'nam' },
-        { regex: /VARMENU IND rr/, raw: 'F2 F8 8r', params: 'reg' },
-        { regex: /VARMENU `nam`/, raw: 'Fn C1', params: 'nam' }
+        { regex: /VARMENU IND (".{1,14}")/, raw: 'Fn C9', params: 'nam' },
+        { regex: /VARMENU IND (\d{2})/, raw: 'F2 F8 8r', params: 'reg' },
+        { regex: /VARMENU (".{1,14}")/, raw: 'Fn C1', params: 'nam' }
       ]
     },
     {
       key: 'VIEW',
       value: [
         { regex: /VIEW IND ST ([XYZLT])/, raw: '98 Ft', params: 'stk' },
-        { regex: /VIEW IND `nam`/, raw: 'Fn 88', params: 'nam' },
-        { regex: /VIEW IND rr/, raw: '98 8r', params: 'reg' },
+        { regex: /VIEW IND (".{1,14}")/, raw: 'Fn 88', params: 'nam' },
+        { regex: /VIEW IND (\d{2})/, raw: '98 8r', params: 'reg' },
         { regex: /VIEW ST ([XYZLT])/, raw: '98 7t', params: 'stk' },
-        { regex: /VIEW `nam`/, raw: 'Fn 80', params: 'nam' },
-        { regex: /VIEW rr/, raw: '98 rr', params: 'reg' }
+        { regex: /VIEW (".{1,14}")/, raw: 'Fn 80', params: 'nam' },
+        { regex: /VIEW (\d{2})/, raw: '98 rr', params: 'reg' }
       ]
     },
     { key: 'WMEAN', value: [{ regex: /WMEAN/, raw: 'A0 AC' }] },
@@ -1629,11 +1634,11 @@ export class EncoderFOCAL {
       key: 'X<>',
       value: [
         { regex: /X<> IND ST ([XYZLT])/, raw: 'CE Ft', params: 'stk' },
-        { regex: /X<> IND `nam`/, raw: 'Fn 8E', params: 'nam' },
-        { regex: /X<> IND rr/, raw: 'CE 8r', params: 'reg' },
+        { regex: /X<> IND (".{1,14}")/, raw: 'Fn 8E', params: 'nam' },
+        { regex: /X<> IND (\d{2})/, raw: 'CE 8r', params: 'reg' },
         { regex: /X<> ST ([XYZLT])/, raw: 'CE 7t', params: 'stk' },
-        { regex: /X<> `nam`/, raw: 'Fn 86', params: 'nam' },
-        { regex: /X<> rr/, raw: 'CE rr', params: 'reg' }
+        { regex: /X<> (".{1,14}")/, raw: 'Fn 86', params: 'nam' },
+        { regex: /X<> (\d{2})/, raw: 'CE rr', params: 'reg' }
       ]
     },
     { key: 'X<>Y', value: [{ regex: /X<>Y/, raw: '71' }] },
@@ -1646,10 +1651,10 @@ export class EncoderFOCAL {
       key: 'XEQ',
       value: [
         { regex: /XEQ IND ST ([XYZLT])/, raw: 'AE Ft', params: 'stk' },
-        { regex: /XEQ IND `nam`/, raw: 'Fn AF', params: 'nam' },
-        { regex: /XEQ IND rr/, raw: 'AE 8r', params: 'reg' },
-        { regex: /XEQ `lbl`/, raw: '1E Fn', params: 'lbl' },
-        { regex: /XEQ ll/, raw: 'E0 00 nn' } //, { regex: /XEQ sl/, raw: 'E0 00 nn' }
+        { regex: /XEQ IND (".{1,14}")/, raw: 'Fn AF', params: 'nam' },
+        { regex: /XEQ IND (\d{2})/, raw: 'AE 8r', params: 'reg' },
+        { regex: /XEQ (".{1,14}")/, raw: '1E Fn', params: 'lbl' },
+        { regex: /XEQ ((\d{2}|[a-eA-J]))/, raw: 'E0 00 nn', params: 'lblno' } // 00-99,A-J,a-e { regex: /XEQ sl/, raw: 'E0 00 nn' }
       ]
     },
     { key: 'XOR', value: [{ regex: /XOR/, raw: 'A5 8A' }] },
@@ -1667,19 +1672,19 @@ export class EncoderFOCAL {
     { key: '[FIND]', value: [{ regex: /\[FIND\]/, raw: 'A6 EC' }] },
     { key: '[MAX]', value: [{ regex: /\[MAX\]/, raw: 'A6 EB' }] },
     { key: '[MIN]', value: [{ regex: /\[MIN\]/, raw: 'A6 EA' }] },
-    { key: '`str`', value: [{ regex: /`str`/, raw: 'Fn' }] },
+    { key: '`str`', value: [{ regex: /(".{15}")/, raw: 'Fn', params: 'str' }] }, // max length 15 !
     {
       key: 'KEY',
       value: [
         { regex: /KEY `key` GTO IND ST ([XYZLT])/, raw: 'F3 E3 kk Ft', params: 'stk' },
-        { regex: /KEY `key` GTO IND `nam`/, raw: 'Fn CB kk', params: 'nam' },
-        { regex: /KEY `key` GTO IND rr/, raw: 'F3 E3 kk 8r', params: 'reg' },
-        { regex: /KEY `key` GTO `lbl`/, raw: 'Fn C3 kk', params: 'lbl' },
+        { regex: /KEY `key` GTO IND (".{1,14}")/, raw: 'Fn CB kk', params: 'nam' },
+        { regex: /KEY `key` GTO IND (\d{2})/, raw: 'F3 E3 kk 8r', params: 'reg' },
+        { regex: /KEY `key` GTO (".{1,14}")/, raw: 'Fn C3 kk', params: 'lbl' },
         { regex: /KEY `key` GTO ll/, raw: 'F3 E3 kk rr' }, // { regex: /KEY `key` GTO sl/, raw: 'F3 E3 kk rr' },
         { regex: /KEY `key` XEQ IND ST ([XYZLT])/, raw: 'F3 E2 kk Ft', params: 'stk' },
-        { regex: /KEY `key` XEQ IND `nam`/, raw: 'Fn CA kk', params: 'nam' },
-        { regex: /KEY `key` XEQ IND rr/, raw: 'F3 E2 kk 8r', params: 'reg' },
-        { regex: /KEY `key` XEQ `lbl`/, raw: 'Fn C2 kk', params: 'lbl' },
+        { regex: /KEY `key` XEQ IND (".{1,14}")/, raw: 'Fn CA kk', params: 'nam' },
+        { regex: /KEY `key` XEQ IND (\d{2})/, raw: 'F3 E2 kk 8r', params: 'reg' },
+        { regex: /KEY `key` XEQ (".{1,14}")/, raw: 'Fn C2 kk', params: 'lbl' },
         { regex: /KEY `key` XEQ ll/, raw: 'F3 E2 kk rr' } //, { regex: /KEY `key` XEQ sl/, raw: 'F3 E2 kk rr' }
       ]
     },
@@ -1693,9 +1698,9 @@ export class EncoderFOCAL {
       key: 'ΣREG',
       value: [
         { regex: /ΣREG IND ST ([XYZLT])/, raw: '99 Ft', params: 'stk' },
-        { regex: /ΣREG IND `nam`/, raw: 'Fn DB', params: 'nam' },
-        { regex: /ΣREG IND rr/, raw: '99 8r', params: 'reg' },
-        { regex: /ΣREG rr/, raw: '99 rr', params: 'reg' }
+        { regex: /ΣREG IND (".{1,14}")/, raw: 'Fn DB', params: 'nam' },
+        { regex: /ΣREG IND (\d{2})/, raw: '99 8r', params: 'reg' },
+        { regex: /ΣREG (\d{2})/, raw: '99 rr', params: 'reg' }
       ]
     },
     { key: 'ΣREG?', value: [{ regex: /ΣREG\?/, raw: 'A6 78' }] },
@@ -1711,7 +1716,7 @@ export class EncoderFOCAL {
     { key: '→RAD', value: [{ regex: /→RAD/, raw: '6A' }] },
     { key: '→REC', value: [{ regex: /→REC/, raw: '4E' }] },
     { key: '↓', value: [{ regex: /↓/, raw: 'A6 DF' }] },
-    { key: '⊢`str`', value: [{ regex: /⊢`str`/, raw: 'Fn 7F' }] }
+    { key: '⊢`str`', value: [{ regex: /⊢(".{14}")/, raw: 'Fn 7F', params: 'str' }] } // max. length 14
   ];
   // #endregion
 }
