@@ -47,7 +47,7 @@ export class RpnParser {
         }
 
         if (program) {
-          let rawLine = this.parseLine_old(docLineIndex, lineText);
+          let rawLine = this.parseLine(docLineIndex, lineText);
 
           // no parser error ...
           if (rawLine.error === undefined) {
@@ -67,7 +67,7 @@ export class RpnParser {
     }
   }
 
-  parseLine(docLineIndex: number, line: string): RawLine {
+  parseLine_new(docLineIndex: number, line: string): RawLine {
     let progErrorText: string | undefined;
     let rawLine = new RawLine();
 
@@ -112,14 +112,15 @@ export class RpnParser {
         const patterns = EncoderFOCAL.rpnMap2.get(rawLine.token);
 
         if (patterns) {
+          let matched = false;
           //
           for (let i = 0; i < patterns.length; i++) {
             const pattern = patterns[i];
-            
+
             //match ?
             let match = rawLine.code.match(pattern.regex);
             if (match) {
-              
+              matched = true;
               if (pattern.params) {
                 const params = pattern.params.split(",");
                 // assign params like regex named groups
@@ -127,19 +128,59 @@ export class RpnParser {
                   const param = params[p];
                   let k = p + 1;
                   switch (true) {
-                  
-                  
+                    case /csk/.test(param):
+                      rawLine.params.csk = match[k];
+                      rawLine.params.cskno = parseInt(match[k]);
+                      break;
+                    case /dig/.test(param):
+                      rawLine.params.dig = match[k];
+                      rawLine.params.digno = parseInt(match[k]);
+                      break;
+                    case /flg/.test(param):
+                      rawLine.params.flg = match[k];
+                      rawLine.params.flgno = parseInt(match[k]);
+                      break;
+                    case /lbl/.test(param):
+                      rawLine.params.lbl = match[k];
+                      break;
+                    case /lblno/.test(param):
+                      rawLine.params.lblno = parseInt(match[k]);
+                      break;
+                    case /nam/.test(param):
+                      rawLine.params.nam = match[k];
+                      break;
+                    case /reg/.test(param):
+                      rawLine.params.reg = match[k];
+                      rawLine.params.regno = parseInt(match[k]);
+                      break;
+                    case /siz/.test(param):
+                      rawLine.params.siz = match[k];
+                      rawLine.params.sizno = parseInt(match[k]);
+                      break;
+                    case /stk/.test(param):
+                      rawLine.params.stk = match[k];
+                      break;
+                    case /ton/.test(param):
+                      rawLine.params.ton = match[k];
+                      rawLine.params.tonno = parseInt(match[k]);
+                      break;
                   }
                 }
               }
 
+              rawLine.raw = pattern.raw;
+
             }
 
+
+          }
+
+          if (!matched) {
+            rawLine.error = new CodeError(docLineIndex, -1, line, 'unvalid command');
           }
         }
-        
       }
-      
+
       //#endregion
 
       //#region Checks ...
@@ -183,8 +224,7 @@ export class RpnParser {
     return rawLine;
   }
 
-  
-  parseLine_old(docLineIndex: number, line: string): RawLine {
+  parseLine(docLineIndex: number, line: string): RawLine {
     let progErrorText: string | undefined;
     let rawLine = new RawLine();
 
@@ -318,8 +358,10 @@ export class RpnParser {
     // Comment //|@|#...
     let match = line.match(/"/);
     if (match) {
+      // lines with strings and comment ...
       line = line.replace(/(".*")\s*(\/\/|@|#).*$/, "$1");
     } else {
+      // all other lines ...
       line = line.replace(/(\/\/|@|#).*$/, "");
 
       // Replace too long spaces (?<!".*)\s{2,} , but not in strings
