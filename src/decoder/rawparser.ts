@@ -75,8 +75,8 @@ export class RawParser {
 
         // create new line
         const rpnLine = new RpnLine();
-        rpnLine.raw = this.number.trim();
-        rpnLine.normCode = "`num`";
+        rpnLine.docRaw = this.number.trim();
+        rpnLine.workCode = "`num`";
         rpnLine.params.num = this.number.trim();
 
         // collect rawLines
@@ -87,7 +87,7 @@ export class RawParser {
 
       // create new line
       const rpnLine = new RpnLine();
-      rpnLine.raw = this.number;
+      rpnLine.docRaw = this.number;
       rpnLine.error = new CodeError(-1, index, b0 + " ...", "Unknown byte sequence for number");
       rpnLine.params.num = this.number.trim();
 
@@ -166,8 +166,8 @@ export class RawParser {
             hex = hex.trim();
 
             // fill RpnLine
-            rpnLine.raw = hex;
-            rpnLine.normCode = pattern.rpn;
+            rpnLine.docRaw = hex;
+            rpnLine.workCode = pattern.rpn;
 
             // collect rawLines
             this.pushRpnLine(rpnLine);
@@ -181,14 +181,14 @@ export class RawParser {
 
         // no match, then error ...
         if (!matched) {
-          rpnLine.raw = b0;
+          rpnLine.docRaw = b0;
           rpnLine.error = new CodeError(-1, index, b0 + " ...", "Unknown byte sequence");
           this.pushRpnLine(rpnLine);
         }
       }
     } else {
       // unknown nibble
-      rpnLine.raw = hex;
+      rpnLine.docRaw = hex;
       rpnLine.error = new CodeError(-1, index, b0 + " ...", "Unknown byte sequence");
       this.pushRpnLine(rpnLine);
     }
@@ -377,7 +377,7 @@ export class RawParser {
     rpnLine.codeLineNo = this.codeLineNo;
 
     if (this.debug > 1) {
-      console.log("-> " + rpnLine.normCode);
+      console.log("-> " + rpnLine.workCode);
     }
 
     this.programs[0].addLine(rpnLine);

@@ -5,7 +5,9 @@ import { Params } from '../common/params';
 export class RawLine {
   codeLineNo = 0;
   docLineIndex = -1;
-  code = '';
+
+  /** original code from the document */
+  docCode = '';
 
   params = new Params();
 
@@ -13,13 +15,15 @@ export class RawLine {
   raw?: string;
   error?: CodeError;
 
-  private _normCode = '';
-  set normCode(nC: string) {
-    this._normCode = nC;
-    this.tokens = this._normCode.split(' ');
+  private _workCode = '';
+
+  /** working code */
+  set workCode(nC: string) {
+    this._workCode = nC;
+    this.tokens = this._workCode.split(' ');
   }
-  get normCode(): string {
-    return this._normCode;
+  get workCode(): string {
+    return this._workCode;
   }
 
   // get/set

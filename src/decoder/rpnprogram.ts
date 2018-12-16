@@ -36,7 +36,7 @@ export class RpnProgram {
     let rawAll = '';
 
     this.rpnLines.forEach(rpnLine => {
-      rawAll += (useLineNumbers ?  (rpnLine.codeLineNo < 10 ? '0' + rpnLine.codeLineNo : rpnLine.codeLineNo) + ': ' : '') + rpnLine.raw + eol;
+      rawAll += (useLineNumbers ?  (rpnLine.codeLineNo < 10 ? '0' + rpnLine.codeLineNo : rpnLine.codeLineNo) + ': ' : '') + rpnLine.docRaw + eol;
     });
 
     return rawAll.trim();
@@ -46,7 +46,7 @@ export class RpnProgram {
     let rpnAll = '';
 
     this.rpnLines.forEach(rpnLine => {
-      rpnAll += (useLineNumbers ? (rpnLine.codeLineNo < 10 ? '0' + rpnLine.codeLineNo : rpnLine.codeLineNo) + ' ' : '') + rpnLine.normCode + eol;
+      rpnAll += (useLineNumbers ? (rpnLine.codeLineNo < 10 ? '0' + rpnLine.codeLineNo : rpnLine.codeLineNo) + ' ' : '') + rpnLine.workCode + eol;
     });
     
     return rpnAll.trim();

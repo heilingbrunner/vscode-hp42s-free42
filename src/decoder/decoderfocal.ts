@@ -37,53 +37,53 @@ export class DecoderFOCAL {
 
   static toRpn(rpnLine: RpnLine) {
 
-    if (rpnLine.normCode) {
-      if (rpnLine.params.stk && /`stk`/.test(rpnLine.normCode)) {
+    if (rpnLine.workCode) {
+      if (rpnLine.params.stk && /`stk`/.test(rpnLine.workCode)) {
         this.replaceStack('`stk`', rpnLine);
       }
 
-      if (rpnLine.params.num && /`num`/.test(rpnLine.normCode)) {
+      if (rpnLine.params.num && /`num`/.test(rpnLine.workCode)) {
         this.replaceNumber('`num`', rpnLine);
       }
 
-      if (rpnLine.params.key && /`key`/.test(rpnLine.normCode)) {
+      if (rpnLine.params.key && /`key`/.test(rpnLine.workCode)) {
         this.replaceKey('`key`', rpnLine);
       }
 
       // numbers
-      if (rpnLine.params.lblno !== undefined && /sl/.test(rpnLine.normCode)) {
+      if (rpnLine.params.lblno !== undefined && /sl/.test(rpnLine.workCode)) {
         this.replaceLabelNo('sl', rpnLine);
-      } else if (rpnLine.params.lblno !== undefined && /ll/.test(rpnLine.normCode)) {
+      } else if (rpnLine.params.lblno !== undefined && /ll/.test(rpnLine.workCode)) {
         this.replaceLabelNo('ll', rpnLine);
       }
       //
-      else if (rpnLine.params.reg !== undefined && /sr/.test(rpnLine.normCode)) {
+      else if (rpnLine.params.reg !== undefined && /sr/.test(rpnLine.workCode)) {
         this.replaceRegister('sr', rpnLine);
-      } else if (rpnLine.params.reg !== undefined && /rr/.test(rpnLine.normCode)) {
+      } else if (rpnLine.params.reg !== undefined && /rr/.test(rpnLine.workCode)) {
         this.replaceRegister('rr', rpnLine);
       }
       // numbers
-      else if (rpnLine.params.flg !== undefined && /fl/.test(rpnLine.normCode)) {
+      else if (rpnLine.params.flg !== undefined && /fl/.test(rpnLine.workCode)) {
         this.replaceFlag('fl', rpnLine);
-      } else if (rpnLine.params.siz !== undefined && /ss ss/.test(rpnLine.normCode)) {
+      } else if (rpnLine.params.siz !== undefined && /ss ss/.test(rpnLine.workCode)) {
         this.replaceSize('ss ss', rpnLine);
-      } else if (rpnLine.params.ton !== undefined && /tn/.test(rpnLine.normCode)) {
+      } else if (rpnLine.params.ton !== undefined && /tn/.test(rpnLine.workCode)) {
         this.replaceTone('tn', rpnLine);
-      } else if (rpnLine.params.dig !== undefined && /sd/.test(rpnLine.normCode)) {
+      } else if (rpnLine.params.dig !== undefined && /sd/.test(rpnLine.workCode)) {
         this.replaceDigits('sd', rpnLine);
-      } else if (rpnLine.params.csk !== undefined && /csk/.test(rpnLine.normCode)) {
+      } else if (rpnLine.params.csk !== undefined && /csk/.test(rpnLine.workCode)) {
         this.replaceCustomKey('csk', rpnLine);
       }
 
-      if (rpnLine.params.lbl && /`lbl`/.test(rpnLine.normCode)) {
+      if (rpnLine.params.lbl && /`lbl`/.test(rpnLine.workCode)) {
         this.replaceLabel('`lbl`', rpnLine);
       }
 
-      if (rpnLine.params.str && /`str`/.test(rpnLine.normCode)) {
+      if (rpnLine.params.str && /`str`/.test(rpnLine.workCode)) {
         this.replaceString('`str`', rpnLine);
       }
 
-      if (rpnLine.params.nam && /`nam`/.test(rpnLine.normCode)) {
+      if (rpnLine.params.nam && /`nam`/.test(rpnLine.workCode)) {
         this.replaceName('`nam`', rpnLine);
       }
     }
@@ -94,36 +94,36 @@ export class DecoderFOCAL {
   //#region
 
   static replaceLabel(replace: string, rpnLine: RpnLine) {
-    if (rpnLine.normCode) {
+    if (rpnLine.workCode) {
       let lbl = this.convertRawToString(rpnLine.params.lbl);
-      rpnLine.normCode = rpnLine.normCode.replace(replace, '"' + lbl + '"');
+      rpnLine.workCode = rpnLine.workCode.replace(replace, '"' + lbl + '"');
     }
   }
 
   static replaceString(replace: string, rpnLine: RpnLine) {
-    if (rpnLine.normCode) {
+    if (rpnLine.workCode) {
       let str = this.convertRawToString(rpnLine.params.str);
-      rpnLine.normCode = rpnLine.normCode.replace(replace, '"' + str + '"');
+      rpnLine.workCode = rpnLine.workCode.replace(replace, '"' + str + '"');
     }
   }
 
   static replaceName(replace: string, rpnLine: RpnLine) {
-    if (rpnLine.normCode) {
+    if (rpnLine.workCode) {
       let nam = this.convertRawToString(rpnLine.params.nam);
-      rpnLine.normCode = rpnLine.normCode.replace(replace, '"' + nam + '"');
+      rpnLine.workCode = rpnLine.workCode.replace(replace, '"' + nam + '"');
     }
   }
 
   static replaceNumber(replace: string, rpnLine: RpnLine) {
-    if (rpnLine.normCode) {
+    if (rpnLine.workCode) {
       let number = this.convertRawToNumber(rpnLine.params.num);
-      rpnLine.normCode = rpnLine.normCode.replace(replace, number);
+      rpnLine.workCode = rpnLine.workCode.replace(replace, number);
     }
   }
 
   static replaceCustomKey(replace: string, rpnLine: RpnLine) {
-    if (rpnLine.normCode) {
-      rpnLine.normCode = rpnLine.normCode.replace(replace, '' + (rpnLine.params.cskno !== undefined ?
+    if (rpnLine.workCode) {
+      rpnLine.workCode = rpnLine.workCode.replace(replace, '' + (rpnLine.params.cskno !== undefined ?
         (rpnLine.params.cskno > 9 ? '' + rpnLine.params.cskno : '0' + rpnLine.params.cskno)
       : '??'));
     }
@@ -135,7 +135,7 @@ export class DecoderFOCAL {
     // ... J   ... 6F dec:111
     // ... a   ... 7B dec:123  char:97
     // ... e   ... 7F dec:127
-    if (rpnLine.normCode) {
+    if (rpnLine.workCode) {
       let number = '';
 
       if (rpnLine.params.lblno !== undefined) {
@@ -156,61 +156,61 @@ export class DecoderFOCAL {
         }
       }
 
-      rpnLine.normCode = rpnLine.normCode.replace(replace, number);
+      rpnLine.workCode = rpnLine.workCode.replace(replace, number);
     }
   }
 
   static replaceRegister(replace: string, rpnLine: RpnLine) {
-    if (rpnLine.normCode) {
+    if (rpnLine.workCode) {
       let number =
         rpnLine.params.regno !== undefined
           ? rpnLine.params.regno > 9
             ? '' + rpnLine.params.regno
             : '0' + rpnLine.params.regno
           : '??';
-      rpnLine.normCode = rpnLine.normCode.replace(replace, number);
+      rpnLine.workCode = rpnLine.workCode.replace(replace, number);
     }
   }
 
   static replaceFlag(replace: string, rpnLine: RpnLine) {
-    if (rpnLine.normCode) {
+    if (rpnLine.workCode) {
       let number =
         rpnLine.params.flgno !== undefined
           ? rpnLine.params.flgno > 9
             ? '' + rpnLine.params.flgno
             : '0' + rpnLine.params.flgno
           : '??';
-      rpnLine.normCode = rpnLine.normCode.replace(replace, number);
+      rpnLine.workCode = rpnLine.workCode.replace(replace, number);
     }
   }
 
   static replaceStack(replace: string, rpnLine: RpnLine) {
-    if (rpnLine.normCode) {
-      rpnLine.normCode = rpnLine.normCode.replace(replace, '' + rpnLine.params.stk);
+    if (rpnLine.workCode) {
+      rpnLine.workCode = rpnLine.workCode.replace(replace, '' + rpnLine.params.stk);
     }
   }
 
   static replaceKey(replace: string, rpnLine: RpnLine) {
-    if (rpnLine.normCode) {
-      rpnLine.normCode = rpnLine.normCode.replace(replace, '' + rpnLine.params.keyno);
+    if (rpnLine.workCode) {
+      rpnLine.workCode = rpnLine.workCode.replace(replace, '' + rpnLine.params.keyno);
     }
   }
 
   static replaceSize(replace: string, rpnLine: RpnLine) {
-    if (rpnLine.normCode) {
-      rpnLine.normCode = rpnLine.normCode.replace(replace, '' + rpnLine.params.sizno);
+    if (rpnLine.workCode) {
+      rpnLine.workCode = rpnLine.workCode.replace(replace, '' + rpnLine.params.sizno);
     }
   }
 
   static replaceTone(replace: string, rpnLine: RpnLine) {
-    if (rpnLine.normCode) {
-      rpnLine.normCode = rpnLine.normCode.replace(replace, '' + rpnLine.params.tonno); // 0-9
+    if (rpnLine.workCode) {
+      rpnLine.workCode = rpnLine.workCode.replace(replace, '' + rpnLine.params.tonno); // 0-9
     }
   }
 
   static replaceDigits(replace: string, rpnLine: RpnLine) {
-    if (rpnLine.normCode) {
-      rpnLine.normCode = rpnLine.normCode.replace(replace, '' + rpnLine.params.dig); // 00-09
+    if (rpnLine.workCode) {
+      rpnLine.workCode = rpnLine.workCode.replace(replace, '' + rpnLine.params.dig); // 00-09
     }
   }
 

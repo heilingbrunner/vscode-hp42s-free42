@@ -42,11 +42,204 @@ export class EncoderFOCAL {
     }
   }
 
+
+
+  static toRaw2(rawLine: RawLine, languageId: string) {
+    let progErrorText: string | undefined;
+    let languageIdFromCode: string = '';
+
+    if (rawLine.workCode !== undefined) {
+      // free42 commands: ACCEL|LOCAT|HEADING|ADATE|ATIME|ATIME24|CLK12|CLK24|DATE|DATE+|DDAYS|DMY|DOW|MDY|TIME
+      languageIdFromCode = EncoderFOCAL.getLanguageIdFromCode(rawLine, languageId);
+
+      if (languageId !== languageIdFromCode) {
+        progErrorText = "free42 command '" + rawLine.token + "' in hp42s program";
+      }
+
+      if (progErrorText === undefined) {
+        if (rawLine.tokenLength === 1) {
+          //#region 1 Token
+
+          
+          if (
+            rawLine.params.str &&
+            rawLine.workCode.match(/`str`/)
+          ) {
+            // is it a string ...
+            rawLine.raw = EncoderFOCAL.insertStringInRaw(rawLine.raw, rawLine.params.str);
+          } else if (
+            rawLine.params.num &&
+            rawLine.workCode.match(/`num`/)
+          ) {
+            // is it a simple number ...
+            rawLine.raw = EncoderFOCAL.convertNumberToRaw(rawLine.params.num);
+            //useless: if (raw === undefined) {..}
+          } else if (
+            rawLine.params.num === undefined &&
+            rawLine.params.str !== undefined &&
+            rawLine.token
+          ) {
+            // is it a single "fixed" opcode ...
+          }
+
+          if (rawLine.raw === undefined) {
+            progErrorText = "Unknown '" + rawLine.docCode + "'";
+          }
+
+          // Some error ...
+          if (progErrorText !== undefined) {
+            rawLine.error = new CodeError(
+              rawLine.docLineIndex,
+              rawLine.codeLineNo,
+              rawLine.docCode,
+              String(progErrorText)
+            );
+          }
+
+          //#endregion
+        } else {
+          //#region n Tokens
+
+          // is it a key ...
+          // KEY `key` GTO IND `nam` - Part 1
+          if (rawLine.params.key) {
+            rawLine.raw = EncoderFOCAL.insertNumberInRaw(rawLine.raw, rawLine.params.key);
+          }
+
+          // is it a string ...
+          // KEY `key` GTO IND `nam` - Part 2
+          // ASSIGN `nam` TO `csk` - Part 1
+          if (rawLine.params.nam) {
+            rawLine.raw = EncoderFOCAL.insertStringInRaw(rawLine.raw, rawLine.params.nam);
+          }
+
+          // is it a custom key, raw must already exist
+          // ASSIGN `nam` TO `csk` - Part 2
+          if (rawLine.params.csk) {
+            rawLine.raw = EncoderFOCAL.insertNumberInRaw(rawLine.raw, rawLine.params.csk);
+          }
+
+          // is it a global label ...
+          if (rawLine.params.lbl) {
+            rawLine.raw = EncoderFOCAL.insertStringInRaw(rawLine.raw, rawLine.params.lbl);
+          }
+
+          // is it a tone ...
+          if (rawLine.params.ton && rawLine.workCode.match(/tn/)) {
+            rawLine.raw = EncoderFOCAL.insertNumberInRaw(rawLine.raw, rawLine.params.ton);
+          }
+
+          // is it a local char label A-J,a-e coded as number ......
+          if (rawLine.params.clb && rawLine.workCode.match(/(ll)/)) {
+            if (rawLine.raw === undefined && EncoderFOCAL.rpnMap.has(rawLine.workCode)) {
+              rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.workCode);
+            }
+            if (rawLine.raw !== undefined && progErrorText === undefined) {
+              rawLine.raw = EncoderFOCAL.insertNumberInRaw(rawLine.raw, rawLine.params.clb);
+            }
+            if (rawLine.raw === undefined) {
+              progErrorText = "'" + rawLine.params.clb + "' in '" + rawLine.docCode + "'";
+            }
+          }
+
+          // flags
+          if (rawLine.params.flg && rawLine.workCode.match(/(rr)/)) {
+            if (rawLine.raw === undefined && EncoderFOCAL.rpnMap.has(rawLine.workCode)) {
+              rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.workCode);
+            }
+            if (rawLine.raw !== undefined && progErrorText === undefined) {
+              rawLine.raw = EncoderFOCAL.insertNumberInRaw(rawLine.raw, rawLine.params.flg);
+            }
+            if (rawLine.raw === undefined) {
+              progErrorText = "'" + rawLine.params.flg + "' in '" + rawLine.docCode + "'";
+            }
+          }
+
+          // is it a register, number labels, digits, local number label 15-99 ......
+          if (rawLine.params.num && rawLine.workCode.match(/(sd|sl|sr|ll|nn|rr)/)) {
+            if (rawLine.raw === undefined && EncoderFOCAL.rpnMap.has(rawLine.workCode)) {
+              rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.workCode);
+            }
+            if (rawLine.raw !== undefined && progErrorText === undefined) {
+              rawLine.raw = EncoderFOCAL.insertNumberInRaw(rawLine.raw, rawLine.params.num);
+            }
+            if (rawLine.raw === undefined) {
+              progErrorText = "'" + rawLine.params.num + "' in '" + rawLine.docCode + "'";
+            }
+          }
+
+          // 10 or 11 digits
+          if (rawLine.workCode.match(/(ENG|FIX|SCI) (10|11)/)) {
+            if (rawLine.raw === undefined && EncoderFOCAL.rpnMap.has(rawLine.workCode)) {
+              rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.workCode);
+            }
+            if (rawLine.raw === undefined) {
+              progErrorText = "'" + rawLine.docCode + "'";
+            }
+          }
+
+          // is it a register/indirect count of digit/flag ...
+          if (rawLine.params.num && rawLine.workCode.match(/rr/)) {
+            if (rawLine.raw === undefined && EncoderFOCAL.rpnMap.has(rawLine.workCode)) {
+              rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.workCode);
+            }
+            if (rawLine.raw !== undefined && progErrorText === undefined) {
+              rawLine.raw = EncoderFOCAL.insertNumberInRaw(rawLine.raw, rawLine.params.num);
+            }
+            if (rawLine.raw === undefined) {
+              progErrorText = "'" + rawLine.params.num + "' in '" + rawLine.docCode + "'";
+            }
+          }
+
+          // is it a stack ...
+          if (rawLine.params.stk && rawLine.workCode.match(/`stk`/)) {
+            if (rawLine.raw === undefined && EncoderFOCAL.rpnMap.has(rawLine.workCode)) {
+              rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.workCode);
+            }
+            if (rawLine.raw !== undefined && progErrorText === undefined) {
+              const int = EncoderFOCAL.stackMap.get(rawLine.params.stk);
+              rawLine.raw = EncoderFOCAL.insertNumberInRaw(rawLine.raw, String(int));
+            }
+            if (rawLine.raw === undefined) {
+              progErrorText = "'" + rawLine.params.stk + "' in '" + rawLine.docCode + "'";
+            }
+          }
+
+          if (rawLine.raw === undefined && progErrorText === undefined) {
+            progErrorText = "'" + rawLine.docCode + "' is unvalid";
+          }
+
+          if (progErrorText !== undefined) {
+            rawLine.error = new CodeError(
+              rawLine.docLineIndex,
+              rawLine.codeLineNo,
+              rawLine.docCode,
+              String(progErrorText)
+            );
+          }
+
+          //#endregion
+        }
+      } else {
+        // wrong extension, free42 commands in hp42s file
+        rawLine.error = new CodeError(rawLine.docLineIndex, rawLine.codeLineNo, rawLine.docCode, String(progErrorText));
+      }
+    }
+  }
+
+
+
+
+
+
+
+// --------------------------------------------------- old ----------------------------------
+
   static toRaw(rawLine: RawLine, languageId: string) {
     let progErrorText: string | undefined;
     let languageIdFromCode: string = '';
 
-    if (rawLine.normCode !== undefined) {
+    if (rawLine.workCode !== undefined) {
       // free42 commands: ACCEL|LOCAT|HEADING|ADATE|ATIME|ATIME24|CLK12|CLK24|DATE|DATE+|DDAYS|DMY|DOW|MDY|TIME
       languageIdFromCode = EncoderFOCAL.getLanguageIdFromCode(rawLine, languageId);
 
@@ -63,16 +256,16 @@ export class EncoderFOCAL {
             rawLine.raw === undefined &&
             progErrorText === undefined &&
             rawLine.params.str &&
-            rawLine.normCode.match(/`str`/)
+            rawLine.workCode.match(/`str`/)
           ) {
-            if (EncoderFOCAL.rpnMap.has(rawLine.normCode)) {
-              rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.normCode);
+            if (EncoderFOCAL.rpnMap.has(rawLine.workCode)) {
+              rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.workCode);
               if (rawLine.raw !== undefined) {
                 rawLine.raw = EncoderFOCAL.insertStringInRaw(rawLine.raw, rawLine.params.str);
               }
             }
             if (rawLine.raw === undefined) {
-              progErrorText = "'" + rawLine.params.str + "' in '" + rawLine.code + "' is unvalid";
+              progErrorText = "'" + rawLine.params.str + "' in '" + rawLine.docCode + "' is unvalid";
             }
           }
 
@@ -81,7 +274,7 @@ export class EncoderFOCAL {
             rawLine.raw === undefined &&
             progErrorText === undefined &&
             rawLine.params.num &&
-            rawLine.normCode.match(/`num`/)
+            rawLine.workCode.match(/`num`/)
           ) {
             rawLine.raw = EncoderFOCAL.convertNumberToRaw(rawLine.params.num);
             //useless: if (raw === undefined) {..}
@@ -92,21 +285,21 @@ export class EncoderFOCAL {
             rawLine.raw === undefined &&
             progErrorText === undefined &&
             rawLine.token &&
-            EncoderFOCAL.rpnMap.has(rawLine.normCode)
+            EncoderFOCAL.rpnMap.has(rawLine.workCode)
           ) {
-            rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.normCode);
+            rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.workCode);
             //useless: if (raw === undefined) {..}
           }
 
           if (rawLine.raw === undefined && progErrorText === undefined) {
-            progErrorText = "Unknown '" + rawLine.code + "'";
+            progErrorText = "Unknown '" + rawLine.docCode + "'";
           }
 
           if (progErrorText !== undefined) {
             rawLine.error = new CodeError(
               rawLine.docLineIndex,
               rawLine.codeLineNo,
-              rawLine.code,
+              rawLine.docCode,
               String(progErrorText)
             );
           }
@@ -117,155 +310,155 @@ export class EncoderFOCAL {
 
           // is it a key ...
           // KEY `key` GTO IND `nam` - Part 1
-          if (rawLine.params.key && rawLine.normCode.match(/`key`/)) {
-            if (rawLine.raw === undefined && EncoderFOCAL.rpnMap.has(rawLine.normCode)) {
-              rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.normCode);
+          if (rawLine.params.key && rawLine.workCode.match(/`key`/)) {
+            if (rawLine.raw === undefined && EncoderFOCAL.rpnMap.has(rawLine.workCode)) {
+              rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.workCode);
             }
             if (rawLine.raw !== undefined && progErrorText === undefined) {
               rawLine.raw = EncoderFOCAL.insertNumberInRaw(rawLine.raw, rawLine.params.key);
             }
             if (rawLine.raw === undefined) {
-              progErrorText = "'" + rawLine.params.key + "' in '" + rawLine.code + "'";
+              progErrorText = "'" + rawLine.params.key + "' in '" + rawLine.docCode + "'";
             }
           }
 
           // is it a string ...
           // KEY `key` GTO IND `nam` - Part 2
           // ASSIGN `nam` TO `csk` - Part 1
-          if (rawLine.params.nam && rawLine.normCode.match(/`nam`/)) {
-            if (rawLine.raw === undefined && EncoderFOCAL.rpnMap.has(rawLine.normCode)) {
-              rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.normCode);
+          if (rawLine.params.nam && rawLine.workCode.match(/`nam`/)) {
+            if (rawLine.raw === undefined && EncoderFOCAL.rpnMap.has(rawLine.workCode)) {
+              rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.workCode);
             }
             if (rawLine.raw !== undefined && progErrorText === undefined) {
               rawLine.raw = EncoderFOCAL.insertStringInRaw(rawLine.raw, rawLine.params.nam);
             }
             if (rawLine.raw === undefined) {
-              progErrorText = "'" + rawLine.params.nam + "' in '" + rawLine.code + "'";
+              progErrorText = "'" + rawLine.params.nam + "' in '" + rawLine.docCode + "'";
             }
           }
 
           // is it a custom key, raw must already exist
           // ASSIGN `nam` TO `csk` - Part 2
-          if (rawLine.params.csk && rawLine.normCode.match(/`csk`/)) {
+          if (rawLine.params.csk && rawLine.workCode.match(/`csk`/)) {
             if (rawLine.raw !== undefined && progErrorText === undefined) {
               rawLine.raw = EncoderFOCAL.insertNumberInRaw(rawLine.raw, rawLine.params.csk);
             }
             if (rawLine.raw === undefined) {
-              progErrorText = "'" + rawLine.params.csk + "' in '" + rawLine.code + "'";
+              progErrorText = "'" + rawLine.params.csk + "' in '" + rawLine.docCode + "'";
             }
           }
 
           // is it a global label ...
-          if (rawLine.params.lbl && rawLine.normCode.match(/`lbl`/)) {
-            if (rawLine.raw === undefined && EncoderFOCAL.rpnMap.has(rawLine.normCode)) {
-              rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.normCode);
+          if (rawLine.params.lbl && rawLine.workCode.match(/`lbl`/)) {
+            if (rawLine.raw === undefined && EncoderFOCAL.rpnMap.has(rawLine.workCode)) {
+              rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.workCode);
             }
             if (rawLine.raw !== undefined && progErrorText === undefined) {
               rawLine.raw = EncoderFOCAL.insertStringInRaw(rawLine.raw, rawLine.params.lbl);
             }
             if (rawLine.raw === undefined) {
-              progErrorText = "'" + rawLine.params.lbl + "' in '" + rawLine.code + "'";
+              progErrorText = "'" + rawLine.params.lbl + "' in '" + rawLine.docCode + "'";
             }
           }
 
           // is it a tone ...
-          if (rawLine.params.ton && rawLine.normCode.match(/tn/)) {
-            if (rawLine.raw === undefined && EncoderFOCAL.rpnMap.has(rawLine.normCode)) {
-              rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.normCode);
+          if (rawLine.params.ton && rawLine.workCode.match(/tn/)) {
+            if (rawLine.raw === undefined && EncoderFOCAL.rpnMap.has(rawLine.workCode)) {
+              rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.workCode);
             }
             if (rawLine.raw !== undefined && progErrorText === undefined) {
               rawLine.raw = EncoderFOCAL.insertNumberInRaw(rawLine.raw, rawLine.params.ton);
             }
             if (rawLine.raw === undefined) {
-              progErrorText = "'" + rawLine.params.ton + "' in '" + rawLine.code + "'";
+              progErrorText = "'" + rawLine.params.ton + "' in '" + rawLine.docCode + "'";
             }
           }
 
           // is it a local char label A-J,a-e coded as number ......
-          if (rawLine.params.clb && rawLine.normCode.match(/(ll)/)) {
-            if (rawLine.raw === undefined && EncoderFOCAL.rpnMap.has(rawLine.normCode)) {
-              rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.normCode);
+          if (rawLine.params.clb && rawLine.workCode.match(/(ll)/)) {
+            if (rawLine.raw === undefined && EncoderFOCAL.rpnMap.has(rawLine.workCode)) {
+              rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.workCode);
             }
             if (rawLine.raw !== undefined && progErrorText === undefined) {
               rawLine.raw = EncoderFOCAL.insertNumberInRaw(rawLine.raw, rawLine.params.clb);
             }
             if (rawLine.raw === undefined) {
-              progErrorText = "'" + rawLine.params.clb + "' in '" + rawLine.code + "'";
+              progErrorText = "'" + rawLine.params.clb + "' in '" + rawLine.docCode + "'";
             }
           }
 
           // flags
-          if (rawLine.params.flg && rawLine.normCode.match(/(rr)/)) {
-            if (rawLine.raw === undefined && EncoderFOCAL.rpnMap.has(rawLine.normCode)) {
-              rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.normCode);
+          if (rawLine.params.flg && rawLine.workCode.match(/(rr)/)) {
+            if (rawLine.raw === undefined && EncoderFOCAL.rpnMap.has(rawLine.workCode)) {
+              rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.workCode);
             }
             if (rawLine.raw !== undefined && progErrorText === undefined) {
               rawLine.raw = EncoderFOCAL.insertNumberInRaw(rawLine.raw, rawLine.params.flg);
             }
             if (rawLine.raw === undefined) {
-              progErrorText = "'" + rawLine.params.flg + "' in '" + rawLine.code + "'";
+              progErrorText = "'" + rawLine.params.flg + "' in '" + rawLine.docCode + "'";
             }
           }
 
           // is it a register, number labels, digits, local number label 15-99 ......
-          if (rawLine.params.num && rawLine.normCode.match(/(sd|sl|sr|ll|nn|rr)/)) {
-            if (rawLine.raw === undefined && EncoderFOCAL.rpnMap.has(rawLine.normCode)) {
-              rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.normCode);
+          if (rawLine.params.num && rawLine.workCode.match(/(sd|sl|sr|ll|nn|rr)/)) {
+            if (rawLine.raw === undefined && EncoderFOCAL.rpnMap.has(rawLine.workCode)) {
+              rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.workCode);
             }
             if (rawLine.raw !== undefined && progErrorText === undefined) {
               rawLine.raw = EncoderFOCAL.insertNumberInRaw(rawLine.raw, rawLine.params.num);
             }
             if (rawLine.raw === undefined) {
-              progErrorText = "'" + rawLine.params.num + "' in '" + rawLine.code + "'";
+              progErrorText = "'" + rawLine.params.num + "' in '" + rawLine.docCode + "'";
             }
           }
 
           // 10 or 11 digits
-          if (rawLine.normCode.match(/(ENG|FIX|SCI) (10|11)/)) {
-            if (rawLine.raw === undefined && EncoderFOCAL.rpnMap.has(rawLine.normCode)) {
-              rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.normCode);
+          if (rawLine.workCode.match(/(ENG|FIX|SCI) (10|11)/)) {
+            if (rawLine.raw === undefined && EncoderFOCAL.rpnMap.has(rawLine.workCode)) {
+              rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.workCode);
             }
             if (rawLine.raw === undefined) {
-              progErrorText = "'" + rawLine.code + "'";
+              progErrorText = "'" + rawLine.docCode + "'";
             }
           }
 
           // is it a register/indirect count of digit/flag ...
-          if (rawLine.params.num && rawLine.normCode.match(/rr/)) {
-            if (rawLine.raw === undefined && EncoderFOCAL.rpnMap.has(rawLine.normCode)) {
-              rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.normCode);
+          if (rawLine.params.num && rawLine.workCode.match(/rr/)) {
+            if (rawLine.raw === undefined && EncoderFOCAL.rpnMap.has(rawLine.workCode)) {
+              rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.workCode);
             }
             if (rawLine.raw !== undefined && progErrorText === undefined) {
               rawLine.raw = EncoderFOCAL.insertNumberInRaw(rawLine.raw, rawLine.params.num);
             }
             if (rawLine.raw === undefined) {
-              progErrorText = "'" + rawLine.params.num + "' in '" + rawLine.code + "'";
+              progErrorText = "'" + rawLine.params.num + "' in '" + rawLine.docCode + "'";
             }
           }
 
           // is it a stack ...
-          if (rawLine.params.stk && rawLine.normCode.match(/`stk`/)) {
-            if (rawLine.raw === undefined && EncoderFOCAL.rpnMap.has(rawLine.normCode)) {
-              rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.normCode);
+          if (rawLine.params.stk && rawLine.workCode.match(/`stk`/)) {
+            if (rawLine.raw === undefined && EncoderFOCAL.rpnMap.has(rawLine.workCode)) {
+              rawLine.raw = EncoderFOCAL.rpnMap.get(rawLine.workCode);
             }
             if (rawLine.raw !== undefined && progErrorText === undefined) {
               const int = EncoderFOCAL.stackMap.get(rawLine.params.stk);
               rawLine.raw = EncoderFOCAL.insertNumberInRaw(rawLine.raw, String(int));
             }
             if (rawLine.raw === undefined) {
-              progErrorText = "'" + rawLine.params.stk + "' in '" + rawLine.code + "'";
+              progErrorText = "'" + rawLine.params.stk + "' in '" + rawLine.docCode + "'";
             }
           }
 
           if (rawLine.raw === undefined && progErrorText === undefined) {
-            progErrorText = "'" + rawLine.code + "' is unvalid";
+            progErrorText = "'" + rawLine.docCode + "' is unvalid";
           }
 
           if (progErrorText !== undefined) {
             rawLine.error = new CodeError(
               rawLine.docLineIndex,
               rawLine.codeLineNo,
-              rawLine.code,
+              rawLine.docCode,
               String(progErrorText)
             );
           }
@@ -274,7 +467,7 @@ export class EncoderFOCAL {
         }
       } else {
         // wrong extension, free42 commands in hp42s file
-        rawLine.error = new CodeError(rawLine.docLineIndex, rawLine.codeLineNo, rawLine.code, String(progErrorText));
+        rawLine.error = new CodeError(rawLine.docLineIndex, rawLine.codeLineNo, rawLine.docCode, String(progErrorText));
       }
     }
   }
@@ -301,7 +494,7 @@ export class EncoderFOCAL {
   /** Changing strings into corresponding opcodes (also adjusting the
    * instruction length in "Fn" byte).
    */
-  private static insertStringInRaw(raw: string | undefined, str: string | undefined): string | undefined {
+  private static insertStringInRaw(raw?: string, str?: string): string | undefined {
     if (raw !== undefined) {
       if (str !== undefined) {
         let len_str = str.length;
@@ -417,7 +610,7 @@ export class EncoderFOCAL {
   /** Changing numbers into corresponding opcodes.
    * "1.234E-455" -> 11 1A 12 13 14 1B 1C 14 15 15 00
    */
-  private static convertNumberToRaw(num: string | undefined): string | undefined {
+  private static convertNumberToRaw(num?: string): string | undefined {
     if (num !== undefined) {
       // "1.234E-455" -> 11 1A 12 13 14 1B 1C 14 15 15 00
       num =

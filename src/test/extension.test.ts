@@ -49,15 +49,15 @@ suite('Extension Tests', function() {
 
     rawLine = parser.parseLine(0, 'LBL "ABC"');
     EncoderFOCAL.toRaw(rawLine, 'hp42s');
-    assert.equal('C0 00 F4 00 41 42 43', rawLine.raw, 'encoding failed at ' + rawLine.code);
+    assert.equal('C0 00 F4 00 41 42 43', rawLine.raw, 'encoding failed at ' + rawLine.docCode);
 
     rawLine = parser.parseLine(0, '"Some Text"');
     EncoderFOCAL.toRaw(rawLine, 'hp42s');
-    assert.equal('F9 53 6F 6D 65 20 54 65 78 74', rawLine.raw, 'encoding failed at ' + rawLine.code);
+    assert.equal('F9 53 6F 6D 65 20 54 65 78 74', rawLine.raw, 'encoding failed at ' + rawLine.docCode);
 
     rawLine = parser.parseLine(0, '1234');
     EncoderFOCAL.toRaw(rawLine, 'hp42s');
-    assert.equal('11 12 13 14 00', rawLine.raw, 'encoding failed at ' + rawLine.code);
+    assert.equal('11 12 13 14 00', rawLine.raw, 'encoding failed at ' + rawLine.docCode);
   });
 
   test('Raw Parser Tests', function() {
@@ -69,7 +69,7 @@ suite('Extension Tests', function() {
     //LBL `lbl`
     let length = parser.parseCommand(0);
 
-    assert.equal('11', length, 'decoding failed at ' + parser.programs[0].rpnLines[0].normCode);
+    assert.equal('11', length, 'decoding failed at ' + parser.programs[0].rpnLines[0].workCode);
 
     //11 11 11 00
     length = parser.parseNumber(11);
@@ -77,7 +77,7 @@ suite('Extension Tests', function() {
     length = parser.parseNumber(13);
     length = parser.parseNumber(14);
 
-    assert.equal('`num`', parser.programs[0].rpnLines[1].normCode, 'decoding failed at ' + parser.programs[0].rpnLines[1].normCode);
+    assert.equal('`num`', parser.programs[0].rpnLines[1].workCode, 'decoding failed at ' + parser.programs[0].rpnLines[1].workCode);
 
   });
 

@@ -3,8 +3,12 @@ import { Params } from '../common/params';
 
 export class RpnLine {
   codeLineNo: number = 0;
-  raw: string = '';
-  normCode?: string;
+
+  /** original raw bytes from the document */
+  docRaw: string = '';
+
+  /** working code */
+  workCode?: string;
   error?: CodeError;
   params = new Params();
 
@@ -15,6 +19,6 @@ export class RpnLine {
   }
 
   toString(): string {
-    return this.codeLineNo + ': ' + this.raw + ', ' + this.normCode + (this.error ? ', ' + this.error : '');
+    return this.codeLineNo + ': ' + this.docRaw + ', ' + this.workCode + (this.error ? ', ' + this.error : '');
   }
 }
