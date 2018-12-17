@@ -4,6 +4,7 @@ import { RawPattern } from './rawpattern';
 
 /** FOCAL (Forty-one calculator language) see https://en.wikipedia.org/wiki/FOCAL_(Hewlett-Packard) */
 export class Encoder42 {
+  
   //#region Members
 
   static rpnMap = new Map<string, RawPattern[]>();
@@ -14,7 +15,7 @@ export class Encoder42 {
 
   //#endregion
 
-  //#region public
+  //#region Public
 
   static initialize() {
     if (!Encoder42.initialized) {
@@ -168,7 +169,7 @@ export class Encoder42 {
 
   //#endregion
 
-  //#region Private
+  //#region Private Methods
 
   /** Check if free42 command used */
   private static getLanguageIdFromCode(rawLine: RawLine, languageId: string): string {
@@ -329,7 +330,7 @@ export class Encoder42 {
 
   //#endregion
 
-  //#region Arrays
+  //#region Private Arrays
 
   private static arr_stackMap = [
     { key: 'T', value: 0 },
@@ -339,11 +340,7 @@ export class Encoder42 {
     { key: 'L', value: 4 }
   ];
 
-  private static arr_errors: string[] = ['No errors', 'Keyword not found', 'Bad parameters', 'String too long'];
-
-  // FOCAL character set
-  // https://en.wikipedia.org/wiki/FOCAL_character_set
-  // key is used as regex
+  /** FOCAL character set https://en.wikipedia.org/wiki/FOCAL_character_set key is used as regex */
   private static arr_charCodeMap = [
     { key: '÷', value: 0 },
     { key: '×', value: 1 },
@@ -481,8 +478,6 @@ export class Encoder42 {
 
     // { key: '´', value: ??? }
   ];
-
-  // TODO ...
 
   // 0(?<lblno>[2-9A-F]): LBL 01-15
   // Fn: F([1-9A-F]) Label: max. length 14
@@ -1156,5 +1151,7 @@ export class Encoder42 {
     { key: '↓', value: [{ regex: /↓/, raw: 'A6 DF' }] },
     { key: '⊢`str`', value: [{ regex: /⊢(".{14}")/, raw: 'Fn 7F', params: 'str' }] } // max. length 14
   ];
+  
   // #endregion
+
 }

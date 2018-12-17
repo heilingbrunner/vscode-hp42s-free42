@@ -8,12 +8,19 @@ import { RawLine } from './rawline';
 
 /** Command parser for a code line */
 export class RpnParser {
+
+  //#region Member
+
   debug = 1; // debug level 0=nothing, 1=minimal, 2=verbose
 
   programs: RawProgram[] = [];
   prgmLineNo: number = 0; // by parser auto incremented number
   document?: vscode.TextDocument;
   config?: Configuration;
+
+  //#endregion
+
+  //#region Public
 
   constructor() {}
 
@@ -88,38 +95,11 @@ export class RpnParser {
 
       if (/^\s*(⊢|)(".*")/.test(rawLine.workCode)) {
         // Is it a string "abc", ⊢"cde" ?
+        this.readString(rawLine);
 
-        let str: string = '';
-        // only ⊢, not |- or ├
-        let match = rawLine.workCode.match(/^\s*(⊢|)(".*")/);
-        if (match) {
-          str = this.removeDoubleQuotes(match[2]);
-          rawLine.workCode = rawLine.workCode.replace(/^\s*(⊢|)"(.*)"/, '$1`str`');
-          if (match[1] === '') {
-            rawLine.raw = 'Fn'; //see EncoderFOCAL.rpnMap.get(`str`)[0];
-          } else {
-            rawLine.raw = 'Fn 7F'; //see EncoderFOCAL.rpnMap.get(⊢`str`)[0];
-          }
-        }
-
-        // replace all occurences of focal character
-        if (str && str.match(/(÷|×|√|∫|░|Σ|▶|π|¿|≤|\[LF\]|≥|≠|↵|↓|→|←|µ|μ|£|₤|°|Å|Ñ|Ä|∡|ᴇ|Æ|…|␛|Ö|Ü|▒|■|•|\\\\|↑)/)) {
-          Encoder42.charCodeMap.forEach((value, key) => {
-            const regex = new RegExp(key, 'g');
-            if (str) {
-              str = str.replace(regex, String.fromCharCode(value));
-            }
-          });
-        }
-
-        rawLine.params.str = str;
       } else if (/^\s*-?\d+(\.\d+|)((ᴇ|e|E)-?\d{1,3}|)\s*$/.test(rawLine.workCode)) {
         // Is it a number ?
-        const match = rawLine.workCode.match(/^\s*-?\d+(\.\d+|)((ᴇ|e|E)-?\d{1,3}|)\s*$/);
-        if (match) {
-          rawLine.params.num = match[0];
-          rawLine.workCode = rawLine.workCode.replace(/^\s*-?\d+(\.\d+|)((ᴇ|e|E)-?\d{1,3}|)\s*$/, '`num`');
-        }
+        this.readNumber(rawLine);
       } else if (Encoder42.rpnMap.has(rawLine.token)) {
         // Is it a rpn command ?
         const patterns = Encoder42.rpnMap.get(rawLine.token);
@@ -135,55 +115,10 @@ export class RpnParser {
             if (match) {
               matched = true;
               // Params included ?
-              if (pattern.params) {
-                const params = pattern.params.split(',');
-                // assign params like regex named groups
-                for (let p = 0; p < params.length; p++) {
-                  const param = params[p];
-                  let k = p + 1;
-                  switch (true) {
-                    case param === 'dig':
-                      rawLine.params.dig = match[k];
-                      rawLine.params.digno = parseInt(match[k]);
-                      break;
-                    case param === 'flg':
-                      rawLine.params.flg = match[k];
-                      rawLine.params.flgno = parseInt(match[k]);
-                      break;
-                    case param === 'key':
-                      rawLine.params.key = match[k];
-                      rawLine.params.keyno = parseInt(match[k]);
-                      break;
-                    case param === 'lblno':
-                      rawLine.params.lblno = parseInt(this.getLblNo(match[k])); //parseInt(this.getLblNo(match[k]));
-                      break;
-                    case param === 'lbl':
-                      rawLine.params.lbl = this.removeDoubleQuotes(match[k]);
-                      break;
-                    case param === 'nam':
-                      rawLine.params.nam = this.removeDoubleQuotes(match[k]);
-                      break;
-                    case param === 'reg':
-                      rawLine.params.reg = match[k];
-                      rawLine.params.regno = parseInt(match[k]);
-                      break;
-                    case param === 'siz':
-                      rawLine.params.siz = match[k];
-                      rawLine.params.sizno = parseInt(match[k]);
-                      break;
-                    case param === 'stk':
-                      rawLine.params.stk = match[k];
-                      break;
-                    case param === 'ton':
-                      rawLine.params.ton = match[k];
-                      rawLine.params.tonno = parseInt(match[k]);
-                      break;
-                    default:
-                      break;
-                  }
-                }
-              }
+              this.checkParamsInMatch(pattern, rawLine, match);
+
               rawLine.raw = pattern.raw;
+
               break;
             }
           }
@@ -191,6 +126,8 @@ export class RpnParser {
           if (!matched) {
             progErrorText = 'unvalid parameter';
           }
+        } else {
+          progErrorText = 'unvalid command';
         }
       } else {
         progErrorText = 'unvalid command';
@@ -219,6 +156,99 @@ export class RpnParser {
     return rawLine;
   }
 
+  //#endregion
+
+  //#region Private Methods
+
+  /** Read params from match like regex named group */
+  private checkParamsInMatch(pattern: import("c:/Temp/#Workbench#/visual-studio/vscode-hp42s-free42/src/encoder/rawpattern").RawPattern, rawLine: RawLine, match: RegExpMatchArray) {
+    if (pattern.params) {
+      const params = pattern.params.split(',');
+      // assign params like regex named groups
+      for (let p = 0; p < params.length; p++) {
+        const param = params[p];
+        let k = p + 1;
+        switch (true) {
+          case param === 'dig':
+            rawLine.params.dig = match[k];
+            rawLine.params.digno = parseInt(match[k]);
+            break;
+          case param === 'flg':
+            rawLine.params.flg = match[k];
+            rawLine.params.flgno = parseInt(match[k]);
+            break;
+          case param === 'key':
+            rawLine.params.key = match[k];
+            rawLine.params.keyno = parseInt(match[k]);
+            break;
+          case param === 'lblno':
+            rawLine.params.lblno = parseInt(this.getLblNo(match[k])); //parseInt(this.getLblNo(match[k]));
+            break;
+          case param === 'lbl':
+            rawLine.params.lbl = this.removeDoubleQuotes(match[k]);
+            break;
+          case param === 'nam':
+            rawLine.params.nam = this.removeDoubleQuotes(match[k]);
+            break;
+          case param === 'reg':
+            rawLine.params.reg = match[k];
+            rawLine.params.regno = parseInt(match[k]);
+            break;
+          case param === 'siz':
+            rawLine.params.siz = match[k];
+            rawLine.params.sizno = parseInt(match[k]);
+            break;
+          case param === 'stk':
+            rawLine.params.stk = match[k];
+            break;
+          case param === 'ton':
+            rawLine.params.ton = match[k];
+            rawLine.params.tonno = parseInt(match[k]);
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  }
+
+  /** Read a number */
+  private readNumber(rawLine: RawLine) {
+    const match = rawLine.workCode.match(/^\s*-?\d+(\.\d+|)((ᴇ|e|E)-?\d{1,3}|)\s*$/);
+    if (match) {
+      rawLine.params.num = match[0];
+      rawLine.workCode = rawLine.workCode.replace(/^\s*-?\d+(\.\d+|)((ᴇ|e|E)-?\d{1,3}|)\s*$/, '`num`');
+    }
+  }
+
+  /** Read a string */
+  private readString(rawLine: RawLine) {
+    let str: string = '';
+    // only ⊢, not |- or ├
+    let match = rawLine.workCode.match(/^\s*(⊢|)(".*")/);
+    if (match) {
+      str = this.removeDoubleQuotes(match[2]);
+      rawLine.workCode = rawLine.workCode.replace(/^\s*(⊢|)"(.*)"/, '$1`str`');
+      if (match[1] === '') {
+        rawLine.raw = 'Fn'; //see EncoderFOCAL.rpnMap.get(`str`)[0];
+      }
+      else {
+        rawLine.raw = 'Fn 7F'; //see EncoderFOCAL.rpnMap.get(⊢`str`)[0];
+      }
+    }
+    // replace all occurences of focal character
+    if (str && str.match(/(÷|×|√|∫|░|Σ|▶|π|¿|≤|\[LF\]|≥|≠|↵|↓|→|←|µ|μ|£|₤|°|Å|Ñ|Ä|∡|ᴇ|Æ|…|␛|Ö|Ü|▒|■|•|\\\\|↑)/)) {
+      Encoder42.charCodeMap.forEach((value, key) => {
+        const regex = new RegExp(key, 'g');
+        if (str) {
+          str = str.replace(regex, String.fromCharCode(value));
+        }
+      });
+    }
+    rawLine.params.str = str;
+  }
+
+  /** Converts lbl to number */
   private getLblNo(lbl: string): string {
     let int: number;
     let num: string = '';
@@ -295,54 +325,11 @@ export class RpnParser {
     return str;
   }
 
-  private checkString(str: string | undefined): string | undefined {
-    if (str !== undefined) {
-      return this.inRange(str.length, 0, 15) ? undefined : 'alpha too long';
-    }
-    return undefined;
-  }
-
-  private checkName(nam: string | undefined): string | undefined {
-    if (nam !== undefined) {
-      return this.inRange(nam.length, 1, 7) ? undefined : 'name length unvalid';
-    }
-    return undefined;
-  }
-
-  /** Check key */
-  private checkKey(key: string | undefined): string | undefined {
-    if (key !== undefined) {
-      return this.inRange(parseInt(key), 1, 9) ? undefined : 'key value invalid';
-    }
-    return undefined;
-  }
-
-  /** Check tone */
-  private checkTone(ton: string | undefined): string | undefined {
-    if (ton !== undefined) {
-      return this.inRange(parseInt(ton), 1, 9) && ton.length === 1 ? undefined : 'tone value invalid';
-    }
-    return undefined;
-  }
-
-  /** Check flag */
-  private checkFlag(flg: string | undefined): string | undefined {
-    if (flg !== undefined) {
-      return this.inRange(parseInt(flg), 0, 99) && flg.length === 2 ? undefined : 'flag value invalid';
-    }
-    return undefined;
-  }
-
-  /** Check global label */
-  private checkGlobalLabel(lbl: string | undefined): string | undefined {
-    if (lbl !== undefined) {
-      return this.inRange(lbl.length, 0, 7) ? undefined : 'label length unvalid';
-    }
-    return undefined;
-  }
-
   /** Check in range min <= x <= max */
   private inRange(x: number, min: number, max: number) {
-    return (x - min) * (x - max) <= 0;
+    return ((x - min) * (x - max)) <= 0;
   }
+
+  //#endregion
+  
 }

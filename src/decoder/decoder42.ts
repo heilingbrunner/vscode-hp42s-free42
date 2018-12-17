@@ -2,6 +2,7 @@ import { RpnPattern } from './rpnpattern';
 import { RpnLine } from './rpnline';
 
 export class Decoder42 {
+  
   //#region Members
 
   static rawMap = new Map<string, RpnPattern[]>();
@@ -13,7 +14,7 @@ export class Decoder42 {
 
   //#endregion
 
-  //#region public
+  //#region Public
 
   static initialize() {
     if (!Decoder42.initialized) {
@@ -89,45 +90,37 @@ export class Decoder42 {
 
   //#endregion
 
-  //#region
+  //#region Private Methods
 
-  static replaceLabel(replace: string, rpnLine: RpnLine) {
+  private static replaceLabel(replace: string, rpnLine: RpnLine) {
     if (rpnLine.workCode) {
       let lbl = this.convertRawToString(rpnLine.params.lbl);
       rpnLine.workCode = rpnLine.workCode.replace(replace, '"' + lbl + '"');
     }
   }
 
-  static replaceString(replace: string, rpnLine: RpnLine) {
+  private static replaceString(replace: string, rpnLine: RpnLine) {
     if (rpnLine.workCode) {
       let str = this.convertRawToString(rpnLine.params.str);
       rpnLine.workCode = rpnLine.workCode.replace(replace, '"' + str + '"');
     }
   }
 
-  static replaceName(replace: string, rpnLine: RpnLine) {
+  private static replaceName(replace: string, rpnLine: RpnLine) {
     if (rpnLine.workCode) {
       let nam = this.convertRawToString(rpnLine.params.nam);
       rpnLine.workCode = rpnLine.workCode.replace(replace, '"' + nam + '"');
     }
   }
 
-  static replaceNumber(replace: string, rpnLine: RpnLine) {
+  private static replaceNumber(replace: string, rpnLine: RpnLine) {
     if (rpnLine.workCode) {
       let number = this.convertRawToNumber(rpnLine.params.num);
       rpnLine.workCode = rpnLine.workCode.replace(replace, number);
     }
   }
 
-  //static replaceCustomKey(replace: string, rpnLine: RpnLine) {
-  //  if (rpnLine.workCode) {
-  //    rpnLine.workCode = rpnLine.workCode.replace(replace, '' + (rpnLine.params.cskno !== undefined ?
-  //      (rpnLine.params.cskno > 9 ? '' + rpnLine.params.cskno : '0' + rpnLine.params.cskno)
-  //    : '??'));
-  //  }
-  //}
-
-  static replaceLabelNo(replace: string, rpnLine: RpnLine) {
+  private static replaceLabelNo(replace: string, rpnLine: RpnLine) {
     // ... 99  ... 63 dec:16-99; hex:10-63
     // ... A   ... 66 dec:102  char:65
     // ... J   ... 6F dec:111
@@ -158,7 +151,7 @@ export class Decoder42 {
     }
   }
 
-  static replaceRegister(replace: string, rpnLine: RpnLine) {
+  private static replaceRegister(replace: string, rpnLine: RpnLine) {
     if (rpnLine.workCode) {
       let number =
         rpnLine.params.regno !== undefined
@@ -170,7 +163,7 @@ export class Decoder42 {
     }
   }
 
-  static replaceFlag(replace: string, rpnLine: RpnLine) {
+  private static replaceFlag(replace: string, rpnLine: RpnLine) {
     if (rpnLine.workCode) {
       let number =
         rpnLine.params.flgno !== undefined
@@ -182,31 +175,31 @@ export class Decoder42 {
     }
   }
 
-  static replaceStack(replace: string, rpnLine: RpnLine) {
+  private static replaceStack(replace: string, rpnLine: RpnLine) {
     if (rpnLine.workCode) {
       rpnLine.workCode = rpnLine.workCode.replace(replace, '' + rpnLine.params.stk);
     }
   }
 
-  static replaceKey(replace: string, rpnLine: RpnLine) {
+  private static replaceKey(replace: string, rpnLine: RpnLine) {
     if (rpnLine.workCode) {
       rpnLine.workCode = rpnLine.workCode.replace(replace, '' + rpnLine.params.keyno);
     }
   }
 
-  static replaceSize(replace: string, rpnLine: RpnLine) {
+  private static replaceSize(replace: string, rpnLine: RpnLine) {
     if (rpnLine.workCode) {
       rpnLine.workCode = rpnLine.workCode.replace(replace, '' + rpnLine.params.sizno);
     }
   }
 
-  static replaceTone(replace: string, rpnLine: RpnLine) {
+  private static replaceTone(replace: string, rpnLine: RpnLine) {
     if (rpnLine.workCode) {
       rpnLine.workCode = rpnLine.workCode.replace(replace, '' + rpnLine.params.tonno); // 0-9
     }
   }
 
-  static replaceDigits(replace: string, rpnLine: RpnLine) {
+  private static replaceDigits(replace: string, rpnLine: RpnLine) {
     if (rpnLine.workCode) {
       rpnLine.workCode = rpnLine.workCode.replace(replace, '' + rpnLine.params.dig); // 00-09
     }
@@ -215,7 +208,7 @@ export class Decoder42 {
   /** Changing numbers into corresponding opcodes.
    *  11 1A 12 13 14 1B 1C 14 15 15 00 -> '1.234E-455'
    */
-  static convertRawToNumber(raw?: string): string {
+  private static convertRawToNumber(raw?: string): string {
     let number = '';
     if (raw) {
       raw = raw.replace(/00$/, '');
@@ -246,7 +239,7 @@ export class Decoder42 {
     return number;
   }
 
-  static convertRawToString(raw?: string): string {
+  private static convertRawToString(raw?: string): string {
     let str = '';
     if (raw) {
       let chars = raw.split(' ');
@@ -266,18 +259,165 @@ export class Decoder42 {
   /** Changing integers (size one byte, 0-255) into hex string .
    * 123 -> 7B, 255 -> FF
    */
-  static convertHexAsByte(hex: string): number {
+  private static convertHexAsByte(hex: string): number {
     let byte = parseInt(hex, 16);
     return byte;
   }
 
-  static inRange(x: number, min: number, max: number): boolean {
-    return (x - min) * (x - max) <= 0;
+  private static inRange(x: number, min: number, max: number): boolean {
+    return ((x - min) * (x - max)) <= 0;
   }
 
   //#endregion
 
-  //#region Arrays
+  //#region Private Arrays
+
+  private static arr_stackMap = [
+    { key: 0, value: 'T' },
+    { key: 1, value: 'Z' },
+    { key: 2, value: 'Y' },
+    { key: 3, value: 'X' },
+    { key: 4, value: 'L' }
+  ];
+
+  /** FOCAL character set https://en.wikipedia.org/wiki/FOCAL_character_set key is used as regex */ 
+  private static arr_charMap = [
+    { key: 0, value: '÷' },
+    { key: 1, value: '×' },
+    { key: 2, value: '√' },
+    { key: 3, value: '∫' },
+    { key: 4, value: '░' },
+    { key: 5, value: 'Σ' },
+    { key: 6, value: '▶' },
+    { key: 7, value: 'π' },
+    { key: 8, value: '¿' },
+    { key: 9, value: '≤' },
+    { key: 10, value: '\\[LF\\]' }, // for [LF] line feed
+    { key: 10, value: '␊' }, // ␊ see: https://www.compart.com/de/unicode/U+240A
+    { key: 11, value: '≥' },
+    { key: 12, value: '≠' },
+    { key: 13, value: '↵' },
+    { key: 14, value: '↓' },
+    { key: 15, value: '→' },
+    { key: 16, value: '←' },
+    { key: 17, value: 'µ' }, // different bytes B5
+    { key: 17, value: 'μ' }, // different bytes N<
+    { key: 18, value: '£' },
+    { key: 18, value: '₤' },
+    { key: 19, value: '°' },
+    { key: 20, value: 'Å' },
+    { key: 21, value: 'Ñ' },
+    { key: 22, value: 'Ä' },
+    { key: 23, value: '∡' },
+    { key: 24, value: 'ᴇ' },
+    { key: 25, value: 'Æ' },
+    { key: 26, value: '…' },
+    { key: 27, value: '␛' }, // ␛ see: https://www.compart.com/de/unicode/U+241B
+    { key: 28, value: 'Ö' },
+    { key: 29, value: 'Ü' },
+    { key: 30, value: '▒' },
+    { key: 31, value: '■' },
+    //{ key: 31, value: '•' }, // see above
+    // { key: 32, value: 'SP' },
+    // { key: 33, value: '!' },
+    // { key: 34, value: ''' }, // single quote
+    // { key: 35, value: '#' },
+    // { key: 36, value: '$' },
+    // { key: 37, value: '%' },
+    // { key: 38, value: '&' },
+    // { key: 39, value: '"' }, // double quotes !!
+    // { key: 40, value: '(' },
+    // { key: 41, value: ')' },
+    // { key: 42, value: '*' },
+    // { key: 43, value: '+' },
+    // { key: 44, value: ',' },
+    // { key: 45, value: '-' },
+    // { key: 46, value: '.' },
+    // { key: 47, value: '/' },
+    // { key: 48, value: '0' },
+    // { key: 49, value: '1' },
+    // { key: 50, value: '2' },
+    // { key: 51, value: '3' },
+    // { key: 52, value: '4' },
+    // { key: 53, value: '5' },
+    // { key: 54, value: '6' },
+    // { key: 55, value: '7' },
+    // { key: 56, value: '8' },
+    // { key: 57, value: '9' },
+    // { key: 58, value: ':' },
+    // { key: 59, value: ';' },
+    // { key: 60, value: '<' },
+    // { key: 61, value: '=' },
+    // { key: 62, value: '>' },
+    // { key: 63, value: '?' },
+    // { key: 64, value: '@' },
+    // { key: 65, value: 'A' },
+    // { key: 66, value: 'B' },
+    // { key: 67, value: 'C' },
+    // { key: 68, value: 'D' },
+    // { key: 69, value: 'E' },
+    // { key: 70, value: 'F' },
+    // { key: 71, value: 'G' },
+    // { key: 72, value: 'H' },
+    // { key: 73, value: 'I' },
+    // { key: 74, value: 'J' },
+    // { key: 75, value: 'K' },
+    // { key: 76, value: 'L' },
+    // { key: 77, value: 'M' },
+    // { key: 78, value: 'N' },
+    // { key: 79, value: 'O' },
+    // { key: 80, value: 'P' },
+    // { key: 81, value: 'Q' },
+    // { key: 82, value: 'R' },
+    // { key: 83, value: 'S' },
+    // { key: 84, value: 'T' },
+    // { key: 85, value: 'U' },
+    // { key: 86, value: 'V' },
+    // { key: 87, value: 'W' },
+    // { key: 88, value: 'X' },
+    // { key: 89, value: 'Y' },
+    // { key: 90, value: 'Z' },
+    // { key: 91, value: '[' },
+    { key: 92, value: '\\\\' }, // for \
+    // { key: 93, value: ']' },
+    { key: 94, value: '↑' }
+    // { key: 95, value: '_' },
+    // { key: 96, value: '`' },
+    // { key: ??, value: '´' },
+    // { key: 97, value: 'a' },
+    // { key: 98, value: 'b' },
+    // { key: 99, value: 'c' },
+    // { key: 100, value: 'd' },
+    // { key: 101, value: 'e' },
+    // { key: 102, value: 'f' },
+    // { key: 103, value: 'g' },
+    // { key: 104, value: 'h' },
+    // { key: 105, value: 'i' },
+    // { key: 106, value: 'j' },
+    // { key: 107, value: 'k' },
+    // { key: 108, value: 'l' },
+    // { key: 109, value: 'm' },
+    // { key: 110, value: 'n' },
+    // { key: 111, value: 'o' },
+    // { key: 112, value: 'p' },
+    // { key: 113, value: 'q' },
+    // { key: 114, value: 'r' },
+    // { key: 115, value: 's' },
+    // { key: 116, value: 't' },
+    // { key: 117, value: 'u' },
+    // { key: 118, value: 'v' },
+    // { key: 119, value: 'w' },
+    // { key: 120, value: 'x' },
+    // { key: 121, value: 'y' },
+    // { key: 122, value: 'z' },
+    // { key: 123, value: '{' },
+    // { key: 124, value: '|' },
+    // { key: 125, value: '}' },
+    // { key: 126, value: '~' }
+    // { key: 127, value: '⊦' }
+
+    // { key: ???, value: '´' }
+  ];
 
   // 0(?<lblno>[2-9A-F]): LBL 01-15
   // Fn: F([1-9A-F]) Label: max. length 14
@@ -315,16 +455,6 @@ export class Decoder42 {
   // XEQ J   E0006F
   // XEQ a   E0007B
   // XEQ e   E0007F
-
-  //#region Arrays
-
-  private static arr_stackMap = [
-    { key: 0, value: 'T' },
-    { key: 1, value: 'Z' },
-    { key: 2, value: 'Y' },
-    { key: 3, value: 'X' },
-    { key: 4, value: 'L' }
-  ];
 
   private static arr_rawMap = [
     {
@@ -880,143 +1010,6 @@ export class Decoder42 {
     }
   ];
 
-  private static arr_charMap = [
-    { key: 0, value: '÷' },
-    { key: 1, value: '×' },
-    { key: 2, value: '√' },
-    { key: 3, value: '∫' },
-    { key: 4, value: '░' },
-    { key: 5, value: 'Σ' },
-    { key: 6, value: '▶' },
-    { key: 7, value: 'π' },
-    { key: 8, value: '¿' },
-    { key: 9, value: '≤' },
-    { key: 10, value: '\\[LF\\]' }, // for [LF] line feed
-    { key: 10, value: '␊' }, // ␊ see: https://www.compart.com/de/unicode/U+240A
-    { key: 11, value: '≥' },
-    { key: 12, value: '≠' },
-    { key: 13, value: '↵' },
-    { key: 14, value: '↓' },
-    { key: 15, value: '→' },
-    { key: 16, value: '←' },
-    { key: 17, value: 'µ' }, // different bytes B5
-    { key: 17, value: 'μ' }, // different bytes N<
-    { key: 18, value: '£' },
-    { key: 18, value: '₤' },
-    { key: 19, value: '°' },
-    { key: 20, value: 'Å' },
-    { key: 21, value: 'Ñ' },
-    { key: 22, value: 'Ä' },
-    { key: 23, value: '∡' },
-    { key: 24, value: 'ᴇ' },
-    { key: 25, value: 'Æ' },
-    { key: 26, value: '…' },
-    { key: 27, value: '␛' }, // ␛ see: https://www.compart.com/de/unicode/U+241B
-    { key: 28, value: 'Ö' },
-    { key: 29, value: 'Ü' },
-    { key: 30, value: '▒' },
-    { key: 31, value: '■' },
-    //{ key: 31, value: '•' }, // see above
-    // { key: 32, value: 'SP' },
-    // { key: 33, value: '!' },
-    // { key: 34, value: ''' }, // single quote
-    // { key: 35, value: '#' },
-    // { key: 36, value: '$' },
-    // { key: 37, value: '%' },
-    // { key: 38, value: '&' },
-    // { key: 39, value: '"' }, // double quotes !!
-    // { key: 40, value: '(' },
-    // { key: 41, value: ')' },
-    // { key: 42, value: '*' },
-    // { key: 43, value: '+' },
-    // { key: 44, value: ',' },
-    // { key: 45, value: '-' },
-    // { key: 46, value: '.' },
-    // { key: 47, value: '/' },
-    // { key: 48, value: '0' },
-    // { key: 49, value: '1' },
-    // { key: 50, value: '2' },
-    // { key: 51, value: '3' },
-    // { key: 52, value: '4' },
-    // { key: 53, value: '5' },
-    // { key: 54, value: '6' },
-    // { key: 55, value: '7' },
-    // { key: 56, value: '8' },
-    // { key: 57, value: '9' },
-    // { key: 58, value: ':' },
-    // { key: 59, value: ';' },
-    // { key: 60, value: '<' },
-    // { key: 61, value: '=' },
-    // { key: 62, value: '>' },
-    // { key: 63, value: '?' },
-    // { key: 64, value: '@' },
-    // { key: 65, value: 'A' },
-    // { key: 66, value: 'B' },
-    // { key: 67, value: 'C' },
-    // { key: 68, value: 'D' },
-    // { key: 69, value: 'E' },
-    // { key: 70, value: 'F' },
-    // { key: 71, value: 'G' },
-    // { key: 72, value: 'H' },
-    // { key: 73, value: 'I' },
-    // { key: 74, value: 'J' },
-    // { key: 75, value: 'K' },
-    // { key: 76, value: 'L' },
-    // { key: 77, value: 'M' },
-    // { key: 78, value: 'N' },
-    // { key: 79, value: 'O' },
-    // { key: 80, value: 'P' },
-    // { key: 81, value: 'Q' },
-    // { key: 82, value: 'R' },
-    // { key: 83, value: 'S' },
-    // { key: 84, value: 'T' },
-    // { key: 85, value: 'U' },
-    // { key: 86, value: 'V' },
-    // { key: 87, value: 'W' },
-    // { key: 88, value: 'X' },
-    // { key: 89, value: 'Y' },
-    // { key: 90, value: 'Z' },
-    // { key: 91, value: '[' },
-    { key: 92, value: '\\\\' }, // for \
-    // { key: 93, value: ']' },
-    { key: 94, value: '↑' }
-    // { key: 95, value: '_' },
-    // { key: 96, value: '`' },
-    // { key: ??, value: '´' },
-    // { key: 97, value: 'a' },
-    // { key: 98, value: 'b' },
-    // { key: 99, value: 'c' },
-    // { key: 100, value: 'd' },
-    // { key: 101, value: 'e' },
-    // { key: 102, value: 'f' },
-    // { key: 103, value: 'g' },
-    // { key: 104, value: 'h' },
-    // { key: 105, value: 'i' },
-    // { key: 106, value: 'j' },
-    // { key: 107, value: 'k' },
-    // { key: 108, value: 'l' },
-    // { key: 109, value: 'm' },
-    // { key: 110, value: 'n' },
-    // { key: 111, value: 'o' },
-    // { key: 112, value: 'p' },
-    // { key: 113, value: 'q' },
-    // { key: 114, value: 'r' },
-    // { key: 115, value: 's' },
-    // { key: 116, value: 't' },
-    // { key: 117, value: 'u' },
-    // { key: 118, value: 'v' },
-    // { key: 119, value: 'w' },
-    // { key: 120, value: 'x' },
-    // { key: 121, value: 'y' },
-    // { key: 122, value: 'z' },
-    // { key: 123, value: '{' },
-    // { key: 124, value: '|' },
-    // { key: 125, value: '}' },
-    // { key: 126, value: '~' }
-    // { key: 127, value: '⊦' }
-
-    // { key: ???, value: '´' }
-  ];
-
   // #endregion
+
 }

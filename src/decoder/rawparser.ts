@@ -5,6 +5,9 @@ import { RpnProgram } from './rpnprogram';
 import { CodeError } from '../common/codeerror';
 
 export class RawParser {
+
+  //#region Members
+  
   debug = 1; // debug level 0=nothing, 1=minimal, 2=verbose
   programs: RpnProgram[] = [];
   languageId = 'hp42s';
@@ -13,6 +16,10 @@ export class RawParser {
   private codeLineNo: number = 0;
   private number: string = '';
   private readingNumber = false;
+
+  //#endregion
+
+  //#region Public
 
   constructor(raw: string[]) {
     this.raw = raw;
@@ -196,6 +203,10 @@ export class RawParser {
 
     return rpnLine.rawLength;
   }
+
+  //#endregion
+
+  //#region Private Methods
 
   /** Check all given matches to named params */
   private checkParamsInMatch(rpnLine: RpnLine, next: number, pattern: RpnPattern, match: RegExpMatchArray) {
@@ -384,4 +395,7 @@ export class RawParser {
 
     this.programs[0].addLine(rpnLine);
   }
+
+  //#endregion
+
 }
