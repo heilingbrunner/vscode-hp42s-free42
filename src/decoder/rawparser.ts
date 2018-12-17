@@ -288,13 +288,13 @@ export class RawParser {
 
   private checkParseLength(rpnLine: RpnLine, next: number): boolean {
     const rawlength = this.raw.length;
-    if (rpnLine.params.strl && next + rpnLine.params.strl >= rawlength) {
+    if ((rpnLine.params.strl !== undefined) && (next + rpnLine.params.strl >= rawlength)) {
       return true;
     }
-    if (rpnLine.params.lbll && next + rpnLine.params.lbll >= rawlength) {
+    if ((rpnLine.params.lbll !== undefined) && (next + rpnLine.params.lbll >= rawlength)) {
       return true;
     }
-    if (rpnLine.params.naml && next + rpnLine.params.naml >= rawlength) {
+    if ((rpnLine.params.naml !== undefined) && (next + rpnLine.params.naml >= rawlength)) {
       return true;
     }
 
@@ -302,7 +302,7 @@ export class RawParser {
   }
   /** Check if str/lbl/nam found and adjust length */
   private readStringParams(rpnLine: RpnLine, next: number) {
-    if (rpnLine.params.strl) {
+    if (rpnLine.params.strl !== undefined) {
       rpnLine.params.str = '';
       // where the string starts ...
       for (let j = 0; j < rpnLine.params.strl; j++) {
@@ -311,7 +311,7 @@ export class RawParser {
       rpnLine.params.str = rpnLine.params.str.trim();
       return rpnLine.params.strl;
     }
-    if (rpnLine.params.lbll) {
+    if (rpnLine.params.lbll !== undefined) {
       rpnLine.params.lbl = '';
       // where the string starts ...
       for (let j = 0; j < rpnLine.params.lbll; j++) {
@@ -320,7 +320,7 @@ export class RawParser {
       rpnLine.params.lbl = rpnLine.params.lbl.trim();
       return rpnLine.params.lbll;
     }
-    if (rpnLine.params.naml) {
+    if (rpnLine.params.naml !== undefined) {
       rpnLine.params.nam = '';
       // where the string starts ...
       for (let j = 0; j < rpnLine.params.naml; j++) {

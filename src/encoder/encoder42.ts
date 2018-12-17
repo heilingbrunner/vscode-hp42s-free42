@@ -53,13 +53,13 @@ export class Encoder42 {
       if (progErrorText === undefined) {
         if (rawLine.tokenLength === 1) {
           //#region 1 Token
-          if (rawLine.params.str && rawLine.workCode.match(/^(⊢|)`str`/)) {
+          if ((rawLine.params.str !== undefined) && (rawLine.workCode.match(/^(⊢|)`str`/))) {
             // is it a string ...
             rawLine.raw = Encoder42.insertStringInRaw(rawLine.raw, rawLine.params.str);
-          } else if (rawLine.params.num && rawLine.workCode.match(/^`num`/)) {
+          } else if ((rawLine.params.num !== undefined) && (rawLine.workCode.match(/^`num`/))) {
             // is it a simple number ...
             rawLine.raw = Encoder42.convertNumberToRaw(rawLine.params.num);
-          } else if (rawLine.token) {
+          } else if (rawLine.token !== undefined) {
             // is it a single "fixed" opcode ...
           }
 
@@ -80,7 +80,7 @@ export class Encoder42 {
           // 1. Insert Name
           // KEY `key` GTO IND `nam`
           // ASSIGN `nam` TO `key`
-          if (rawLine.params.nam) {
+          if (rawLine.params.nam !== undefined) {
             rawLine.raw = Encoder42.insertStringInRaw(rawLine.raw, rawLine.params.nam);
           }
 
@@ -88,43 +88,43 @@ export class Encoder42 {
           // 2. Insert key
           // KEY `key` GTO IND `nam`
           // ASSIGN `nam` TO `key`
-          if (rawLine.params.key) {
+          if (rawLine.params.key !== undefined) {
             rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, rawLine.params.key);
           }
 
           // is it a global label ...
-          if (rawLine.params.lbl) {
+          if (rawLine.params.lbl !== undefined) {
             rawLine.raw = Encoder42.insertStringInRaw(rawLine.raw, rawLine.params.lbl);
           }
 
           // is it a register ...
-          if (rawLine.params.reg) {
+          if (rawLine.params.reg !== undefined) {
             rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, rawLine.params.reg);
           }
 
           // is it a tone ...
-          if (rawLine.params.ton) {
+          if (rawLine.params.ton !== undefined) {
             rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, rawLine.params.ton);
           }
 
           // see lblno
           // is it a local char label A-J,a-e coded as number ......
-          if (rawLine.params.lblno) {
+          if (rawLine.params.lblno !== undefined) {
             rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, String(rawLine.params.lblno));
           }
 
           // flag
-          if (rawLine.params.flg) {
+          if (rawLine.params.flg !== undefined) {
             rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, rawLine.params.flg);
           }
 
           // is it a register, number labels, digits, local number label 15-99 ......
-          if (rawLine.params.num) {
+          if (rawLine.params.num !== undefined) {
             rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, rawLine.params.num);
           }
 
           // 0-9 digits
-          if (rawLine.params.dig) {
+          if (rawLine.params.dig !== undefined) {
             rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, rawLine.params.dig);
           }
 
@@ -134,22 +134,22 @@ export class Encoder42 {
           }
 
           // size
-          if (rawLine.params.siz) {
+          if (rawLine.params.siz !== undefined) {
             rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, rawLine.params.siz);
           }
 
           // is it a register/indirect count of digit/flag ...
-          if (rawLine.params.num) {
+          if (rawLine.params.num !== undefined) {
             rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, rawLine.params.num);
           }
 
           // is it a stack ...
-          if (rawLine.params.stk) {
+          if (rawLine.params.stk !== undefined) {
             const int = Encoder42.stackMap.get(rawLine.params.stk);
             rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, String(int));
           }
 
-          if (rawLine.raw === undefined && progErrorText === undefined) {
+          if ((rawLine.raw === undefined) && (progErrorText === undefined)) {
             progErrorText = "'" + rawLine.docCode + "' is unvalid";
           }
 

@@ -38,15 +38,15 @@ export class Decoder42 {
   static toRpn(rpnLine: RpnLine) {
 
     if (rpnLine.workCode) {
-      if (rpnLine.params.stk && /`stk`/.test(rpnLine.workCode)) {
+      if ((rpnLine.params.stk !== undefined) && /`stk`/.test(rpnLine.workCode)) {
         this.replaceStack('`stk`', rpnLine);
       }
 
-      if (rpnLine.params.num && /`num`/.test(rpnLine.workCode)) {
+      if ((rpnLine.params.num !== undefined) && /`num`/.test(rpnLine.workCode)) {
         this.replaceNumber('`num`', rpnLine);
       }
 
-      if (rpnLine.params.key && /`key`/.test(rpnLine.workCode)) {
+      if ((rpnLine.params.key !== undefined) && /`key`/.test(rpnLine.workCode)) {
         this.replaceKey('`key`', rpnLine);
       }
 
@@ -73,15 +73,15 @@ export class Decoder42 {
         this.replaceDigits('sd', rpnLine);
       } 
 
-      if (rpnLine.params.lbl && /`lbl`/.test(rpnLine.workCode)) {
+      if ((rpnLine.params.lbl !== undefined) && /`lbl`/.test(rpnLine.workCode)) {
         this.replaceLabel('`lbl`', rpnLine);
       }
 
-      if (rpnLine.params.str && /`str`/.test(rpnLine.workCode)) {
+      if ((rpnLine.params.str !== undefined) && /`str`/.test(rpnLine.workCode)) {
         this.replaceString('`str`', rpnLine);
       }
 
-      if (rpnLine.params.nam && /`nam`/.test(rpnLine.workCode)) {
+      if ((rpnLine.params.nam !== undefined) && /`nam`/.test(rpnLine.workCode)) {
         this.replaceName('`nam`', rpnLine);
       }
     }
