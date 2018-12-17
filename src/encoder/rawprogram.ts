@@ -7,10 +7,10 @@ import { CodeError } from '../common/codeerror';
 export class RawProgram {
   rawLines: RawLine[] = [];
   private size: number = 0;
-  startdocLineIndex: number = -1;
+  startDocLine: number = -1;
 
-  constructor(startdocLineIndex: number) {
-    this.startdocLineIndex = startdocLineIndex;
+  constructor(startDocLine: number) {
+    this.startDocLine = startDocLine;
   }
 
   getRaw(): string {

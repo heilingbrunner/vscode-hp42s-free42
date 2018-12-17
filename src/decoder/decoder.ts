@@ -1,12 +1,12 @@
 import * as vscode from 'vscode';
 
-import { DecoderFOCAL } from './decoderfocal';
+import { Decoder42 } from './decoder42';
 import { DecoderResult } from './decoderresult';
 import { RawParser } from './rawparser';
 
 export class Decoder {
   constructor() {
-    DecoderFOCAL.initialize();
+    Decoder42.initialize();
   }
 
   /** Decode raw input to readable code string */
@@ -20,7 +20,7 @@ export class Decoder {
 
     parser.programs.forEach(program => {
       program.rpnLines.forEach(rpnLine =>{
-        DecoderFOCAL.toRpn(rpnLine);
+        Decoder42.toRpn(rpnLine);
       });
     });
 
@@ -37,8 +37,8 @@ export class Decoder {
     let bytes: string[];
     let content: string = '';
 
-    for (let docLineIndex = 0; docLineIndex < docLineCount; docLineIndex++) {
-      let line = document.lineAt(docLineIndex);
+    for (let docLine = 0; docLine < docLineCount; docLine++) {
+      let line = document.lineAt(docLine);
       let linetext = line.text;
 
       //   Offset: 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 	                   <----- not this

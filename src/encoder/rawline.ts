@@ -4,7 +4,7 @@ import { Params } from '../common/params';
 /** Class for a raw line */
 export class RawLine {
   codeLineNo = 0;
-  docLineIndex = -1;
+  docLine = -1;
 
   /** original code from the document */
   docCode = '';
@@ -59,7 +59,7 @@ export class RawLine {
 
   toString(): string {
     return (
-      (this.docLineIndex > -1 ? ', ' + this.docLineIndex : '') +
+      (this.docLine > -1 ? ', ' + this.docLine : '') +
       (this.codeLineNo ? ', ' + this.codeLineNo : '') +
       this.raw +
       (this.error ? ', ' + this.error : '')

@@ -38,7 +38,6 @@ export class Tool {
               if (result.programs !== undefined) {
                 // Save *.hex42 output ...
                 if (config.encoderGenerateHexFile) {
-                  
                   const hex = result.getHex(eol, useWhitespaceBetweenHex, useLineNumbers);
 
                   writeText(document.fileName + '.hex42', hex);
@@ -206,7 +205,7 @@ export class Tool {
         // Walk through reverse (!!) all programs and insert/update head line.
         // Reverse iteration for easier insert of new header lines.
         result.programs.reverse().forEach(program => {
-          const startdocLineIndex = program.startdocLineIndex;
+          const startDocLine = program.startDocLine;
           const size = program.getSize();
           const firstError = program.getFirstError();
           let firstErrorText = firstError ? firstError.toString() : '';
@@ -214,7 +213,7 @@ export class Tool {
             firstErrorText = firstErrorText.replace(/ \[.*\]/, '');
           }
 
-          const headLine = editor.document.lineAt(startdocLineIndex);
+          const headLine = editor.document.lineAt(startDocLine);
           let line = '';
 
           if (program.succeeded()) {

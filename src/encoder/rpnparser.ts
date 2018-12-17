@@ -1,71 +1,59 @@
-import * as vscode from "vscode";
+import * as vscode from 'vscode';
 
-import { CodeError } from "../common/codeerror";
-import { Configuration } from "../common/configuration";
-import { EncoderFOCAL } from "./encoderfocal";
-import { RawProgram } from "./rawprogram";
-import { RawLine } from "./rawline";
+import { CodeError } from '../common/codeerror';
+import { Configuration } from '../common/configuration';
+import { Encoder42 } from './encoder42';
+import { RawProgram } from './rawprogram';
+import { RawLine } from './rawline';
 
 /** Command parser for a code line */
 export class RpnParser {
   debug = 1; // debug level 0=nothing, 1=minimal, 2=verbose
 
   programs: RawProgram[] = [];
-  document?: vscode.TextDocument;
-
-  config?: Configuration;
-
-  // parsed
-  ignored: boolean = false;
-
-  // line numbers
   prgmLineNo: number = 0; // by parser auto incremented number
+  document?: vscode.TextDocument;
+  config?: Configuration;
 
   constructor() {}
 
-  parse2() {
+  parse() {
     if (this.document) {
       let docLineCount = this.document.lineCount;
       let program: RawProgram | undefined;
 
-      for (let docLineIndex = 0; docLineIndex < docLineCount; docLineIndex++) {
-        let line = this.document.lineAt(docLineIndex);
-        let lineText = line.text;
+      for (let docLine = 0; docLine < docLineCount; docLine++) {
+        let line = this.document.lineAt(docLine);
 
         //{ ... }-line detected -> Prgm Start
         let match = line.text.match(/\{.*\}/);
         if (match) {
-          program = new RawProgram(docLineIndex);
+          program = new RawProgram(docLine);
           this.programs.push(program);
         }
 
         if (program) {
-          let rawLine = this.parseLine(docLineIndex, lineText);
+          let rawLine = this.parseLine(docLine, line.text);
 
           // no parser error ...
           if (rawLine.error === undefined) {
-            if (this.debug > 1) {
-              console.log("-> " + rawLine.workCode);
-            }
-
             if (!rawLine.ignored) {
-              program.addLine(rawLine);
+              this.pushLine(rawLine);
             }
           } else {
             // parse error
-            program.addLine(rawLine);
+            this.pushLine(rawLine);
           }
         }
       }
     }
   }
 
-  parseLine2(docLineIndex: number, line: string): RawLine {
+  parseLine(docLine: number, line: string): RawLine {
     let progErrorText: string | undefined;
     let rawLine = new RawLine();
 
     //save original code
-    
 
     if (this.ignoredLine(line)) {
       rawLine.ignored = true;
@@ -101,34 +89,40 @@ export class RpnParser {
       if (/^\s*(⊢|)(".*")/.test(rawLine.workCode)) {
         // Is it a string "abc", ⊢"cde" ?
 
-        let str: string | undefined;
+        let str: string = '';
         // only ⊢, not |- or ├
         let match = rawLine.workCode.match(/^\s*(⊢|)(".*")/);
         if (match) {
           str = this.removeDoubleQuotes(match[2]);
-          rawLine.workCode = rawLine.workCode.replace(/^\s*(⊢|)"(.*)"/, "$1`str`");
+          rawLine.workCode = rawLine.workCode.replace(/^\s*(⊢|)"(.*)"/, '$1`str`');
+          if (match[1] === '') {
+            rawLine.raw = 'Fn'; //see EncoderFOCAL.rpnMap.get(`str`)[0];
+          } else {
+            rawLine.raw = 'Fn 7F'; //see EncoderFOCAL.rpnMap.get(⊢`str`)[0];
+          }
         }
 
         // replace all occurences of focal character
         if (str && str.match(/(÷|×|√|∫|░|Σ|▶|π|¿|≤|\[LF\]|≥|≠|↵|↓|→|←|µ|μ|£|₤|°|Å|Ñ|Ä|∡|ᴇ|Æ|…|␛|Ö|Ü|▒|■|•|\\\\|↑)/)) {
-          EncoderFOCAL.charMap.forEach((value, key) => {
-            const regex = new RegExp(key, "g");
+          Encoder42.charCodeMap.forEach((value, key) => {
+            const regex = new RegExp(key, 'g');
             if (str) {
               str = str.replace(regex, String.fromCharCode(value));
             }
           });
         }
+
         rawLine.params.str = str;
       } else if (/^\s*-?\d+(\.\d+|)((ᴇ|e|E)-?\d{1,3}|)\s*$/.test(rawLine.workCode)) {
         // Is it a number ?
         const match = rawLine.workCode.match(/^\s*-?\d+(\.\d+|)((ᴇ|e|E)-?\d{1,3}|)\s*$/);
         if (match) {
           rawLine.params.num = match[0];
-          rawLine.workCode = rawLine.workCode.replace(/^\s*-?\d+(\.\d+|)((ᴇ|e|E)-?\d{1,3}|)\s*$/, "`num`");
+          rawLine.workCode = rawLine.workCode.replace(/^\s*-?\d+(\.\d+|)((ᴇ|e|E)-?\d{1,3}|)\s*$/, '`num`');
         }
-      } else if (EncoderFOCAL.rpnMap2.has(rawLine.token)) {
+      } else if (Encoder42.rpnMap.has(rawLine.token)) {
         // Is it a rpn command ?
-        const patterns = EncoderFOCAL.rpnMap2.get(rawLine.token);
+        const patterns = Encoder42.rpnMap.get(rawLine.token);
 
         if (patterns) {
           let matched = false;
@@ -137,66 +131,69 @@ export class RpnParser {
             const pattern = patterns[i];
 
             //match ?
-            let match = rawLine.docCode.match(pattern.regex);
+            let match = rawLine.workCode.match(pattern.regex);
             if (match) {
               matched = true;
               // Params included ?
               if (pattern.params) {
-                const params = pattern.params.split(",");
+                const params = pattern.params.split(',');
                 // assign params like regex named groups
                 for (let p = 0; p < params.length; p++) {
                   const param = params[p];
                   let k = p + 1;
                   switch (true) {
-                    case /csk/.test(param):
-                      rawLine.params.csk = match[k];
-                      rawLine.params.cskno = parseInt(match[k]);
-                      break;
-                    case /dig/.test(param):
+                    case param === 'dig':
                       rawLine.params.dig = match[k];
                       rawLine.params.digno = parseInt(match[k]);
                       break;
-                    case /flg/.test(param):
+                    case param === 'flg':
                       rawLine.params.flg = match[k];
                       rawLine.params.flgno = parseInt(match[k]);
                       break;
-                    case /lbl/.test(param):
-                      rawLine.params.lbl = match[k];
+                    case param === 'key':
+                      rawLine.params.key = match[k];
+                      rawLine.params.keyno = parseInt(match[k]);
                       break;
-                    case /lblno/.test(param):
-                      rawLine.params.lblno = parseInt(match[k]);
+                    case param === 'lblno':
+                      rawLine.params.lblno = parseInt(this.getLblNo(match[k])); //parseInt(this.getLblNo(match[k]));
                       break;
-                    case /nam/.test(param):
-                      rawLine.params.nam = match[k].replace(/"/g,'');
+                    case param === 'lbl':
+                      rawLine.params.lbl = this.removeDoubleQuotes(match[k]);
                       break;
-                    case /reg/.test(param):
+                    case param === 'nam':
+                      rawLine.params.nam = this.removeDoubleQuotes(match[k]);
+                      break;
+                    case param === 'reg':
                       rawLine.params.reg = match[k];
                       rawLine.params.regno = parseInt(match[k]);
                       break;
-                    case /siz/.test(param):
+                    case param === 'siz':
                       rawLine.params.siz = match[k];
                       rawLine.params.sizno = parseInt(match[k]);
                       break;
-                    case /stk/.test(param):
+                    case param === 'stk':
                       rawLine.params.stk = match[k];
                       break;
-                    case /ton/.test(param):
+                    case param === 'ton':
                       rawLine.params.ton = match[k];
                       rawLine.params.tonno = parseInt(match[k]);
+                      break;
+                    default:
                       break;
                   }
                 }
               }
               rawLine.raw = pattern.raw;
+              break;
             }
           }
 
           if (!matched) {
-            progErrorText = "unvalid parameter";
+            progErrorText = 'unvalid parameter';
           }
         }
       } else {
-        progErrorText = "unvalid command";
+        progErrorText = 'unvalid command';
       }
 
       //#endregion
@@ -204,352 +201,27 @@ export class RpnParser {
       //#region Checks ...
 
       if (this.config && this.config.useLineNumbers && this.prgmLineNo !== rawLine.codeLineNo) {
-        progErrorText = "line number not correct: " + this.prgmLineNo + "!==" + rawLine.codeLineNo;
+        progErrorText = 'line number not correct: ' + this.prgmLineNo + '!==' + rawLine.codeLineNo;
       }
 
       //#endregion
     }
 
     if (progErrorText) {
-      rawLine.error = new CodeError(docLineIndex, this.config && this.config.useLineNumbers ? this.prgmLineNo : -1, rawLine.docCode, String(progErrorText));
+      rawLine.error = new CodeError(
+        docLine,
+        this.config && this.config.useLineNumbers ? this.prgmLineNo : -1,
+        rawLine.docCode,
+        String(progErrorText)
+      );
     }
 
     return rawLine;
   }
 
-
-
-
-
-
-
-
-
-
-
-
-  // -------------------------------------------------- old --------------------------
-
-  parse() {
-    if (this.document) {
-      let docLineCount = this.document.lineCount;
-      let program: RawProgram | undefined;
-
-      for (let docLineIndex = 0; docLineIndex < docLineCount; docLineIndex++) {
-        let line = this.document.lineAt(docLineIndex);
-        let lineText = line.text;
-
-        //{ ... }-line detected -> Prgm Start
-        let match = line.text.match(/\{.*\}/);
-        if (match) {
-          program = new RawProgram(docLineIndex);
-          this.programs.push(program);
-        }
-
-        if (program) {
-          let rawLine = this.parseLine(docLineIndex, lineText);
-
-          // no parser error ...
-          if (rawLine.error === undefined) {
-            if (this.debug > 1) {
-              console.log("-> " + rawLine.workCode);
-            }
-
-            if (!rawLine.ignored) {
-              program.addLine(rawLine);
-            }
-          } else {
-            // parse error
-            program.addLine(rawLine);
-          }
-        }
-      }
-    }
-  }
-
-  parseLine(docLineIndex: number, line: string): RawLine {
-    let progErrorText: string | undefined;
-    let rawLine = new RawLine();
-
-    //save original code
-    rawLine.docCode = line;
-    rawLine.workCode = line;
-
-    if (this.ignoredLine(line)) {
-      rawLine.ignored = true;
-
-      // reset line number when {} header line
-      if (this.config && this.config.useLineNumbers) {
-        switch (true) {
-          // code line is { n-Byte Prgm }
-          case /^00 {.*\}/.test(line):
-            this.prgmLineNo = 0;
-            break;
-
-          default:
-          //nothing
-        }
-      }
-    } else {
-      // increment
-      this.prgmLineNo++;
-
-      // read codeLineNo from code line
-      if (this.config && this.config.useLineNumbers) {
-        let match = line.match(/(^\d+)(▸|▶|>|\s+)/);
-        if (match) {
-          rawLine.codeLineNo = parseInt(match[1]);
-        }
-      }
-
-      //#region prepare line
-
-      rawLine.workCode = this.formatLine(rawLine.workCode);
-
-      // alpha in `str`
-      this.replaceString(rawLine);
-
-      // key number in `key`
-      this.replaceKey(rawLine);
-
-      // global labels in `lbl`
-      this.replaceGlobalLabel(rawLine);
-
-      // local char labels
-      this.replaceLocalCharLabel(rawLine);
-
-      // variables in `nam`
-      this.replaceName(rawLine);
-
-      // custom in `csk`
-      this.replaceCustomKey(rawLine);
-
-      // tone in tn
-      this.replaceTone(rawLine);
-
-      // stack in `stk`
-      this.replaceStack(rawLine);
-
-      // flag in rr
-      this.replaceFlag(rawLine);
-
-      // number in `num`/local labels in `sl|ll`/number in sr/rr/sd/10/11
-      this.replaceNumber(rawLine);
-
-      //#endregion
-
-      //#region Checks ...
-
-      if (this.config && this.config.useLineNumbers && this.prgmLineNo !== rawLine.codeLineNo) {
-        progErrorText = "line number not correct: " + this.prgmLineNo + "!==" + rawLine.codeLineNo;
-      }
-
-      if (rawLine.params.str && progErrorText === undefined) {
-        progErrorText = this.checkString(rawLine.params.str);
-      }
-      if (rawLine.params.nam && progErrorText === undefined) {
-        progErrorText = this.checkName(rawLine.params.nam);
-      }
-      if (rawLine.params.key && progErrorText === undefined) {
-        progErrorText = this.checkKey(rawLine.params.key);
-      }
-      if (rawLine.params.csk && progErrorText === undefined) {
-        progErrorText = this.checkCustomKey(rawLine.params.csk);
-      }
-      if (rawLine.params.ton && progErrorText === undefined) {
-        progErrorText = this.checkTone(rawLine.params.ton);
-      }
-      if (rawLine.params.flg && progErrorText === undefined) {
-        progErrorText = this.checkFlag(rawLine.params.flg);
-      }
-      if (rawLine.params.lbl && progErrorText === undefined) {
-        progErrorText = this.checkGlobalLabel(rawLine.params.lbl);
-      }
-      if (rawLine.params.clb && progErrorText === undefined) {
-        progErrorText = this.checkLocalCharLabel(rawLine.params.clb);
-      }
-
-      //#endregion
-    }
-
-    if (progErrorText) {
-      rawLine.error = new CodeError(docLineIndex, this.config && this.config.useLineNumbers ? this.prgmLineNo : -1, rawLine.docCode, String(progErrorText));
-    }
-
-    return rawLine;
-  }
-
-  //#region Line prepare
-
-  /** check if line can be ignored */
-  private ignoredLine(line: string): boolean {
-    // ignore blank lines, length === 0
-    // ignore { 33-Byte Prgm }...
-    // ignore comments (#|//)
-    line = line.trim();
-    const ignored = line.length === 0 || line.match(/\{.*\}/) !== null || line.match(/^\s*(#|@|\/\/)/) !== null;
-    return ignored;
-  }
-
-  /** Prepare line */
-  private formatLine(line: string): string {
-    // Remove leading line numbers 01▸LBL "AA" or 07 SIN
-    line = line.replace(/^\d+(▸|▶|>|\s+)/, "");
-
-    // Comment //|@|#...
-    let match = line.match(/"/);
-    if (match) {
-      // lines with strings and comment ...
-      line = line.replace(/(".*")\s*(\/\/|@|#).*$/, "$1");
-    } else {
-      // all other lines ...
-      line = line.replace(/(\/\/|@|#).*$/, "");
-
-      // Replace too long spaces (?<!".*)\s{2,} , but not in strings
-      //let regex = new RegExp(/\s{2,}/, "g");
-      line = line.replace(/\s{2,}/g, " ");
-    }
-
-    // Trim spaces
-    line = line.trim();
-
-    return line;
-  }
-
-  //#endregion
-
-  //#region Replace ...
-
-  /** Replace a string with `str` */
-  private replaceString(rawLine: RawLine) {
-    let str: string | undefined;
-    // ⊢ or |- or ├
-    let match = rawLine.workCode.match(/^\s*(⊢|\|-|├|)(".*")/);
-    if (match) {
-      str = this.removeDoubleQuotes(match[2]);
-      rawLine.workCode = rawLine.workCode.replace(/^\s*(⊢|\|-|├|)"(.*)"/, "$1`str`");
-    }
-
-    // replace all occurences of focal character
-    if (str && str.match(/(÷|×|√|∫|░|Σ|▶|π|¿|≤|\[LF\]|≥|≠|↵|↓|→|←|µ|μ|£|₤|°|Å|Ñ|Ä|∡|ᴇ|Æ|…|␛|Ö|Ü|▒|■|•|\\\\|↑)/)) {
-      EncoderFOCAL.charMap.forEach((value, key) => {
-        const regex = new RegExp(key, "g");
-        if (str) {
-          str = str.replace(regex, String.fromCharCode(value));
-        }
-      });
-    }
-    rawLine.params.str = str;
-  }
-
-  /** Replace key number with `key` */
-  private replaceKey(rawLine: RawLine) {
-    let key: string | undefined;
-    let match = rawLine.workCode.match(/KEY\s+(\d+)/);
-    if (match) {
-      key = match[1];
-      rawLine.workCode = rawLine.workCode.replace(/KEY\s+\d+/, "KEY `key`");
-    }
-
-    rawLine.params.key = key;
-  }
-
-  /** Replace global label */
-  private replaceGlobalLabel(rawLine: RawLine) {
-    //Global labels: string with max. 7 characters
-    //               unique to calculator
-    let lbl: string | undefined = undefined;
-    let match = rawLine.workCode.match(/(LBL|GTO|XEQ|CLP|INTEG|PGMSLV|PGMINT|SOLVE)\s+(".{1,7}")/);
-    if (match) {
-      lbl = this.removeDoubleQuotes(match[2]);
-      rawLine.workCode = rawLine.workCode.replace(/(LBL|GTO|XEQ|CLP|INTEG|PGMSLV|PGMINT|SOLVE)\s+".{1,7}"/, "$1 `lbl`");
-    }
-
-    rawLine.params.lbl = lbl;
-  }
-
-  /** Replace a variable with `nam` */
-  private replaceName(rawLine: RawLine) {
-    let nam: string | undefined;
-    let match = rawLine.workCode.match(/".*"/);
-    if (match) {
-      nam = this.removeDoubleQuotes(match[0]);
-      rawLine.workCode = rawLine.workCode.replace(/".*"/, "`nam`");
-    }
-
-    rawLine.params.nam = nam;
-  }
-
-  /** Replace stack with `stk` */
-  private replaceStack(rawLine: RawLine) {
-    let stk: string | undefined;
-    let match = rawLine.workCode.match(/\s+ST\s+([LXYZT])/);
-    if (match) {
-      stk = match[1];
-      rawLine.workCode = rawLine.workCode.replace(/\s+ST\s+([LXYZT])/, " ST `stk`");
-    }
-
-    rawLine.params.stk = stk;
-  }
-
-  /** Replace tone with `tn` */
-  private replaceTone(rawLine: RawLine) {
-    let ton: string | undefined;
-    let match = rawLine.workCode.match(/TONE\s+(\d+)\b/);
-    if (match) {
-      ton = match[1];
-      rawLine.workCode = rawLine.workCode.replace(/TONE\s+(\d+)\b/, "TONE tn");
-    }
-
-    rawLine.params.ton = ton;
-  }
-
-  /** Replace CUSTOM key */
-  private replaceCustomKey(rawLine: RawLine) {
-    // others use 01-18 -> csk hex:00-11
-    let csk: string | undefined;
-    let match = rawLine.workCode.match(/\bTO\s+(\d+)/);
-    if (match) {
-      let int = parseInt(match[1]) - 1;
-      csk = String(int);
-      rawLine.workCode = rawLine.workCode.replace(/\bTO\s+(\d+)/, "TO `csk`");
-    }
-
-    rawLine.params.csk = csk;
-  }
-
-  /** Replace local char label
-   * A-J, a-e
-   */
-  private replaceLocalCharLabel(rawLine: RawLine) {
-    let num: string | undefined;
-    let lbl: string | undefined;
-    let int: number = 0;
-    let match: RegExpMatchArray | null;
-
-    switch (true) {
-      // char labels A-J
-      case /(LBL|GTO|XEQ)\s+\b(A|B|C|D|E|F|G|H|I|J)\b/.test(rawLine.workCode):
-        match = rawLine.workCode.match(/(LBL|GTO|XEQ)\s+\b(A|B|C|D|E|F|G|H|I|J)\b/);
-        if (match) {
-          lbl = match[2]; // A=102(0x66),B=107(0x67),...
-          rawLine.workCode = rawLine.workCode.replace(/(LBL|GTO|XEQ)\s+\b(A|B|C|D|E|F|G|H|I|J)\b/, "$1 ll");
-        }
-        break;
-
-      // char labels a-e
-      case /(LBL|GTO|XEQ)\s+\b(a|b|c|d|e)\b/.test(rawLine.workCode):
-        match = rawLine.workCode.match(/(LBL|GTO|XEQ)\s+\b(a|b|c|d|e)\b/);
-        if (match) {
-          lbl = match[2]; // a=123(0x7B),b=124(0x7C),...
-          rawLine.workCode = rawLine.workCode.replace(/(LBL|GTO|XEQ)\s+\b(a|b|c|d|e)\b/, "$1 ll");
-        }
-        break;
-
-      default:
-        // nothing
-        break;
-    }
+  private getLblNo(lbl: string): string {
+    let int: number;
+    let num: string = '';
 
     // Label A-J,a-e to number, or local number label
     if (lbl) {
@@ -566,134 +238,50 @@ export class RpnParser {
       }
     }
 
-    rawLine.params.clb = num;
+    return num;
   }
 
-  /** Replace flag */
-  private replaceFlag(rawLine: RawLine) {
-    let num: string | undefined;
-    let match: RegExpMatchArray | null;
-
-    switch (true) {
-      case /(CF|SF|F[CS]\?|F[CS]\?C)\s+(\d+)/.test(rawLine.workCode):
-        match = rawLine.workCode.match(/(CF|SF|F[CS]\?|F[CS]\?C)\s+(\d+)/);
-        if (match) {
-          num = match[2];
-          rawLine.workCode = rawLine.workCode.replace(/(CF|SF|F[CS]\?|F[CS]\?C)\s+(\d+)/, "$1 rr");
-        }
-        break;
-
-      default:
-        // nothing
-        break;
+  private pushLine(rawLine: RawLine) {
+    if (this.debug > 0) {
+      console.log(rawLine.workCode + ' -> ' + rawLine.raw);
     }
 
-    rawLine.params.flg = num;
+    this.programs[0].addLine(rawLine);
   }
 
-  /** Replace number */
-  private replaceNumber(rawLine: RawLine) {
-    let num: string | undefined;
-    let int: number = 0;
-    let match: RegExpMatchArray | null;
+  /** check if line can be ignored */
+  private ignoredLine(line: string): boolean {
+    // ignore blank lines, length === 0
+    // ignore { 33-Byte Prgm }...
+    // ignore comments (#|//)
+    line = line.trim();
+    const ignored = line.length === 0 || line.match(/\{.*\}/) !== null || line.match(/^\s*(#|@|\/\/)/) !== null;
+    return ignored;
+  }
 
-    switch (true) {
-      // number label 00-14, 15-99
-      case /(LBL|GTO|XEQ)\s+(\d{2})/.test(rawLine.workCode):
-        match = rawLine.workCode.match(/(LBL|GTO|XEQ)\s+(\d{2})/);
-        if (match) {
-          num = match[2];
+  /** Prepare line */
+  private formatLine(line: string): string {
+    // Remove leading line numbers 01▸LBL "AA" or 07 SIN
+    line = line.replace(/^\d+(▸|▶|>|\s+)/, '');
 
-          // 00-14
-          int = parseInt(num);
-          if (this.inRange(int, 0, 14)) {
-            rawLine.workCode = rawLine.workCode.replace(/(LBL|GTO|XEQ)\s+(\d{2})/, "$1 sl");
-          }
+    // Comment //|@|#...
+    let match = line.match(/"/);
+    if (match) {
+      // lines with strings and comment ...
+      line = line.replace(/(".*")\s*(\/\/|@|#).*$/, '$1');
+    } else {
+      // all other lines ...
+      line = line.replace(/(\/\/|@|#).*$/, '');
 
-          // 15-99
-          if (this.inRange(int, 15, 99)) {
-            rawLine.workCode = rawLine.workCode.replace(/(LBL|GTO|XEQ)\s+(\d{2})/, "$1 ll");
-          }
-        }
-        break;
-
-      case /^\s*-?\d+(\.\d+|)((ᴇ|e|E)-?\d{1,3}|)\s*$/.test(rawLine.workCode):
-        match = rawLine.workCode.match(/^\s*-?\d+(\.\d+|)((ᴇ|e|E)-?\d{1,3}|)\s*$/);
-        if (match) {
-          num = match[0];
-          rawLine.workCode = rawLine.workCode.replace(/^\s*-?\d+(\.\d+|)((ᴇ|e|E)-?\d{1,3}|)\s*$/, "`num`");
-        }
-        break;
-
-      case /\b(STO|RCL)\s+(\d{2})/.test(rawLine.workCode):
-        // sr/rr only for STO/RCL
-        match = rawLine.workCode.match(/\b(STO|RCL)\s+(\d{2})/);
-        if (match) {
-          num = match[2];
-          int = parseInt(num);
-          rawLine.workCode = rawLine.workCode.replace(/\b(STO|RCL)\s+(\d{2})/, "$1 " + (int < 16 ? "sr" : "rr"));
-        }
-        break;
-
-      case /\b(STO|RCL)(\+|-|x|×|\/|÷)\s+(\d{2})/.test(rawLine.workCode):
-        // sr/rr only for STO/RCL
-        match = rawLine.workCode.match(/\b(STO|RCL)(\+|-|x|×|\/|÷)\s+(\d{2})/);
-        if (match) {
-          num = match[3];
-          rawLine.workCode = rawLine.workCode.replace(/\b(STO|RCL)(\+|-|x|×|\/|÷)\s+(\d{2})/, "$1$2 rr");
-        }
-        break;
-
-      case /(ENG|FIX|SCI)\s+IND\s+(\d{2})/.test(rawLine.workCode):
-        // sr/rr only for STO/RCL
-        match = rawLine.workCode.match(/(ENG|FIX|SCI)\s+IND\s+(\d{2})/);
-        if (match) {
-          num = match[2];
-          rawLine.workCode = rawLine.workCode.replace(/(ENG|FIX|SCI)\s+IND\s+(\d{2})/, "$1 IND rr");
-        }
-        break;
-
-      case /(ENG|FIX|SCI)\s+(\d{2})/.test(rawLine.workCode):
-        // sr/rr only for STO/RCL
-        match = rawLine.workCode.match(/(ENG|FIX|SCI)\s+(\d{2})/);
-        if (match) {
-          num = match[2];
-          int = parseInt(num);
-          rawLine.workCode = rawLine.workCode.replace(/(ENG|FIX|SCI)\s+(\d{2})/, "$1 " + (int < 10 ? "sd" : "$2"));
-        }
-        break;
-
-      case /X<>\s+\d{2}/.test(rawLine.workCode):
-        match = rawLine.workCode.match(/X<>\s+(\d{2})/);
-        if (match) {
-          num = match[1];
-          rawLine.workCode = rawLine.workCode.replace(/X<>\s+(\d{2})/, "X<> rr");
-        }
-        break;
-
-      case /SIZE\s+\d{1,4}/.test(rawLine.workCode):
-        match = rawLine.workCode.match(/SIZE\s+(\d{1,4})/);
-        if (match) {
-          num = match[1];
-          rawLine.workCode = rawLine.workCode.replace(/SIZE\s+(\d{1,4})/, "SIZE rr");
-        }
-        break;
-
-      case /(\w+)(\?|)(\s+IND|)\s+(\d{2})/.test(rawLine.workCode):
-        // others use 00-99 -> rr
-        match = rawLine.workCode.match(/(\w+)(\?|)(\s+IND|)\s+(\d{2})/);
-        if (match) {
-          num = match[4];
-          rawLine.workCode = rawLine.workCode.replace(/(\w+)(\?|)(\s+IND|)\s+(\d{2})/, "$1$2$3 rr");
-        }
-        break;
-
-      default:
-        // nothing
-        break;
+      // Replace too long spaces (?<!".*)\s{2,} , but not in strings
+      //let regex = new RegExp(/\s{2,}/, "g");
+      line = line.replace(/\s{2,}/g, ' ');
     }
 
-    rawLine.params.num = num;
+    // Trim spaces
+    line = line.trim();
+
+    return line;
   }
 
   /** Removes double quotes */
@@ -707,72 +295,48 @@ export class RpnParser {
     return str;
   }
 
-  //#endregion
-
-  //#region Checks ...
-
   private checkString(str: string | undefined): string | undefined {
     if (str !== undefined) {
-      return this.inRange(str.length, 0, 15) ? undefined : "alpha too long";
+      return this.inRange(str.length, 0, 15) ? undefined : 'alpha too long';
     }
     return undefined;
   }
 
   private checkName(nam: string | undefined): string | undefined {
     if (nam !== undefined) {
-      return this.inRange(nam.length, 1, 7) ? undefined : "name length unvalid";
+      return this.inRange(nam.length, 1, 7) ? undefined : 'name length unvalid';
     }
     return undefined;
   }
 
-  /** Check length of global label */
+  /** Check key */
   private checkKey(key: string | undefined): string | undefined {
     if (key !== undefined) {
-      return this.inRange(parseInt(key), 1, 9) ? undefined : "key value invalid";
+      return this.inRange(parseInt(key), 1, 9) ? undefined : 'key value invalid';
     }
     return undefined;
   }
 
-  /** Check length of global label */
+  /** Check tone */
   private checkTone(ton: string | undefined): string | undefined {
     if (ton !== undefined) {
-      return this.inRange(parseInt(ton), 1, 9) && ton.length === 1 ? undefined : "tone value invalid";
+      return this.inRange(parseInt(ton), 1, 9) && ton.length === 1 ? undefined : 'tone value invalid';
     }
     return undefined;
   }
 
-  /** Check flag of global label */
+  /** Check flag */
   private checkFlag(flg: string | undefined): string | undefined {
     if (flg !== undefined) {
-      return this.inRange(parseInt(flg), 0, 99) && flg.length === 2 ? undefined : "flag value invalid";
+      return this.inRange(parseInt(flg), 0, 99) && flg.length === 2 ? undefined : 'flag value invalid';
     }
     return undefined;
   }
 
-  /** Check length of global label */
+  /** Check global label */
   private checkGlobalLabel(lbl: string | undefined): string | undefined {
     if (lbl !== undefined) {
-      return this.inRange(lbl.length, 0, 7) ? undefined : "label length unvalid";
-    }
-    return undefined;
-  }
-
-  /** Check Local Char Label */
-  private checkLocalCharLabel(clb: string | undefined): string | undefined {
-    if (clb !== undefined) {
-      let int = parseInt(clb);
-      // A=102(0x66),B=107(0x67),...             -> 102-111
-      // a=97+26=123(0x7B),b=98+26=124(0x7C),... -> 123-127
-      return this.inRange(int, 102, 111) || this.inRange(int, 123, 127) ? undefined : "wrong label";
-    }
-    return undefined;
-  }
-
-  /** Check Custom Key */
-  private checkCustomKey(csk: string | undefined): string | undefined {
-    if (csk !== undefined) {
-      let int = parseInt(csk);
-      return this.inRange(int, 0, 17) ? undefined : "custom key out of range";
+      return this.inRange(lbl.length, 0, 7) ? undefined : 'label length unvalid';
     }
     return undefined;
   }
@@ -781,6 +345,4 @@ export class RpnParser {
   private inRange(x: number, min: number, max: number) {
     return (x - min) * (x - max) <= 0;
   }
-
-  //#endregion
 }

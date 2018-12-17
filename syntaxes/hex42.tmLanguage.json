@@ -4,25 +4,54 @@
   "fileTypes": ["hex42"],
   "patterns": [
     {
-      "include": "#constants"
+      "include": "#text"
+    },
+    {
+      "include": "#numeric"
     },
     {
       "include": "#invalid"
     }
   ],
   "repository": {
-    "constants": {
+    "numeric": {
       "patterns": [
         {
-          "include": "#constant-number-hex42"
+          "include": "#numeric-address"
+        },
+        {
+          "include": "#numeric-hex"
         }
       ]
     },
-    "constant-number-hex42": {
+    "text": {
       "patterns": [
         {
-          "match": "[0-9a-fA-F]+",
+          "include": "#text-comment"
+        }
+      ]
+    },
+    "numeric-address": {
+      "patterns": [
+        {
+          "match": "\\d{2,}:",
+          "name": "keyword.other.control.hex42"
+        }
+      ]
+    },
+    "numeric-hex": {
+      "patterns": [
+        {
+          "match": "([0-9a-fA-F]{2}( |))+",
           "name": "constant.numeric.hex42"
+        }
+      ]
+    },
+    "text-comment": {
+      "patterns": [
+        {
+          "match": "Offset: .*",
+          "name": "keyword.other.control.hex42"
         }
       ]
     },

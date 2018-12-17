@@ -1,7 +1,8 @@
 export class Params {
+  //private dictString: Map<string, string>;
+  //private dictNumber: Map<string, number>;
+
   // parameters
-  clb?: string;
-  csk?: string;
   dig?: string;
   flg?: string;
   key?: string;
@@ -12,20 +13,21 @@ export class Params {
   siz?: string;
   str?: string;
   ton?: string;
-
   stk?: string;
-  stkno?: string;
-
-  cskno?: number;
+  
+  // length
+  lbll?: number;
+  naml?: number;
+  strl?: number;
+  
+  // values
+  stkno?: number;
   digno?: number;
   flgno?: number;
   keyno?: number;
   lblno?: number;
-  lbll?: number;
-  naml?: number;
   regno?: number;
   sizno?: number;
-  strl?: number;
   tonno?: number;
 
   constructor() {}

@@ -1,7 +1,7 @@
 import { RpnPattern } from './rpnpattern';
 import { RpnLine } from './rpnline';
 
-export class DecoderFOCAL {
+export class Decoder42 {
   //#region Members
 
   static rawMap = new Map<string, RpnPattern[]>();
@@ -16,22 +16,22 @@ export class DecoderFOCAL {
   //#region public
 
   static initialize() {
-    if (!DecoderFOCAL.initialized) {
+    if (!Decoder42.initialized) {
       // transform arr_rawMap -> rawMap
-      DecoderFOCAL.arr_rawMap.forEach((e) => {
-        DecoderFOCAL.rawMap.set(e.key, e.value);
+      Decoder42.arr_rawMap.forEach((e) => {
+        Decoder42.rawMap.set(e.key, e.value);
       });
 
-      DecoderFOCAL.arr_stackMap.forEach((e) => {
-        DecoderFOCAL.stackMap.set(e.key, e.value);
+      Decoder42.arr_stackMap.forEach((e) => {
+        Decoder42.stackMap.set(e.key, e.value);
       });
 
       // transform arr_charMap -> charMap
-      DecoderFOCAL.arr_charMap.forEach((e) => {
-        DecoderFOCAL.charMap.set(e.key, e.value);
+      Decoder42.arr_charMap.forEach((e) => {
+        Decoder42.charMap.set(e.key, e.value);
       });
 
-      DecoderFOCAL.initialized = true;
+      Decoder42.initialized = true;
     }
   }
 
@@ -71,9 +71,7 @@ export class DecoderFOCAL {
         this.replaceTone('tn', rpnLine);
       } else if (rpnLine.params.dig !== undefined && /sd/.test(rpnLine.workCode)) {
         this.replaceDigits('sd', rpnLine);
-      } else if (rpnLine.params.csk !== undefined && /csk/.test(rpnLine.workCode)) {
-        this.replaceCustomKey('csk', rpnLine);
-      }
+      } 
 
       if (rpnLine.params.lbl && /`lbl`/.test(rpnLine.workCode)) {
         this.replaceLabel('`lbl`', rpnLine);
@@ -121,13 +119,13 @@ export class DecoderFOCAL {
     }
   }
 
-  static replaceCustomKey(replace: string, rpnLine: RpnLine) {
-    if (rpnLine.workCode) {
-      rpnLine.workCode = rpnLine.workCode.replace(replace, '' + (rpnLine.params.cskno !== undefined ?
-        (rpnLine.params.cskno > 9 ? '' + rpnLine.params.cskno : '0' + rpnLine.params.cskno)
-      : '??'));
-    }
-  }
+  //static replaceCustomKey(replace: string, rpnLine: RpnLine) {
+  //  if (rpnLine.workCode) {
+  //    rpnLine.workCode = rpnLine.workCode.replace(replace, '' + (rpnLine.params.cskno !== undefined ?
+  //      (rpnLine.params.cskno > 9 ? '' + rpnLine.params.cskno : '0' + rpnLine.params.cskno)
+  //    : '??'));
+  //  }
+  //}
 
   static replaceLabelNo(replace: string, rpnLine: RpnLine) {
     // ... 99  ... 63 dec:16-99; hex:10-63
@@ -139,7 +137,7 @@ export class DecoderFOCAL {
       let number = '';
 
       if (rpnLine.params.lblno !== undefined) {
-        if (DecoderFOCAL.inRange(rpnLine.params.lblno, 0, 99)) {
+        if (Decoder42.inRange(rpnLine.params.lblno, 0, 99)) {
           //00-99
           number =
             rpnLine.params.lblno !== undefined
@@ -147,10 +145,10 @@ export class DecoderFOCAL {
                 ? '' + rpnLine.params.lblno
                 : '0' + rpnLine.params.lblno
               : '??';
-        } else if (DecoderFOCAL.inRange(rpnLine.params.lblno, 102, 111)) {
+        } else if (Decoder42.inRange(rpnLine.params.lblno, 102, 111)) {
           //A-F
           number = String.fromCharCode(rpnLine.params.lblno - 37);
-        } else if (DecoderFOCAL.inRange(rpnLine.params.lblno, 123, 127)) {
+        } else if (Decoder42.inRange(rpnLine.params.lblno, 123, 127)) {
           //a-e
           number = String.fromCharCode(rpnLine.params.lblno - 26);
         }
@@ -229,7 +227,7 @@ export class DecoderFOCAL {
       number = raw;
     }
 
-    // TODO: 0.008 -> 8ᴇ-3
+    // TODO: Format 0.008 -> 8ᴇ-3
     const match = number.match(/(0+)\.(0+)(\d+)(ᴇ|)((-|)\d+|)/);
     if (match) {
       let len1 = match[1].length;
@@ -254,8 +252,8 @@ export class DecoderFOCAL {
       let chars = raw.split(' ');
       chars.forEach(char => {
         let byte = this.convertHexAsByte(char);
-        if (DecoderFOCAL.charMap.has(byte)) {
-          str += DecoderFOCAL.charMap.get(byte);
+        if (Decoder42.charMap.has(byte)) {
+          str += Decoder42.charMap.get(byte);
         } else {
           str += String.fromCharCode(byte);
         }
@@ -858,7 +856,7 @@ export class DecoderFOCAL {
         { regex: /F([1-9A-F]) BD/, len: 2, rpn: 'PGMSLV IND `nam`', params: 'naml-1' },
         { regex: /F([1-9A-F]) BE/, len: 2, rpn: 'INTEG IND `nam`', params: 'naml-1' },
         { regex: /F([1-9A-F]) BF/, len: 2, rpn: 'SOLVE IND `nam`', params: 'naml-1' },
-        { regex: /F([1-9A-F]) C0/, len: 2, rpn: 'ASSIGN `nam` TO csk', params: 'naml-2,csk+1' }, // 
+        { regex: /F([1-9A-F]) C0/, len: 2, rpn: 'ASSIGN `nam` TO key', params: 'naml-2,key++' }, // 
         { regex: /F([1-9A-F]) C1/, len: 2, rpn: 'VARMENU `nam`', params: 'naml-1' },
         { regex: /F([1-9A-F]) C2 (0[1-9])/, len: 3, rpn: 'KEY `key` XEQ `lbl`', params: 'lbll-2,key' }, //+
         { regex: /F([1-9A-F]) C3 (0[1-9])/, len: 3, rpn: 'KEY `key` GTO `lbl`', params: 'lbll-2,key' },

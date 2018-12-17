@@ -10,6 +10,7 @@ export class RpnLine {
   /** working code */
   workCode?: string;
   error?: CodeError;
+  rawLength: number = 0;
   params = new Params();
 
   constructor() {}

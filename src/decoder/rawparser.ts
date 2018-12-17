@@ -1,17 +1,17 @@
-import { RpnLine } from "./rpnline";
-import { DecoderFOCAL } from "./decoderfocal";
-import { RpnPattern } from "./rpnpattern";
-import { RpnProgram } from "./rpnprogram";
-import { CodeError } from "../common/codeerror";
+import { RpnLine } from './rpnline';
+import { Decoder42 } from './decoder42';
+import { RpnPattern } from './rpnpattern';
+import { RpnProgram } from './rpnprogram';
+import { CodeError } from '../common/codeerror';
 
 export class RawParser {
   debug = 1; // debug level 0=nothing, 1=minimal, 2=verbose
   programs: RpnProgram[] = [];
-  languageId = "hp42s";
+  languageId = 'hp42s';
 
   private raw: string[];
   private codeLineNo: number = 0;
-  private number: string = "";
+  private number: string = '';
   private readingNumber = false;
 
   constructor(raw: string[]) {
@@ -47,8 +47,8 @@ export class RawParser {
 
     let size = this.raw.length;
     if (size >= 3) {
-      const end = this.raw[size - 3] + " " + this.raw[size - 2] + " " + this.raw[size - 1];
-      if (end === "C0 00 0D") {
+      const end = this.raw[size - 3] + ' ' + this.raw[size - 2] + ' ' + this.raw[size - 1];
+      if (end === 'C0 00 0D') {
         size -= 3;
       }
     }
@@ -62,12 +62,12 @@ export class RawParser {
     // number detected
     if (!this.readingNumber) {
       this.readingNumber = true;
-      this.number = "";
+      this.number = '';
     }
 
     //put it together
     if (/(1[0-9A-C]|00)/.test(b0)) {
-      this.number += b0 + " ";
+      this.number += b0 + ' ';
 
       //end of number ?
       if (/00/.test(b0)) {
@@ -76,11 +76,12 @@ export class RawParser {
         // create new line
         const rpnLine = new RpnLine();
         rpnLine.docRaw = this.number.trim();
-        rpnLine.workCode = "`num`";
+        rpnLine.rawLength = this.number.length / 3; //'00 '
+        rpnLine.workCode = '`num`';
         rpnLine.params.num = this.number.trim();
 
         // collect rawLines
-        this.pushRpnLine(rpnLine);
+        this.pushLine(rpnLine);
       }
     } else {
       this.readingNumber = false;
@@ -88,11 +89,12 @@ export class RawParser {
       // create new line
       const rpnLine = new RpnLine();
       rpnLine.docRaw = this.number;
-      rpnLine.error = new CodeError(-1, index, b0 + " ...", "Unknown byte sequence for number");
+      rpnLine.rawLength = this.number.length / 3; //'00 '
+      rpnLine.error = new CodeError(-1, index, b0 + ' ...', 'Unknown byte sequence for number');
       rpnLine.params.num = this.number.trim();
 
       // collect rawLines
-      this.pushRpnLine(rpnLine);
+      this.pushLine(rpnLine);
     }
 
     return 1;
@@ -101,19 +103,18 @@ export class RawParser {
   public parseCommand(index: number): number {
     // new temp maps
     const b0 = this.raw[index];
-    
+
     const n0 = b0[0];
 
     // create new line
     const rpnLine = new RpnLine();
 
     let hex = '';
-    let length = 0;
 
     // test first nibble
-    if (DecoderFOCAL.rawMap.has(n0)) {
+    if (Decoder42.rawMap.has(n0)) {
       //get patterns from first nibble
-      let patterns = DecoderFOCAL.rawMap.get(n0);
+      let patterns = Decoder42.rawMap.get(n0);
 
       if (patterns) {
         //params
@@ -138,7 +139,7 @@ export class RawParser {
           //match ?
           let match = hex.match(pattern.regex);
           if (match) {
-            length = pattern.len;
+            rpnLine.rawLength = pattern.len;
             // offset
             const next = index + pattern.len;
 
@@ -146,21 +147,21 @@ export class RawParser {
             this.checkParamsInMatch(rpnLine, next, pattern, match);
 
             // check if strings are too long ?
-            if(this.checkParseLength(rpnLine, next)){
+            if (this.checkParseLength(rpnLine, next)) {
               break;
             }
 
             // check if str/lbl/nam found and adjust length ...
-            length += this.readStringParams(rpnLine, next);
+            rpnLine.rawLength += this.readStringParams(rpnLine, next);
 
-            // increase length for csk from 'ASSIGN `nam` TO csk'
-            if (rpnLine.params.cskno) {
-              length += 1;
-            }
+            // increase length for
+            // 'ASSIGN `nam` TO key'
+            // 'KEY `key` GTO (|IND) `nam`'
+            // 'KEY `key` XEQ (|IND) `nam`'
 
             // get all raw bytes of this code line
             hex += ' ';
-            for (let j = pattern.len; j < length; j++) {
+            for (let j = pattern.len; j < rpnLine.rawLength; j++) {
               hex += this.raw[index + j] + ' ';
             }
             hex = hex.trim();
@@ -170,7 +171,7 @@ export class RawParser {
             rpnLine.workCode = pattern.rpn;
 
             // collect rawLines
-            this.pushRpnLine(rpnLine);
+            this.pushLine(rpnLine);
 
             // someting matched successfully
             matched = true;
@@ -182,98 +183,99 @@ export class RawParser {
         // no match, then error ...
         if (!matched) {
           rpnLine.docRaw = b0;
-          rpnLine.error = new CodeError(-1, index, b0 + " ...", "Unknown byte sequence");
-          this.pushRpnLine(rpnLine);
+          rpnLine.error = new CodeError(-1, index, b0 + ' ...', 'Unknown byte sequence');
+          this.pushLine(rpnLine);
         }
       }
     } else {
       // unknown nibble
       rpnLine.docRaw = hex;
-      rpnLine.error = new CodeError(-1, index, b0 + " ...", "Unknown byte sequence");
-      this.pushRpnLine(rpnLine);
+      rpnLine.error = new CodeError(-1, index, b0 + ' ...', 'Unknown byte sequence');
+      this.pushLine(rpnLine);
     }
 
-    return length;
+    return rpnLine.rawLength;
   }
 
   /** Check all given matches to named params */
-  private checkParamsInMatch(rpnLine: RpnLine, next: number, pattern: RpnPattern, match: RegExpMatchArray ) {
+  private checkParamsInMatch(rpnLine: RpnLine, next: number, pattern: RpnPattern, match: RegExpMatchArray) {
     if (pattern.params) {
-      const params = pattern.params.split(",");
+      const params = pattern.params.split(',');
       // assign params like regex named groups
       for (let p = 0; p < params.length; p++) {
         const param = params[p];
         let k = p + 1;
         switch (true) {
-          case /strl-2/.test(param):
+          case param === 'strl-2':
             rpnLine.params.strl = parseInt(match[k], 16) - 2;
             break;
-          case /strl-1/.test(param):
+          case param === 'strl-1':
             rpnLine.params.strl = parseInt(match[k], 16) - 1;
             break;
-          case /strl/.test(param):
+          case param === 'strl':
             rpnLine.params.strl = parseInt(match[k], 16);
             break;
-          case /lblno-1/.test(param):
+          case param === 'lblno-1':
             rpnLine.params.lblno = parseInt(match[k], 16) - 1;
             break;
-          case /lblno/.test(param):
+          case param === 'lblno':
             rpnLine.params.lblno = parseInt(match[k], 16);
             break;
-          case /lbll-2/.test(param):
+          case param === 'lbll-2':
             rpnLine.params.lbll = parseInt(match[k], 16) - 2;
             break;
-          case /lbll-1/.test(param):
+          case param === 'lbll-1':
             rpnLine.params.lbll = parseInt(match[k], 16) - 1;
             break;
-          case /lbll/.test(param):
+          case param === 'lbll':
             rpnLine.params.lbll = parseInt(match[k], 16);
             break;
-          case /naml-2/.test(param):
+          case param === 'naml-2':
             rpnLine.params.naml = parseInt(match[k], 16) - 2;
             break;
-          case /naml-1/.test(param):
+          case param === 'naml-1':
             rpnLine.params.naml = parseInt(match[k], 16) - 1;
             break;
-          case /naml/.test(param):
+          case param === 'naml':
             rpnLine.params.naml = parseInt(match[k], 16);
             break;
-          case /reg-128/.test(param):
+          case param === 'reg-128':
             rpnLine.params.reg = match[k];
             rpnLine.params.regno = parseInt(match[k], 16) - 128;
             break;
-          case /reg/.test(param):
+          case param === 'reg':
             rpnLine.params.reg = match[k];
             rpnLine.params.regno = parseInt(match[k], 16);
             break;
-          case /stk/.test(param):
-            rpnLine.params.stkno = match[k];
-            let stk = parseInt(match[k], 16);
-            if (DecoderFOCAL.stackMap.has(stk)) {
-              rpnLine.params.stk = DecoderFOCAL.stackMap.get(stk);
+          case param === 'stk':
+            rpnLine.params.stkno = parseInt(match[k], 16);
+            if (Decoder42.stackMap.has(rpnLine.params.stkno)) {
+              rpnLine.params.stk = Decoder42.stackMap.get(rpnLine.params.stkno);
             }
             break;
-          case /dig/.test(param):
+          case param === 'dig':
             rpnLine.params.dig = match[k];
             rpnLine.params.digno = parseInt(match[k], 16);
             break;
-          case /csk\+1/.test(param):
-            // fetch csk-byte after name
-            rpnLine.params.csk = rpnLine.params.naml ? this.raw[next + rpnLine.params.naml] : undefined;
-            rpnLine.params.cskno = rpnLine.params.naml ? parseInt(this.raw[next + rpnLine.params.naml], 16) + 1 : undefined;
-            break;
-          case /flg/.test(param):
+          case param === 'flg':
             rpnLine.params.flg = match[k];
             rpnLine.params.flgno = parseInt(match[k], 16);
             break;
-          case /key/.test(param):
+          case param === 'key++':
+            // fetch key-byte after name
+            rpnLine.params.key = rpnLine.params.naml ? this.raw[next + rpnLine.params.naml] : undefined;
+            rpnLine.params.keyno = rpnLine.params.naml ? parseInt(this.raw[next + rpnLine.params.naml], 16) : undefined;
+            // include key byte
+            rpnLine.rawLength++;
+            break;
+          case param === 'key':
             rpnLine.params.key = match[k];
             rpnLine.params.keyno = parseInt(match[k], 16);
             break;
-          case /size/.test(param):
+          case param === 'size':
             rpnLine.params.siz = match[k];
-            rpnLine.params.sizno = parseInt(match[k].replace(' ',''), 16);
-          case /ton/.test(param):
+            rpnLine.params.sizno = parseInt(match[k].replace(' ', ''), 16);
+          case param === 'ton':
             rpnLine.params.ton = match[k];
             rpnLine.params.tonno = parseInt(match[k], 16);
             break;
@@ -301,28 +303,28 @@ export class RawParser {
   /** Check if str/lbl/nam found and adjust length */
   private readStringParams(rpnLine: RpnLine, next: number) {
     if (rpnLine.params.strl) {
-      rpnLine.params.str = "";
+      rpnLine.params.str = '';
       // where the string starts ...
       for (let j = 0; j < rpnLine.params.strl; j++) {
-        rpnLine.params.str += this.raw[next + j] + " ";
+        rpnLine.params.str += this.raw[next + j] + ' ';
       }
       rpnLine.params.str = rpnLine.params.str.trim();
       return rpnLine.params.strl;
     }
     if (rpnLine.params.lbll) {
-      rpnLine.params.lbl = "";
+      rpnLine.params.lbl = '';
       // where the string starts ...
       for (let j = 0; j < rpnLine.params.lbll; j++) {
-        rpnLine.params.lbl += this.raw[next + j] + " ";
+        rpnLine.params.lbl += this.raw[next + j] + ' ';
       }
       rpnLine.params.lbl = rpnLine.params.lbl.trim();
       return rpnLine.params.lbll;
     }
     if (rpnLine.params.naml) {
-      rpnLine.params.nam = "";
+      rpnLine.params.nam = '';
       // where the string starts ...
       for (let j = 0; j < rpnLine.params.naml; j++) {
-        rpnLine.params.nam += this.raw[next + j] + " ";
+        rpnLine.params.nam += this.raw[next + j] + ' ';
       }
       rpnLine.params.nam = rpnLine.params.nam.trim();
       return rpnLine.params.naml;
@@ -335,49 +337,49 @@ export class RawParser {
     if (pattern.len === 2) {
       // free42 commands: ACCEL|LOCAT|HEADING|ADATE|ATIME|ATIME24|CLK12|CLK24|DATE|DATE+|DDAYS|DMY|DOW|MDY|TIME
       let free42All =
-        "A7 CF" +
-        " " + // ACCEL
-        "A7 D0" +
-        " " + // LOCAT'
-        "A7 D1" +
-        " " + // HEADING'
-        "A6 81" +
-        " " + // ADATE
-        "A6 84" +
-        " " + // ATIME
-        "A6 85" +
-        " " + // ATIME24
-        "A6 86" +
-        " " + // CLK12
-        "A6 87" +
-        " " + // CLK24
-        "A6 8C" +
-        " " + // DATE
-        "A6 8D" +
-        " " + // DATE+
-        "A6 8E" +
-        " " + // DDAYS
-        "A6 8F" +
-        " " + // DMY
-        "A6 90" +
-        " " + // DOW
-        "A6 91" +
-        " " + // MDY
-        "A6 9C" +
-        " "; // TIME
+        'A7 CF' +
+        ' ' + // ACCEL
+        'A7 D0' +
+        ' ' + // LOCAT'
+        'A7 D1' +
+        ' ' + // HEADING'
+        'A6 81' +
+        ' ' + // ADATE
+        'A6 84' +
+        ' ' + // ATIME
+        'A6 85' +
+        ' ' + // ATIME24
+        'A6 86' +
+        ' ' + // CLK12
+        'A6 87' +
+        ' ' + // CLK24
+        'A6 8C' +
+        ' ' + // DATE
+        'A6 8D' +
+        ' ' + // DATE+
+        'A6 8E' +
+        ' ' + // DDAYS
+        'A6 8F' +
+        ' ' + // DMY
+        'A6 90' +
+        ' ' + // DOW
+        'A6 91' +
+        ' ' + // MDY
+        'A6 9C' +
+        ' '; // TIME
       let isFree42 = free42All.match(hex);
       if (isFree42) {
-        this.languageId = "free42";
+        this.languageId = 'free42';
       }
     }
   }
 
-  private pushRpnLine(rpnLine: RpnLine) {
+  private pushLine(rpnLine: RpnLine) {
     this.codeLineNo++;
     rpnLine.codeLineNo = this.codeLineNo;
 
-    if (this.debug > 1) {
-      console.log("-> " + rpnLine.workCode);
+    if (this.debug > 0) {
+      console.log(rpnLine.docRaw + ' -> ' + rpnLine.workCode);
     }
 
     this.programs[0].addLine(rpnLine);
