@@ -11,7 +11,7 @@ export class RpnParser {
 
   //#region Member
 
-  debug = 1; // debug level 0=nothing, 1=minimal, 2=verbose
+  debug = 0; // debug level 0=nothing, 1=minimal, 2=verbose
 
   programs: RawProgram[] = [];
   prgmLineNo: number = 0; // by parser auto incremented number

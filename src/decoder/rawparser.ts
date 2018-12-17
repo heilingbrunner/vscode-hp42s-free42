@@ -8,7 +8,7 @@ export class RawParser {
 
   //#region Members
   
-  debug = 1; // debug level 0=nothing, 1=minimal, 2=verbose
+  debug = 0; // debug level 0=nothing, 1=minimal, 2=verbose
   programs: RpnProgram[] = [];
   languageId = 'hp42s';
 
