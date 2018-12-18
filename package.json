@@ -8,6 +8,7 @@
   "description": "HP42S/free42 RPN programming language support",
   "version": "1.0.0",
   "publisher": "JHeilingbrunner",
+  "license": "MIT",
   "icon": "images/vscode-hp42s-free42-logo.png",
   "engines": {
     "vscode": "^1.27.0"
