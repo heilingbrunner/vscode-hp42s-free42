@@ -5,6 +5,7 @@ import { Configuration } from '../common/configuration';
 import { Encoder42 } from './encoder42';
 import { RawProgram } from './rawprogram';
 import { RawLine } from './rawline';
+import { RawPattern } from './rawpattern';
 
 /** Command parser for a code line */
 export class RpnParser {
@@ -161,7 +162,7 @@ export class RpnParser {
   //#region Private Methods
 
   /** Read params from match like regex named group */
-  private checkParamsInMatch(pattern: import("c:/Temp/#Workbench#/visual-studio/vscode-hp42s-free42/src/encoder/rawpattern").RawPattern, rawLine: RawLine, match: RegExpMatchArray) {
+  private checkParamsInMatch(pattern: RawPattern, rawLine: RawLine, match: RegExpMatchArray) {
     if (pattern.params) {
       const params = pattern.params.split(',');
       // assign params like regex named groups
