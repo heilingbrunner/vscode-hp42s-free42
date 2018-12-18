@@ -3,5 +3,3 @@ node_modules
 .vscode-test/
 *.vsix
 *.docx
-
-package-lock.json
