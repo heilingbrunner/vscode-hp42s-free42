@@ -58,19 +58,19 @@ export class Decoder42 {
         this.replaceLabelNo('ll', rpnLine);
       }
       //
-      else if (rpnLine.params.reg !== undefined && /sr/.test(rpnLine.workCode)) {
+      else if (rpnLine.params.regno !== undefined && /sr/.test(rpnLine.workCode)) {
         this.replaceRegister('sr', rpnLine);
-      } else if (rpnLine.params.reg !== undefined && /rr/.test(rpnLine.workCode)) {
+      } else if (rpnLine.params.regno !== undefined && /rr/.test(rpnLine.workCode)) {
         this.replaceRegister('rr', rpnLine);
       }
       // numbers
-      else if (rpnLine.params.flg !== undefined && /fl/.test(rpnLine.workCode)) {
+      else if (rpnLine.params.flgno !== undefined && /fl/.test(rpnLine.workCode)) {
         this.replaceFlag('fl', rpnLine);
-      } else if (rpnLine.params.siz !== undefined && /ss ss/.test(rpnLine.workCode)) {
+      } else if (rpnLine.params.sizno !== undefined && /ss ss/.test(rpnLine.workCode)) {
         this.replaceSize('ss ss', rpnLine);
-      } else if (rpnLine.params.ton !== undefined && /tn/.test(rpnLine.workCode)) {
+      } else if (rpnLine.params.tonno !== undefined && /tn/.test(rpnLine.workCode)) {
         this.replaceTone('tn', rpnLine);
-      } else if (rpnLine.params.dig !== undefined && /sd/.test(rpnLine.workCode)) {
+      } else if (rpnLine.params.digno !== undefined && /sd/.test(rpnLine.workCode)) {
         this.replaceDigits('sd', rpnLine);
       } 
 
@@ -132,12 +132,7 @@ export class Decoder42 {
       if (rpnLine.params.lblno !== undefined) {
         if (Decoder42.inRange(rpnLine.params.lblno, 0, 99)) {
           //00-99
-          number =
-            rpnLine.params.lblno !== undefined
-              ? rpnLine.params.lblno > 9
-                ? '' + rpnLine.params.lblno
-                : '0' + rpnLine.params.lblno
-              : '??';
+          number = this.formatNN(rpnLine.params.lblno);
         } else if (Decoder42.inRange(rpnLine.params.lblno, 102, 111)) {
           //A-F
           number = String.fromCharCode(rpnLine.params.lblno - 37);
@@ -153,24 +148,14 @@ export class Decoder42 {
 
   private static replaceRegister(replace: string, rpnLine: RpnLine) {
     if (rpnLine.workCode) {
-      let number =
-        rpnLine.params.regno !== undefined
-          ? rpnLine.params.regno > 9
-            ? '' + rpnLine.params.regno
-            : '0' + rpnLine.params.regno
-          : '??';
+      let number = this.formatNN(rpnLine.params.regno);
       rpnLine.workCode = rpnLine.workCode.replace(replace, number);
     }
   }
 
   private static replaceFlag(replace: string, rpnLine: RpnLine) {
     if (rpnLine.workCode) {
-      let number =
-        rpnLine.params.flgno !== undefined
-          ? rpnLine.params.flgno > 9
-            ? '' + rpnLine.params.flgno
-            : '0' + rpnLine.params.flgno
-          : '??';
+      let number = this.formatNN(rpnLine.params.flgno);
       rpnLine.workCode = rpnLine.workCode.replace(replace, number);
     }
   }
@@ -189,7 +174,7 @@ export class Decoder42 {
 
   private static replaceSize(replace: string, rpnLine: RpnLine) {
     if (rpnLine.workCode) {
-      rpnLine.workCode = rpnLine.workCode.replace(replace, '' + rpnLine.params.sizno);
+      rpnLine.workCode = rpnLine.workCode.replace(replace, this.formatNN(rpnLine.params.sizno)); // 01-9999
     }
   }
 
@@ -201,13 +186,12 @@ export class Decoder42 {
 
   private static replaceDigits(replace: string, rpnLine: RpnLine) {
     if (rpnLine.workCode) {
-      rpnLine.workCode = rpnLine.workCode.replace(replace, '' + rpnLine.params.dig); // 00-09
+      // rpnLine.params.digno: 0-9, rpnLine.params.dig: 00-09
+      rpnLine.workCode = rpnLine.workCode.replace(replace, this.formatNN(rpnLine.params.digno));
     }
   }
 
-  /** Changing numbers into corresponding opcodes.
-   *  11 1A 12 13 14 1B 1C 14 15 15 00 -> '1.234E-455'
-   */
+  /** Changing numbers into corresponding opcodes. 11 1A 12 13 14 1B 1C 14 15 15 00 -> '1.234E-455' */
   private static convertRawToNumber(raw?: string): string {
     let number = '';
     if (raw) {
@@ -256,12 +240,17 @@ export class Decoder42 {
     return str;
   }
 
-  /** Changing integers (size one byte, 0-255) into hex string .
-   * 123 -> 7B, 255 -> FF
-   */
+  /** Changing integers (size one byte, 0-255) into hex string . 123 -> 7B, 255 -> FF */
   private static convertHexAsByte(hex: string): number {
     let byte = parseInt(hex, 16);
     return byte;
+  }
+
+  private static formatNN(n?: number): string{
+    if(n !== undefined){
+      return n > 9 ? '' + n : '0' + n;
+    }
+    return '??';
   }
 
   private static inRange(x: number, min: number, max: number): boolean {
@@ -653,7 +642,7 @@ export class Decoder42 {
         { regex: /9E (0[0-9])/, len: 2, rpn: 'ENG sd', params: 'dig' },
         { regex: /9F ([89A-E][0-9A-F])/, len: 2, rpn: 'TONE IND rr', params: 'reg-128' },
         { regex: /9F F([0-4])/, len: 2, rpn: 'TONE IND ST `stk`', params: 'stk' },
-        { regex: /9F (0[0-9])/, len: 2, rpn: 'TONE tn', params: 'tone' } //+
+        { regex: /9F (0[0-9])/, len: 2, rpn: 'TONE tn', params: 'ton' } //+
       ]
     },
     {
@@ -986,7 +975,7 @@ export class Decoder42 {
         { regex: /F([1-9A-F]) BD/, len: 2, rpn: 'PGMSLV IND `nam`', params: 'naml-1' },
         { regex: /F([1-9A-F]) BE/, len: 2, rpn: 'INTEG IND `nam`', params: 'naml-1' },
         { regex: /F([1-9A-F]) BF/, len: 2, rpn: 'SOLVE IND `nam`', params: 'naml-1' },
-        { regex: /F([1-9A-F]) C0/, len: 2, rpn: 'ASSIGN `nam` TO key', params: 'naml-2,key++' }, // 
+        { regex: /F([1-9A-F]) C0/, len: 2, rpn: 'ASSIGN `nam` TO `key`', params: 'naml-2,+key+1' }, // 
         { regex: /F([1-9A-F]) C1/, len: 2, rpn: 'VARMENU `nam`', params: 'naml-1' },
         { regex: /F([1-9A-F]) C2 (0[1-9])/, len: 3, rpn: 'KEY `key` XEQ `lbl`', params: 'lbll-2,key' }, //+
         { regex: /F([1-9A-F]) C3 (0[1-9])/, len: 3, rpn: 'KEY `key` GTO `lbl`', params: 'lbll-2,key' },

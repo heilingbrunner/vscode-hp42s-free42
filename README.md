@@ -181,6 +181,11 @@ None.
 
 ## Release Notes
 
+### 1.0.0
+
+- decoder implemented
+- encoder reimplemented
+
 ### 0.0.10
 
 - more snippets

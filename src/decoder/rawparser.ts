@@ -272,10 +272,10 @@ export class RawParser {
             rpnLine.params.flg = match[k];
             rpnLine.params.flgno = parseInt(match[k], 16);
             break;
-          case param === 'key++':
+          case param === '+key+1':
             // fetch key-byte after name
             rpnLine.params.key = rpnLine.params.naml ? this.raw[next + rpnLine.params.naml] : undefined;
-            rpnLine.params.keyno = rpnLine.params.naml ? parseInt(this.raw[next + rpnLine.params.naml], 16) : undefined;
+            rpnLine.params.keyno = rpnLine.params.naml ? parseInt(this.raw[next + rpnLine.params.naml], 16) + 1 : undefined;
             // include key byte
             rpnLine.rawLength++;
             break;

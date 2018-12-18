@@ -26,6 +26,7 @@ export class Params {
   flgno?: number;
   keyno?: number;
   lblno?: number;
+  numno?: number;
   regno?: number;
   sizno?: number;
   tonno?: number;

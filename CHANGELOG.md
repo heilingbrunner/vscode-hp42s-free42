@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.0.0] - 2018-12-xx
+
+- decoder implemented
+- encoder reimplemented
+
 ## [0.0.10] - 2018-11-21
 
 - more snippets

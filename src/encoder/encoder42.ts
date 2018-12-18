@@ -89,8 +89,8 @@ export class Encoder42 {
           // 2. Insert key
           // KEY `key` GTO IND `nam`
           // ASSIGN `nam` TO `key`
-          if (rawLine.params.key !== undefined) {
-            rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, rawLine.params.key);
+          if (rawLine.params.keyno !== undefined) {
+            rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, rawLine.params.keyno);
           }
 
           // is it a global label ...
@@ -99,34 +99,28 @@ export class Encoder42 {
           }
 
           // is it a register ...
-          if (rawLine.params.reg !== undefined) {
-            rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, rawLine.params.reg);
+          if (rawLine.params.regno !== undefined) {
+            rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, rawLine.params.regno);
           }
 
           // is it a tone ...
-          if (rawLine.params.ton !== undefined) {
-            rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, rawLine.params.ton);
+          if (rawLine.params.tonno !== undefined) {
+            rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, rawLine.params.tonno);
           }
 
-          // see lblno
           // is it a local char label A-J,a-e coded as number ......
           if (rawLine.params.lblno !== undefined) {
-            rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, String(rawLine.params.lblno));
+            rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, rawLine.params.lblno);
           }
 
           // flag
-          if (rawLine.params.flg !== undefined) {
-            rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, rawLine.params.flg);
-          }
-
-          // is it a register, number labels, digits, local number label 15-99 ......
-          if (rawLine.params.num !== undefined) {
-            rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, rawLine.params.num);
+          if (rawLine.params.flgno !== undefined) {
+            rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, rawLine.params.flgno);
           }
 
           // 0-9 digits
-          if (rawLine.params.dig !== undefined) {
-            rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, rawLine.params.dig);
+          if (rawLine.params.digno !== undefined) {
+            rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, rawLine.params.digno);
           }
 
           // 10 or 11 digits
@@ -135,19 +129,14 @@ export class Encoder42 {
           }
 
           // size
-          if (rawLine.params.siz !== undefined) {
-            rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, rawLine.params.siz);
-          }
-
-          // is it a register/indirect count of digit/flag ...
-          if (rawLine.params.num !== undefined) {
-            rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, rawLine.params.num);
+          if (rawLine.params.sizno !== undefined) {
+            rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, rawLine.params.sizno);
           }
 
           // is it a stack ...
           if (rawLine.params.stk !== undefined) {
             const int = Encoder42.stackMap.get(rawLine.params.stk);
-            rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, String(int));
+            rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, int);
           }
 
           if ((rawLine.raw === undefined) && (progErrorText === undefined)) {
@@ -236,35 +225,38 @@ export class Encoder42 {
   }
 
   /** Insert a number into raw */
-  private static insertNumberInRaw(raw: string | undefined, num: string | undefined): string | undefined {
+  private static insertNumberInRaw(raw: string | undefined, num: number | undefined): string | undefined {
     if (raw !== undefined && num !== undefined) {
-      let int = parseInt(num);
       let match: RegExpMatchArray | null = null;
 
       switch (true) {
         case /kk/.test(raw):
-          raw = raw.replace(/kk/, Encoder42.convertByteAsHex(int));
+          raw = raw.replace(/kk/, Encoder42.convertByteAsHex(num));
           break;
 
         case /rr/.test(raw):
-          raw = raw.replace(/rr/, Encoder42.convertByteAsHex(int));
+          raw = raw.replace(/rr/, Encoder42.convertByteAsHex(num));
+          break;
+
+        case /tn/.test(raw):
+          raw = raw.replace(/tn/, Encoder42.convertByteAsHex(num));
           break;
 
         case /nn/.test(raw):
           // numbered label 00-99, digits 00-11
-          raw = raw.replace(/nn/, Encoder42.convertByteAsHex(int));
+          raw = raw.replace(/nn/, Encoder42.convertByteAsHex(num));
           break;
 
         case /ll/.test(raw):
           // char label as number A-J,a-e
-          raw = raw.replace(/ll/, 'CF ' + Encoder42.convertByteAsHex(int));
+          raw = raw.replace(/ll/, 'CF ' + Encoder42.convertByteAsHex(num));
           break;
 
         case /ss ss/.test(raw):
           // SIZE
           raw = raw.replace(
             /ss ss/,
-            Encoder42.convertByteAsHex(int / 256) + ' ' + Encoder42.convertByteAsHex(int % 256)
+            Encoder42.convertByteAsHex(num / 256) + ' ' + Encoder42.convertByteAsHex(num % 256)
           );
           break;
 
@@ -272,7 +264,7 @@ export class Encoder42 {
           // not working: hex = hex.replace(/([\dA-F])l/, this.convertNumberToHexString(parseInt('0x' + '$1' + '0') + 1 + int));
           match = raw.match(/([\dA-F])l/);
           if (match) {
-            raw = raw.replace(/([\dA-F])l/, Encoder42.convertByteAsHex(parseInt('0x' + match[1] + '0') + 1 + int));
+            raw = raw.replace(/([\dA-F])l/, Encoder42.convertByteAsHex(parseInt('0x' + match[1] + '0') + 1 + num));
           }
           break;
 
@@ -280,7 +272,7 @@ export class Encoder42 {
           // not working: $1
           match = raw.match(/(\d)r/);
           if (match) {
-            raw = raw.replace(/(\d)r/, Encoder42.convertByteAsHex(parseInt(match[1]) * 16 + int));
+            raw = raw.replace(/(\d)r/, Encoder42.convertByteAsHex(parseInt(match[1]) * 16 + num));
           }
           break;
 
@@ -490,7 +482,7 @@ export class Encoder42 {
   // ENG|FIX|SCI 10|11: digits 10,11
   // LBL|GTO sl|ll: sl: 00-14, ll:15-99
   // RCL|STO sr|rr: sr 0-15, rr: 16-99
-  // tone: (?<tone>0[0-9]); dec:1-9; hex:01-09
+  // tone: dec:0-9; hex:00-09
   // nam: name max length 14
   // CharLabels: A=102(0x66), B=107(0x67), ..., J, a=123(0x7B), b=124(0x7C), ..., e
 
@@ -533,7 +525,7 @@ export class Encoder42 {
     { key: 'ASHF', value: [{ regex: /ASHF/, raw: '88' }] },
     { key: 'ASIN', value: [{ regex: /ASIN/, raw: '5C' }] },
     { key: 'ASINH', value: [{ regex: /ASINH/, raw: 'A0 64' }] },
-    { key: 'ASSIGN', value: [{ regex: /ASSIGN (".{1,14}") TO (0[1-9]|1[0-8])/, raw: 'Fn C0 aa', params: 'nam,key' }] }, // key: 01-18
+    { key: 'ASSIGN', value: [{ regex: /ASSIGN (".{1,14}") TO (0[1-9]|1[0-8])/, raw: 'Fn C0 aa', params: 'nam,key-1' }] }, // key: 01-18
     {
       key: 'ASTO',
       value: [
@@ -968,7 +960,7 @@ export class Encoder42 {
     { key: 'SIGN', value: [{ regex: /SIGN/, raw: '7A' }] },
     { key: 'SIN', value: [{ regex: /SIN/, raw: '59' }] },
     { key: 'SINH', value: [{ regex: /SINH/, raw: 'A0 61' }] },
-    { key: 'SIZE', value: [{ regex: /SIZE (\d{4})/, raw: 'F3 F7 ss ss', params: 'siz' }] },
+    { key: 'SIZE', value: [{ regex: /SIZE (\d{2,4})/, raw: 'F3 F7 ss ss', params: 'siz' }] },
     { key: 'SLOPE', value: [{ regex: /SLOPE/, raw: 'A0 A4' }] },
     {
       key: 'SOLVE',
@@ -1050,7 +1042,7 @@ export class Encoder42 {
         { regex: /TONE IND ST ([XYZLT])/, raw: '9F Ft', params: 'stk' },
         { regex: /TONE IND (".{1,14}")/, raw: 'Fn DF', params: 'nam' },
         { regex: /TONE IND (\d{2})/, raw: '9F 8r', params: 'reg' },
-        { regex: /TONE ([1-9])/, raw: '9F rr', params: 'ton' } // 1-9
+        { regex: /TONE ([0-9])/, raw: '9F tn', params: 'ton' } // 0-9
       ]
     },
     { key: 'TRACE', value: [{ regex: /TRACE/, raw: 'A7 5D' }] },

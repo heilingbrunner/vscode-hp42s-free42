@@ -15,7 +15,8 @@ export class RpnParser {
   debug = 0; // debug level 0=nothing, 1=minimal, 2=verbose
 
   programs: RawProgram[] = [];
-  prgmLineNo: number = 0; // by parser auto incremented number
+  prgmLineNo = 0; // by parser auto incremented number
+  prgmIndex = -1;
   document?: vscode.TextDocument;
   config?: Configuration;
 
@@ -36,6 +37,7 @@ export class RpnParser {
         //{ ... }-line detected -> Prgm Start
         let match = line.text.match(/\{.*\}/);
         if (match) {
+          this.prgmIndex++;
           program = new RawProgram(docLine);
           this.programs.push(program);
         }
@@ -100,7 +102,7 @@ export class RpnParser {
 
       } else if (/^\s*-?\d+(\.\d+|)((ᴇ|e|E)-?\d{1,3}|)\s*$/.test(rawLine.workCode)) {
         // Is it a number ?
-        this.readNumber(rawLine);
+        this.readFloatNumber(rawLine);
       } else if (Encoder42.rpnMap.has(rawLine.token)) {
         // Is it a rpn command ?
         const patterns = Encoder42.rpnMap.get(rawLine.token);
@@ -178,6 +180,10 @@ export class RpnParser {
             rawLine.params.flg = match[k];
             rawLine.params.flgno = parseInt(match[k]);
             break;
+          case param === 'key-1':
+            rawLine.params.key = match[k];
+            rawLine.params.keyno = parseInt(match[k]) - 1;
+            break;
           case param === 'key':
             rawLine.params.key = match[k];
             rawLine.params.keyno = parseInt(match[k]);
@@ -214,10 +220,11 @@ export class RpnParser {
   }
 
   /** Read a number */
-  private readNumber(rawLine: RawLine) {
+  private readFloatNumber(rawLine: RawLine) {
     const match = rawLine.workCode.match(/^\s*-?\d+(\.\d+|)((ᴇ|e|E)-?\d{1,3}|)\s*$/);
     if (match) {
       rawLine.params.num = match[0];
+      rawLine.params.numno = parseFloat(match[0]); // or parseInt()
       rawLine.workCode = rawLine.workCode.replace(/^\s*-?\d+(\.\d+|)((ᴇ|e|E)-?\d{1,3}|)\s*$/, '`num`');
     }
   }
@@ -277,7 +284,7 @@ export class RpnParser {
       console.log(rawLine.workCode + ' -> ' + rawLine.raw);
     }
 
-    this.programs[0].addLine(rawLine);
+    this.programs[this.prgmIndex].addLine(rawLine);
   }
 
   /** check if line can be ignored */

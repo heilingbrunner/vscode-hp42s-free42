@@ -29,7 +29,7 @@ export class Configuration {
       this.useWhitespaceBetweenHex = config.get<boolean>("formatterUseWhitespaceBetweenHex");
       
       // get eol ...
-      config = vscode.workspace.getConfiguration("files");
+      config = vscode.workspace.getConfiguration("files", null);
       const fileseol = String(config.get<string>("eol"));
 
       switch (true) {
