@@ -13,7 +13,7 @@ export class CodeError {
 
   toString(useHex?: boolean): string {
     const docLine = (this.docLine > -1 ? (this.docLine + 1) + ', ' : '');
-    const codeLine = (this.codeLineNo > -1 ? (useHex ? 'addr: ' + this.codeLineNo.toString(16).toUpperCase() : (this.codeLineNo < 10 ? '0' + this.codeLineNo : this.codeLineNo)) : '');
+    const codeLine = (this.codeLineNo > -1 ? (useHex ? this.toHex(this.codeLineNo,8) : (this.codeLineNo < 10 ? '0' + this.codeLineNo : this.codeLineNo)) : '');
     return (
       'Error [' +
       docLine +
@@ -23,5 +23,9 @@ export class CodeError {
       "'; Message: " +
       this.message
     );
+  }
+
+  private toHex(number: number, digits: number) {
+    return ('0'.repeat(digits) + ((number + 1) & (Math.pow(16,digits)-1)).toString(16)).slice(-digits).toUpperCase();
   }
 }

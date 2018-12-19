@@ -57,7 +57,7 @@ export default class RawContentProvider implements vscode.TextDocumentContentPro
             // next line ?  not first line      &&     last line                       00000000: leading address
             const nl =
               (index + 1) % 16 === 0 && index < length - 1
-                ? ' ' + eol + ('0000000' + ((index + 1) & 0xffffffff).toString(16)).slice(-8).toUpperCase() + ': '
+                ? ' ' + eol + this.toHex(index,8) + ': '
                 : ' ';
 
             // add to string
@@ -74,6 +74,10 @@ export default class RawContentProvider implements vscode.TextDocumentContentPro
         return resolve('("hp42s/free42: Show Raw" cancelled.)');
       }
     });
+  }
+
+  private toHex(number: number, digits: number) {
+    return ('0'.repeat(digits) + ((number + 1) & (Math.pow(16,digits)-1)).toString(16)).slice(-digits).toUpperCase();
   }
 
   get onDidChange(): vscode.Event<vscode.Uri> {
