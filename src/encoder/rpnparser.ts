@@ -103,6 +103,7 @@ export class RpnParser {
       } else if (/^\s*-?\d+(\.\d+|)((ᴇ|e|E)-?\d{1,3}|)\s*$/.test(rawLine.workCode)) {
         // Is it a number ?
         this.readFloatNumber(rawLine);
+
       } else if (Encoder42.rpnMap.has(rawLine.token)) {
         // Is it a rpn command ?
         const patterns = Encoder42.rpnMap.get(rawLine.token);
@@ -132,6 +133,7 @@ export class RpnParser {
         } else {
           progErrorText = 'unvalid command';
         }
+        
       } else {
         progErrorText = 'unvalid command';
       }
