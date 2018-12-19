@@ -17,19 +17,6 @@
       "preLaunchTask": "npm: webpack"
     },
     {
-      "name": "Extension out-Code",
-      "type": "extensionHost",
-      "request": "launch",
-      "runtimeExecutable": "${execPath}",
-      "args": [
-        "--extensionDevelopmentPath=${workspaceFolder}"
-      ],
-      "outFiles": [
-        "${workspaceFolder}/out/**/*.js"
-      ],
-      "preLaunchTask": "npm: watch"
-    },
-    {
       "name": "Extension grammar/snippets",
       "type": "extensionHost",
       "request": "launch",
