@@ -15,11 +15,16 @@ Features
 - comments
 - document formatter
 - encoding code to raw
+- decoding raw to code
   
 Supported filetypes
 
 - __`*.hp42s`__ for the __original__ operation set of the __HP-42S__
 - __`*.free42`__ for the __extended__ operation set of the __free42__
+
+The endless chain of encoding and decoding:
+
+`*.hp42s` -> `*.hp42s.hex42` -> `*.hp42s.raw` -> `*.hp42s.raw.hex42` -> `*.hp42s.raw.hp42s` -> ...
 
 Depending on the file type, snippets, syntax highlighting with the additional commands of free42 are supported or not.
 
@@ -109,7 +114,7 @@ Encoding with errors: All errors are logged to the *.log file.
 
 ### `Decode Code` - Comand
 
-From a `*.raw` file the decoder generates the following files 
+From a `*.raw` file the decoder generates the following files
 
 - `*.hex42`: The sequence of the command bytes, when setting `HP42S/free42.decoderGenerateHexFile` is checked.
 - `*.hp42s`: The code file with only pure HP42S commands.
