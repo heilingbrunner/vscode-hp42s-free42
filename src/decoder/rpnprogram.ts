@@ -7,7 +7,7 @@ export class RpnProgram {
   rpnLines: RpnLine[] = [];
   size: number = 0;
 
-  succeeded(): boolean {
+  get succeeded(): boolean {
     return !(this.getFirstError() !== undefined);
   }
 

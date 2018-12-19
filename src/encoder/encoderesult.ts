@@ -11,7 +11,7 @@ export class EncoderResult {
   succeeded(): boolean {
     let succeeded = true;
     this.programs.forEach(program => {
-      succeeded = succeeded && program.succeeded();
+      succeeded = succeeded && program.succeeded;
     });
 
     return succeeded;

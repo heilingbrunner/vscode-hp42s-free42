@@ -8,10 +8,10 @@ export class DecoderResult{
 
   constructor() {}
 
-  succeeded(): boolean {
+  get succeeded(): boolean {
     let succeeded = true;
     this.programs.forEach(program => {
-      succeeded = succeeded && program.succeeded();
+      succeeded = succeeded && program.succeeded;
     });
 
     return succeeded;

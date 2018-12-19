@@ -5,6 +5,7 @@ import { writeBytes, writeText, deleteFile, getPhysicalPath, existsSync } from '
 import { EncoderResult } from './encoder/encoderesult';
 import { Encoder } from './encoder/encoder';
 import { Decoder } from './decoder/decoder';
+import { DecoderResult } from './decoder/decoderresult';
 
 export class Tool {
   // The team players ...
@@ -69,7 +70,7 @@ export class Tool {
               vscode.window.showErrorMessage(Tool.EXTPREFIX + ': Encoding failed.' + eol + firstErrorText);
 
               // Create log file
-              this.writeErrorsToLog(document.fileName + '.log', result, eol, config.useLineNumbers);
+              this.writeEncoderErrorsToLog(document.fileName + '.log', result, eol, config.useLineNumbers);
             }
 
             // Update all {...} line
@@ -116,12 +117,12 @@ export class Tool {
                 const size = result.getSize();
                 let headLine = '';
 
-                if (result.succeeded()) {
+                if (result.succeeded) {
                   headLine = (useLineNumbers ? '00 ' : '') + '{ ' + size + '-Byte Prgm }';
                   vscode.window.showInformationMessage(Tool.EXTPREFIX + ': { ' + size + '-Byte Prgm }');
                 } else {
                   const firstError = result.getFirstError();
-                  let firstErrorText = firstError ? firstError.toString() : '';
+                  let firstErrorText = firstError ? firstError.toString(true) : '';
                   if (!useLineNumbers) {
                     firstErrorText = firstErrorText.replace(/ \[.*\]/, '');
                   }
@@ -137,12 +138,22 @@ export class Tool {
                 // nothing happend ...
                 vscode.window.showInformationMessage(Tool.EXTPREFIX + ': No raw format found.');
               }
+              // Delete log file
+              deleteFile(document.fileName.replace('raw42', 'log'));
             } else {
               const firstError = result.getFirstError();
-              const firstErrorText = firstError !== undefined ? firstError.toString() : '';
+              const firstErrorText = firstError !== undefined ? firstError.toString(true) : '';
 
               // Show error ...
               vscode.window.showErrorMessage(Tool.EXTPREFIX + ': Decoding failed.' + eol + firstErrorText);
+
+              // Create log file
+              this.writeDecoderErrorsToLog(
+                document.fileName.replace('raw42', 'log'),
+                result,
+                eol,
+                config.useLineNumbers
+              );
             }
           }
         } else {
@@ -178,14 +189,34 @@ export class Tool {
   }
 
   /** Create log file */
-  private writeErrorsToLog(filename: string, result: EncoderResult, eol: string, useLineNumbers?: boolean) {
+  private writeEncoderErrorsToLog(filename: string, result: EncoderResult, eol: string, useLineNumbers?: boolean) {
     let allErrors = '';
     if (result.programs) {
       result.programs.forEach(program => {
         let errors = program.getErrors();
         if (errors) {
           errors.forEach(error => {
-            allErrors += error ? error.toString() + eol : '';
+            allErrors += error ? error.toString(false) + eol : '';
+          });
+        }
+      });
+
+      if (!useLineNumbers) {
+        allErrors = allErrors.replace(/ \[.*\]/g, '');
+      }
+
+      writeText(filename, allErrors);
+    }
+  }
+
+  private writeDecoderErrorsToLog(filename: string, result: DecoderResult, eol: string, useLineNumbers?: boolean) {
+    let allErrors = '';
+    if (result.programs) {
+      result.programs.forEach(program => {
+        let errors = program.getErrors();
+        if (errors) {
+          errors.forEach(error => {
+            allErrors += error ? error.toString(true) + eol : '';
           });
         }
       });
@@ -199,7 +230,12 @@ export class Tool {
   }
 
   /** {} Head lines */
-  private updateHeadLines(editor: vscode.TextEditor, result: EncoderResult, useLineNumbers?: boolean) {
+  private updateHeadLines(
+    editor: vscode.TextEditor,
+    result: EncoderResult,
+    useLineNumbers?: boolean,
+    useHex?: boolean
+  ) {
     editor
       .edit(e => {
         // Walk through reverse (!!) all programs and insert/update head line.
@@ -208,7 +244,7 @@ export class Tool {
           const startDocLine = program.startDocLine;
           const size = program.getSize();
           const firstError = program.getFirstError();
-          let firstErrorText = firstError ? firstError.toString() : '';
+          let firstErrorText = firstError ? firstError.toString(useHex) : '';
           if (!useLineNumbers) {
             firstErrorText = firstErrorText.replace(/ \[.*\]/, '');
           }
@@ -216,7 +252,7 @@ export class Tool {
           const headLine = editor.document.lineAt(startDocLine);
           let line = '';
 
-          if (program.succeeded()) {
+          if (program.succeeded) {
             line = (useLineNumbers ? '00 ' : '') + '{ ' + size + '-Byte Prgm }';
           } else {
             line = (useLineNumbers ? '00 ' : '') + '{ ' + firstErrorText + ' }';

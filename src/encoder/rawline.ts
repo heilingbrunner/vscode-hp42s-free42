@@ -18,8 +18,8 @@ export class RawLine {
   private _workCode = '';
 
   /** working code */
-  set workCode(nC: string) {
-    this._workCode = nC;
+  set workCode(code: string) {
+    this._workCode = code;
     this.tokens = this._workCode.split(' ');
   }
   get workCode(): string {

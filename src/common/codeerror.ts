@@ -11,11 +11,13 @@ export class CodeError {
     this.message = message;
   }
 
-  toString(): string {
+  toString(useHex?: boolean): string {
+    const docLine = (this.docLine > -1 ? (this.docLine + 1) + ', ' : '');
+    const codeLine = (this.codeLineNo > -1 ? (useHex ? 'addr: ' + this.codeLineNo.toString(16).toUpperCase() : (this.codeLineNo < 10 ? '0' + this.codeLineNo : this.codeLineNo)) : '');
     return (
       'Error [' +
-      (this.docLine > -1 ? this.docLine + 1 + ', ' : '') +
-      (this.codeLineNo > -1 ? (this.codeLineNo < 10 ? '0' + this.codeLineNo : this.codeLineNo) : '') +
+      docLine +
+      codeLine +
       "]! Code: '" +
       this.code +
       "'; Message: " +

@@ -29,7 +29,7 @@ export class RawProgram {
     return hexAll; //no trim() !
   }
 
-  succeeded(): boolean {
+  get succeeded(): boolean {
     return !(this.getFirstError() !== undefined);
   }
 
