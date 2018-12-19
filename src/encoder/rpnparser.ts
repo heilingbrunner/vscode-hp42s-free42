@@ -9,7 +9,6 @@ import { RawPattern } from './rawpattern';
 
 /** Command parser for a code line */
 export class RpnParser {
-
   //#region Member
 
   debug = 0; // debug level 0=nothing, 1=minimal, 2=verbose
@@ -99,11 +98,9 @@ export class RpnParser {
       if (/^\s*(⊢|)(".*")/.test(rawLine.workCode)) {
         // Is it a string "abc", ⊢"cde" ?
         this.readString(rawLine);
-
       } else if (/^\s*-?\d+(\.\d+|)((ᴇ|e|E)-?\d{1,3}|)\s*$/.test(rawLine.workCode)) {
         // Is it a number ?
         this.readFloatNumber(rawLine);
-
       } else if (Encoder42.rpnMap.has(rawLine.token)) {
         // Is it a rpn command ?
         const patterns = Encoder42.rpnMap.get(rawLine.token);
@@ -114,8 +111,10 @@ export class RpnParser {
           for (let i = 0; i < patterns.length; i++) {
             const pattern = patterns[i];
 
+            //Append whitespace + eol to all pattern.regex
+            const regex = new RegExp(pattern.regex.source + /\s*$/.source);
             //match ?
-            let match = rawLine.workCode.match(pattern.regex);
+            let match = rawLine.workCode.match(regex);
             if (match) {
               matched = true;
               // Params included ?
@@ -133,7 +132,6 @@ export class RpnParser {
         } else {
           progErrorText = 'unvalid command';
         }
-        
       } else {
         progErrorText = 'unvalid command';
       }
@@ -154,7 +152,7 @@ export class RpnParser {
         docLine,
         this.config && this.config.useLineNumbers ? this.prgmLineNo : -1,
         rawLine.docCode,
-        String(progErrorText)
+        '' + progErrorText
       );
     }
 
@@ -241,8 +239,7 @@ export class RpnParser {
       rawLine.workCode = rawLine.workCode.replace(/^\s*(⊢|)"(.*)"/, '$1`str`');
       if (match[1] === '') {
         rawLine.raw = 'Fn'; //see EncoderFOCAL.rpnMap.get(`str`)[0];
-      }
-      else {
+      } else {
         rawLine.raw = 'Fn 7F'; //see EncoderFOCAL.rpnMap.get(⊢`str`)[0];
       }
     }
@@ -337,9 +334,8 @@ export class RpnParser {
 
   /** Check in range min <= x <= max */
   private inRange(x: number, min: number, max: number) {
-    return ((x - min) * (x - max)) <= 0;
+    return (x - min) * (x - max) <= 0;
   }
 
   //#endregion
-  
 }

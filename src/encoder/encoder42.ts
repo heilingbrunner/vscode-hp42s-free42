@@ -4,7 +4,6 @@ import { RawPattern } from './rawpattern';
 
 /** FOCAL (Forty-one calculator language) see https://en.wikipedia.org/wiki/FOCAL_(Hewlett-Packard) */
 export class Encoder42 {
-  
   //#region Members
 
   static rpnMap = new Map<string, RawPattern[]>();
@@ -54,22 +53,18 @@ export class Encoder42 {
       if (progErrorText === undefined) {
         if (rawLine.tokenLength === 1) {
           //#region 1 Token
-          if ((rawLine.params.str !== undefined) && (rawLine.workCode.match(/^(⊢|)`str`/))) {
+          if (rawLine.params.str !== undefined && rawLine.workCode.match(/^(⊢|)`str`/)) {
             // is it a string ...
             rawLine.raw = Encoder42.insertStringInRaw(rawLine.raw, rawLine.params.str);
-          } else if ((rawLine.params.num !== undefined) && (rawLine.workCode.match(/^`num`/))) {
+          } else if (rawLine.params.num !== undefined && rawLine.workCode.match(/^`num`/)) {
             // is it a simple number ...
             rawLine.raw = Encoder42.convertNumberToRaw(rawLine.params.num);
           } else if (rawLine.token !== undefined) {
             // is it a single "fixed" opcode ...
           }
 
-          if (rawLine.raw === undefined) {
-            progErrorText = "Unknown '" + rawLine.docCode + "'";
-          }
-
           // Some error ...
-          if (progErrorText !== undefined) {
+          if (rawLine.error === undefined && progErrorText !== undefined) {
             rawLine.error = new CodeError(rawLine.docLine, rawLine.codeLineNo, rawLine.docCode, String(progErrorText));
           }
 
@@ -139,11 +134,7 @@ export class Encoder42 {
             rawLine.raw = Encoder42.insertNumberInRaw(rawLine.raw, int);
           }
 
-          if ((rawLine.raw === undefined) && (progErrorText === undefined)) {
-            progErrorText = "'" + rawLine.docCode + "' is unvalid";
-          }
-
-          if (progErrorText !== undefined) {
+          if (rawLine.error === undefined && progErrorText !== undefined) {
             rawLine.error = new CodeError(rawLine.docLine, rawLine.codeLineNo, rawLine.docCode, String(progErrorText));
           }
 
@@ -151,7 +142,9 @@ export class Encoder42 {
         }
       } else {
         // wrong extension, free42 commands in hp42s file
-        rawLine.error = new CodeError(rawLine.docLine, rawLine.codeLineNo, rawLine.docCode, String(progErrorText));
+        if (rawLine.error === undefined) {
+          rawLine.error = new CodeError(rawLine.docLine, rawLine.codeLineNo, rawLine.docCode, String(progErrorText));
+        }
       }
     }
   }
@@ -486,6 +479,7 @@ export class Encoder42 {
   // nam: name max length 14
   // CharLabels: A=102(0x66), B=107(0x67), ..., J, a=123(0x7B), b=124(0x7C), ..., e
 
+  // see RpnParser: regex = regex + /\s*$/ !!
   private static arr_rpnMap = [
     { key: '%', value: [{ regex: /%/, raw: '4C' }] },
     { key: '%CH', value: [{ regex: /%CH/, raw: '4D' }] },
@@ -525,7 +519,10 @@ export class Encoder42 {
     { key: 'ASHF', value: [{ regex: /ASHF/, raw: '88' }] },
     { key: 'ASIN', value: [{ regex: /ASIN/, raw: '5C' }] },
     { key: 'ASINH', value: [{ regex: /ASINH/, raw: 'A0 64' }] },
-    { key: 'ASSIGN', value: [{ regex: /ASSIGN (".{1,14}") TO (0[1-9]|1[0-8])/, raw: 'Fn C0 aa', params: 'nam,key-1' }] }, // key: 01-18
+    {
+      key: 'ASSIGN',
+      value: [{ regex: /ASSIGN (".{1,14}") TO (0[1-9]|1[0-8])/, raw: 'Fn C0 aa', params: 'nam,key-1' }]
+    }, // key: 01-18
     {
       key: 'ASTO',
       value: [
@@ -1143,7 +1140,6 @@ export class Encoder42 {
     { key: '↓', value: [{ regex: /↓/, raw: 'A6 DF' }] },
     { key: '⊢`str`', value: [{ regex: /⊢(".{14}")/, raw: 'Fn 7F', params: 'str' }] } // max. length 14
   ];
-  
-  // #endregion
 
+  // #endregion
 }

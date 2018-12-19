@@ -14,13 +14,12 @@ export class CodeError {
   toString(): string {
     return (
       'Error [' +
-      (this.docLine > -1 ? (this.docLine + 1) +  ', ' : '') +
-      (this.codeLineNo > -1 ? (this.codeLineNo < 10 ? '0' + this.codeLineNo : this.codeLineNo): '') +
+      (this.docLine > -1 ? this.docLine + 1 + ', ' : '') +
+      (this.codeLineNo > -1 ? (this.codeLineNo < 10 ? '0' + this.codeLineNo : this.codeLineNo) : '') +
       "]! Code: '" +
       this.code +
-      "'; Message: \'" +
-      this.message +
-      '\''
+      "'; Message: " +
+      this.message
     );
   }
 }
