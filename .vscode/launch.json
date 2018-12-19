@@ -8,7 +8,16 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Extension code",
+      "name": "Extension dist-Code",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "${execPath}",
+      "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "preLaunchTask": "npm: webpack"
+    },
+    {
+      "name": "Extension out-Code",
       "type": "extensionHost",
       "request": "launch",
       "runtimeExecutable": "${execPath}",
@@ -47,7 +56,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug ts file",
+      "name": "Debug *.ts file",
       "program": "${workspaceRoot}/out/${fileBasenameNoExtension}.js",
       "cwd": "${workspaceRoot}",
       "sourceMaps": true,
