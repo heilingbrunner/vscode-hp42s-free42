@@ -1,0 +1,13 @@
+.vscode/
+.vscodetest/
+src/
+out/
+typings/
+images/
+
+**/*.ts
+**/tsconfig.json
+**/tslint.json
+HOW-TO-VSIX.md
+
+!images/vscode-hp42s-free42-logo.png
