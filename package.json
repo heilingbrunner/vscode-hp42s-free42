@@ -6,7 +6,7 @@
   },
   "displayName": "HP42S-free42",
   "description": "HP42S/free42 RPN programming language support",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "JHeilingbrunner",
   "license": "MIT",
   "icon": "images/vscode-hp42s-free42-logo.png",
@@ -205,13 +205,13 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "typescript": "^2.6.1",
-    "vscode": "^1.1.21",
-    "tslint": "^5.8.0",
-    "@types/node": "^8.10.25",
-    "@types/mocha": "^2.2.42",
-    "ts-loader": "^4.4.2",
-    "webpack": "^4.19.1",
-    "webpack-cli": "^3.1.0"
+    "typescript": "^3.4.3",
+    "vscode": "^1.1.33",
+    "tslint": "^5.15.0",
+    "@types/node": "^11.13.4",
+    "@types/mocha": "^5.2.6",
+    "ts-loader": "^5.3.3",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0"
   }
 }

@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.0.1] - 2019-04-12
+
+- devDependencies update
+
 ## [1.0.0] - 2018-12-xx
 
 - decoder implemented
