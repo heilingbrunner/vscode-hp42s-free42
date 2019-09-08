@@ -3,7 +3,6 @@
 ![hp42s-free42-extension-logo](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/vscode-hp42s-free42-logo.png)
 
 ![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)
-[![Build Status](https://travis-ci.org/heilingbrunner/vscode-hp42s-free42.svg?branch=master)](https://travis-ci.org/heilingbrunner/vscode-hp42s-free42)
 ![Installs](https://vsmarketplacebadge.apphb.com/installs-short/JHeilingbrunner.vscode-hp42s-free42.svg)
 ![Downloads](https://vsmarketplacebadge.apphb.com/downloads-short/JHeilingbrunner.vscode-hp42s-free42.svg)
 
