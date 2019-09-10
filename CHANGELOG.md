@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.0.2] - 2019-09-10
+
+- travis ci tag removed
+
 ## [1.0.1] - 2019-04-12
 
 - devDependencies update
