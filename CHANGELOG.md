@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.0.3] - 2019-12-20
+
+- security update
+
 ## [1.0.2] - 2019-09-10
 
 - travis ci tag removed
