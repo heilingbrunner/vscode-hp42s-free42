@@ -2567,6 +2567,14 @@
     ],
     "description": "PRA: Print alpha register."
   },
+  "PRGM": {
+    "prefix": "PRGM",
+    "scope": "hp42s",
+    "body": [
+      "{ 0-Byte Prgm }$0"
+    ],
+    "description": "PRGM: Program header."
+  },
   "PRLCD": {
     "prefix": "PRLCD",
     "scope": "hp42s",

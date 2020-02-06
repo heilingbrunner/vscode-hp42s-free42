@@ -8,7 +8,11 @@
 
 Language support for HP42S/free42 programming language.
 
-Features
+## What's new in HP42S-free42:
+
+- Support free42 v2.4 (free42 extensions to the HP42S instruction set)
+
+## Features
 
 - syntax highlighting
 - snipptes with description

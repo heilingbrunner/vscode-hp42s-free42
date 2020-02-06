@@ -5,9 +5,8 @@ import { RpnProgram } from './rpnprogram';
 import { CodeError } from '../common/codeerror';
 
 export class RawParser {
-
   //#region Members
-  
+
   debug = 0; // debug level 0=nothing, 1=minimal, 2=verbose
   programs: RpnProgram[] = [];
   languageId = 'hp42s';
@@ -275,7 +274,9 @@ export class RawParser {
           case param === '+key+1':
             // fetch key-byte after name
             rpnLine.params.key = rpnLine.params.naml ? this.raw[next + rpnLine.params.naml] : undefined;
-            rpnLine.params.keyno = rpnLine.params.naml ? parseInt(this.raw[next + rpnLine.params.naml], 16) + 1 : undefined;
+            rpnLine.params.keyno = rpnLine.params.naml
+              ? parseInt(this.raw[next + rpnLine.params.naml], 16) + 1
+              : undefined;
             // include key byte
             rpnLine.rawLength++;
             break;
@@ -299,13 +300,13 @@ export class RawParser {
 
   private checkParseLength(rpnLine: RpnLine, next: number): boolean {
     const rawlength = this.raw.length;
-    if ((rpnLine.params.strl !== undefined) && (next + rpnLine.params.strl >= rawlength)) {
+    if (rpnLine.params.strl !== undefined && next + rpnLine.params.strl >= rawlength) {
       return true;
     }
-    if ((rpnLine.params.lbll !== undefined) && (next + rpnLine.params.lbll >= rawlength)) {
+    if (rpnLine.params.lbll !== undefined && next + rpnLine.params.lbll >= rawlength) {
       return true;
     }
-    if ((rpnLine.params.naml !== undefined) && (next + rpnLine.params.naml >= rawlength)) {
+    if (rpnLine.params.naml !== undefined && next + rpnLine.params.naml >= rawlength) {
       return true;
     }
 
@@ -346,39 +347,11 @@ export class RawParser {
 
   private checkLanguageId(pattern: RpnPattern, hex: string) {
     if (pattern.len === 2) {
-      // free42 commands: ACCEL|LOCAT|HEADING|ADATE|ATIME|ATIME24|CLK12|CLK24|DATE|DATE+|DDAYS|DMY|DOW|MDY|TIME
-      let free42All =
-        'A7 CF' +
-        ' ' + // ACCEL
-        'A7 D0' +
-        ' ' + // LOCAT'
-        'A7 D1' +
-        ' ' + // HEADING'
-        'A6 81' +
-        ' ' + // ADATE
-        'A6 84' +
-        ' ' + // ATIME
-        'A6 85' +
-        ' ' + // ATIME24
-        'A6 86' +
-        ' ' + // CLK12
-        'A6 87' +
-        ' ' + // CLK24
-        'A6 8C' +
-        ' ' + // DATE
-        'A6 8D' +
-        ' ' + // DATE+
-        'A6 8E' +
-        ' ' + // DDAYS
-        'A6 8F' +
-        ' ' + // DMY
-        'A6 90' +
-        ' ' + // DOW
-        'A6 91' +
-        ' ' + // MDY
-        'A6 9C' +
-        ' '; // TIME
-      let isFree42 = free42All.match(hex);
+      //free42 extension commands:
+      //ACCEL,LOCAT,HEADING,ADATE,ATIME24,CLK12,CLK24,DATE,DATE+,DDAYS,DMY,DOW,MDY,TIME,YMD,BSIGNED,BWRAP,BRESET,LSTO (4x)
+      let free42Ext = /(A7 CF|A7 D0|A7 D1|A6 81|A6 84|A6 85|A6 86|A6 87|A6 8C|A6 8D|A6 8E|A6 8F|A6 90|A6 91|A6 9C|A7 D5|A7 D6|A7 D7|A7 D8|F2 ED ([89A-E][0-9A-F])|F2 ED F([0-4])|F([1-9A-F]) C7|F([1-9A-F]) CF)/;
+
+      let isFree42 = hex.match(free42Ext);
       if (isFree42) {
         this.languageId = 'free42';
       }
@@ -397,5 +370,4 @@ export class RawParser {
   }
 
   //#endregion
-
 }

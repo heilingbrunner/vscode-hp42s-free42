@@ -43,7 +43,6 @@ export class Encoder42 {
     let languageIdFromCode: string = '';
 
     if (rawLine.workCode !== undefined) {
-      // free42 commands: ACCEL|LOCAT|HEADING|ADATE|ATIME|ATIME24|CLK12|CLK24|DATE|DATE+|DDAYS|DMY|DOW|MDY|TIME
       languageIdFromCode = Encoder42.getLanguageIdFromCode(rawLine, languageId);
 
       if (languageId !== languageIdFromCode) {
@@ -156,10 +155,12 @@ export class Encoder42 {
   /** Check if free42 command used */
   private static getLanguageIdFromCode(rawLine: RawLine, languageId: string): string {
     let languageIdFromCode: string;
-    // free42 commands: ACCEL|LOCAT|HEADING|ADATE|ATIME|ATIME24|CLK12|CLK24|DATE|DATE+|DDAYS|DMY|DOW|MDY|TIME
     if (
+      // free42 extension commands: ACCEL|LOCAT|HEADING|ADATE|ATIME|ATIME24|CLK12|CLK24|DATE|DATE+|DDAYS|DMY|DOW|MDY|TIME|YMD|BSIGNED|BWRAP|BRESET|LSTO .+
       rawLine.token &&
-      rawLine.token.match(/(ACCEL|LOCAT|HEADING|ADATE|ATIME|ATIME24|CLK12|CLK24|DATE|DATE\+|DDAYS|DMY|DOW|MDY|TIME)/)
+      rawLine.token.match(
+        /(ACCEL|LOCAT|HEADING|ADATE|ATIME|ATIME24|CLK12|CLK24|DATE|DATE\+|DDAYS|DMY|DOW|MDY|TIME|YMD|BSIGNED|BWRAP|BRESET|LSTO .+)/
+      )
     ) {
       languageIdFromCode = 'free42';
     } else {
@@ -549,6 +550,9 @@ export class Encoder42 {
     { key: 'BEST', value: [{ regex: /BEST/, raw: 'A0 9F' }] },
     { key: 'BINM', value: [{ regex: /BINM/, raw: 'A0 E5' }] },
     { key: 'BIT?', value: [{ regex: /BIT\?/, raw: 'A5 8C' }] },
+    { key: 'BSIGNED', value: [{ regex: /BSIGNED/, raw: 'A7 D6' }] },
+    { key: 'BWRAP', value: [{ regex: /BWRAP/, raw: 'A7 D7' }] },
+    { key: 'BRESET', value: [{ regex: /BRESET/, raw: 'A7 D8' }] },
     {
       key: 'CF',
       value: [
@@ -798,6 +802,18 @@ export class Encoder42 {
     { key: 'LOCAT', value: [{ regex: /LOCAT/, raw: 'A7 D0' }] },
     { key: 'LOG', value: [{ regex: /LOG/, raw: '56' }] },
     { key: 'LOGF', value: [{ regex: /LOGF/, raw: 'A0 A2' }] },
+    {
+      key: 'LSTO',
+      value: [
+        { regex: /LSTO IND ST ([XYZLT])/, raw: 'F2 ED Ft', params: 'stk' },
+        { regex: /LSTO IND (".{1,14}")/, raw: 'Fn CF', params: 'nam' },
+        { regex: /LSTO IND (\d{2})/, raw: 'F2 ED 8r', params: 'reg' },
+        //{ regex: /LSTO ST ([XYZLT])/, raw: '91 7t', params: 'stk' },
+        { regex: /LSTO (".{1,14}")/, raw: 'Fn C7', params: 'nam' }
+        //{ regex: /LSTO (1[6-9]|[2-9][0-9])/, raw: '91 rr', params: 'reg' }, // 16-99
+        //{ regex: /LSTO (0[0-9]|1[0-5])/, raw: '3r', params: 'reg' } // 00-15
+      ]
+    },
     { key: 'MAN', value: [{ regex: /MAN/, raw: 'A7 5B' }] },
     { key: 'MAT?', value: [{ regex: /MAT\?/, raw: 'A2 66' }] },
     { key: 'MDY', value: [{ regex: /MDY/, raw: 'A6 91' }] },
@@ -1067,6 +1083,8 @@ export class Encoder42 {
     },
     { key: 'WMEAN', value: [{ regex: /WMEAN/, raw: 'A0 AC' }] },
     { key: 'WRAP', value: [{ regex: /WRAP/, raw: 'A6 E2' }] },
+    { key: 'WSIZE', value: [{ regex: /WSIZE/, raw: 'A7 D3' }] },
+    { key: 'WSIZE?', value: [{ regex: /WSIZE\?/, raw: 'A7 D4' }] },
     { key: 'X<0?', value: [{ regex: /X<0\?/, raw: '66' }] },
     {
       key: 'X<>',
@@ -1097,6 +1115,7 @@ export class Encoder42 {
     },
     { key: 'XOR', value: [{ regex: /XOR/, raw: 'A5 8A' }] },
     { key: 'XTOA', value: [{ regex: /XTOA/, raw: 'A6 6F' }] },
+    { key: 'YMD', value: [{ regex: /YMD/, raw: 'A7 D5' }] },
     { key: 'X↑2', value: [{ regex: /X↑2/, raw: '51' }] },
     { key: 'X≠0?', value: [{ regex: /X≠0\?/, raw: '63' }] },
     { key: 'X≠Y?', value: [{ regex: /X≠Y\?/, raw: '79' }] },

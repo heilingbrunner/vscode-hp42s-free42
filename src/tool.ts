@@ -31,50 +31,54 @@ export class Tool {
           // start encoding ...
           let result = this.encoder.encode(languageId, editor);
           if (result) {
-            const useWhitespaceBetweenHex = config.useWhitespaceBetweenHex;
-            const useLineNumbers = config.useLineNumbers;
-            // no encoding errors ...
-            if (result.succeeded()) {
-              // save result and show messages
-              if (result.programs !== undefined) {
-                // Save *.hex42 output ...
-                if (config.encoderGenerateHexFile) {
-                  const hex = result.getHex(eol, useWhitespaceBetweenHex, useLineNumbers);
+            if (result.programs.length > 0) {
+              const useWhitespaceBetweenHex = config.useWhitespaceBetweenHex;
+              const useLineNumbers = config.useLineNumbers;
+              // no encoding errors ...
+              if (result.succeeded()) {
+                // save result and show messages
+                if (result.programs !== undefined) {
+                  // Save *.hex42 output ...
+                  if (config.encoderGenerateHexFile) {
+                    const hex = result.getHex(eol, useWhitespaceBetweenHex, useLineNumbers);
 
-                  writeText(document.fileName + '.hex42', hex);
+                    writeText(document.fileName + '.hex42', hex);
+                  }
+
+                  // Save *.raw output ...
+                  const raw = result.getRaw();
+                  const size = result.getSize();
+
+                  writeBytes(document.fileName + '.raw', raw);
+
+                  // Show Info ...
+                  vscode.window.showInformationMessage(Tool.EXTPREFIX + ': { ' + size + '-Byte Prgm }');
+                } else {
+                  // nothing happend ...
+                  vscode.window.showInformationMessage(Tool.EXTPREFIX + ': No code found.');
                 }
 
-                // Save *.raw output ...
-                const raw = result.getRaw();
-                const size = result.getSize();
-
-                writeBytes(document.fileName + '.raw', raw);
-
-                // Show Info ...
-                vscode.window.showInformationMessage(Tool.EXTPREFIX + ': { ' + size + '-Byte Prgm }');
+                // Delete log file
+                deleteFile(document.fileName + '.log');
               } else {
-                // nothing happend ...
-                vscode.window.showInformationMessage(Tool.EXTPREFIX + ': No code found.');
+                // handle ecoding errors ...
+                const firstError = result.getFirstError();
+                let firstErrorText = firstError !== undefined ? firstError.toString() : '';
+                if (!useLineNumbers) {
+                  firstErrorText = firstErrorText.replace(/ \[.*\]/, '');
+                }
+                // Show error ...
+                vscode.window.showErrorMessage(Tool.EXTPREFIX + ': Encoding failed.' + eol + firstErrorText);
+
+                // Create log file
+                this.writeEncoderErrorsToLog(document.fileName + '.log', result, eol, config.useLineNumbers);
               }
 
-              // Delete log file
-              deleteFile(document.fileName + '.log');
+              // Update all {...} line
+              this.updateHeadLines(editor, result, config.useLineNumbers);
             } else {
-              // handle ecoding errors ...
-              const firstError = result.getFirstError();
-              let firstErrorText = firstError !== undefined ? firstError.toString() : '';
-              if (!useLineNumbers) {
-                firstErrorText = firstErrorText.replace(/ \[.*\]/, '');
-              }
-              // Show error ...
-              vscode.window.showErrorMessage(Tool.EXTPREFIX + ': Encoding failed.' + eol + firstErrorText);
-
-              // Create log file
-              this.writeEncoderErrorsToLog(document.fileName + '.log', result, eol, config.useLineNumbers);
+                vscode.window.showErrorMessage(Tool.EXTPREFIX + ': Encoding failed.' + eol + ': Missing program header (empty curely braces, { }), to insert program size information.');
             }
-
-            // Update all {...} line
-            this.updateHeadLines(editor, result, config.useLineNumbers);
           }
         } else {
           // wrong file

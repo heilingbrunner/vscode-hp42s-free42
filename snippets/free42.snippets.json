@@ -367,6 +367,30 @@
     ],
     "description": "BIT?: Test the xth bit of y. If the bit is set (1), execute the next program line; if the bit is clear (0), skip the next program line."
   },
+  "BSIGNED": {
+    "prefix": "BSIGNED",
+    "scope": "free42",
+    "body": [
+      "BSIGNED$0"
+    ],
+    "description": "BSIGNED: Toggles signed mode. In signed mode, numbers are interpreted as two's complement signed integers, like on the real HP-42S and in earlier versions of Free42; in unsigned mode, numbers are always interpreted as non-negative, and negative numbers do not exist. You can check whether signed or unsigned mode is active by checking the MODES menu, where there will be a dot marking the BSGN menu item when signed mode is active. Alternatively, you can check flag 78."
+  },
+  "BWRAP": {
+    "prefix": "BWRAP",
+    "scope": "free42",
+    "body": [
+      "BWRAP$0"
+    ],
+    "description": "BWRAP: Toggles wrapped mode. In wrapped mode, numbers are kept within WSIZE bits by discarding any bits to the left of bit WSIZE−1; in non-wrapped mode, numbers outside of the binary range are not allowed and cause Invalid Data errors when parameters are out of range, or Out of Range errors when results are out of range. You can check whether wrapped or non-wrapped mode is active by checking the MODES menu, where there will be a dot marking the BWRP menu item when wrapped mode is active. Alternatively, you can check flag 79."
+  },
+  "BRESET": {
+    "prefix": "BRESET",
+    "scope": "free42",
+    "body": [
+      "BRESET$0"
+    ],
+    "description": "BRESET: Resets all BASE modes back to their defaults, which match the behavior of the real HP-42S: WSIZE 36, signed, not wrapped."
+  },
   "CF <number>": {
     "prefix": "CF",
     "scope": "free42",
@@ -2439,6 +2463,38 @@
     ],
     "description": "LOGF: Select the logarithmic curve-fitting model."
   },
+  "LSTO \"<name>\"": {
+    "prefix": "LSTO",
+    "scope": "free42",
+    "body": [
+      "LSTO \"${1:name}\"$0"
+    ],
+    "description": "LSTO \"<name>\": Used to create local variables. These are variables that exist only for the duration of the current subroutine, and are automatically deleted when it returns."
+  },
+  "LSTO IND <number>": {
+    "prefix": "STO",
+    "scope": "free42",
+    "body": [
+      "LSTO IND ${1:number}$0"
+    ],
+    "description": "LSTO IND <number>: Store a copy of x into a local variable. Parameter: register or variable (indirect allowed)."
+  },
+  "LSTO IND ST <stack>": {
+    "prefix": "STO",
+    "scope": "free42",
+    "body": [
+      "LSTO IND ST ${1|L,T,X,Y,Z|}$0"
+    ],
+    "description": "LSTO IND ST <stack>: Store a copy of x into a local variable. Parameter: register or variable (indirect allowed)."
+  },
+    "LSTO IND \"<name>\"": {
+    "prefix": "STO",
+    "scope": "free42",
+    "body": [
+      "LSTO IND \"${1:name}\"$0"
+    ],
+    "description": "LSTO IND \"<name>\": Store a copy of x into a local variable. Parameter: register or variable (indirect allowed)."
+  },
   "MAN": {
     "prefix": "MAN",
     "scope": "free42",
@@ -2678,6 +2734,14 @@
       "PRA$0"
     ],
     "description": "PRA: Print alpha register."
+  },
+  "PRGM": {
+    "prefix": "PRGM",
+    "scope": "free42",
+    "body": [
+      "{ 0-Byte Prgm }$0"
+    ],
+    "description": "PRGM: Program header."
   },
   "PRLCD": {
     "prefix": "PRLCD",
@@ -3791,6 +3855,22 @@
     ],
     "description": "WRAP: Select wrap mode, which prevents the indexed matrix from growing."
   },
+  "WSIZE": {
+    "prefix": "WSIZE",
+    "scope": "free42",
+    "body": [
+      "WSIZE$0"
+    ],
+    "description": "WSIZE: Sets the word size to the number in the X register, which must be between 1 and 64."
+  },
+  "WSIZE?": {
+    "prefix": "WSIZE",
+    "scope": "free42",
+    "body": [
+      "WSIZE?$0"
+    ],
+    "description": "WSIZE?: Returns the current word size."
+  },
   "X<> <number>": {
     "prefix": "X",
     "scope": "free42",
@@ -4022,6 +4102,14 @@
       "YINT$0"
     ],
     "description": "YINT: y-intercept. Returns the y-intercept of the curve fitted to the current statistical data."
+  },
+  "YMD": {
+    "prefix": "YMD",
+    "scope": "free42",
+    "body": [
+      "YMD$0"
+    ],
+    "description": "YMD: Display, return, and accept dates in year/month/day format."
   },
   "Y↑X": {
     "prefix": "Y",
