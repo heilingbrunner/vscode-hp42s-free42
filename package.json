@@ -1,220 +1,223 @@
 {
-  "name": "vscode-hp42s-free42",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/heilingbrunner/vscode-hp42s-free42.git"
-  },
-  "displayName": "HP42S-free42",
-  "description": "HP42S/free42 RPN programming language support",
-  "version": "1.0.4",
-  "publisher": "JHeilingbrunner",
-  "license": "MIT",
-  "icon": "images/vscode-hp42s-free42-logo.png",
-  "engines": {
-    "vscode": "^1.27.0"
-  },
-  "categories": [
-    "Programming Languages",
-    "Snippets",
-    "Other"
-  ],
-  "keywords": [
-    "HP42S/free42",
-    "FOCAL encoder",
-    "syntax highlighting",
-    "document formatter"
-  ],
-  "galleryBanner": {
-    "color": "#1e1e1e",
-    "theme": "dark"
-  },
-  "activationEvents": [
-    "onLanguage:hp42s",
-    "onLanguage:free42",
-    "onLanguage:hex42",
-    "onLanguage:raw42",
-    "onCommand:extension.Encode",
-    "onCommand:extension.Decode",
-    "onCommand:extension.ShowRaw"
-  ],
-  "contributes": {
-    "languages": [
-      {
-        "id": "hp42s",
-        "aliases": [
-          "hp42s"
-        ],
-        "extensions": [
-          "hp42s"
-        ],
-        "configuration": "./hp42s.language-configuration.json"
-      },
-      {
-        "id": "free42",
-        "aliases": [
-          "free42"
-        ],
-        "extensions": [
-          "free42"
-        ],
-        "configuration": "./free42.language-configuration.json"
-      },
-      {
-        "id": "hex42",
-        "aliases": [
-          "hex42"
-        ],
-        "extensions": [
-          "hex42"
-        ],
-        "configuration": "./hex42.language-configuration.json"
-      },
-      {
-        "id": "raw42",
-        "aliases": [
-          "raw42"
-        ],
-        "extensions": [
-          "raw42"
-        ],
-        "configuration": "./raw42.language-configuration.json"
-      }
-    ],
-    "grammars": [
-      {
-        "language": "hp42s",
-        "scopeName": "source.hp42s",
-        "path": "./syntaxes/hp42s.tmLanguage.json"
-      },
-      {
-        "language": "free42",
-        "scopeName": "source.free42",
-        "path": "./syntaxes/free42.tmLanguage.json"
-      },
-      {
-        "language": "hex42",
-        "scopeName": "source.hex42",
-        "path": "./syntaxes/hex42.tmLanguage.json"
-      },
-      {
-        "language": "raw42",
-        "scopeName": "source.raw42",
-        "path": "./syntaxes/raw42.tmLanguage.json"
-      }
-    ],
-    "snippets": [
-      {
-        "language": "hp42s",
-        "path": "./snippets/hp42s.snippets.json"
-      },
-      {
-        "language": "free42",
-        "path": "./snippets/free42.snippets.json"
-      }
-    ],
-    "commands": [
-      {
-        "command": "extension.Encode",
-        "title": "hp42s/free42: Encode Code",
-        "when": "editorLangId == (hp42s||free42)"
-      },
-      {
-        "command": "extension.Decode",
-        "title": "hp42s/free42: Decode Raw",
-        "when": "editorLangId == raw42"
-      },
-      {
-        "command": "extension.ShowRaw",
-        "title": "hp42s/free42: Show Raw"
-      }
-    ],
-    "menus": {
-      "explorer/context": [
-        {
-          "command": "extension.ShowRaw",
-          "when": "resourceExtname == .raw"
-        }
-      ],
-      "editor/context": [
-        {
-          "when": "editorLangId == hp42s",
-          "command": "extension.Encode"
-        },
-        {
-          "when": "editorLangId == free42",
-          "command": "extension.Encode"
-        },
-        {
-          "when": "editorLangId == raw42",
-          "command": "extension.Decode"
-        }
-      ]
+    "name": "vscode-hp42s-free42",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/heilingbrunner/vscode-hp42s-free42.git"
     },
-    "configuration": {
-      "type": "object",
-      "title": "HP42S/free42 Configuration",
-      "properties": {
-        "HP42S/free42.encoderGenerateHexFile": {
-          "type": "boolean",
-          "default": false,
-          "markdownDescription": "The `Encode Code` command will although generate a readable `hex42` file."
+    "displayName": "HP42S-free42",
+    "description": "HP42S/free42 RPN programming language support",
+    "version": "1.0.4",
+    "publisher": "JHeilingbrunner",
+    "license": "MIT",
+    "icon": "images/vscode-hp42s-free42-logo.png",
+    "engines": {
+        "vscode": "^1.27.0"
+    },
+    "categories": [
+        "Programming Languages",
+        "Formatters",
+        "Snippets",
+        "Other"
+    ],
+    "keywords": [
+        "RPN",
+        "HP42S",
+        "free42",
+        "DM42",
+        "FOCAL",
+        "syntax highlighting"
+    ],
+    "galleryBanner": {
+        "color": "#1e1e1e",
+        "theme": "dark"
+    },
+    "activationEvents": [
+        "onLanguage:hp42s",
+        "onLanguage:free42",
+        "onLanguage:hex42",
+        "onLanguage:raw42",
+        "onCommand:extension.Encode",
+        "onCommand:extension.Decode",
+        "onCommand:extension.ShowRaw"
+    ],
+    "contributes": {
+        "languages": [
+            {
+                "id": "hp42s",
+                "aliases": [
+                    "hp42s"
+                ],
+                "extensions": [
+                    "hp42s"
+                ],
+                "configuration": "./hp42s.language-configuration.json"
+            },
+            {
+                "id": "free42",
+                "aliases": [
+                    "free42"
+                ],
+                "extensions": [
+                    "free42"
+                ],
+                "configuration": "./free42.language-configuration.json"
+            },
+            {
+                "id": "hex42",
+                "aliases": [
+                    "hex42"
+                ],
+                "extensions": [
+                    "hex42"
+                ],
+                "configuration": "./hex42.language-configuration.json"
+            },
+            {
+                "id": "raw42",
+                "aliases": [
+                    "raw42"
+                ],
+                "extensions": [
+                    "raw42"
+                ],
+                "configuration": "./raw42.language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "hp42s",
+                "scopeName": "source.hp42s",
+                "path": "./syntaxes/hp42s.tmLanguage.json"
+            },
+            {
+                "language": "free42",
+                "scopeName": "source.free42",
+                "path": "./syntaxes/free42.tmLanguage.json"
+            },
+            {
+                "language": "hex42",
+                "scopeName": "source.hex42",
+                "path": "./syntaxes/hex42.tmLanguage.json"
+            },
+            {
+                "language": "raw42",
+                "scopeName": "source.raw42",
+                "path": "./syntaxes/raw42.tmLanguage.json"
+            }
+        ],
+        "snippets": [
+            {
+                "language": "hp42s",
+                "path": "./snippets/hp42s.snippets.json"
+            },
+            {
+                "language": "free42",
+                "path": "./snippets/free42.snippets.json"
+            }
+        ],
+        "commands": [
+            {
+                "command": "extension.Encode",
+                "title": "hp42s/free42: Encode Code",
+                "when": "editorLangId == (hp42s||free42)"
+            },
+            {
+                "command": "extension.Decode",
+                "title": "hp42s/free42: Decode Raw",
+                "when": "editorLangId == raw42"
+            },
+            {
+                "command": "extension.ShowRaw",
+                "title": "hp42s/free42: Show Raw"
+            }
+        ],
+        "menus": {
+            "explorer/context": [
+                {
+                    "command": "extension.ShowRaw",
+                    "when": "resourceExtname == .raw"
+                }
+            ],
+            "editor/context": [
+                {
+                    "when": "editorLangId == hp42s",
+                    "command": "extension.Encode"
+                },
+                {
+                    "when": "editorLangId == free42",
+                    "command": "extension.Encode"
+                },
+                {
+                    "when": "editorLangId == raw42",
+                    "command": "extension.Decode"
+                }
+            ]
         },
-        "HP42S/free42.decoderGenerateHexFile": {
-          "type": "boolean",
-          "default": false,
-          "markdownDescription": "The `Decode Raw` command will although generate a readable `hex42` file."
-        },
-        "HP42S/free42.formatterUseLineNumbers": {
-          "type": "boolean",
-          "default": true,
-          "markdownDescription": "Formatter uses and refreshes line numbers."
-        },
-        "HP42S/free42.formatterReplaceAbbreviations": {
-          "type": "boolean",
-          "default": true,
-          "markdownDescription": "Formatter replaces abbreviations."
-        },
-        "HP42S/free42.formatterRemoveTooLongSpaces": {
-          "type": "boolean",
-          "default": true,
-          "markdownDescription": "Formatter removes too long whitespaces."
-        },
-        "HP42S/free42.formatterTrimLine": {
-          "type": "boolean",
-          "default": true,
-          "markdownDescription": "Formatter trims start and end of line."
-        },
-        "HP42S/free42.formatterUseWhitespaceBetweenHex": {
-          "type": "boolean",
-          "default": true,
-          "markdownDescription": "Formatter uses whitespace between hex numbers."
+        "configuration": {
+            "type": "object",
+            "title": "HP42S/free42 Configuration",
+            "properties": {
+                "HP42S/free42.encoderGenerateHexFile": {
+                    "type": "boolean",
+                    "default": false,
+                    "markdownDescription": "The `Encode Code` command will although generate a readable `hex42` file."
+                },
+                "HP42S/free42.decoderGenerateHexFile": {
+                    "type": "boolean",
+                    "default": false,
+                    "markdownDescription": "The `Decode Raw` command will although generate a readable `hex42` file."
+                },
+                "HP42S/free42.formatterUseLineNumbers": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "Formatter uses and refreshes line numbers."
+                },
+                "HP42S/free42.formatterReplaceAbbreviations": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "Formatter replaces abbreviations."
+                },
+                "HP42S/free42.formatterRemoveTooLongSpaces": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "Formatter removes too long whitespaces."
+                },
+                "HP42S/free42.formatterTrimLine": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "Formatter trims start and end of line."
+                },
+                "HP42S/free42.formatterUseWhitespaceBetweenHex": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "Formatter uses whitespace between hex numbers."
+                }
+            }
         }
-      }
+    },
+    "main": "./dist/extension",
+    "scripts": {
+        "vscode:prepublish": "webpack --mode production",
+        "prev-vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "webpack": "webpack --mode development",
+        "webpack-dev": "webpack --mode development --watch",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test",
+        "lint": "eslint -c .eslintrc.js --ext .ts ./src"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "@types/mocha": "^5.2.6",
+        "@types/node": "^11.13.4",
+        "@typescript-eslint/eslint-plugin": "^2.19.2",
+        "@typescript-eslint/parser": "^2.19.2",
+        "eslint": "^6.8.0",
+        "ts-loader": "^5.3.3",
+        "typescript": "^3.4.3",
+        "vscode": "^1.1.33",
+        "webpack": "^4.29.6",
+        "webpack-cli": "^3.3.0"
     }
-  },
-  "main": "./dist/extension",
-  "scripts": {
-    "vscode:prepublish": "webpack --mode production",
-    "prev-vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "webpack": "webpack --mode development",
-    "webpack-dev": "webpack --mode development --watch",
-    "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "npm run compile && node ./node_modules/vscode/bin/test",
-    "lint": "eslint -c .eslintrc.js --ext .ts ./src"
-  },
-  "dependencies": {},
-  "devDependencies": {
-    "@types/mocha": "^5.2.6",
-    "@types/node": "^11.13.4",
-    "@typescript-eslint/eslint-plugin": "^2.19.2",
-    "@typescript-eslint/parser": "^2.19.2",
-    "eslint": "^6.8.0",
-    "ts-loader": "^5.3.3",
-    "typescript": "^3.4.3",
-    "vscode": "^1.1.33",
-    "webpack": "^4.29.6",
-    "webpack-cli": "^3.3.0"
-  }
 }
