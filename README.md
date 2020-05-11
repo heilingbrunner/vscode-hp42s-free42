@@ -10,7 +10,7 @@ Language support for HP42S/free42 programming language.
 
 ## What's new in HP42S-free42:
 
-- Support free42 v2.4 (free42 extensions to the HP42S instruction set)
+- security update
 
 ## Features
 
@@ -37,6 +37,11 @@ Useful for [Hewlett Packard HP-42S](https://en.wikipedia.org/wiki/HP-42S) calcul
 ![Demo](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/demo.gif)
 
 ## Features
+
+### Instruction sets
+
+- HP42S instruction set
+- Support [Free42 Extensions to the HP-42S Instruction Set (v2.4)](https://thomasokken.com/free42/#time)
 
 ### Syntax Highligthing
 

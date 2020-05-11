@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.0.5] - 2020-05-11
+
+- security update
+
 ## [1.0.4] - 2020-02-05
 
 - free42 instruction set extension
