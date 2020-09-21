@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.0.6] - 2020-09-21
+
+- security update
+
 ## [1.0.5] - 2020-05-11
 
 - security update
