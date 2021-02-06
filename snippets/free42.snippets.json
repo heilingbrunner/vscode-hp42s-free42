@@ -95,6 +95,14 @@
     ],
     "description": "AND: Logical AND. Returns x AND y."
   },
+  "ANUM": {
+    "prefix": "ANUM",
+    "scope": "free42",
+    "body": [
+      "ANUM$0"
+    ],
+    "description": "ANUM: Scans the ALPHA register for a number, and places it into the X register. If a number is found, the numeric input flag, flag 22, is set."
+  },
   "AOFF": {
     "prefix": "AOFF",
     "scope": "free42",
@@ -1927,6 +1935,14 @@
     ],
     "description": "FS?C IND \"<name>\": Flag set test and clear. If the specified flag is set, execute the next program line; if the flag is clear, skip the next program line. Clear the flag after the test is complete. (This function can be used only with flags 00 through 35 and 81 through 99.) Parameter: flag number (indirect allowed)."
   },
+  "FUNC <number>": {
+    "prefix": "FUNC",
+    "scope": "free42",
+    "body": [
+      "FUNC ${1:number}$0"
+    ],
+    "description": "FUNC <number>: Prepare user-defined function. Save the contents of the stack and LASTx; when the function returns, this saved data will be used to restore the stack such that it looks as if a built-in function has executed. FUNC takes a two-digit numeric parameter. Each digit can be from 0 to 4. The first digit indicates the number of parameters consumed by the user-defined function, and the second digit indicates the number of values returned."
+  },
   "GAMMA": {
     "prefix": "GAMMA",
     "scope": "free42",
@@ -1942,6 +1958,14 @@
       "GETKEY$0"
     ],
     "description": "GETKEY: Get key. The calculator waits for you to press a key. When you do, the key number is returned to the x-register. Keys are numbered from 1 through 37 ( Σ+  through  ÷ )for normal keys and 38 through 74 (■ Σ–   through ■CATALOG) for shifted keys."
+  },
+  "GETKEY1": {
+    "prefix": "GETKEY1",
+    "scope": "free42",
+    "body": [
+      "GETKEY1$0"
+    ],
+    "description": "GETKEY1: This function works like the regular GETKEY, except it does not halt program execution when EXIT or Shift-EXIT are pressed, allowing programs to implement custom behaviors for those keys. GETKEY1 does halt on R/S, like GETKEY."
   },
   "GETM": {
     "prefix": "GETM",
@@ -2551,6 +2575,14 @@
     ],
     "description": "MVAR \"<name>\": Declare a menu variable in a SOLVER program. Parameter: variable name."
   },
+  "MVARCAT": {
+    "prefix": "MVARCAT",
+    "scope": "free42",
+    "body": [
+      "MVARCAT$0"
+    ],
+    "description": "MVARCAT: Returns a matrix in X-register with all the functions with MVAR."
+  },
   "N!": {
     "prefix": "N",
     "scope": "free42",
@@ -2566,6 +2598,14 @@
       "NEWMAT$0"
     ],
     "description": "NEWMAT: New matrix. Creates a y × x matrix in the x-register."
+  },
+  "NOP": {
+    "prefix": "NOP",
+    "scope": "free42",
+    "body": [
+      "NOP$0"
+    ],
+    "description": "NOP: No Operation. Can be used as a filler when ISG is used in a way where it will always skip the next instruction, like when using it as a counter with no upper limit. In raw files, this instruction is encoded as 0xF0, which corresponds to TEXT 0 in the HP-41, which is sometimes used as a synthetic NOP on that platform."
   },
   "NORM": {
     "prefix": "NORM",
@@ -3127,6 +3167,14 @@
     ],
     "description": "RCLEL: Recall element. Recalls the current matrix element from the indexed matrix."
   },
+  "RCLFLAG": {
+    "prefix": "RCLFLAG",
+    "scope": "free42",
+    "body": [
+      "RCLFLAG$0"
+    ],
+    "description": "RCLFLAG: Gets the state of all flags and returns them as a complex number."
+  },
   "RCLIJ": {
     "prefix": "RCLIJ",
     "scope": "free42",
@@ -3214,6 +3262,30 @@
       "RTN$0"
     ],
     "description": "RTN: Return. In a running program, branches the program pointer back to the line following the most recent XEQ instruction. If there is no matching XEQ instruction, program execution halts. From the keyboard, RTN moves the program pointer to line 00 of the current program."
+  },
+  "RTNERR": {
+    "prefix": "RTNERR",
+    "scope": "free42",
+    "body": [
+      "RTNERR ${1:number}$0"
+    ],
+    "description": "RTNERR : RTNERR <number>: Return an error and Execution is halted on the XEQ.  0: No Error  1: Alpha Data Is Invalid  2: Out of Range 3: Divide by 0  4: Invalid Type 5: Invalid Data   6: Nonexistent    7: Dimension Error"
+  },
+  "RTNNO": {
+    "prefix": "RTNNO",
+    "scope": "free42",
+    "body": [
+      "RTNNO$0"
+    ],
+    "description": "RTNNO: Return from conditional function. To be used by functions that act as conditionals. RTNNO causes the line after the calling XEQ to be skipped, or, if the function was called from the keyboard, it will display the message No, like a built-in conditional."
+  },
+  "RTNYES": {
+    "prefix": "RTNYES",
+    "scope": "free42",
+    "body": [
+      "RTNYES$0"
+    ],
+    "description": "RTNYES: Return from conditional function. To be used by functions that act as conditionals. RTNYES is like RTN, except if the function was called from the keyboard, it will display the message Yes, like a built-in conditional."
   },
   "R<>R": {
     "prefix": "R<>R",
@@ -3406,6 +3478,14 @@
       "STO ${1:number}$0"
     ],
     "description": "STO <number>: Store a copy of x into a destination register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "STOFLAG": {
+    "prefix": "STOFLAG",
+    "scope": "free42",
+    "body": [
+      "STOFLAG$0"
+    ],
+    "description": "STOFLAG: estores the state of all flags that were retrieved using a previous RCLFLAG"
   },
   "STO IND <number>": {
     "prefix": "STO",
@@ -3918,6 +3998,14 @@
       "X<> IND \"${1:name}\"$0"
     ],
     "description": "X<> IND \"<name>\": Swaps the contents of the x-register with another register or variable. Parameter: register or variable (indirect allowed)."
+  },
+  "X<>F": {
+    "prefix": "X",
+    "scope": "free42",
+    "body": [
+      "X<>F$0"
+    ],
+    "description": "X<>F: Exchanges flags 0-7 with the X register. The flags are encoded as a binary integer between 0 and 255, with the least significant bits corresponding to the lowest-numbered flags."
   },
   "X<>Y": {
     "prefix": "X",

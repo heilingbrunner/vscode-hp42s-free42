@@ -32,6 +32,9 @@
           "include": "#keyword-opcode-single-parameter"
         },
         {
+          "include": "#keyword-opcode-single-parameter-free42"
+        },
+        {
           "include": "#keyword-opcode-no-parameter-1-free42"
         },
         {
@@ -166,6 +169,15 @@
         }
       ]
     },
+    "keyword-opcode-single-parameter-free42": {
+      "patterns": [
+        {
+          "comment": "starts with normal char, ends with normal char",
+          "match": "\\b(RTNERR)\\b",
+          "name": "keyword.other.control.sp.free42"
+        }
+      ]
+    },
     "keyword-opcode-no-parameter-1-free42": {
       "patterns": [
         {
@@ -206,7 +218,7 @@
       "patterns": [
         {
           "comment": "free42: starts with normal char, ends with normal char",
-          "match": "\\b(ACCEL|ADATE|ATIME24|ATIME|BSIGNED|BWRAP|BRESET|CLK12|CLK24|DATE|DDAYS|DMY|DOW|HEADING|MDY|LOCAT|TIME|WSIZE|YMD)\\b",
+          "match": "\\b(ACCEL|ADATE|ATIME24|ATIME|BSIGNED|BWRAP|BRESET|CLK12|CLK24|DATE|DDAYS|DMY|DOW|HEADING|MDY|LOCAT|TIME|WSIZE|YMD|FUNC|MVARCAT|RTNYES|RTNNO|STOFLAG|RCLFLAG|ANUM|X<>F|GETKEY1|NOP)\\b",
           "name": "keyword.other.control.np.free42"
         }
       ]
