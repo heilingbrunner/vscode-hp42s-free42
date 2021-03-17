@@ -3269,7 +3269,7 @@
     "body": [
       "RTNERR ${1:number}$0"
     ],
-    "description": "RTNERR : RTNERR <number>: Return an error and Execution is halted on the XEQ.  0: No Error  1: Alpha Data Is Invalid  2: Out of Range 3: Divide by 0  4: Invalid Type 5: Invalid Data   6: Nonexistent    7: Dimension Error"
+    "description": "RTNERR : RTNERR <number>: Return an error and Execution is halted on the XEQ.  0: No Error  1: Alpha Data Is Invalid  2: Out of Range 3: Divide by 0  4: Invalid Type 5: Invalid Data   6: Nonexistent    7: Dimension Error    8: Too Few Arguments"
   },
   "RTNNO": {
     "prefix": "RTNNO",
@@ -4445,7 +4445,7 @@
     "body": [
       "[FIND]$0"
     ],
-    "description": "[FIND]"
+    "description": "[FIND]: Locates a specific value, searching the indexed matrix left to right and top to bottom. The function works as a conditional: when a program is running, the following instruction is executed if a match is found, and skipped if a match is not found; when executed interactively, the display shows \"Yes\" if a match is found and \"No\" if not. Also, if a match is found, I and J are set to point to it. The indexed matrix may be real or complex, and the search value may be real, complex, or string; real or string values are only found in real matrices, and complex values are only found in complex matrices; in other words, 5 is not considered equal to 5 + 0i -- mathematically speaking this is wrong, but on the other hand it is consistent with the behavior of the X=Y? and X≠Y? functions."
   },
   "[MAX]": {
     "prefix": "MAX",
@@ -4453,7 +4453,7 @@
     "body": [
       "[MAX]$0"
     ],
-    "description": "[MAX]"
+    "description": "[MAX]: Is like [MIN] except it finds the highest element; if the minimum or maximum is not unique (it is found in more than one row), the highest matching row is returned. [MIN] and [MAX] require the indexed matrix to be a real matrix, and they do not allow string elements in the column being searched."
   },
   "[MIN]": {
     "prefix": "MIN",
@@ -4461,7 +4461,7 @@
     "body": [
       "[MIN]$0"
     ],
-    "description": "[MIN]"
+    "description": "[MIN]: Finds the lowest element of the current column, starting at the current row, of the indexed matrix, and returns the element to X and the row where it was found to Y."
   },
   "÷ ": {
     "prefix": "FOC",

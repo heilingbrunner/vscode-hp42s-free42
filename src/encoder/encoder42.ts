@@ -156,13 +156,13 @@ export class Encoder42 {
   private static getLanguageIdFromCode(rawLine: RawLine, languageId: string): string {
     let languageIdFromCode: string;
     if (
-      // free42 extension commands: ACCEL|LOCAT|HEADING|ADATE|ATIME|ATIME24|CLK12|CLK24|DATE|DATE+|DDAYS|DMY|DOW|MDY|TIME|YMD|BSIGNED|BWRAP|BRESET|LSTO .+
+      // free42 extension commands: ACCEL|LOCAT|HEADING|ADATE|ATIME|ATIME24|CLK12|CLK24|DATE|DATE+|DDAYS|DMY|DOW|MDY|TIME|YMD|BSIGNED|BWRAP|BRESET|LSTO|ANUM|FUNC|GETKEY1|MVARCAT|RCLFLAG|STOFLAG|RTNERR|RTNNO|RTNYES|x<>F|NOP .+
       rawLine.token &&
       rawLine.token.match(
-        /(ACCEL|LOCAT|HEADING|ADATE|ATIME|ATIME24|CLK12|CLK24|DATE|DATE\+|DDAYS|DMY|DOW|MDY|TIME|YMD|BSIGNED|BWRAP|BRESET|LSTO .+)/
+        /(ACCEL|LOCAT|HEADING|ADATE|ATIME|ATIME24|CLK12|CLK24|DATE|DATE\+|DDAYS|DMY|DOW|MDY|TIME|YMD|BSIGNED|BWRAP|BRESET|LSTO|ANUM|FUNC|GETKEY1|MVARCAT|RCLFLAG|STOFLAG|RTNERR|RTNNO|RTNYES|x<>F|NOP .+)/
       )
     ) {
-      languageIdFromCode = 'free42';
+      languageIdFromCode = "free42";
     } else {
       languageIdFromCode = languageId;
     }
