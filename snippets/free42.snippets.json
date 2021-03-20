@@ -3485,7 +3485,7 @@
     "body": [
       "STOFLAG$0"
     ],
-    "description": "STOFLAG: estores the state of all flags that were retrieved using a previous RCLFLAG"
+    "description": "STOFLAG: Restores the state of all flags that were retrieved using a previous RCLFLAG"
   },
   "STO IND <number>": {
     "prefix": "STO",

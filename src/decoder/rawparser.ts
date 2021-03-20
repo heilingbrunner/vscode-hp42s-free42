@@ -346,15 +346,59 @@ export class RawParser {
   }
 
   private checkLanguageId(pattern: RpnPattern, hex: string) {
-    if (pattern.len === 2) {
-      //free42 extension commands:
-      //ACCEL,LOCAT,HEADING,ADATE,ATIME24,CLK12,CLK24,DATE,DATE+,DDAYS,DMY,DOW,MDY,TIME,YMD,BSIGNED,BWRAP,BRESET,LSTO (4x)
-      let free42Ext = /(A7 CF|A7 D0|A7 D1|A6 81|A6 84|A6 85|A6 86|A6 87|A6 8C|A6 8D|A6 8E|A6 8F|A6 90|A6 91|A6 9C|A7 D5|A7 D6|A7 D7|A7 D8|F2 ED ([89A-E][0-9A-F])|F2 ED F([0-4])|F([1-9A-F]) C7|F([1-9A-F]) CF)/;
+    //check free42 extension commands
+    switch (pattern.len) {
+      case 1:
+        //NOP      : F0
+        let free42Ext1 = /(F0)/;
+        if (hex.match(free42Ext1)) {
+          this.languageId = "free42";
+        }
+        break;
 
-      let isFree42 = hex.match(free42Ext);
-      if (isFree42) {
-        this.languageId = 'free42';
-      }
+      case 2:
+        //Hex: A6 ..
+        //ANUM     : A6 42
+        //RCLFLAG  : A6 60
+        //STOFLAG  : A6 6D
+        //X<>F     : A6 6E
+        //ADATE    : A6 81
+        //ATIME    : A6 84
+        //ATIME24  : A6 85
+        //CLK12    : A6 86
+        //CLK24    : A6 87
+        //DATE     : A6 8C
+        //DATE+    : A6 8D
+        //DDAYS    : A6 8E
+        //DMY      : A6 8F
+        //DOW      : A6 90
+        //MDY      : A6 91
+        //TIME     : A6 9C
+
+        //Hex: A7 ..
+        //ACCEL    : A7 CF
+        //LOCAT    : A7 D0
+        //HEADING  : A7 D1
+        //YMD      : A7 D5
+        //BSIGNED  : A7 D6
+        //BWRAP    : A7 D7
+        //BRESET   : A7 D8
+        //RTNYES   : A7 DE
+        //RTNNO    : A7 DF
+
+        //Hex: F. ..
+        //LSTO IND rr       : F2 ED ([89A-E][0-9A-F])
+        //LSTO IND ST `stk` : F2 ED F([0-4])|F([1-9A-F]) C7
+        //LSTO `nam`        : F([1-9A-F]) CF
+        
+        let free42Ext2 = /(A6 42|A6 60|A6 6D|A6 6E|A6 81|A6 84|A6 85|A6 86|A6 87|A6 8C|A6 8D|A6 8E|A6 8F|A6 90|A6 91|A6 9C|A7 CF|A7 D0|A7 D1|A7 D5|A7 D6|A7 D7|A7 D8|A7 DE|A7 DF|F2 ED ([89A-E][0-9A-F])|F2 ED F([0-4])|F([1-9A-F]) C7|F([1-9A-F]) CF)/;
+        if (hex.match(free42Ext2)) {
+          this.languageId = "free42";
+        }
+        break;
+
+      default:
+        break;
     }
   }
 
