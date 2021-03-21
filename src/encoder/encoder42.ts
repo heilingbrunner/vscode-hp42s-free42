@@ -788,6 +788,7 @@ export class Encoder42 {
     },
     { key: "GAMMA", value: [{ regex: /GAMMA/, raw: "A0 74" }] },
     { key: "GETM", value: [{ regex: /GETM/, raw: "A6 E8" }] },
+    { key: "GETKEY1", value: [{ regex: /GETKEY1/, raw: "A7 D9" }] },
     { key: "GETKEY", value: [{ regex: /GETKEY/, raw: "A2 6E" }] },
     { key: "GRAD", value: [{ regex: /GRAD/, raw: "82" }] },
     { key: "GROW", value: [{ regex: /GROW/, raw: "A6 E3" }] },
