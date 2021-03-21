@@ -383,6 +383,7 @@ export class RawParser {
         //BSIGNED  : A7 D6
         //BWRAP    : A7 D7
         //BRESET   : A7 D8
+        //FMA      : A7 DA
         //RTNYES   : A7 DE
         //RTNNO    : A7 DF
 
@@ -391,7 +392,7 @@ export class RawParser {
         //LSTO IND ST `stk` : F2 ED F([0-4])|F([1-9A-F]) C7
         //LSTO `nam`        : F([1-9A-F]) CF
         
-        let free42Ext2 = /(A6 42|A6 60|A6 6D|A6 6E|A6 81|A6 84|A6 85|A6 86|A6 87|A6 8C|A6 8D|A6 8E|A6 8F|A6 90|A6 91|A6 9C|A7 CF|A7 D0|A7 D1|A7 D5|A7 D6|A7 D7|A7 D8|A7 DE|A7 DF|F2 ED ([89A-E][0-9A-F])|F2 ED F([0-4])|F([1-9A-F]) C7|F([1-9A-F]) CF)/;
+        let free42Ext2 = /(A6 42|A6 60|A6 6D|A6 6E|A6 81|A6 84|A6 85|A6 86|A6 87|A6 8C|A6 8D|A6 8E|A6 8F|A6 90|A6 91|A6 9C|A7 CF|A7 D0|A7 D1|A7 D5|A7 D6|A7 D7|A7 D8|A7 DA|A7 DE|A7 DF|F2 ED ([89A-E][0-9A-F])|F2 ED F([0-4])|F([1-9A-F]) C7|F([1-9A-F]) CF)/;
         if (hex.match(free42Ext2)) {
           this.languageId = "free42";
         }

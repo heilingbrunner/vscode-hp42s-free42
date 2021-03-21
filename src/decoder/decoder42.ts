@@ -990,6 +990,7 @@ export class Decoder42 {
         { regex: /A7 D6/, len: 2, rpn: "BSIGNED" },
         { regex: /A7 D7/, len: 2, rpn: "BWRAP" },
         { regex: /A7 D8/, len: 2, rpn: "BRESET" },
+        { regex: /A7 DA/, len: 2, rpn: "FMA" },
         { regex: /A7 DE/, len: 2, rpn: "RTNYES" },
         { regex: /A7 DF/, len: 2, rpn: "RTNNO" },
         {

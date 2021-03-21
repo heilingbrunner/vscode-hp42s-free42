@@ -1855,6 +1855,14 @@
     ],
     "description": "FLAG 99: User Flag."
   },
+  "FMA": {
+    "prefix": "FMA",
+    "scope": "free42",
+    "body": [
+      "FMA$0"
+    ],
+    "description": "FMA: Fused Multiply-Add. Calculates Z*Y+X using the underlying platform's native FMA function, as provided by the floating-point hardware or library."
+  },
   "FNRM": {
     "prefix": "FNRM",
     "scope": "free42",
