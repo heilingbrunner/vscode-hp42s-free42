@@ -993,6 +993,7 @@ export class Decoder42 {
         { regex: /A7 DA/, len: 2, rpn: "FMA" },
         { regex: /A7 DE/, len: 2, rpn: "RTNYES" },
         { regex: /A7 DF/, len: 2, rpn: "RTNNO" },
+        { regex: /A7 E8/, len: 2, rpn: "PGMMENU" },
         {
           regex: /A8 ([89A-E][0-9A-F])/,
           len: 2,

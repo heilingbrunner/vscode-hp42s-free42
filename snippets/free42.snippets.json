@@ -2711,6 +2711,14 @@
     ],
     "description": "PGMINT IND \"<name>\": Select a program to integrate. Parameter: global label (indirect allowed)."
   },
+  "PGMMENU": {
+    "prefix": "PGMMENU",
+    "scope": "free42",
+    "body": [
+      "PGMMENU$0"
+    ],
+    "description": "PGMMENU: PGM Menu. Presents a menu of all global labels that have MVAR instructions. When the user makes a selection, the label name is placed in the ALPHA register, and program execution is resumed, similar to the way VARMENU handles a selection. This function allows programs to implement behavior similar to the top-level SOLVER and ∫f(x) menus."
+  },
   "PGMSLV IND <number>": {
     "prefix": "PGMSLV",
     "scope": "free42",

@@ -218,7 +218,7 @@
       "patterns": [
         {
           "comment": "free42: starts with normal char, ends with normal char",
-          "match": "\\b(ACCEL|ADATE|ANUM|ATIME24|ATIME|BRESET|BSIGNED|BWRAP|CLK12|CLK24|DATE|DDAYS|DMY|DOW|FMA|FUNC|GETKEY1|HEADING|LOCAT|MDY|MVARCAT|NOP|RCLFLAG|RTNNO|RTNYES|STOFLAG|TIME|WSIZE|X<>F|YMD)\\b",
+          "match": "\\b(ACCEL|ADATE|ANUM|ATIME24|ATIME|BRESET|BSIGNED|BWRAP|CLK12|CLK24|DATE|DDAYS|DMY|DOW|FMA|FUNC|GETKEY1|HEADING|LOCAT|MDY|MVARCAT|NOP|PGMMENU|RCLFLAG|RTNNO|RTNYES|STOFLAG|TIME|WSIZE|X<>F|YMD)\\b",
           "name": "keyword.other.control.np.free42"
         }
       ]
