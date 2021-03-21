@@ -1190,6 +1190,7 @@ export class Encoder42 {
       ],
     },
     { key: "STR?", value: [{ regex: /STR\?/, raw: "A2 68" }] },
+    { key: "STRACE", value: [{ regex: /STRACE/, raw: "A7 E1" }] },
     { key: "SUM", value: [{ regex: /SUM/, raw: "A0 A5" }] },
     { key: "TAN", value: [{ regex: /TAN/, raw: "5B" }] },
     { key: "TANH", value: [{ regex: /TANH/, raw: "A0 63" }] },

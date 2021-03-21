@@ -3767,6 +3767,14 @@
     ],
     "description": "STR?: If the x-register contains an alpha string, execute the next program line; if the x-register does not contain an alpha string, skip the next program line."
   },
+  "STRACE": {
+    "prefix": "STRACE",
+    "scope": "free42",
+    "body": [
+      "STRACE$0"
+    ],
+    "description": "STRACE: Stack Trace mode. This turns on a new print mode, which is a variation on TRACE mode, printing the entire stack instead of just X. This can be a valuable debugging tool, but it generates large amounts of output!"
+  },
   "SUM": {
     "prefix": "SUM",
     "scope": "free42",
