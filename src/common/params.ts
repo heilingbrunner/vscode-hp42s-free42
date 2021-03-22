@@ -13,13 +13,14 @@ export class Params {
   siz?: string;
   str?: string;
   ton?: string;
+  err?: string;
   stk?: string;
-  
+
   // length
   lbll?: number;
   naml?: number;
   strl?: number;
-  
+
   // values
   stkno?: number;
   digno?: number;
@@ -30,6 +31,7 @@ export class Params {
   regno?: number;
   sizno?: number;
   tonno?: number;
+  errno?: number;
 
   constructor() {}
 }

@@ -91,6 +91,11 @@ export class Decoder42 {
         /sd/.test(rpnLine.workCode)
       ) {
         this.replaceDigits("sd", rpnLine);
+      } else if (
+        rpnLine.params.errno !== undefined &&
+        /er/.test(rpnLine.workCode)
+      ) {
+        this.replaceError("er", rpnLine);
       }
 
       if (rpnLine.params.lbl !== undefined && /`lbl`/.test(rpnLine.workCode)) {
@@ -222,6 +227,15 @@ export class Decoder42 {
         replace,
         this.formatNN(rpnLine.params.digno)
       );
+    }
+  }
+
+  private static replaceError(replace: string, rpnLine: RpnLine) {
+    if (rpnLine.workCode) {
+      rpnLine.workCode = rpnLine.workCode.replace(
+        replace,
+        "" + rpnLine.params.errno
+      ); // 0-9
     }
   }
 
@@ -1174,6 +1188,12 @@ export class Decoder42 {
         { regex: /F1 E5/, len: 2, rpn: "FIX 11" },
         { regex: /F1 E6/, len: 2, rpn: "SCI 11" },
         { regex: /F1 E7/, len: 2, rpn: "ENG 11" },
+        {
+          regex: /F2 A0 0([1-8])/,
+          len: 3,
+          rpn: "RTNERR er",
+          params: "err",
+        },
         {
           regex: /F2 D0 7([0-4])/,
           len: 3,

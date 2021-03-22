@@ -156,6 +156,14 @@ export class Encoder42 {
             );
           }
 
+          // 1-8 errno
+          if (rawLine.params.errno !== undefined) {
+            rawLine.raw = Encoder42.insertNumberInRaw(
+              rawLine.raw,
+              rawLine.params.errno
+            );
+          }
+
           // 10 or 11 digits
           if (rawLine.workCode.match(/(ENG|FIX|SCI) (10|11)/)) {
             // nothing to do ...
@@ -297,6 +305,10 @@ export class Encoder42 {
 
         case /tn/.test(raw):
           raw = raw.replace(/tn/, Encoder42.convertByteAsHex(num));
+          break;
+
+        case /er/.test(raw):
+          raw = raw.replace(/er/, Encoder42.convertByteAsHex(num));
           break;
 
         case /nn/.test(raw):
@@ -1085,6 +1097,10 @@ export class Encoder42 {
     { key: "ROTXY", value: [{ regex: /ROTXY/, raw: "A5 8B" }] },
     { key: "RSUM", value: [{ regex: /RSUM/, raw: "A6 D0" }] },
     { key: "RTN", value: [{ regex: /RTN/, raw: "85" }] },
+    {
+      key: "RTNERR",
+      value: [{ regex: /RTNERR ([1-8])/, raw: "F2 A0 er", params: "err" }],
+    },
     { key: "RTNNO", value: [{ regex: /RTNNO/, raw: "A7 DF" }] },
     { key: "RTNYES", value: [{ regex: /RTNYES/, raw: "A7 DE" }] },
     { key: "R↑", value: [{ regex: /R↑/, raw: "74" }] },

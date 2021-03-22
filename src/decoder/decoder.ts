@@ -11,15 +11,19 @@ export class Decoder {
 
   /** Decode raw input to readable code string */
   decode(editor: vscode.TextEditor): DecoderResult {
-
     const document = editor.document;
     const raw = this.readDocumentBytes(document);
 
     const parser = new RawParser(raw);
+
+    // Read code and return rpn programs with rpn lines
+    // Example:
+    // RpnProgram {rpnLines: Array(3), size: 0, startDocLine: 0}
+    // F2 A0 01 -> RpnLine {codeLineNo: 2, docRaw: 'F2 A0 01', rawLength: 3, params: Params, workCode: 'RTNERR `er`'}
     parser.parse();
 
-    parser.programs.forEach(program => {
-      program.rpnLines.forEach(rpnLine =>{
+    parser.programs.forEach((program) => {
+      program.rpnLines.forEach((rpnLine) => {
         Decoder42.toRpn(rpnLine);
       });
     });
@@ -28,7 +32,7 @@ export class Decoder {
     const result = new DecoderResult();
     result.programs = parser.programs;
     result.languageId = parser.languageId;
-    
+
     return result;
   }
 
