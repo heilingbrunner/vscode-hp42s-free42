@@ -197,14 +197,19 @@
     },
     "main": "./dist/extension",
     "scripts": {
-        "vscode:prepublish": "webpack --mode production",
+        "vscode:prepublish": "npm run prepublish-with-esbuild",
+        "prepublish-with-webpack": "webpack --mode production",
+        "prepublish-with-esbuild": "npm run esbuild-base -- --minify",
         "prev-vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
         "webpack": "webpack --mode development",
         "webpack-dev": "webpack --mode development --watch",
         "test": "npm run compile && node ./node_modules/vscode/bin/test",
-        "lint": "eslint -c .eslintrc.js --ext .ts ./src"
+        "lint": "eslint -c .eslintrc.js --ext .ts ./src",
+        "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node",
+        "esbuild": "npm run esbuild-base -- --sourcemap",
+        "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch"
     },
     "devDependencies": {
         "@types/glob": "^7.2.0",
@@ -214,6 +219,7 @@
         "@typescript-eslint/eslint-plugin": "^5.21.0",
         "@typescript-eslint/parser": "^5.21.0",
         "@vscode/test-electron": "^2.1.3",
+        "esbuild": "^0.14.39",
         "eslint": "^8.14.0",
         "glob": "^8.0.3",
         "mocha": "^9.2.2",
