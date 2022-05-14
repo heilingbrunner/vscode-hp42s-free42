@@ -5,12 +5,12 @@
 
 // The module 'assert' provides assertion methods from node
 import * as assert from 'assert';
-import { Encoder42 } from '../encoder/encoder42';
-import { Decoder42 } from '../decoder/decoder42';
-import { RpnParser } from '../encoder/rpnparser';
-import { RawParser } from '../decoder/rawparser';
-import { RawLine } from '../encoder/rawline';
-import { RpnLine } from '../decoder/rpnline';
+import { Encoder42 } from '../../encoder/encoder42';
+import { Decoder42 } from '../../decoder/decoder42';
+import { RpnParser } from '../../encoder/rpnparser';
+import { RawParser } from '../../decoder/rawparser';
+import { RawLine } from '../../encoder/rawline';
+import { RpnLine } from '../../decoder/rpnline';
 
 // You can import and use all API from the 'vscode' module
 // as well as import your extension to test it
