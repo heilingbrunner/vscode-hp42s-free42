@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.0.7] - 2022-05-15
+
+- package updates
+- bug fix
+
 ## [1.0.6] - 2020-09-21
 
 - security update
