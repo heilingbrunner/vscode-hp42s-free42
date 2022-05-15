@@ -197,6 +197,7 @@
     },
     "main": "./dist/extension",
     "scripts": {
+        "vsce-package": "vsce package",
         "vscode:prepublish": "npm run prepublish-with-esbuild",
         "prepublish-with-webpack": "webpack --mode production",
         "prepublish-with-esbuild": "npm run esbuild-base -- --minify",
