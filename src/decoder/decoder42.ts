@@ -197,7 +197,7 @@ export class Decoder42 {
     if (rpnLine.workCode) {
       rpnLine.workCode = rpnLine.workCode.replace(
         replace,
-        "" + rpnLine.params.keyno
+        this.formatNN(rpnLine.params.keyno)
       );
     }
   }
