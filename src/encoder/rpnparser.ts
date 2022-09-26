@@ -30,9 +30,11 @@ export class RpnParser {
       let docLineCount = this.document.lineCount;
       let program: RawProgram | undefined;
 
+      // iterate line by line through the document
       for (let docLine = 0; docLine < docLineCount; docLine++) {
         let line = this.document.lineAt(docLine);
 
+        // When program header detected, create new program and add to programs list
         //{ ... }-line detected -> Prgm Start
         let match = line.text.match(/\{.*\}/);
         if (match) {
@@ -41,6 +43,7 @@ export class RpnParser {
           this.programs.push(program);
         }
 
+        // if program created from above, parse line
         if (program) {
           // search in avaiable commands
           let rawLine = this.parseLine(docLine, line.text);
