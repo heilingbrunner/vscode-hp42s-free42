@@ -546,7 +546,7 @@ export class Encoder42 {
     // { key: '}', value: 125 },
     // { key: '~', value: 126 }
     // { key: '⊦', value: 127 }
-
+    { key: 'Ω', value: 130 }
     // { key: '´', value: ??? }
   ];
 

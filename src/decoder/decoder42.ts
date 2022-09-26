@@ -452,7 +452,7 @@ export class Decoder42 {
     // { key: 125, value: '}' },
     // { key: 126, value: '~' }
     // { key: 127, value: '⊦' }
-
+       { key: 130, value: 'Ω' }
     // { key: ???, value: '´' }
   ];
 
