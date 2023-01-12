@@ -1017,7 +1017,7 @@ export class Decoder42 {
           params: "reg-128",
         },
         { regex: /A8 F([0-4])/, len: 2, rpn: "SF IND ST `stk`", params: "stk" },
-        { regex: /A8 ([0-7][0-9A-F])/, len: 2, rpn: "SF fl", params: "flg" }, //+ flags dec:00-99 hex:00-63
+        { regex: /A8 ([0-6][0-9A-F])/, len: 2, rpn: "SF fl", params: "flg" }, // flags dec:00-99 hex:00-63
         {
           regex: /A9 ([89A-E][0-9A-F])/,
           len: 2,
@@ -1025,7 +1025,7 @@ export class Decoder42 {
           params: "reg-128",
         },
         { regex: /A9 F([0-4])/, len: 2, rpn: "CF IND ST `stk`", params: "stk" },
-        { regex: /A9 ([0-7][0-9A-F])/, len: 2, rpn: "CF fl", params: "flg" },
+        { regex: /A9 ([0-6][0-9A-F])/, len: 2, rpn: "CF fl", params: "flg" }, // dec:00-99, hex:00-63
         {
           regex: /AA ([89A-E][0-9A-F])/,
           len: 2,
@@ -1038,7 +1038,7 @@ export class Decoder42 {
           rpn: "FS?C IND ST `stk`",
           params: "stk",
         },
-        { regex: /AA ([0-7][0-9A-F])/, len: 2, rpn: "FS?C fl", params: "flg" }, //+
+        { regex: /AA ([0-6][0-9A-F])/, len: 2, rpn: "FS?C fl", params: "flg" }, // dec:00-99, hex:00-63
         {
           regex: /AB ([89A-E][0-9A-F])/,
           len: 2,
@@ -1051,7 +1051,7 @@ export class Decoder42 {
           rpn: "FC?C IND ST `stk`",
           params: "stk",
         },
-        { regex: /AB ([0-7][0-9A-F])/, len: 2, rpn: "FC?C fl", params: "flg" },
+        { regex: /AB ([0-6][0-9A-F])/, len: 2, rpn: "FC?C fl", params: "flg" }, // dec:00-99, hex:00-63
         {
           regex: /AC ([89A-E][0-9A-F])/,
           len: 2,
@@ -1064,7 +1064,7 @@ export class Decoder42 {
           rpn: "FS? IND ST `stk`",
           params: "stk",
         },
-        { regex: /AC ([0-7][0-9A-F])/, len: 2, rpn: "FS? fl", params: "flg" }, //+
+        { regex: /AC ([0-6][0-9A-F])/, len: 2, rpn: "FS? fl", params: "flg" }, //dec:00-99, hex:00-63
         {
           regex: /AD ([89A-E][0-9A-F])/,
           len: 2,
@@ -1077,7 +1077,7 @@ export class Decoder42 {
           rpn: "FC? IND ST `stk`",
           params: "stk",
         },
-        { regex: /AD ([0-7][0-9A-F])/, len: 2, rpn: "FC? fl", params: "flg" }, //+
+        { regex: /AD ([0-6][0-9A-F])/, len: 2, rpn: "FC? fl", params: "flg" }, //dec:00-99, hex:00-63
         {
           regex: /AE 7([0-4])/,
           len: 2,
