@@ -1458,12 +1458,13 @@ export class Decoder42 {
           rpn: "KEY `key` XEQ IND ST `stk`",
           params: "key,stk",
         },
-        {
-          regex: /F3 E2 (0[1-9]) ([0-7][0-9A-F])/,
-          len: 4,
-          rpn: "KEY `key` XEQ ll",
-          params: "key,lblno",
-        },
+        // double entry, see below KEY `key` XEQ sl
+        // {
+        //   regex: /F3 E2 (0[1-9]) ([0-7][0-9A-F])/,
+        //   len: 4,
+        //   rpn: "KEY `key` XEQ ll",
+        //   params: "key,lblno",
+        // },
         {
           regex: /F3 E2 (0[1-9]) ([0-7][0-9A-F])/,
           len: 4,
