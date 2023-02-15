@@ -2,7 +2,8 @@ import * as vscode from 'vscode';
 
 import { Decoder42 } from './decoder42';
 import { DecoderResult } from './decoderresult';
-import { RawParser } from './rawparser';
+//import { RawParser } from './rawparser';
+import * as RawParser from './RawParser.js';
 
 export class Decoder {
   constructor() {
@@ -11,28 +12,32 @@ export class Decoder {
 
   /** Decode raw input to readable code string */
   decode(editor: vscode.TextEditor): DecoderResult {
-    const document = editor.document;
-    const raw = this.readDocumentBytes(document);
+    // const document = editor.document;
+    // const raw = this.readDocumentBytes(document);
 
-    const parser = new RawParser(raw);
+    //const parser = new RawParser(raw);
 
     // Read code and return rpn programs with rpn lines
     // Example:
     // RpnProgram {rpnLines: Array(3), size: 0, startDocLine: 0}
     // F2 A0 01 -> RpnLine {codeLineNo: 2, docRaw: 'F2 A0 01', rawLength: 3, params: Params, workCode: 'RTNERR `er`'}
-    parser.parse();
+    // parser.parse();
 
-    parser.programs.forEach((program) => {
-      program.rpnLines.forEach((rpnLine) => {
-        Decoder42.toRpn(rpnLine);
-      });
-    });
+    // parser.programs.forEach((program) => {
+    //   program.rpnLines.forEach((rpnLine) => {
+    //     Decoder42.toRpn(rpnLine);
+    //   });
+    // });
 
-    // return result
+    // // return result
+    // result.programs = parser.programs;
+    // result.languageId = parser.languageId;
+
+    const bytes = this.readDocumentBytes(editor.document);
+    const code = bytes.join(' ');
+    const tree = RawParser.parse(code);
+    
     const result = new DecoderResult();
-    result.programs = parser.programs;
-    result.languageId = parser.languageId;
-
     return result;
   }
 
