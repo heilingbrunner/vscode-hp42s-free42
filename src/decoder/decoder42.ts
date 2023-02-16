@@ -1458,12 +1458,13 @@ export class Decoder42 {
           rpn: "KEY `key` XEQ IND ST `stk`",
           params: "key,stk",
         },
-        {
-          regex: /F3 E2 (0[1-9]) ([0-7][0-9A-F])/,
-          len: 4,
-          rpn: "KEY `key` XEQ ll",
-          params: "key,lblno",
-        },
+        // double entry, see below KEY `key` XEQ sl
+        // {
+        //   regex: /F3 E2 (0[1-9]) ([0-7][0-9A-F])/,
+        //   len: 4,
+        //   rpn: "KEY `key` XEQ ll",
+        //   params: "key,lblno",
+        // },
         {
           regex: /F3 E2 (0[1-9]) ([0-7][0-9A-F])/,
           len: 4,
@@ -1487,12 +1488,13 @@ export class Decoder42 {
           rpn: "KEY `key` GTO IND ST `stk`",
           params: "key,stk",
         },
-        {
-          regex: /F3 E3 (0[1-9]) ([0-7][0-9A-F])/,
-          len: 4,
-          rpn: "KEY `key` GTO ll",
-          params: "key,lblno",
-        },
+        // double entry, see below KEY `key` GTO sl
+        // {
+        //   regex: /F3 E3 (0[1-9]) ([0-7][0-9A-F])/,
+        //   len: 4,
+        //   rpn: "KEY `key` GTO ll",
+        //   params: "key,lblno",
+        // },
         {
           regex: /F3 E3 (0[1-9]) ([0-7][0-9A-F])/,
           len: 4,
@@ -1801,9 +1803,13 @@ export class Decoder42 {
           rpn: "SOLVE IND `nam`",
           params: "naml-1",
         },
+        //               ↓key             ↓key-1
+        // ASIGN "AA" TO 01 : F4 C0 41 41 00, first row left button
+        // ASIGN "BB" TO 12 : F4 C0 42 42 0B, second row right button
+        // ASIGN "CC" TO 18 : F4 C0 43 43 11, third row right button
         {
-          regex: /F([1-9A-F]) C0/,
-          len: 2,
+          regex: /F([1-9A-F]) C0 (0[0-9]|1[0-1])/,
+          len: 3,
           rpn: "ASSIGN `nam` TO `key`",
           params: "naml-2,+key+1",
         }, //
@@ -1814,13 +1820,13 @@ export class Decoder42 {
           params: "naml-1",
         },
         {
-          regex: /F([1-9A-F]) C2 (0[1-9])/,
+          regex: /F([1-9A-F]) C2 (0[0-9]|1[0-1])/,
           len: 3,
           rpn: "KEY `key` XEQ `lbl`",
           params: "lbll-2,key",
         }, //+
         {
-          regex: /F([1-9A-F]) C3 (0[1-9])/,
+          regex: /F([1-9A-F]) C3 (0[0-9]|1[0-1])/,
           len: 3,
           rpn: "KEY `key` GTO `lbl`",
           params: "lbll-2,key",
@@ -1851,13 +1857,13 @@ export class Decoder42 {
           params: "naml-1",
         },
         {
-          regex: /F([1-9A-F]) CA (0[1-9])/,
+          regex: /F([1-9A-F]) CA (0[0-9]|1[0-1])/,
           len: 3,
           rpn: "KEY `key` XEQ IND `nam`",
           params: "naml-2,key",
         },
         {
-          regex: /F([1-9A-F]) CB (0[1-9])/,
+          regex: /F([1-9A-F]) CB (0[0-9]|1[0-1])/,
           len: 3,
           rpn: "KEY `key` GTO IND `nam`",
           params: "naml-2,key",
