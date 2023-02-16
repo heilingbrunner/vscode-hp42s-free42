@@ -5,7 +5,7 @@ import { toBytes } from './bytes';
 
 /** Write bytes to file */
 export function writeBytes(fileName: string, content: string) {
-  const data = new Buffer(toBytes(content));
+  const data = Buffer.from(toBytes(content)); // deprecated: new Buffer(toBytes(content));
 
   fs.writeFile(fileName, data, err => {
     if (err) {
