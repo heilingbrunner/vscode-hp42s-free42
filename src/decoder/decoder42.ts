@@ -451,8 +451,8 @@ export class Decoder42 {
     // { key: 124, value: '|' },
     // { key: 125, value: '}' },
     // { key: 126, value: '~' }
-    // { key: 127, value: '⊦' }
-       { key: 130, value: 'Ω' }
+    // { key: 127, value: '⊦' } // for second line
+    // { key: 130, value: 'Ω' } // new in PLUS42, but causes error !!!!
     // { key: ???, value: '´' }
   ];
 
