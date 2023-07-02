@@ -173,7 +173,7 @@
       "patterns": [
         {
           "comment": "starts with normal char, ends with normal char",
-          "match": "\\b(RTNERR)\\b",
+          "match": "\\b(RTNERR|DROPN|DUPN|PICK|UNPICK)\\b",
           "name": "keyword.other.control.sp.free42"
         }
       ]
@@ -218,7 +218,7 @@
       "patterns": [
         {
           "comment": "free42: starts with normal char, ends with normal char",
-          "match": "\\b(ACCEL|ADATE|ANUM|ATIME24|ATIME|BRESET|BSIGNED|BWRAP|CLK12|CLK24|DATE|DDAYS|DMY|DOW|FMA|FUNC|GETKEY1|HEADING|LOCAT|MDY|MVARCAT|NOP|PGMMENU|RCLFLAG|RTNNO|RTNYES|STOFLAG|STRACE|TIME|WSIZE|X<>F|YMD)\\b",
+          "match": "\\b(4STK|ACCEL|ADATE|ANUM|ATIME24|ATIME|BRESET|BSIGNED|BWRAP|CLK12|CLK24|DATE|DDAYS|DEPTH|DMY|DOW|DROP|DUP|FMA|FUNC|GETKEY1|HEADING|LOCAT|L4STK|LNSTK|MDY|MVARCAT|NOP|NSTK|PGMMENU|RCLFLAG|RTNNO|RTNYES|STOFLAG|STRACE|TIME|WSIZE|X<>F|YMD)\\b",
           "name": "keyword.other.control.np.free42"
         }
       ]
