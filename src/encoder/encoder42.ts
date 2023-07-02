@@ -221,10 +221,11 @@ export class Encoder42 {
     if (
       // free42 extension commands:
       // order of ATIME24|ATIME for regex
-      // ACCEL|ADATE|ANUM|ATIME24|ATIME|BRESET|BSIGNED|BWRAP|CLK12|CLK24|DATE|DATE+|DDAYS|DMY|DOW|FMA|FUNC|GETKEY1|HEADING|LOCAT|LSTO .+|MDY|MVARCAT|NOP|PGMMENU|RCLFLAG|RTNERR|RTNNO|RTNYES|STOFLAG|TIME|X<>F|YMD
+      // 4STK|ACCEL|ADATE|ANUM|ATIME24|ATIME|BRESET|BSIGNED|BWRAP|CLK12|CLK24|DATE|DATE+|DDAYS|DEPTH|DMY|DOW|DROP|ERRMSG|ERRNO|FMA|FUNC|GETKEY1|HEADING|L4STK|LNSTK|LOCAT|LSTO .+|MDY|MVARCAT|NOP|NSTK|PGMMENU|RCLFLAG|RTNERR|RTNNO|RTNYES|STOFLAG|TIME|X<>F|YMD
       rawLine.token &&
       rawLine.token.match(
-        /(ACCEL|ADATE|ANUM|ATIME24|ATIME|BRESET|BSIGNED|BWRAP|CLK12|CLK24|DATE|DATE+|DDAYS|DMY|DOW|FMA|FUNC|GETKEY1|HEADING|LOCAT|LSTO .+|MDY|MVARCAT|NOP|PGMMENU|RCLFLAG|RTNERR|RTNNO|RTNYES|STOFLAG|TIME|X<>F|YMD)/
+        /(4STK|ACCEL|ADATE|ANUM|ATIME24|ATIME|BRESET|BSIGNED|BWRAP|CLK12|CLK24|DATE|DATE+|DDAYS|DEPTH|DMY|DOW|DROP|ERRMSG|ERRNO|FMA|FUNC|GETKEY1|HEADING|L4STK|LNSTK|LOCAT|LSTO .+|MDY|MVARCAT|NOP|NSTK|PGMMENU|RCLFLAG|RTNERR|RTNNO|RTNYES|STOFLAG|TIME|X<>F|YMD)/
+
       )
     ) {
       languageIdFromCode = "free42";
@@ -576,6 +577,7 @@ export class Encoder42 {
     { key: "1/X", value: [{ regex: /1\/X/, raw: "60" }] },
     { key: "10^X", value: [{ regex: /10\^X/, raw: "57" }] },
     { key: "10↑X", value: [{ regex: /10↑X/, raw: "57" }] },
+    { key: "4STK", value: [{ regex: /4STK/, raw: "A7 E2" }] },
     { key: "ABS", value: [{ regex: /ABS/, raw: "61" }] },
     { key: "ACCEL", value: [{ regex: /ACCEL/, raw: "A7 CF" }] },
     { key: "ACOS", value: [{ regex: /ACOS/, raw: "5D" }] },
@@ -591,6 +593,7 @@ export class Encoder42 {
     { key: "ANUM", value: [{ regex: /ANUM/, raw: "A6 42" }] },
     { key: "AOFF", value: [{ regex: /AOFF/, raw: "8B" }] },
     { key: "AON", value: [{ regex: /AON/, raw: "8C" }] },
+    { key: "APPEND", value: [{ regex: /APPEND/, raw: "A7 E9" }] },
     {
       key: "ARCL",
       value: [
@@ -687,6 +690,7 @@ export class Encoder42 {
     { key: "CPXRES", value: [{ regex: /CPXRES/, raw: "A2 6A" }] },
     { key: "CROSS", value: [{ regex: /CROSS/, raw: "A6 CA" }] },
     { key: "CUSTOM", value: [{ regex: /CUSTOM/, raw: "A2 6F" }] },
+    { key: "C→N", value: [{ regex: /C→N/, raw: "A7 F1" }] }
     { key: "DATE", value: [{ regex: /DATE/, raw: "A6 8C" }] },
     { key: "DATE+", value: [{ regex: /DATE\+/, raw: "A6 8D" }] },
     { key: "DDAYS", value: [{ regex: /DDAYS/, raw: "A6 8E" }] },
@@ -694,6 +698,7 @@ export class Encoder42 {
     { key: "DEG", value: [{ regex: /DEG/, raw: "80" }] },
     { key: "DELAY", value: [{ regex: /DELAY/, raw: "A7 60" }] },
     { key: "DELR", value: [{ regex: /DELR/, raw: "A0 AB" }] },
+    { key: "DEPTH", value: [{ regex: /DEPTH/, raw: "A7 E6" }] },
     { key: "DET", value: [{ regex: /DET/, raw: "A6 CC" }] },
     {
       key: "DIM",
@@ -708,6 +713,13 @@ export class Encoder42 {
     { key: "DMY", value: [{ regex: /DMY/, raw: "A6 8F" }] },
     { key: "DOT", value: [{ regex: /DOT/, raw: "A6 CB" }] },
     { key: "DOW", value: [{ regex: /DOW/, raw: "A6 90" }] },
+    { key: "DROP", value: [{ regex: /DROP/, raw: "A2 71" }] },
+    {
+      key: "DROPN",
+      value: [
+        { regex: /DROPN ([1-8])/, raw: "F2 A1 rr", params: "reg" },
+      ],
+    },
     {
       key: "DSE",
       value: [
@@ -717,6 +729,13 @@ export class Encoder42 {
         { regex: /DSE ST ([XYZLT])/, raw: "97 7t", params: "stk" },
         { regex: /DSE (".{1,14}")/, raw: "Fn 97", params: "nam" },
         { regex: /DSE (\d{2})/, raw: "97 rr", params: "reg" },
+      ],
+    },
+    { key: "DUP", value: [{ regex: /DUP/, raw: "A7 E7" }] },
+    {
+      key: "DUPN",
+      value: [
+        { regex: /DUPN ([1-8])/, raw: "F2 A2 rr", params: "reg" },
       ],
     },
     { key: "EDIT", value: [{ regex: /EDIT/, raw: "A6 E1" }] },
@@ -742,8 +761,11 @@ export class Encoder42 {
       ],
     },
     { key: "ENTER", value: [{ regex: /ENTER/, raw: "83" }] },
+    { key: "ERRMSG", value: [{ regex: /ERRMSG/, raw: "A7 F6" }] },
+    { key: "ERRNO", value: [{ regex: /ERRNO/, raw: "A7 F7" }] },
     { key: "EXITALL", value: [{ regex: /EXITALL/, raw: "A2 6C" }] },
     { key: "EXPF", value: [{ regex: /EXPF/, raw: "A0 A0" }] },
+    { key: "EXTEND", value: [{ regex: /EXTEND/, raw: "A7 EA" }] },
     { key: "E↑X", value: [{ regex: /E↑X/, raw: "55" }] },
     { key: "E↑X-1", value: [{ regex: /E↑X-1/, raw: "58" }] },
     {
@@ -796,6 +818,12 @@ export class Encoder42 {
         { regex: /FS\?C IND (".{1,14}")/, raw: "Fn AA", params: "nam" },
         { regex: /FS\?C IND (\d{2})/, raw: "AA 8r", params: "reg" },
         { regex: /FS\?C (\d{2})/, raw: "AA rr", params: "flg" }, //00-99
+      ],
+    },
+    {
+      key: "FUNC",
+      value: [
+        { regex: /FUNC ([0-9][0-9])/, raw: "F2 E0 nn", params: "dig" },
       ],
     },
     { key: "GAMMA", value: [{ regex: /GAMMA/, raw: "A0 74" }] },
@@ -926,6 +954,7 @@ export class Encoder42 {
       ],
     },
     { key: "KEYASN", value: [{ regex: /KEYASN/, raw: "A2 63" }] },
+    { key: "L4STK", value: [{ regex: /L4STK/, raw: "A7 E3" }] },
     { key: "LASTX", value: [{ regex: /LASTX/, raw: "76" }] },
     {
       key: "LBL",
@@ -940,13 +969,16 @@ export class Encoder42 {
       ],
     },
     { key: "LCLBL", value: [{ regex: /LCLBL/, raw: "A2 64" }] },
+    { key: "LENGTH", value: [{ regex: /LENGTH/, raw: "A7 EC" }] },
     { key: "LINF", value: [{ regex: /LINF/, raw: "A0 A1" }] },
     { key: "LINΣ", value: [{ regex: /LINΣ/, raw: "A0 AD" }] },
+    { key: "LIST?", value: [{ regex: /LIST\?/, raw: "A7 F3" }] },
     { key: "LN", value: [{ regex: /LN/, raw: "50" }] },
     { key: "LN1+X", value: [{ regex: /LN1\+X/, raw: "65" }] },
     { key: "LOCAT", value: [{ regex: /LOCAT/, raw: "A7 D0" }] },
     { key: "LOG", value: [{ regex: /LOG/, raw: "56" }] },
     { key: "LOGF", value: [{ regex: /LOGF/, raw: "A0 A2" }] },
+    { key: "LNSTK", value: [{ regex: /LNSTK/, raw: "A7 E5" }] },
     {
       key: "LSTO",
       value: [
@@ -970,11 +1002,16 @@ export class Encoder42 {
       value: [{ regex: /MVAR (".{1,14}")/, raw: "Fn 90", params: "nam" }],
     },
     { key: "N!", value: [{ regex: /N!/, raw: "62" }] },
+    { key: "NEWLIST", value: [{ regex: /NEWLIST/, raw: "A7 F4" }] },
     { key: "NEWMAT", value: [{ regex: /NEWMAT/, raw: "A6 DA" }] },
+    { key: "NEWSTR", value: [{ regex: /NEWSTR/, raw: "A7 F5" }] },
     { key: "NOP", value: [{ regex: /NOP/, raw: "F0" }] },
     { key: "NORM", value: [{ regex: /NORM/, raw: "A7 5C" }] },
     { key: "NOT", value: [{ regex: /NOT/, raw: "A5 87" }] },
+    { key: "NSTK", value: [{ regex: /NSTK/, raw: "A7 E4" }] },
     { key: "NULL", value: [{ regex: /NULL/, raw: "00" }] },
+    { key: "N→C", value: [{ regex: /N→C/, raw: "A7 F2" }] },
+    { key: "N→S", value: [{ regex: /N→S/, raw: "A7 F0" }] },
     { key: "OCTM", value: [{ regex: /OCTM/, raw: "A0 E4" }] },
     { key: "OFF", value: [{ regex: /OFF/, raw: "8D" }] },
     { key: "OLD", value: [{ regex: /OLD/, raw: "A6 DB" }] },
@@ -1001,8 +1038,15 @@ export class Encoder42 {
       ],
     },
     { key: "PI", value: [{ regex: /PI/, raw: "72" }] },
+    {
+      key: "PICK",
+      value: [
+        { regex: /PICK ([1-8])/, raw: "F2 A3 rr", params: "reg" },
+      ],
+    },
     { key: "PIXEL", value: [{ regex: /PIXEL/, raw: "A7 65" }] },
     { key: "POLAR", value: [{ regex: /POLAR/, raw: "A2 59" }] },
+    { key: "POS", value: [{ regex: /POS/, raw: "A7 EE" }] },
     { key: "POSA", value: [{ regex: /POSA/, raw: "A6 5C" }] },
     { key: "PRA", value: [{ regex: /PRA/, raw: "A7 48" }] },
     { key: "PRLCD", value: [{ regex: /PRLCD/, raw: "A7 62" }] },
@@ -1092,6 +1136,7 @@ export class Encoder42 {
     { key: "REAL?", value: [{ regex: /REAL\?/, raw: "A2 65" }] },
     { key: "REALRES", value: [{ regex: /REALRES/, raw: "A2 6B" }] },
     { key: "RECT", value: [{ regex: /RECT/, raw: "A2 5A" }] },
+    { key: "REV", value: [{ regex: /REV/, raw: "A7 ED" }] },
     { key: "RND", value: [{ regex: /RND/, raw: "6E" }] },
     { key: "RNRM", value: [{ regex: /RNRM/, raw: "A6 ED" }] },
     { key: "ROTXY", value: [{ regex: /ROTXY/, raw: "A5 8B" }] },
@@ -1104,7 +1149,19 @@ export class Encoder42 {
     { key: "RTNNO", value: [{ regex: /RTNNO/, raw: "A7 DF" }] },
     { key: "RTNYES", value: [{ regex: /RTNYES/, raw: "A7 DE" }] },
     { key: "R↑", value: [{ regex: /R↑/, raw: "74" }] },
+    {
+      key: "R↑N",
+      value: [
+        { regex: /R↑N ([1-8])/, raw: "F2 A6 rr", params: "reg" },
+      ],
+    },
     { key: "R↓", value: [{ regex: /R↓/, raw: "75" }] },
+    {
+      key: "R↓N",
+      value: [
+        { regex: /R↓N ([1-8])/, raw: "F2 A5 rr", params: "reg" },
+      ],
+    },
     {
       key: "SCI",
       value: [
@@ -1207,7 +1264,9 @@ export class Encoder42 {
     },
     { key: "STR?", value: [{ regex: /STR\?/, raw: "A2 68" }] },
     { key: "STRACE", value: [{ regex: /STRACE/, raw: "A7 E1" }] },
+    { key: "SUBSTR", value: [{ regex: /SUBSTR/, raw: "A7 EB" }] },
     { key: "SUM", value: [{ regex: /SUM/, raw: "A0 A5" }] },
+    { key: "S→N", value: [{ regex: /S→N/, raw: "A7 EF" }] },
     { key: "TAN", value: [{ regex: /TAN/, raw: "5B" }] },
     { key: "TANH", value: [{ regex: /TANH/, raw: "A0 63" }] },
     { key: "TIME", value: [{ regex: /TIME/, raw: "A6 9C" }] },
@@ -1223,6 +1282,12 @@ export class Encoder42 {
     { key: "TRACE", value: [{ regex: /TRACE/, raw: "A7 5D" }] },
     { key: "TRANS", value: [{ regex: /TRANS/, raw: "A6 C9" }] },
     { key: "UVEC", value: [{ regex: /UVEC/, raw: "A6 CD" }] },
+    {
+      key: "UNPICK",
+      value: [
+        { regex: /UNPICK ([1-8])/, raw: "F2 A4 rr", params: "reg" },
+      ],
+    },
     {
       key: "VARMENU",
       value: [

@@ -399,6 +399,9 @@ export class RawParser {
         break;
 
       case 2:
+        //Hex: A2..
+        //DROP     : A2 71
+
         //Hex: A6 ..
         //ANUM     : A6 42
         //RCLFLAG  : A6 60
@@ -430,9 +433,30 @@ export class RawParser {
         //RTNYES   : A7 DE
         //RTNNO    : A7 DF
         //STRACE   : A7 E1
+        //4STK     : A7 E2
+        //L4STK    : A7 E3
+        //NSTK     : A7 E4
+        //LNSTK    : A7 E5
+        //DEPTH    : A7 E6
+        //DUP      : A7 E7
         //PGMMENU  : A7 E8
+        //APPEND   : A7 E9
+        //EXTEND   : A7 EA
+        //SUBSTR   : A7 EB
+        //LENGTH   : A7 EC
+        //REV      : A7 ED
+        //POS      : A7 EE
+        //S→N      : A7 EF
+        //N→S      : A7 F0
+        //C→N      : A7 F1
+        //N→C      : A7 F2
+        //LIST?    : A7 F3
+        //NEWLIST  : A7 F4
+        //NEWSTR   : A7 F5
+        //ERRMSG   : A7 F6
+        //ERRNO    : A7 F7
 
-        let regex2 = /(A6 42|A6 60|A6 6D|A6 6E|A6 81|A6 84|A6 85|A6 86|A6 87|A6 8C|A6 8D|A6 8E|A6 8F|A6 90|A6 91|A6 9C|A7 CF|A7 D0|A7 D1|A7 D5|A7 D6|A7 D7|A7 D8|A7 D9|A7 DA|A7 DE|A7 DF|A7 E1|A7 E8)/;
+        let regex2 = /(A2 71|A6 42|A6 60|A6 6D|A6 6E|A6 81|A6 84|A6 85|A6 86|A6 87|A6 8C|A6 8D|A6 8E|A6 8F|A6 90|A6 91|A6 9C|A7 CF|A7 D0|A7 D1|A7 D5|A7 D6|A7 D7|A7 D8|A7 D9|A7 DA|A7 DE|A7 DF|A7 E1|A7 E2|A7 E3|A7 E4|A7 E5|A7 E6|A7 E7|A7 E8|A7 E9|A7 EA|A7 EB|A7 EC|A7 ED|A7 EE|A7 EF|A7 F0|A7 F1|A7 F2|A7 F3|A7 F4|A7 F5|A7 F6|A7 F7)/;
         if (hex.match(regex2)) {
           this.languageId = "free42";
         }
@@ -441,10 +465,17 @@ export class RawParser {
       case 3:
         //Hex: F. ..
         //RTNERR er         : F2 A0 (0[1-8])
+        //DROPN rr          : F2 A1 (0[1-9])
+        //DUPN rr           : F2 A2 (0[1-9])
+        //PICK              : F2 A3 (0[1-9])
+        //UNPICK            : F2 A4 (0[1-9])
+        //R↓N               : F2 A5 (0[1-9])
+        //R↑N               : F2 A6 (0[1-9])
+        //FUNC rr           : F2 E0 ([0-9][0-9])
         //LSTO IND rr       : F2 ED ([89A-E][0-9A-F])
         //LSTO IND ST `stk` : F2 ED F([0-4])
         //LSTO IND `nam`    : F([1-9A-F]) CF
-        let regex3 = /(F2 A0 (0[1-8])|F2 ED ([89A-E][0-9A-F])|F2 ED F([0-4])|F([1-9A-F]) C7|F([1-9A-F]) CF)/;
+        let regex3 = /(F2 A0 (0[1-8])|F2 A1 (0[1-9])|F2 A2 (0[1-9])|F2 A3 (0[1-9])|F2 A4 (0[1-9])|F2 A5 (0[1-9])|F2 A6 (0[1-9])|F2 E0 ([0-9][0-9])|F2 ED ([89A-E][0-9A-F])|F2 ED F([0-4])|F([1-9A-F]) C7|F([1-9A-F]) CF)/;
         if (hex.match(regex3)) {
           this.languageId = "free42";
         }
