@@ -119,6 +119,14 @@
     ],
     "description": "AON: Alpha on. Select the ALPHA menu."
   },
+  "APPEND": {
+    "prefix": "APPEND",
+    "scope": "free42",
+    "body": [
+      "APPEND$0"
+    ],
+    "description": "APPEND: Adds the object in X to the string or list in Y and returns the combined string or list. If Y is a string, the contents of X will be converted to a string in the same way as ARCL. If Y is a list, X will be added to it unchanged. If X is a list, it will be added to Y as one element."
+  },
   "ARCL <number>": {
     "prefix": "ARCL",
     "scope": "free42",
@@ -631,6 +639,14 @@
     ],
     "description": "CUSTOM: Custom menu."
   },
+  "C→N": {
+    "prefix": "C→N",
+    "scope": "free42",
+    "body": [
+      "C→N$0"
+    ],
+    "description": "C→N: Convert character to number or number to character, like ATOX and XTOA."
+  },
   "DATE": {
     "prefix": "DAT",
     "scope": "free42",
@@ -686,6 +702,14 @@
       "DELR$0"
     ],
     "description": "DELR: Delete row. Delete the current row from the indexed matrix."
+  },
+  "DEPTH": {
+    "prefix": "DEPTH",
+    "scope": "free42",
+    "body": [
+      "DEPTH$0"
+    ],
+    "description": "DEPTH: Returns the current stack depth."
   },
   "DET": {
     "prefix": "DET",
@@ -759,6 +783,22 @@
     ],
     "description": "DOW: (FREE42, HP-41 Time Module Emulation) Calculates the day of the week for the date in the X register. Returns a number from 0 to 6, where 0 is Sunday, 1 is Monday, and so on. When this function is executed from the keyboard, the day is also displayed in a human-friendly format, i.e. MON for Monday, TUE for Tuesday, etc."
   },
+  "DROP": {
+    "prefix": "DROP",
+    "scope": "free42",
+    "body": [
+      "DROP$0"
+    ],
+    "description": "DROP: Drops level 1, or levels 1..n. In 4-level mode, the stack is replenished with zeroes from the top."
+  },
+  "DROPN <number>": {
+    "prefix": "DROPN",
+    "scope": "free42",
+    "body": [
+      "DROPN ${1:number}$0"
+    ],
+    "description": "DROPN: Drops level 1, or levels 1..n. In 4-level mode, the stack is replenished with zeroes from the top."
+  },
   "DSE <number>": {
     "prefix": "DSE",
     "scope": "free42",
@@ -806,6 +846,22 @@
       "DSE IND \"${1:name}\"$0"
     ],
     "description": "DSE IND \"<name>\": Decrement, skip if (less than or) equal. Given ccccccc.fffii in a variable or register, decrements ccccccc by ii and skips the next program line if ccccccc is now ≤  fff. Parameter: register or variable (indirect allowed)."
+  },
+  "DUP": {
+    "prefix": "DUP",
+    "scope": "free42",
+    "body": [
+      "DUP$0"
+    ],
+    "description": "DUP: Duplicates level 1, or levels 1..n. In 4-level mode, n must be 2 or less."
+  },
+  "DUPN <number>": {
+    "prefix": "DUPN",
+    "scope": "free42",
+    "body": [
+      "DUPN ${1:number}$0"
+    ],
+    "description": "DUPN: Duplicates level 1, or levels 1..n. In 4-level mode, n must be 2 or less."
   },
   "E": {
     "prefix": "E",
@@ -911,6 +967,22 @@
     ],
     "description": "ENTER: Separate two numbers keyed in sequentially; copies x into the y-register, y into the z-register, and z into the t-register, and loses t."
   },
+  "ERRMSG": {
+    "prefix": "ERRMSG",
+    "scope": "free42",
+    "body": [
+      "ERRMSG$0"
+    ],
+    "description": "ERRMSG: Returns error message of the most recent error caught by flag 25."
+  },
+  "ERRNO": {
+    "prefix": "ERRNO",
+    "scope": "free42",
+    "body": [
+      "ERRNO$0"
+    ],
+    "description": "ERRNO: Returns error number of the most recent error caught by flag 25."
+  },
   "EXITALL": {
     "prefix": "EXITALL",
     "scope": "free42",
@@ -926,6 +998,14 @@
       "EXPF$0"
     ],
     "description": "EXPF: Select the exponential curve-fitting model."
+  },
+  "EXTEND": {
+    "prefix": "EXTEND",
+    "scope": "free42",
+    "body": [
+      "EXTEND$0"
+    ],
+    "description": "EXTEND: Adds the object in X to the string or list in Y and returns the combined string or list. If Y is a string, the contents of X will be converted to a string in the same way as ARCL. If Y is a list, X will be added to it unchanged. If X is a list, it will be added to Y element by element."
   },
   "E↑X": {
     "prefix": "EX",
@@ -2439,6 +2519,14 @@
     ],
     "description": "LCLBL: Select local label mode for the custom menu (to use custom menu assignments to execute local labels within the current program)."
   },
+  "LENGTH": {
+    "prefix": "LENGTH",
+    "scope": "free42",
+    "body": [
+      "LENGTH$0"
+    ],
+    "description": "LENGTH: Returns the length of the string or list in X."
+  },
   "LINF": {
     "prefix": "LINF",
     "scope": "free42",
@@ -2455,6 +2543,14 @@
     ],
     "description": "LINΣ: Select linear statistics mode, which uses six summation coefficients."
   },
+  "LIST?": {
+    "prefix": "LIST?",
+    "scope": "free42",
+    "body": [
+      "LIST?$0"
+    ],
+    "description": "LIST?: Tests whether the object in X is a list."
+  },
   "LN": {
     "prefix": "LN",
     "scope": "free42",
@@ -2470,6 +2566,14 @@
       "LN1+X$0"
     ],
     "description": "LN1+X: Natural logarithm for values close to zero. Returns ln(1 + x), which provides a much higher accuracy in the fractional part of the result."
+  },
+  "LNSTK": {
+    "prefix": "LNSTK",
+    "scope": "free42",
+    "body": [
+      "LNSTK$0"
+    ],
+    "description": "LNSTK: Local N-level / 4-level Stack. These switch to N-level or 4-level stack mode, respectively, but in addition, they automatically restore the previous stack mode when the current function returns. Further, L4STK saves levels 5 and up in a hidden list, and also restores them when the previous stack mode is restored. (The non-local 4STK function simply discards levels 5 and up.)."
   },
   "LOCAT": {
     "prefix": "LOC",
@@ -2526,6 +2630,14 @@
       "LSTO IND \"${1:name}\"$0"
     ],
     "description": "LSTO IND \"<name>\": Store a copy of x into a local variable. Parameter: register or variable (indirect allowed)."
+  },
+  "L4STK": {
+    "prefix": "L4STK",
+    "scope": "free42",
+    "body": [
+      "L4STK$0"
+    ],
+    "description": "L4STK: Local N-level / 4-level Stack. These switch to N-level or 4-level stack mode, respectively, but in addition, they automatically restore the previous stack mode when the current function returns. Further, L4STK saves levels 5 and up in a hidden list, and also restores them when the previous stack mode is restored. (The non-local 4STK function simply discards levels 5 and up.)"
   },
   "MAN": {
     "prefix": "MAN",
@@ -2599,6 +2711,14 @@
     ],
     "description": "N!: Factorial. Returns x!."
   },
+  "NEWLIST": {
+    "prefix": "NEWLIST",
+    "scope": "free42",
+    "body": [
+      "NEWLIST$0"
+    ],
+    "description": "NEWLIST: Returns a new empty list."
+  },
   "NEWMAT": {
     "prefix": "NEWMAT",
     "scope": "free42",
@@ -2606,6 +2726,14 @@
       "NEWMAT$0"
     ],
     "description": "NEWMAT: New matrix. Creates a y × x matrix in the x-register."
+  },
+  "NEWSTR": {
+    "prefix": "NEWSTR",
+    "scope": "free42",
+    "body": [
+      "NEWSTR$0"
+    ],
+    "description": "NEWSTR: Returns a new empty string. Equivalent to XSTR \"\"."
   },
   "NOP": {
     "prefix": "NOP",
@@ -2630,6 +2758,30 @@
       "NOT$0"
     ],
     "description": "NOT: Logical NOT. Returns NOT(x)."
+  },
+  "NSTK": {
+    "prefix": "NSTK",
+    "scope": "free42",
+    "body": [
+      "NSTK$0"
+    ],
+    "description": "NSTK: N-level stack. Turns on big stack mode."
+  },
+  "N→C": {
+    "prefix": "N→C",
+    "scope": "free42",
+    "body": [
+      "N→C$0"
+    ],
+    "description": "N→C: Convert character to number or number to character, like ATOX and XTOA."
+  },
+  "N→S": {
+    "prefix": "N→S",
+    "scope": "free42",
+    "body": [
+      "N→S$0"
+    ],
+    "description": "N→S: Convert string to number or number to string, like ANUM and ARCL."
   },
   "OCTM": {
     "prefix": "OCTM",
@@ -2759,6 +2911,14 @@
     ],
     "description": "PI: Put an approximation of π into the x-register (3.14159265359)."
   },
+  "PICK <number>": {
+    "prefix": "PICK",
+    "scope": "free42",
+    "body": [
+      "PICK ${1:number}$0"
+    ],
+    "description": "PICK: Gets the object from level n, or puts an object into level n. Note that UNPICK consumes the contents of level 1, unlike STO, and n refers to the stack level number after X has been dropped. The effect is that you can modify an object at level n by doing PICK n, <modify the object>, UNPICK n, without having to add 1 to the level number for UNPICK. Also note that this is similar to the behavior of PICK and UNPICK in RPL."
+  },
   "PIXEL": {
     "prefix": "PIXEL",
     "scope": "free42",
@@ -2774,6 +2934,14 @@
       "POLAR$0"
     ],
     "description": "POLAR: Select polar coordinate mode for displaying complex numbers."
+  },
+  "POS": {
+    "prefix": "POS",
+    "scope": "free42",
+    "body": [
+      "POS$0"
+    ],
+    "description": "POS: Finds the first occurrence of the string or list X in Y. Or with three parameters: find the first occurrence of string or list X in Z, starting the search from position Y."
   },
   "POSA": {
     "prefix": "POSA",
@@ -3239,6 +3407,14 @@
     ],
     "description": "RECT: Select rectangular coordinate mode for displaying complex numbers."
   },
+  "REV": {
+    "prefix": "REV",
+    "scope": "free42",
+    "body": [
+      "REV$0"
+    ],
+    "description": "REV: Reverse the string or list in X."
+  },
   "RND": {
     "prefix": "RND",
     "scope": "free42",
@@ -3319,6 +3495,14 @@
     ],
     "description": "R↑: Roll up the contents of the four stack registers one position."
   },
+  "R↑N <number>": {
+    "prefix": "RN",
+    "scope": "free42",
+    "body": [
+      "R↑N ${1:number}$0"
+    ],
+    "description": "R↑N: Rolls levels 1..n down or up. Note that the standard R↓ and R↑ are equivalent to R↓N depth and R↑N depth."
+  },
   "R↓": {
     "prefix": "R",
     "scope": "free42",
@@ -3326,6 +3510,14 @@
       "R↓$0"
     ],
     "description": "R↓: Roll down the contents of the four stack registers one position."
+  },
+  "R↓N <number>": {
+    "prefix": "RN",
+    "scope": "free42",
+    "body": [
+      "R↓N ${1:number}$0"
+    ],
+    "description": "R↓N: Rolls levels 1..n down or up. Note that the standard R↓ and R↑ are equivalent to R↓N depth and R↑N depth."
   },
   "SCI <number>": {
     "prefix": "SCI",
@@ -3775,6 +3967,14 @@
     ],
     "description": "STRACE: Stack Trace mode. This turns on a new print mode, which is a variation on TRACE mode, printing the entire stack instead of just X. This can be a valuable debugging tool, but it generates large amounts of output!"
   },
+  "SUBSTR": {
+    "prefix": "SUBSTR",
+    "scope": "free42",
+    "body": [
+      "SUBSTR$0"
+    ],
+    "description": "SUBSTR: From the string or list in Z, gets the substring/sublist starting at index Y and ending at index X. If X and/or Y are negative, they are counts from the end, rather than the beginning. The very end of the string or list can be specified by leaving off the 'end' parameter, i.e. by having the string or list in Y and the starting index in X."
+  },
   "SUM": {
     "prefix": "SUM",
     "scope": "free42",
@@ -3782,6 +3982,14 @@
       "SUM$0"
     ],
     "description": "SUM: Returns the sums Σx and Σy into the x- and y-registers."
+  },
+  "S→N": {
+    "prefix": "S→N",
+    "scope": "free42",
+    "body": [
+      "S→N$0"
+    ],
+    "description": "S→N: Convert string to number or number to string, like ANUM and ARCL."
   },
   "TAN": {
     "prefix": "TAN",
@@ -3854,6 +4062,14 @@
       "TRANS$0"
     ],
     "description": "TRANS: Return the transpose of the matrix in the x-register."
+  },
+  "UNPICK <number>": {
+    "prefix": "UNPICK",
+    "scope": "free42",
+    "body": [
+      "UNPICK ${1:number}$0"
+    ],
+    "description": "UNPICK: Gets the object from level n, or puts an object into level n. Note that UNPICK consumes the contents of level 1, unlike STO, and n refers to the stack level number after X has been dropped. The effect is that you can modify an object at level n by doing PICK n, <modify the object>, UNPICK n, without having to add 1 to the level number for UNPICK. Also note that this is similar to the behavior of PICK and UNPICK in RPL."
   },
   "UVEC": {
     "prefix": "UVEC",
@@ -4246,6 +4462,14 @@
       "10↑X$0"
     ],
     "description": "10↑X: Common exponential. Returns 10x."
+  },
+  "4STK": {
+    "prefix": "4STK",
+    "scope": "free42",
+    "body": [
+      "4STK$0"
+    ],
+    "description": "4STK: 4-level stack. Turns off big stack mode, returning to the TZYX stack."
   },
   "+": {
     "prefix": "OP",
