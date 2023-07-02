@@ -10,6 +10,7 @@ Language support for HP42S/free42 programming language.
 
 ## What's new in HP42S-free42:
 
+- more new commands for free42
 - package updates
 - bug fix
 
