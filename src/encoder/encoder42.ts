@@ -221,10 +221,111 @@ export class Encoder42 {
     if (
       // free42 extension commands:
       // order of ATIME24|ATIME for regex
-      // 4STK|ACCEL|ADATE|ANUM|ATIME24|ATIME|BRESET|BSIGNED|BWRAP|CLK12|CLK24|DATE|DATE+|DDAYS|DEPTH|DMY|DOW|DROP|ERRMSG|ERRNO|FMA|FUNC|GETKEY1|HEADING|L4STK|LNSTK|LOCAT|LSTO .+|MDY|MVARCAT|NOP|NSTK|PGMMENU|RCLFLAG|RTNERR|RTNNO|RTNYES|STOFLAG|TIME|X<>F|YMD
+      // 0<?
+      // 0=?
+      // 0>?
+      // 0≠?
+      // 0≤?
+      // 0≥?
+      // 4STK
+      // A...F
+      // A2+LINE
+      // A2LINE
+      // ACCEL
+      // ADATE
+      // ANUM
+      // APPEND
+      // ATIME24
+      // ATIME
+      // BRESET
+      // BSIGNED
+      // BWRAP
+      // CAPS
+      // CLK12
+      // CLK24
+      // CPXMAT?
+      // C→N
+      // DATE+
+      // DATE
+      // DDAYS
+      // DEPTH
+      // DMY
+      // DOW
+      // DROPN
+      // DROP
+      // DUPN
+      // DUP
+      // ERRMSG
+      // ERRNO
+      // EXTEND
+      // FMA
+      // FUNC
+      // GETKEY1
+      // HEAD
+      // HEADING
+      // L4STK
+      // LASTO
+      // LCLV
+      // LENGTH
+      // LIST?
+      // LIST→
+      // LNSTK
+      // LOCAT
+      // LSTO
+      // LXASTO
+      // MDY
+      // Mixed
+      // NEWLIST
+      // NEWSTR
+      // NOP
+      // NSTK
+      // N→C
+      // N→S
+      // PCOMPLEX
+      // PGMMENU
+      // PGMVAR
+      // PICK
+      // POS
+      // RCLFLAG
+      // RCOMPLEX
+      // REV
+      // RTNERR
+      // RTNNO
+      // RTNYES
+      // R↑N
+      // R↓N
+      // SKIP
+      // STOFLAG
+      // STRACE
+      // SUBSTR
+      // S→N
+      // TIME
+      // TYPE?
+      // UNPICK
+      // VARMENU1
+      // WSIZE?
+      // WSIZE
+      // X2LINE
+      // X<>F
+      // X<?
+      // X=?
+      // X>?
+      // XASTO
+      // XSTR
+      // XVIEW
+      // X≠?
+      // X≤?
+      // X≥?
+      // YMD
+      // →LIST
+
+      // ? -> \?
+      // + -> \+
+      // . -> \.
+      // 0<\?|0=\?|0>\?|0≠\?|0≤\?|0≥\?|4STK|A\.\.\.F|A2\+LINE|A2LINE|ACCEL|ADATE|ANUM|APPEND|ATIME24|ATIME|BRESET|BSIGNED|BWRAP|CAPS|CLK12|CLK24|CPXMAT\?|C→N|DATE\+|DATE|DDAYS|DEPTH|DMY|DOW|DROPN|DROP|DUPN|DUP|ERRMSG|ERRNO|EXTEND|FMA|FUNC|GETKEY1|HEAD|HEADING|L4STK|LASTO|LCLV|LENGTH|LIST\?|LIST→|LNSTK|LOCAT|LSTO|LXASTO|MDY|Mixed|NEWLIST|NEWSTR|NOP|NSTK|N→C|N→S|PCOMPLEX|PGMMENU|PGMVAR|PICK|POS|RCLFLAG|RCOMPLEX|REV|RTNERR|RTNNO|RTNYES|R↑N|R↓N|SKIP|STOFLAG|STRACE|SUBSTR|S→N|TIME|TYPE\?|UNPICK|VARMENU1|WSIZE\?|WSIZE|X2LINE|X<>F|X<\?|X=\?|X>\?|XASTO|XSTR|XVIEW|X≠\?|X≤\?|X≥\?|YMD|→LIST
       rawLine.token &&
       rawLine.token.match(
-        /(4STK|ACCEL|ADATE|ANUM|ATIME24|ATIME|BRESET|BSIGNED|BWRAP|CLK12|CLK24|DATE|DATE+|DDAYS|DEPTH|DMY|DOW|DROP|ERRMSG|ERRNO|FMA|FUNC|GETKEY1|HEADING|L4STK|LNSTK|LOCAT|LSTO .+|MDY|MVARCAT|NOP|NSTK|PGMMENU|RCLFLAG|RTNERR|RTNNO|RTNYES|STOFLAG|TIME|X<>F|YMD)/
+        /(0<\?|0=\?|0>\?|0≠\?|0≤\?|0≥\?|4STK|A\.\.\.F|A2\+LINE|A2LINE|ACCEL|ADATE|ANUM|APPEND|ATIME24|ATIME|BRESET|BSIGNED|BWRAP|CAPS|CLK12|CLK24|CPXMAT\?|C→N|DATE\+|DATE|DDAYS|DEPTH|DMY|DOW|DROPN|DROP|DUPN|DUP|ERRMSG|ERRNO|EXTEND|FMA|FUNC|GETKEY1|HEAD|HEADING|L4STK|LASTO|LCLV|LENGTH|LIST\?|LIST→|LNSTK|LOCAT|LSTO|LXASTO|MDY|Mixed|NEWLIST|NEWSTR|NOP|NSTK|N→C|N→S|PCOMPLEX|PGMMENU|PGMVAR|PICK|POS|RCLFLAG|RCOMPLEX|REV|RTNERR|RTNNO|RTNYES|R↑N|R↓N|SKIP|STOFLAG|STRACE|SUBSTR|S→N|TIME|TYPE\?|UNPICK|VARMENU1|WSIZE\?|WSIZE|X2LINE|X<>F|X<\?|X=\?|X>\?|XASTO|XSTR|XVIEW|X≠\?|X≤\?|X≥\?|YMD|→LIST)/
 
       )
     ) {
