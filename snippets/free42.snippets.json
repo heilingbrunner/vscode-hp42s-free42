@@ -383,6 +383,14 @@
     ],
     "description": "BIT?: Test the xth bit of y. If the bit is set (1), execute the next program line; if the bit is clear (0), skip the next program line."
   },
+  "BRESET": {
+    "prefix": "BRESET",
+    "scope": "free42",
+    "body": [
+      "BRESET$0"
+    ],
+    "description": "BRESET: Resets all BASE modes back to their defaults, which match the behavior of the real HP-42S: WSIZE 36, signed, not wrapped."
+  },
   "BSIGNED": {
     "prefix": "BSIGNED",
     "scope": "free42",
@@ -399,13 +407,13 @@
     ],
     "description": "BWRAP: Toggles wrapped mode. In wrapped mode, numbers are kept within WSIZE bits by discarding any bits to the left of bit WSIZE−1; in non-wrapped mode, numbers outside of the binary range are not allowed and cause Invalid Data errors when parameters are out of range, or Out of Range errors when results are out of range. You can check whether wrapped or non-wrapped mode is active by checking the MODES menu, where there will be a dot marking the BWRP menu item when wrapped mode is active. Alternatively, you can check flag 79."
   },
-  "BRESET": {
-    "prefix": "BRESET",
+  "CAPS": {
+    "prefix": "CAPS",
     "scope": "free42",
     "body": [
-      "BRESET$0"
+      "CAPS$0"
     ],
-    "description": "BRESET: Resets all BASE modes back to their defaults, which match the behavior of the real HP-42S: WSIZE 36, signed, not wrapped."
+    "description": "CAPS: NOP on the DM42 which is always in Mixed mode."
   },
   "CF <number>": {
     "prefix": "CF",
@@ -622,6 +630,14 @@
       "CPX?$0"
     ],
     "description": "CPX?: If the x-register contains a complex number, execute the next program line; if the x-register does not contain a complex number, skip the next program line."
+  },
+  "CPXMAT?": {
+    "prefix": "CPXMAT",
+    "scope": "free42",
+    "body": [
+      "CPXMAT?$0"
+    ],
+    "description": "CPXMAT?: Tests whether the object in the X register is a complex matrix."
   },
   "CROSS": {
     "prefix": "CROSS",
@@ -2127,6 +2143,54 @@
     ],
     "description": "GTO IND \"<name>\": Go to label. From the keyboard, move the program pointer to the specified label. In a running program, cause the program to branch to the specified label. Parameter: local or global label (indirect allowed)."
   },
+  "HEAD <number>": {
+    "prefix": "HEAD",
+    "scope": "free42",
+    "body": [
+      "HEAD ${1:number}$0"
+    ],
+    "description": "HEAD <number>: Removes and returns the first character or element from the string or list named by the function's parameter."
+  },
+  "HEAD IND <number>": {
+    "prefix": "HEAD",
+    "scope": "free42",
+    "body": [
+      "HEAD IND ${1:number}$0"
+    ],
+    "description": "HEAD IND <number>: Removes and returns the first character or element from the string or list named by the function's parameter."
+  },
+  "HEAD IND ST <stack>": {
+    "prefix": "HEAD",
+    "scope": "free42",
+    "body": [
+      "HEAD IND ST ${1|L,T,X,Y,Z|}$0"
+    ],
+    "description": "HEAD IND ST <stack>: Removes and returns the first character or element from the string or list named by the function's parameter."
+  },
+  "HEAD <alpha_local_label>": {
+    "prefix": "HEAD",
+    "scope": "free42",
+    "body": [
+      "HEAD ${1|A,B,C,D,E,F,G,H,I,J,a,b,c,d,e|}$0"
+    ],
+    "description": "HEAD <alpha_local_label>: Removes and returns the first character or element from the string or list named by the function's parameter."
+  },
+  "HEAD \"<name>\"": {
+    "prefix": "HEAD",
+    "scope": "free42",
+    "body": [
+      "HEAD \"${1:name}\"$0"
+    ],
+    "description": "HEAD \"<name>\": Removes and returns the first character or element from the string or list named by the function's parameter."
+  },
+  "HEAD IND \"<name>\"": {
+    "prefix": "HEAD",
+    "scope": "free42",
+    "body": [
+      "HEAD IND \"${1:name}\"$0"
+    ],
+    "description": "HEAD IND \"<name>\": Removes and returns the first character or element from the string or list named by the function's parameter."
+  },
   "HEADING": {
     "prefix": "HEAD",
     "scope": "free42",
@@ -2479,6 +2543,14 @@
     ],
     "description": "KEY <number> XEQ IND \"<name>\": On menu key, execute. Execute (as a subroutine) specified label when a particular menu key is pressed. Parameter 1: Key number (1 through 9), Parameter 2: program label (global or local)."
   },
+  "LASTO \"<name>\"": {
+    "prefix": "LASTO",
+    "scope": "free42",
+    "body": [
+      "LASTO \"${1:name}\"$0"
+    ],
+    "description": "LASTO \"<name>\": Relates to LSTO like ASTO relates to STO."
+  },
   "LASTX": {
     "prefix": "LASTX",
     "scope": "free42",
@@ -2519,6 +2591,14 @@
     ],
     "description": "LCLBL: Select local label mode for the custom menu (to use custom menu assignments to execute local labels within the current program)."
   },
+  "LCLV \"<name>\"": {
+    "prefix": "LCLV",
+    "scope": "free42",
+    "body": [
+      "LCLV \"${1:name}\"$0"
+    ],
+    "description": "LCLV \"<name>\": CLV for local variables. LCLV only deletes local variables that were created at the current RTN level."
+  },
   "LENGTH": {
     "prefix": "LENGTH",
     "scope": "free42",
@@ -2550,6 +2630,14 @@
       "LIST?$0"
     ],
     "description": "LIST?: Tests whether the object in X is a list."
+  },
+  "LIST→": {
+    "prefix": "LIST→",
+    "scope": "free42",
+    "body": [
+      "LIST→$0"
+    ],
+    "description": "LIST?: Performs the inverse of the →LIST operation."
   },
   "LN": {
     "prefix": "LN",
@@ -2655,6 +2743,14 @@
     ],
     "description": "MAT?: If the x-register contains a matrix, execute the next program line; if the X-register does not contain a matrix, skip the next program line."
   },
+  "MDY": {
+    "prefix": "MDY",
+    "scope": "free42",
+    "body": [
+      "MDY$0"
+    ],
+    "description": "MDY: (FREE42, HP-41 Time Module Emulation) Display, return, and accept dates in month/day/year format."
+  },
   "MEAN": {
     "prefix": "MEAN",
     "scope": "free42",
@@ -2671,13 +2767,13 @@
     ],
     "description": "MENU: Select the programmable menu."
   },
-  "MDY": {
-    "prefix": "MDY",
+  "Mixed": {
+    "prefix": "Mixed",
     "scope": "free42",
     "body": [
-      "MDY$0"
+      "Mixed$0"
     ],
-    "description": "MDY: (FREE42, HP-41 Time Module Emulation) Display, return, and accept dates in month/day/year format."
+    "description": "Mixed: NOP on the DM42 which is always in Mixed mode."
   },
   "MOD": {
     "prefix": "MOD",
