@@ -1,4 +1,12 @@
 {
+  "A...F": {
+    "prefix": "A...F",
+    "scope": "free42",
+    "body": [
+      "A...F$0"
+    ],
+    "description": "A...F: Sets HEXM mode and activates the A...F menu."
+  },
   "ABS": {
     "prefix": "ABS",
     "scope": "free42",
@@ -413,7 +421,7 @@
     "body": [
       "CAPS$0"
     ],
-    "description": "CAPS: NOP on the DM42 which is always in Mixed mode."
+    "description": "CAPS: The CAPS setting can be used to preserve the original HP-42S look; the Mixed setting is the new default. NOP on the DM42 which is always in Mixed mode."
   },
   "CF <number>": {
     "prefix": "CF",
@@ -2639,6 +2647,14 @@
     ],
     "description": "LIST?: Performs the inverse of the →LIST operation."
   },
+  "→LIST": {
+    "prefix": "→LIST",
+    "scope": "free42",
+    "body": [
+      "→LIST$0"
+    ],
+    "description": "→LIST: Creates a list from objects on the stack. The number of objects is taken from the X register."
+  },
   "LN": {
     "prefix": "LN",
     "scope": "free42",
@@ -2773,7 +2789,7 @@
     "body": [
       "Mixed$0"
     ],
-    "description": "Mixed: NOP on the DM42 which is always in Mixed mode."
+    "description": "Mixed: Display menu labels in all caps, or allow lowercase letters. NOP on the DM42 which is always in Mixed mode."
   },
   "MOD": {
     "prefix": "MOD",
@@ -2918,6 +2934,14 @@
       "OR$0"
     ],
     "description": "OR: Logical OR. Returns x OR y."
+  },
+  "PCOMPLEX": {
+    "prefix": "PCOMPLEX",
+    "scope": "free42",
+    "body": [
+      "PCOMPLEX$0"
+    ],
+    "description": "PCOMPLEX: Works like COMPLEX, but always in polar mode."
   },
   "PERM": {
     "prefix": "PERM",
@@ -3463,6 +3487,14 @@
     ],
     "description": "RCLIJ: Recall the row- and column-pointer values (I and J) for the indexed matrix."
   },
+  "RCOMPLEX": {
+    "prefix": "RCOMPLEX",
+    "scope": "free42",
+    "body": [
+      "RCOMPLEX$0"
+    ],
+    "description": "RCOMPLEX: Works like COMPLEX, but always in rectangular mode."
+  },
   "RDX,": {
     "prefix": "RDX",
     "scope": "free42",
@@ -3726,6 +3758,14 @@
       "SIZE ${1:number}$0"
     ],
     "description": "SIZE <number>: Set the number of storage registers. Parameter: number of registers."
+  },
+  "SKIP": {
+    "prefix": "SKIP",
+    "scope": "free42",
+    "body": [
+      "SKIP$0"
+    ],
+    "description": "SKIP: Skips the next line, like a test that always tests false."
   },
   "SLOPE": {
     "prefix": "SLOPE",
@@ -4157,7 +4197,15 @@
     "body": [
       "TRANS$0"
     ],
-    "description": "TRANS: Return the transpose of the matrix in the x-register."
+    "description": "TRANS: Returns the transpose of the matrix in the x-register."
+  },
+  "TYPE?": {
+    "prefix": "TYPE?",
+    "scope": "free42",
+    "body": [
+      "TYPE?$0"
+    ],
+    "description": "TYPE?: Returns an integer, representing the type of the object in the X register."
   },
   "UNPICK <number>": {
     "prefix": "UNPICK",
@@ -4510,6 +4558,14 @@
       "XTOA$0"
     ],
     "description": "XTOA: X to alpha. Appends a character (specified by the code in the x-register) to the alpha register. If the x-register contains an alpha string, appends the entire string."
+  },
+  "XVIEW": {
+    "prefix": "XVIEW",
+    "scope": "free42",
+    "body": [
+      "XVIEW$0"
+    ],
+    "description": "XVIEW: This function works just like AVIEW, except it takes the text from the X register rather than the ALPHA register, so it doesn't have the 44-character length restriction of AVIEW."
   },
   "X↑2": {
     "prefix": "X",
