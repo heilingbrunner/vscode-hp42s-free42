@@ -36,7 +36,7 @@ export default class RawContentProvider implements vscode.TextDocumentContentPro
       const eol = config.eol;
 
       const proceed =
-        getFileSize(uri) < sizeWarning
+        Number(getFileSize(uri)) < sizeWarning
           ? 'Open'
           : await vscode.window.showWarningMessage('File might be too big, are you sure you want to continue?', 'Open');
       if (proceed === 'Open') {
