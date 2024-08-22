@@ -792,7 +792,7 @@ export class Encoder42 {
     { key: "CPXRES", value: [{ regex: /CPXRES/, raw: "A2 6A" }] },
     { key: "CROSS", value: [{ regex: /CROSS/, raw: "A6 CA" }] },
     { key: "CUSTOM", value: [{ regex: /CUSTOM/, raw: "A2 6F" }] },
-    { key: "C→N", value: [{ regex: /C→N/, raw: "A7 F1" }] }
+    { key: "C→N", value: [{ regex: /C→N/, raw: "A7 F1" }] },
     { key: "DATE", value: [{ regex: /DATE/, raw: "A6 8C" }] },
     { key: "DATE+", value: [{ regex: /DATE\+/, raw: "A6 8D" }] },
     { key: "DDAYS", value: [{ regex: /DDAYS/, raw: "A6 8E" }] },
