@@ -25,9 +25,9 @@ Format -> Encode -> Decode -> Encode -> ...
 
 ![Demo](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/demo.gif)
 
-![Syntax-check](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/syntx-check.png)
+![Syntax-check](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/syntax-check.png)
 
-![Syntax-check](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/completion-label.png)
+![completion-label](https://raw.githubusercontent.com/heilingbrunner/vscode-hp42s-free42/master/images/completion-label.png)
 
 ## Features
 
