@@ -1,12 +1,20 @@
 {
     "name": "vscode-hp42s-free42",
+    "main": "./dist/extension",
+    "extensionKind": ["workspace", "ui"],
+    "capabilities": {
+        "untrustedWorkspaces": {
+            "supported": true
+        },
+        "virtualWorkspaces": true
+    },
     "repository": {
         "type": "git",
         "url": "https://github.com/heilingbrunner/vscode-hp42s-free42.git"
     },
     "displayName": "HP42S-free42",
     "description": "HP42S/free42 RPN programming language support",
-    "version": "1.0.8",
+    "version": "2.0.0",
     "publisher": "JHeilingbrunner",
     "license": "MIT",
     "icon": "images/vscode-hp42s-free42-logo.png",
@@ -21,25 +29,21 @@
     ],
     "keywords": [
         "RPN",
+        "HP41C",
         "HP42S",
         "free42",
         "DM42",
         "FOCAL",
-        "syntax highlighting"
+        "Encoder",
+        "Decoder",
+        "syntax highlighting",
+        "syntax checking"
     ],
     "galleryBanner": {
         "color": "#1e1e1e",
         "theme": "dark"
     },
-    "activationEvents": [
-        "onLanguage:hp42s",
-        "onLanguage:free42",
-        "onLanguage:hex42",
-        "onLanguage:raw42",
-        "onCommand:extension.Encode",
-        "onCommand:extension.Decode",
-        "onCommand:extension.ShowRaw"
-    ],
+    "activationEvents": [],
     "contributes": {
         "languages": [
             {
@@ -118,12 +122,12 @@
         "commands": [
             {
                 "command": "extension.Encode",
-                "title": "hp42s/free42: Encode Code",
+                "title": "hp42s/free42: Encode Code from Editor",
                 "when": "editorLangId == (hp42s||free42)"
             },
             {
                 "command": "extension.Decode",
-                "title": "hp42s/free42: Decode Raw",
+                "title": "hp42s/free42: Decode Raw from Editor",
                 "when": "editorLangId == raw42"
             },
             {
@@ -167,11 +171,6 @@
                     "default": false,
                     "markdownDescription": "The `Decode Raw` command will although generate a readable `hex42` file."
                 },
-                "HP42S/free42.formatterUseLineNumbers": {
-                    "type": "boolean",
-                    "default": true,
-                    "markdownDescription": "Formatter uses and refreshes line numbers."
-                },
                 "HP42S/free42.formatterReplaceAbbreviations": {
                     "type": "boolean",
                     "default": true,
@@ -187,42 +186,45 @@
                     "default": true,
                     "markdownDescription": "Formatter trims start and end of line."
                 },
-                "HP42S/free42.formatterUseWhitespaceBetweenHex": {
+                "HP42S/free42.hex42UseLineNumbers": {
                     "type": "boolean",
                     "default": true,
-                    "markdownDescription": "Formatter uses whitespace between hex numbers."
+                    "markdownDescription": "Hex42 uses line numbers."
+                },
+                "HP42S/free42.enableDiagnostic": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "Enable diagnostic."
                 }
             }
         }
     },
-    "main": "./dist/extension",
     "scripts": {
-        "vsce-package": "vsce package",
-        "vscode:prepublish": "npm run prepublish-with-esbuild",
-        "prepublish-with-esbuild": "npm run esbuild-base -- --minify",
-        "prev-vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
-        "test": "npm run compile && node ./node_modules/vscode/bin/test --mocha .mocharc.json",
-        "lint": "eslint -c .eslintrc.js --ext .ts ./src",
         "esbuild": "npm run esbuild-base -- --sourcemap",
         "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
-        "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch"
+        "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
+        "esbuild-prepublish": "npm run esbuild-base -- --minify",
+        "prev-vscode:prepublish": "npm run compile",
+        "quality-lint": "eslint -c .eslintrc.js --ext .ts ./src",
+        "vsce-package": "vsce package",
+        "vscode:prepublish": "npm run esbuild-prepublish -- --minify"
     },
     "devDependencies": {
+        "esbuild": "^0.25.2",
+        "eslint": "^8.57.0",
+        "glob": "^11.0.0",
+        "peggy": "^5.0.2",
         "@types/glob": "^8.1.0",
-        "@types/mocha": "^10.0.6",
         "@types/node": "18.x",
         "@types/vscode": "^1.92.0",
         "@typescript-eslint/eslint-plugin": "^7.4.0",
         "@typescript-eslint/parser": "^7.4.0",
+        "ts-loader": "^9.5.1",
+        "typescript": "^5.3.3",
         "@vscode/test-cli": "^0.0.8",
         "@vscode/test-electron": "^2.3.9",
-        "esbuild": "^0.25.0",
-        "eslint": "^8.57.0",
-        "glob": "^11.0.0",
-        "mocha": "^10.7.3",
-        "ts-loader": "^9.5.1",
-        "typescript": "^5.3.3"
+        "@vscode/vsce": "^3.4.2"
     }
 }

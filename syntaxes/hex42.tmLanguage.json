@@ -1,63 +1,59 @@
 {
-  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-  "name": "hex42",
-  "fileTypes": ["hex42"],
-  "patterns": [
-    {
-      "include": "#text"
-    },
-    {
-      "include": "#numeric"
-    },
-    {
-      "include": "#invalid"
-    }
-  ],
-  "repository": {
-    "numeric": {
-      "patterns": [
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "hex42",
+    "fileTypes": [
+        "hex42"
+    ],
+    "patterns": [
         {
-          "include": "#numeric-address"
+            "include": "#text"
         },
         {
-          "include": "#numeric-hex"
+            "include": "#invalid"
         }
-      ]
-    },
-    "text": {
-      "patterns": [
-        {
-          "include": "#text-comment"
+    ],
+    "repository": {
+        "numeric": {
+            "patterns": [
+                {
+                    "include": "#numeric-linenumber"
+                },
+                {
+                    "include": "#numeric-length-hex"
+                }
+            ]
+        },
+        "text": {
+            "patterns": [
+                {
+                    "include": "#line"
+                }
+            ]
+        },
+        "line": {
+            "patterns": [
+                {
+                    "match": "(^(\\d+)\\s+)?((?:(?!\\s+\\[).)+)\\s+\\[(\\d+)\\]\\s+(([0-9a-fA-F]{2}(\\s|$))+)",
+                    "captures": {
+                        "2": {
+                            "name": "constant.numeric.line-number.hex42"
+                        },
+                        "3": {
+                            "name": "keyword.opcode.hex42"
+                        },
+                        "4": {
+                            "name": "constant.numeric.length.hex42"
+                        },
+                        "5": {
+                            "name": "constant.numeric.hex.hex42"
+                        }
+                    }
+                }
+            ]
+        },
+        "invalid": {
+            "patterns": []
         }
-      ]
     },
-    "numeric-address": {
-      "patterns": [
-        {
-          "match": "\\d{2,}:",
-          "name": "keyword.other.control.hex42"
-        }
-      ]
-    },
-    "numeric-hex": {
-      "patterns": [
-        {
-          "match": "([0-9a-fA-F]{2}( |))+",
-          "name": "constant.numeric.hex42"
-        }
-      ]
-    },
-    "text-comment": {
-      "patterns": [
-        {
-          "match": "Offset: .*",
-          "name": "keyword.other.control.hex42"
-        }
-      ]
-    },
-    "invalid": {
-      "patterns": []
-    }
-  },
-  "scopeName": "source.hex42"
+    "scopeName": "source.hex42"
 }

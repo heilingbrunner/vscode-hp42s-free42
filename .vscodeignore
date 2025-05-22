@@ -1,15 +1,15 @@
 .vscode/
 .vscodetest/
-src/
-out/
-typings/
 images/
+node_modules/
+out/
+src/
+typings/
 
 **/*.ts
 **/tsconfig.json
 **/tslint.json
 HOW-TO-VSIX.md
 HOW-TO-FREE42-EXTENSIONS.md
-webpack.config.json
 
 !images/vscode-hp42s-free42-logo.png

@@ -15,43 +15,6 @@
       "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],
       "preLaunchTask": "npm: esbuild"
-    },
-    {
-      "name": "Extension grammar/snippets",
-      "type": "extensionHost",
-      "request": "launch",
-      "runtimeExecutable": "${execPath}",
-      "args": [
-        "--extensionDevelopmentPath=${workspaceFolder}"
-      ]
-    },
-    {
-      "name": "Extension Tests",
-      "type": "extensionHost",
-      "request": "launch",
-      "runtimeExecutable": "${execPath}",
-      "args": [
-        "--disable-extensions",
-        "--extensionDevelopmentPath=${workspaceFolder}",
-        "--extensionTestsPath=${workspaceFolder}/out/test/suite/index"
-      ],
-      "outFiles": [
-        "${workspaceFolder}/out/test/**/*.js"
-      ],
-      "preLaunchTask": "npm: watch"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Debug *.ts file",
-      "program": "${workspaceRoot}/out/${fileBasenameNoExtension}.js",
-      "cwd": "${workspaceRoot}",
-      "sourceMaps": true,
-      "smartStep": true,
-      "preLaunchTask": "npm: compile",
-      "outFiles": [
-        "${workspaceRoot}/out/*.js"
-      ]
     }
   ]
 }

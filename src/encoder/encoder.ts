@@ -1,42 +1,50 @@
 import * as vscode from 'vscode';
 
-import { Encoder42 } from './encoder42';
-import { EncoderResult } from './encoderesult';
-import { RpnParser } from './rpnparser';
-import { Configuration } from '../common/configuration';
+import { Encoding } from "./Encoding";
+import { IRpnResult } from "./IRpnResult";
+import * as RpnProgParser from "./RpnProgParser";
 
 export class Encoder {
-  constructor() {
-    Encoder42.initialize();
-  }
 
-  /** Encode RPN to raw */
-  encode(
-    languageId: string,
-    editor: vscode.TextEditor
-  ): EncoderResult {
-    const parser = new RpnParser();
-    parser.document = editor.document;
-    parser.config = new Configuration(true);
+    constructor() {
+        // nothing to do
+    }
 
-    // Read code and return raw programs with raw lines
-    // Example:
-    // RawProgram {rawLines: Array(3), size: 0, startDocLine: 0}
-    // RTNERR 1 -> RawLine { docCode: '02 RTNERR 1', raw: 'F2 A0 er', params: { err: '1', errno: 1 }, ignored: false, … }
-    parser.parse();
+    /** Encode RPN to raw */
+    encode(
+        languageId: string,
+        editor: vscode.TextEditor
+    ): Encoding {
 
-    parser.programs.forEach((program) => {
-      program.rawLines.forEach((rawLine) => {
-        Encoder42.toRaw(rawLine, languageId);
-      });
-    });
+        let result: IRpnResult | undefined;
 
-    // return result
-    const result = new EncoderResult();
-    result.programs = parser.programs;
+        try {
 
-    return result;
-  }
+            const content = editor.document.getText();
 
-  dispose() {}
+            result = RpnProgParser.parse(content) as IRpnResult;
+
+        } catch (e) {
+
+            // TypeScript weiß nicht, dass das Error-Objekt zusätzliche Eigenschaften hat
+            if (e instanceof Error && (e as any).location) {
+                const err = e as any; // Workaround, um an Peggy-spezifische Felder zu kommen
+
+                console.error("Parse-Error:");
+                console.error(`  → Position: line ${err.location.start.line}, column ${err.location.start.column}`);
+                //console.error(`  → Expected: ${err.expected ? err.expected.map((e: any) => e.description).join(", ") : "n/a"}`);
+                console.error(`  → Found   : ${err.found !== null ? JSON.stringify(err.found) : "nothing"}`);
+                console.error(`  → Message : ${err.message}`);
+                //console.error(`  → Diagnose: ${err.diagnostic || "no more details available"}`);
+            } else {
+                console.error("Error:", e);
+            }
+        }
+
+        const encoding = new Encoding(result as IRpnResult);
+
+        return encoding;
+    }
+
+    dispose() { }
 }

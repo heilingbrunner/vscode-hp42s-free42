@@ -1,4 +1,0 @@
-{
-    "spec": ["out/test/**/*.js"],
-    "ignore": ["node_modules/**"]
-  }

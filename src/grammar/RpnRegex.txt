@@ -1,0 +1,396 @@
+-
+(".{1,15}"|'.{1,15}')
+\[FIND\]
+\[MAX\]
+\[MIN\]
+#B
+%
+%CH
+←
+→
+→DEC
+→DEG
+→HMS
+→HR
+→LIST
+→OCT
+→POL
+→RAD
+→REC
+↑
+↓
++
++/-
+÷
+×
+⊢(".{0,14}"|'.{0,14}')
+0<? (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9]|"REGS")
+0=? (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9]|"REGS")
+0≠? (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9]|"REGS")
+0>? (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9]|"REGS")
+0≤? (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9]|"REGS")
+0≥? (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9]|"REGS")
+1/X
+10↑X
+4STK
+A...F
+ABS
+ACCEL
+ACOS
+ACOSH
+ADATE
+ADV
+AGRAPH
+AIP
+ALENG
+ALL
+ALLΣ
+AND
+ANUM
+AOFF
+AON
+APPEND
+ARCL (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9])
+AROT
+ASHF
+ASIN
+ASINH
+ASR
+ASRN
+ASSIGN (".{0,7}"|'.{0,7}') TO (0[1-9]|1[0-8])
+ASTO (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9])
+ATAN
+ATANH
+ATIME
+ATIME24
+ATOX
+AVIEW
+B?
+BASE-
+BASE+
+BASE±
+BASE÷
+BASE×
+BD→N
+BEEP
+BEST
+BINM
+BINSEP
+BIT?
+BQ→N
+BRESET
+BS→N
+BSIGNED
+BWRAP
+C?
+C.E↑X-1
+C.LN1+X
+C→N
+CB
+CC
+CF (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|[0-9][0-9])
+CLA
+CLD
+CLK12
+CLK24
+CLKEYS
+CLLCD
+CLMENU
+CLP (".{0,7}"|'.{0,7}')
+CLRG
+CLST
+CLV (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|(".{1,7}"|'.{1,7}'))
+CLX
+CLΣ
+COMB
+COMPLEX
+CORR
+COS
+COSH
+CPX?
+CPXMAT?
+CPXRES
+CROSS
+CSLD?
+CUSTOM
+DATE
+DATE+
+DD→N
+DDAYS
+DECINT
+DECM
+DECSEP
+DEG
+DELAY
+DELR
+DEPTH
+DET
+DIM (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|(".{1,7}"|'.{1,7}'))
+DIM?
+DMY
+DOT
+DOW
+DQ→N
+DROP
+DROPN (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|[0-9])
+DS→N
+DSE (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9])
+DUP
+DUPN (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|[0-9])
+E↑X
+E↑X-1
+EDIT
+EDITN (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|(".{1,7}"|'.{1,7}'))
+END
+ENG (10|11|IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|0[0-9])
+ENTER
+ERRMSG
+ERRNO
+EXITALL
+EXPF
+EXTEND
+FC? (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|[0-9][0-9])
+FC?C (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|[0-9][0-9])
+FCSTX
+FCSTY
+FIX (10|11|IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|0[0-9])
+FMA
+FNRM
+FP
+FPTEST
+FS? (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|[0-9][0-9])
+FS?C (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|[0-9][0-9])
+FUNC [0-4][0-4]
+GAMMA
+GETKEY
+GETKEY1
+GETKEYA
+GETLI (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}'))
+GETM
+GETMI (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|"REGS")
+GRAD
+GROW
+GTO (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|(".{1,7}"|'.{1,7}')|(0[0-9]|1[0-4])|(1[5-9]|[2-9][0-9]|[A-J]|[a-e]))
+HEAD (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9])
+HEADING
+HEIGHT
+HEXM
+HEXSEP
+HMS-
+HMS+
+I-
+I+
+IDENT
+INDEX (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|(".{1,7}"|'.{1,7}'))
+INPUT (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9])
+INSR
+INTEG (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|(".{1,7}"|'.{1,7}'))
+INVRT
+IP
+ISG (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9])
+J-
+J+
+KEY ((1[0-8]|[1-9]) GTO IND ST (L|T|X|Y|Z)|(1[0-8]|[1-9]) GTO IND (".{1,6}"|'.{1,6}')|(1[0-8]|[1-9]) GTO IND [0-9][0-9]|(1[0-8]|[1-9]) GTO (".{1,7}"|'.{1,7}')|(1[0-8]|[1-9]) GTO ([0-9][0-9]|[A-J]|[a-e])|(1[0-8]|[1-9]) XEQ IND ST (L|T|X|Y|Z)|(1[0-8]|[1-9]) XEQ IND (".{1,6}"|'.{1,6}')|(1[0-8]|[1-9]) XEQ IND [0-9][0-9]|(1[0-8]|[1-9]) XEQ (".{1,7}"|'.{1,7}')|(1[0-8]|[1-9]) XEQ ([0-9][0-9]|[A-J]|[a-e]))
+KEYASN
+L4STK
+LASTO (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|(".{1,7}"|'.{1,7}')|"REGS")
+LASTX
+LBL ((".{1,7}"|'.{1,7}')|(1[0-4]|[0-9])|(1[5-9]|[2-9][0-9]|[A-J]|[a-e]))
+LCLBL
+LCLV (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|(".{1,7}"|'.{1,7}')|"REGS")
+LENGTH
+LINF
+LINΣ
+LIST?
+LIST→
+LJ
+LN
+LN1+X
+LNSTK
+LOCAT
+LOG
+LOGF
+LSTO (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|(".{1,7}"|'.{1,7}'))
+LXASTO (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|(".{1,7}"|'.{1,7}')|"REGS")
+MAN
+MASKL
+MASKR
+MAT?
+MDY
+MEAN
+MENU
+MOD
+MVAR (".{1,7}"|'.{1,7}')
+N!
+N→BD
+N→BQ
+N→BS
+N→C
+N→DD
+N→DQ
+N→DS
+N→S
+NEWLIST
+NEWMAT
+NN→S
+NOP
+NORM
+NOT
+NSTK
+OCTM
+OCTSEP
+OFF
+OLD
+ON
+OR
+PCOMPLX
+PERM
+PGMINT (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|(".{1,7}"|'.{1,7}'))
+PGMMENU
+PGMSLV (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|(".{1,7}"|'.{1,7}'))
+PGMVAR (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|(".{1,7}"|'.{1,7}'))
+PI
+PICK (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|[0-9])
+PIXEL
+POLAR
+POS
+POSA
+PRA
+PRLCD
+PROFF
+PROMPT
+PRON
+PRREG
+PRSTK
+PRUSR
+PRV (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|(".{1,7}"|'.{1,7}'))
+PRX
+PRΣ
+PSE
+PUTLI (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}'))
+PUTM
+PUTMI (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|"REGS")
+PWRF
+R↑
+R↑N (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|[0-9])
+R↓
+R↓N (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|[0-9])
+R<>R
+RAD
+RAN
+RCL (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|(0[0-9]|1[0-5])|(1[6-9]|[2-9][0-9]))
+RCL- (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9])
+RCL+ (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9])
+RCL÷ (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9])
+RCL× (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9])
+RCLEL
+RCLFLAG
+RCLIJ
+RCOMPLX
+RDX,
+RDX.
+REAL?
+REALRES
+RECT
+REV
+RJ
+RL
+RLC
+RLCN
+RLN
+RND
+RNRM
+ROTXY
+RR
+RRC
+RRCN
+RRN
+RSUM
+RTN
+RTNERR (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|[0-8])
+RTNNO
+RTNYES
+S→N
+SB
+SC
+SCI (10|11|IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|0[0-9])
+SDEV
+SEED
+SF (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|[0-9][0-9])
+SIGN
+SIN
+SINH
+SIZE ([0-9][0-9][0-9][0-9]|[0-9][0-9][0-9]|[0-9][0-9])
+SKIP
+SL
+SLN
+SLOPE
+SOLVE (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|(".{1,7}"|'.{1,7}'))
+SQRT
+SR
+SRN
+STO (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|(0[0-9]|1[0-5])|(1[6-9]|[2-9][0-9]))
+STO- (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9])
+STO+ (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9])
+STO÷ (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9])
+STO× (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9])
+STOEL
+STOFLAG
+STOIJ
+STOP
+STR?
+STRACE
+SUBSTR
+SUM
+TAN
+TANH
+TIME
+TONE (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|[0-9])
+TRACE
+TRANS
+TYPE?
+UNPICK (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|[0-9])
+UVEC
+VARMENU (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|(".{1,7}"|'.{1,7}'))
+VARMNU1 (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|(".{1,7}"|'.{1,7}'))
+VIEW (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9])
+WIDTH
+WMEAN
+WRAP
+WSIZE
+WSIZE?
+X↑2
+X<? (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9]|"REGS")
+X<> (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9]|"REGS")
+X<>F
+X<>Y
+X<0?
+X<Y?
+X=? (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9]|"REGS")
+X≠? (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9]|"REGS")
+X=0?
+X≠0?
+X=Y?
+X≠Y?
+X>? (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9]|"REGS")
+X>0?
+X>Y?
+X≤? (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9]|"REGS")
+X≤0?
+X≤Y?
+X≥? (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9]|"REGS")
+X≥0?
+X≥Y?
+XASTO (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|ST (L|T|X|Y|Z)|(".{1,7}"|'.{1,7}')|[0-9][0-9]|"REGS")
+XEQ (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|(".{1,7}"|'.{1,7}')|([0-9][0-9]|[A-J]|[a-e])|[0-9][0-9])
+XOR
+XSTR ((".{0,13}"|'.{0,13}')|(".{14,22}"|'.{14,22}'))
+XTOA
+XVIEW
+Y↑X
+YINT
+YMD
+Σ-
+Σ+
+ΣREG (IND ST (L|T|X|Y|Z)|IND (".{1,6}"|'.{1,6}')|IND [0-9][0-9]|[0-9][0-9])
+ΣREG?

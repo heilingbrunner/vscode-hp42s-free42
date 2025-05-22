@@ -94,7 +94,13 @@
     "parameters": {
       "patterns": [
         {
-          "include": "#parameter-string"
+          "include": "#parameter-string-quoted-double"
+        },
+        {
+          "include": "#parameter-string-quoted-single"
+        },
+        {
+          "include": "#parameter-number-4-digit"
         },
         {
           "include": "#parameter-number-4-digit"
@@ -156,7 +162,7 @@
         {
           "comment": "constants",
           "match": "\\b(π)\\b",
-          "name": "keyword.other.control.sp.free42"
+          "name": "keyword.other.control.free42"
         }
       ]
     },
@@ -165,7 +171,7 @@
         {
           "comment": "starts with normal char, ends with normal char",
           "match": "\\b(LBL|CLP|MVAR|SIZE)\\b",
-          "name": "keyword.other.control.sp.free42"
+          "name": "keyword.other.control.free42"
         }
       ]
     },
@@ -174,7 +180,7 @@
         {
           "comment": "starts with normal char, ends with normal char",
           "match": "\\b(RTNERR|DROPN|DUPN|PICK|UNPICK)\\b",
-          "name": "keyword.other.control.sp.free42"
+          "name": "keyword.other.control.free42"
         }
       ]
     },
@@ -182,8 +188,8 @@
       "patterns": [
         {
           "comment": "free42: starts with normal char, ends with special",
-          "match": "\\b(DATE\\+|WSIZE\\?)",
-          "name": "keyword.other.control.np.free42"
+          "match": "\\b(B\\?|C\\?|CPXMAT\\?|CSLD\\?|C→N|C\\.E↑X-1|C\\.LN1\\+X|DATE\\+|LIST\\?|LIST→|TYPE\\?|WSIZE\\?|X=\\?|X≠\\?|X<\\?|X>\\?|X≤\\?|X≥\\?|0=\\?|0≠\\?|0<\\?|0>\\?|0≤\\?|0≥\\?)",
+          "name": "keyword.other.control.free42"
         }
       ]
     },
@@ -191,8 +197,8 @@
       "patterns": [
         {
           "comment": "starts with normal char, ends with special",
-          "match": "\\b(BASE±|BASE\\+/-|BASE\\+|BASE-|BASE×|BASE÷|BIT\\?|CPX\\?|DIM\\?|FC\\?(?!C)|FS\\?(?!C)|HMS\\+|HMS-|I\\+|I-|J\\+|J-|MAT\\?|N!|RCL\\+|RCL-|RCL×|RCL÷|RDX,|RDX.|REAL\\?|R↑|R↓|STO\\+|STO-|STO×|STO÷|STR\\?|X<>(?!Y)|X<0\\?|X<Y\\?|X≤0\\?|X≤Y\\?|X=0\\?|X=Y\\?|X≠0\\?|X≠Y\\?|X>0\\?|X>Y\\?|X≥0\\?|X≥Y\\?|Σ\\+|Σ-|ΣREG\\?)",
-          "name": "keyword.other.control.np.free42"
+          "match": "\\b(BASE±|BASE\\+/-|BASE\\+|BASE-|BASE×|BASE÷|BIT\\?|CPX\\?|DIM\\?|FC\\?(?!C)|FS\\?(?!C)|HMS\\+|HMS-|I\\+|I-|J\\+|J-|MAT\\?|N!|RCL\\+|RCL-|RCL×|RCL÷|RDX,|RDX.|REAL\\?|R↑(?!N)|R↓(?!N)|STO\\+|STO-|STO×|STO÷|STR\\?|X<>(?!(F|Y))|X<0\\?|X<Y\\?|X≤0\\?|X≤Y\\?|X=0\\?|X=Y\\?|X≠0\\?|X≠Y\\?|X>0\\?|X>Y\\?|X≥0\\?|X≥Y\\?|Σ\\+|Σ-|ΣREG\\?)",
+          "name": "keyword.other.control.free42"
         }
       ]
     },
@@ -200,8 +206,8 @@
       "patterns": [
         {
           "comment": "starts with special, ends with normal char",
-          "match": "(→DEC|→DEG|→HMS|→HR|→OCT|→POL|→RAD|→REC|%CH)\\b",
-          "name": "keyword.other.control.np.free42"
+          "match": "(→DEC|→DEG|→HMS|→HR|→LIST|→OCT|→POL|→RAD|→REC|\\#B|%CH)\\b",
+          "name": "keyword.other.control.free42"
         }
       ]
     },
@@ -210,7 +216,7 @@
         {
           "comment": "starts with bracket, ends with bracket",
           "match": "(\\[FIND\\]|\\[MAX\\]|\\[MIN\\])",
-          "name": "keyword.other.control.np.free42"
+          "name": "keyword.other.control.free42"
         }
       ]
     },
@@ -218,8 +224,8 @@
       "patterns": [
         {
           "comment": "free42: starts with normal char, ends with normal char",
-          "match": "\\b(4STK|ACCEL|ADATE|ANUM|ATIME24|ATIME|BRESET|BSIGNED|BWRAP|CLK12|CLK24|DATE|DDAYS|DEPTH|DMY|DOW|DROP|DUP|FMA|FUNC|GETKEY1|HEADING|LOCAT|L4STK|LNSTK|MDY|MVARCAT|NOP|NSTK|PGMMENU|RCLFLAG|RTNNO|RTNYES|STOFLAG|STRACE|TIME|WSIZE|X<>F|YMD)\\b",
-          "name": "keyword.other.control.np.free42"
+          "match": "\\b(4STK|A\\.\\.\\.F|ACCEL|ADATE|ANUM|APPEND|ASRN|ASR|ATIME24|ATIME|BD→N|BINSEP|BQ→N|BS→N|BRESET|BSIGNED|BWRAP|CB|CC|CLK12|CLK24|DATE|DD→N|DDAYS|DQ→N|DS→N|DECINT|DECSEP|DEPTH|DMY|DOW|DROP|DUP|ERRMSG|ERRNO|EXTEND|FMA|FPTEST|FUNC|GETKEY1|GETKEYA|GETLI|GETMI|HEADING|HEAD|HEIGHT|HEXSEP|IDENT|LASTO|LCLV|LENGTH|LJ|LOCAT|L4STK|LNSTK|LXASTO|MASKL|MASKR|MDY|MVARCAT|NEWLIST|N→BD|N→BQ|N→BS|N→C|N→DD|N→DQ|N→DS|N→S|NN→S|NOP|NSTK|OCTSEP|PCOMPLX|PGMMENU|PGMVAR|POS|PRREG|PUTLI|PUTMI|RCLFLAG|RCOMPLX|R↓N|R↑N|REV|RJ|RLCN|RLC|RLN|RL|RRN|RRCN|RRC|RR|RTNNO|RTNYES|S→N|SB|SC|SKIP|SLN|SL|SRN|SR|SUBSTR|STOFLAG|STRACE|TIME|VARMNU1|WIDTH|WSIZE|X<>F|XASTO|XSTR|XVIEW|YMD)\\b",
+          "name": "keyword.other.control.free42"
         }
       ]
     },
@@ -228,7 +234,7 @@
         {
           "comment": "starts with normal char, ends with normal char",
           "match": "\\b(ABS|ACOSH|ACOS|ADV|AGRAPH|AIP|ALENG|ALLΣ|ALL|AND|AOFF|AON|AROT|ASHF|ASINH|ASIN|ATANH|ATAN|ATOX|AVIEW|BEEP|BEST|BINM|CLA|CLD|CLKEYS|CLLCD|CLMENU|CLRG|CLST|CLX|CLΣ|COMB|COMPLEX|CORR|COSH|COS|CPXRES|CROSS|CUSTOM|DECM|DEG|DELAY|DELR|DET|DOT|EDIT(?!N)|ENTER|EXITALL|EXPF|E↑X-1|E↑X|FC\\?C|FCSTX|FCSTY|FNRM|FP|FS\\?C|GAMMA|GETKEY|GETM|GRAD|GROW|HEXM|INSR|INVRT|IP|KEYASN|LASTX|LCLBL|LINF|LINΣ|LN1\\+X|LN|LOGF|LOG|MAN|MEAN|MENU|MOD|NEWMAT|NORM|NOT|OCTM|OFF|OLD|ON|OR|PERM|PIXEL|PI|POLAR|POSA|PRA|PRLCD|PROFF|PROMPT|PRON|PRSTK|PRUSR|PRX|PRΣ|PSE|PUTM|PWRF|RAD|RAN|RCLEL|RCLIJ|REALRES|RECT|RND|RNRM|ROTXY|RSUM|RTN|R<>R|SDEV|SEED|SIGN|SINH|SIN|SLOPE|SQRT|STOEL|STOIJ|STOP|SUM|TANH|TAN|TRACE|TRANS|UVEC|WMEAN|WRAP|X<>Y|XOR|XTOA|X↑2|YINT|Y↑X|1/X|10↑X|END)\\b",
-          "name": "keyword.other.control.np.free42"
+          "name": "keyword.other.control.free42"
         }
       ]
     },
@@ -236,7 +242,7 @@
       "patterns": [
         {
           "match": "(\\+/-|\\+|-(?!\\d)|×|÷|%|←|↑|↓|→)",
-          "name": "keyword.other.control.np.free42"
+          "name": "keyword.other.control.free42"
         }
       ]
     },
@@ -244,7 +250,7 @@
       "patterns": [
         {
           "match": "\\b(ASSIGN)\\b",
-          "name": "keyword.other.control.np.free42"
+          "name": "keyword.other.control.free42"
         }
       ]
     },
@@ -252,7 +258,7 @@
       "patterns": [
         {
           "match": "\\bTO\\b",
-          "name": "keyword.other.control.np.free42"
+          "name": "keyword.other.control.free42"
         }
       ]
     },
@@ -261,7 +267,7 @@
         {
           "comment": "... IND ST",
           "match": "\\bIND\\s+ST\\b",
-          "name": "keyword.other.control.isl.free42"
+          "name": "keyword.other.control.free42"
         }
       ]
     },
@@ -270,7 +276,7 @@
         {
           "comment": "... IND 99|... IND \"A\"",
           "match": "\\bIND\\b",
-          "name": "keyword.other.control.il.free42"
+          "name": "keyword.other.control.free42"
         }
       ]
     },
@@ -279,7 +285,7 @@
         {
           "comment": "... ST",
           "match": "\\bST\\b",
-          "name": "keyword.other.control.sl.free42"
+          "name": "keyword.other.control.free42"
         }
       ]
     },
@@ -288,7 +294,7 @@
           {
             "comment": "... \"A\"",
             "match": "\\b(LSTO)\\b",
-            "name": "keyword.other.control.al.free42"
+            "name": "keyword.other.control.free42"
           }
         ]
       },
@@ -296,8 +302,8 @@
       "patterns": [
         {
           "comment": "... 99|... \"A\"",
-          "match": "\\b(ARCL|ASTO|CF|CLV|DIM|DSE|EDITN|ENG|FC\\?C|FC\\?|FIX|FS\\?C|FS\\?|GTO|INDEX|INPUT|INTEG|ISG|KEY|PGMINT|PGMSLV|PRV|RCL\\+|RCL-|RCL×|RCL÷|RCL|SCI|SF|SOLVE|STO\\+|STO-|STO×|STO÷|STO|TONE|VARMENU|VIEW|X<>|XEQ|ΣREG)\\b",
-          "name": "keyword.other.control.al.free42"
+          "match": "\\b(ARCL|ASTO|CF|CLV|DIM|DSE|EDITN|ENG|FC\\?C|FC\\?|FIX|FS\\?C|FS\\?|GTO|INDEX|INPUT|INTEG|ISG|KEY|PGMINT|PGMSLV|PRV|RCL\\+|RCL-|RCL×|RCL÷|RCL|SCI|SF|SOLVE|STO\\+|STO-|STO×|STO÷|STO|TONE|VARMENU|VIEW|XEQ|ΣREG)\\b",
+          "name": "keyword.other.control.free42"
         }
       ]
     },
@@ -322,10 +328,21 @@
         }
       ]
     },
-    "parameter-string": {
+    "parameter-string-quoted-double": {
       "name": "string.quoted.double.string.free42",
       "begin": "(?<=\\s)\"",
       "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.free42",
+          "match": "\\\\."
+        }
+      ]
+    },
+    "parameter-string-quoted-single": {
+      "name": "string.quoted.single.string.free42",
+      "begin": "(?<=\\s)'",
+      "end": "'",
       "patterns": [
         {
           "name": "constant.character.escape.free42",
@@ -372,7 +389,7 @@
           "begin": "(⊢)",
           "beginCaptures": {
             "1": {
-              "name": "keyword.other.control.np.free42"
+              "name": "keyword.other.control.free42"
             }
           },
           "end": "(?=\")"
@@ -450,7 +467,7 @@
     "comment-line-full": {
       "patterns": [
         {
-          "match": "^\\s*(//|#|@).*",
+          "match": "^\\s*//.*",
           "name": "comment.line.free42"
         }
       ]
@@ -458,7 +475,7 @@
     "comment-line-end": {
       "patterns": [
         {
-          "match": "\\s*(//|#|@)[^\"].*$",
+          "match": "\\s*//[^\"].*$",
           "name": "comment.line.free42"
         }
       ]

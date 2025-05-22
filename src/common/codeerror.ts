@@ -1,31 +1,37 @@
 export class CodeError {
-  docLine: number = -1; //index 0,... but document line numer starts at 1 !!
-  codeLineNo: number = -1;
-  code: string;
-  message: string = '';
+    docLine: string = ''; //index 0,... but document line numer starts at 1 !!
+    progLine: string = ''; //index 0,... but document line numer starts at 1 !!
+    code: string;
+    message: string = '';
 
-  constructor(docLine: number, codeLineNo: number, code: string, message: string) {
-    this.docLine = docLine;
-    this.codeLineNo = codeLineNo;
-    this.code = code;
-    this.message = message;
-  }
+    constructor(dl: string, pl: string, code: string, message: string) {
+        this.docLine = dl;
+        this.progLine = pl;
+        this.code = code;
+        this.message = message;
+    }
 
-  toString(useHex?: boolean): string {
-    const docLine = (this.docLine > -1 ? (this.docLine + 1) + ', ' : '');
-    const codeLine = (this.codeLineNo > -1 ? (useHex ? this.toHex(this.codeLineNo,8) : (this.codeLineNo < 10 ? '0' + this.codeLineNo : this.codeLineNo)) : '');
-    return (
-      'Error [' +
-      docLine +
-      codeLine +
-      "]! Code: '" +
-      this.code +
-      "'; Message: " +
-      this.message
-    );
-  }
+    toString(useHex: boolean): string {
+        const docLine = (this.docLine !== '' ? (this.docLine) + ', ' : '');
+        const progLine = (this.progLine !== '' ? (useHex ? this.toHex(Number(this.progLine), 8) : this.progLine) : '');
 
-  private toHex(number: number, digits: number) {
-    return ('0'.repeat(digits) + ((number + 1) & (Math.pow(16,digits)-1)).toString(16)).slice(-digits).toUpperCase();
-  }
+        const codeextract = (this.code.length > 48) ? this.code.substring(0, 48) + ' ...'
+            : (this.code.length > 24) ? this.code.substring(0, 24) + ' ...'
+                : (this.code.length > 12) ? this.code.substring(0, 12) + ' ...'
+                    : (this.code.length > 6) ? this.code.substring(0, 6) + ' ...'
+                        : this.code;
+
+        return (
+            'Error [' +
+            docLine +
+            progLine +
+            "]; Message: '" +
+            this.message +
+            "'; Code: '" +
+            codeextract + "'");
+    }
+
+    private toHex(number: number, digits: number) {
+        return ('0'.repeat(digits) + ((number + 1) & (Math.pow(16, digits) - 1)).toString(16)).slice(-digits).toUpperCase();
+    }
 }

@@ -1,5 +1,13 @@
 # Change Log
 
+## [2.0.0] - 2025-05-15
+
+- refactoring code based parsers, with generated PEG parsers using grammars
+- improved log with more details for error analysis
+- more commands until free42 __v3.3.4__
+- package updates
+- comments only using `//`
+
 ## [1.0.8] - 2024-08-21
 
 - package updates
