@@ -1,5 +1,13 @@
 # Change Log
 
+## [2.0.2] - 2025-07-22
+
+- merges from dependabot
+
+## [2.0.1] - 2025-05-22
+
+- typos, etc...
+
 ## [2.0.0] - 2025-05-15
 
 - refactoring code based parsers, with generated PEG parsers using grammars
