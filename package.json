@@ -214,7 +214,7 @@
     "devDependencies": {
         "esbuild": "^0.25.2",
         "eslint": "^8.57.0",
-        "glob": "^11.0.0",
+        "glob": "^11.1.0",
         "peggy": "^5.0.2",
         "@types/glob": "^8.1.0",
         "@types/node": "18.x",
