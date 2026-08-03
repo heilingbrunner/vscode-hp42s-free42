@@ -4,6 +4,9 @@ import { runTests } from '@vscode/test-electron';
 
 async function main() {
 	try {
+		// Some terminal environments set this globally, which breaks launching VS Code for tests.
+		delete process.env.ELECTRON_RUN_AS_NODE;
+
 		// The folder containing the Extension Manifest package.json
 		// Passed to `--extensionDevelopmentPath`
 		const extensionDevelopmentPath = path.resolve(__dirname, '../../');

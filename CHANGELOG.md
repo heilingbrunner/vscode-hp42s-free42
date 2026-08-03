@@ -1,5 +1,9 @@
 # Change Log
 
+## [2.0.4] - 2026-08-03
+
+- packages update
+
 ## [2.0.3] - 2026-01-12
 
 - packages update

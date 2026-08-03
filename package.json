@@ -1,7 +1,10 @@
 {
     "name": "vscode-hp42s-free42",
     "main": "./dist/extension",
-    "extensionKind": ["workspace", "ui"],
+    "extensionKind": [
+        "workspace",
+        "ui"
+    ],
     "capabilities": {
         "untrustedWorkspaces": {
             "supported": true
@@ -14,7 +17,7 @@
     },
     "displayName": "HP42S-free42",
     "description": "HP42S/free42 RPN programming language support",
-    "version": "2.0.3",
+    "version": "2.0.4",
     "publisher": "JHeilingbrunner",
     "license": "MIT",
     "icon": "images/vscode-hp42s-free42-logo.png",
@@ -201,6 +204,8 @@
     },
     "scripts": {
         "compile": "tsc -p ./",
+        "pretest": "npm run compile",
+        "test": "node ./out/test/runTest.js",
         "watch": "tsc -watch -p ./",
         "esbuild": "npm run esbuild-base -- --sourcemap",
         "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
@@ -208,23 +213,22 @@
         "esbuild-prepublish": "npm run esbuild-base -- --minify",
         "prev-vscode:prepublish": "npm run compile",
         "quality-lint": "eslint -c .eslintrc.js --ext .ts ./src",
-        "vsce-package": "vsce package",
+        "vsce-package": "npx @vscode/vsce package",
         "vscode:prepublish": "npm run esbuild-prepublish -- --minify"
     },
     "devDependencies": {
-        "esbuild": "^0.28.1",
-        "eslint": "^8.57.0",
-        "glob": "^11.1.0",
-        "peggy": "^5.0.2",
         "@types/glob": "^8.1.0",
         "@types/node": "18.x",
         "@types/vscode": "^1.92.0",
         "@typescript-eslint/eslint-plugin": "^7.4.0",
         "@typescript-eslint/parser": "^7.4.0",
-        "ts-loader": "^9.5.1",
-        "typescript": "^5.3.3",
-        "@vscode/test-cli": "^0.0.8",
         "@vscode/test-electron": "^2.3.9",
-        "@vscode/vsce": "^3.6.0"
+        "@vscode/vsce": "^3.6.0",
+        "esbuild": "^0.28.1",
+        "eslint": "^8.57.0",
+        "glob": "^11.1.0",
+        "peggy": "^5.0.2",
+        "ts-loader": "^9.5.1",
+        "typescript": "^5.3.3"
     }
 }
