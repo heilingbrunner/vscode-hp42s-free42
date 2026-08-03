@@ -212,7 +212,7 @@
         "vscode:prepublish": "npm run esbuild-prepublish -- --minify"
     },
     "devDependencies": {
-        "esbuild": "^0.25.2",
+        "esbuild": "^0.28.1",
         "eslint": "^8.57.0",
         "glob": "^11.1.0",
         "peggy": "^5.0.2",
