@@ -230,5 +230,10 @@
         "peggy": "^5.0.2",
         "ts-loader": "^9.5.1",
         "typescript": "^5.3.3"
+    },
+    "allowScripts": {
+        "@vscode/vsce-sign@2.0.5": true,
+        "esbuild@0.28.1": true,
+        "keytar@7.9.0": true
     }
 }
