@@ -103,22 +103,7 @@ export class Tool {
     }
 
     private getEncodingLanguageId(encoding: Encoding) {
-        let languageId = encoding.getLanguageId();
-        let languageIdAsString = 'hp42s';
-
-        switch (languageId) {
-            case 0:
-                languageIdAsString = 'hp41c';
-                break;
-            case 1:
-                languageIdAsString = 'hp42s';
-                break;
-            case 2:
-                languageIdAsString = 'free42';
-                break;
-        }
-
-        return languageIdAsString;
+        return ['hp41c', 'hp42s', 'free42'][encoding.getLanguageId()] ?? 'hp42s';
     }
 
     private showEncodingFirstError(encoding: Encoding, useLineNumbers: boolean, eol: string) {

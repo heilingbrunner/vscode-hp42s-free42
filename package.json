@@ -211,7 +211,6 @@
         "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
         "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
         "esbuild-prepublish": "npm run esbuild-base -- --minify",
-        "prev-vscode:prepublish": "npm run compile",
         "quality-lint": "eslint -c .eslintrc.js --ext .ts ./src",
         "vsce-package": "npx @vscode/vsce package",
         "vscode:prepublish": "npm run esbuild-prepublish -- --minify"

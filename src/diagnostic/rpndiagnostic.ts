@@ -430,6 +430,7 @@ export class RpnDiagnostic {
 
         // Store the context for later use
         this.extensionContext = context;
+        context.subscriptions.push(this.collection);
 
         // when opening file
         context.subscriptions.push(vscode.workspace.onDidOpenTextDocument(doc => {

@@ -32,7 +32,7 @@ export function activate(context: vscode.ExtensionContext) {
         if (editor) {
             tool.decode(editor);
         } else {
-
+            vscode.window.showWarningMessage('No active editor.');
         }
     });
 
