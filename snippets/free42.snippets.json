@@ -5968,7 +5968,7 @@
         "prefix": "LBL",
         "scope": "free42",
         "body": [
-            "{ Template }",
+            "{ 0-Byte Prgm }",
             "LBL \"${1:name}\"",
             "$0",
             "END"
@@ -6030,7 +6030,7 @@
         "prefix": "SOLVE",
         "scope": "free42",
         "body": [
-            "{ Template }",
+            "{ 0-Byte Prgm }",
             "LBL \"${1:SOLVE1}\"",
             "// Declare the variables.",
             "MVAR \"${2:A}\"",
@@ -6047,7 +6047,7 @@
         "prefix": "INTEG",
         "scope": "free42",
         "body": [
-            "{ Template }",
+            "{ 0-Byte Prgm }",
             "LBL \"${1:INTEG1}\"",
             "// Declare the variables.",
             "MVAR \"${2:A}\"",
