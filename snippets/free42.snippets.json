@@ -6024,7 +6024,7 @@
             "VARMENU \"${1:menu}\"",
             "STOP$0"
         ],
-        "description": "PROMPT using two-line display: A template for two-line display. '␊' is for the line feed."
+        "description": "VARMENU using menu variables: A template that declares menu variables and shows them as a variable menu."
     },
     "SOLVE template": {
         "prefix": "SOLVE",
@@ -6060,5 +6060,81 @@
             "END"
         ],
         "description": "INTEG template: A template for the integration application. Refer to 'HP-42S Programming Examples' page 126."
+    },
+    "INPUT with validation loop template": {
+        "prefix": "INPUT",
+        "scope": "free42",
+        "body": [
+            "LBL ${1:retry}",
+            "\"${2:VALUE}?\"",
+            "PROMPT",
+            "${3|X<Y?,X=0?,X>0?,X≠0?,X≤0?,X≥0?|}",
+            "GTO ${4:ok}",
+            "\"INVALID\"",
+            "AVIEW",
+            "PSE",
+            "GTO ${1:retry}",
+            "LBL ${4:ok}",
+            "$0"
+        ],
+        "description": "INPUT with validation loop: Prompts for a value, tests it and shows an error message and re-prompts if the test fails."
+    },
+    "INDEX matrix traversal template": {
+        "prefix": "INDEX",
+        "scope": "free42",
+        "body": [
+            "INDEX \"${1:M}\"",
+            "1",
+            "ENTER",
+            "STOIJ",
+            "LBL ${2:next}",
+            "RCLEL",
+            "$0",
+            "STOEL",
+            "J+",
+            "FC?C ${3:77}",
+            "GTO ${2:next}"
+        ],
+        "description": "INDEX matrix traversal: Visits every element of a matrix with RCLEL/STOEL and J+, and ends when the end-wrap flag is set."
+    },
+    "PGMSLV solver driver template": {
+        "prefix": "PGMSLV",
+        "scope": "free42",
+        "body": [
+            "PGMSLV \"${1:SOLVE1}\"",
+            "${2:guess1}",
+            "STO \"${3:A}\"",
+            "${4:guess2}",
+            "SOLVE \"${3:A}\"",
+            "RCL \"${3:A}\"",
+            "VIEW \"${3:A}\"",
+            "$0"
+        ],
+        "description": "PGMSLV solver driver: Selects the solver program, seeds the unknown with two guesses, solves and shows the result. Use together with the SOLVE template."
+    },
+    "ALPHA message builder template": {
+        "prefix": "ALPHA",
+        "scope": "free42",
+        "body": [
+            "CLA",
+            "\"${1:Result=}\"",
+            "ARCL ST ${2|X,Y,Z,T,L|}",
+            "⊢\"${3: units}\"",
+            "AVIEW",
+            "PSE$0"
+        ],
+        "description": "ALPHA message builder: Builds a message from text and a formatted stack value, displays it and pauses."
+    },
+    "LBL subroutine template": {
+        "prefix": "LBL",
+        "scope": "free42",
+        "body": [
+            "LBL ${1:00}",
+            "STO ${2:10}",
+            "$0",
+            "RCL ${2:10}",
+            "RTN"
+        ],
+        "description": "LBL subroutine: Creates a local label, saves x to a register, leaves a placeholder for the code, restores x and returns."
     }
 }
