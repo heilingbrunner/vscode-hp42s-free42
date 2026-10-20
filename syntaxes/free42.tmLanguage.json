@@ -85,9 +85,6 @@
         },
         {
           "include": "#entity-name-local-label-name"
-        },
-        {
-          "include": "#entity-name-local-label-number"
         }
       ]
     },

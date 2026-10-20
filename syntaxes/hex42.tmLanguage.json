@@ -13,16 +13,6 @@
         }
     ],
     "repository": {
-        "numeric": {
-            "patterns": [
-                {
-                    "include": "#numeric-linenumber"
-                },
-                {
-                    "include": "#numeric-length-hex"
-                }
-            ]
-        },
         "text": {
             "patterns": [
                 {
